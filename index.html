@@ -27,16 +27,21 @@ input[type=checkbox]{accent-color:var(--red);width:20px;height:20px;margin:0}
 .nil{color:var(--mute);font-weight:500}
 
 /* toolbar */
-.top{display:grid;grid-template-columns:auto auto minmax(0,1fr) auto auto;grid-template-areas:"title tabs . acts theme" "title tabs . rline rline";align-items:center;gap:6px 10px;padding:14px 0 10px}
+.top{display:grid;grid-template-columns:auto auto minmax(0,1fr) auto auto;grid-template-areas:"title tabs . data theme";align-items:center;gap:8px 12px;padding:12px 0;border-bottom:2px solid var(--ink)}
 h1{grid-area:title;font-size:clamp(22px,2.4vw,30px);line-height:1.1;margin:0;font-stretch:112%;font-weight:800;letter-spacing:-.01em}
-.acts{grid-area:acts;display:flex;gap:8px}
+.acts{display:flex;gap:8px;flex:none}
+.dacts{grid-area:data;display:flex;gap:6px}
+.dbtn{display:inline-flex;align-items:center;gap:6px}.dbtn svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 .acts .btn{min-width:84px}
 .theme{grid-area:theme}
 .tabs{grid-area:tabs;display:inline-flex;align-self:center;background:var(--soft);border-radius:11px;padding:3px;gap:2px;margin-left:16px}
 .tabs a{padding:7px 16px;border-radius:8px;font-weight:700;font-size:14px;color:var(--mute);text-decoration:none;min-height:36px;display:grid;place-items:center}
 .tabs a[aria-current=page]{background:var(--bg);color:var(--ink);box-shadow:0 1px 3px rgb(0 0 0/.14)}
 body:not([data-view=tt]) .tonly,body:not([data-view=grades]) .gonly,body:not([data-view=tasks]) .konly,body:not([data-view=home]) .honly{display:none!important}
-.rline{grid-area:rline;margin:0;text-align:right;font-size:12px;color:var(--mute)}
+.rline{margin:0;font-size:12px;color:var(--mute)}
+/* page bar: same place and height on every page */
+.pbar{display:flex;align-items:center;justify-content:space-between;gap:8px 16px;flex-wrap:wrap;min-height:62px;padding:10px 0;border-bottom:1px solid var(--line)}
+.pleft{flex:1 1 260px;min-width:0;display:flex;align-items:center;gap:8px 14px;flex-wrap:wrap}
 .btn{min-height:40px;padding:0 14px;border:1.5px solid var(--ink);border-radius:var(--rad);background:var(--ink);color:var(--bg);font-weight:700;font-size:14px;white-space:nowrap}
 .btn.ghost{background:transparent;color:var(--ink)}
 .btn.sm{min-height:34px;padding:0 11px;font-size:13px}
@@ -45,8 +50,8 @@ body:not([data-view=tt]) .tonly,body:not([data-view=grades]) .gonly,body:not([da
 .theme .sun{display:none}
 :root[data-theme=dark] .theme .sun{display:block}:root[data-theme=dark] .theme .moon{display:none}
 @media(prefers-color-scheme:dark){:root:not([data-theme=light]) .theme .sun{display:block}:root:not([data-theme=light]) .theme .moon{display:none}}
-.status{padding-bottom:10px;border-bottom:2px solid var(--ink)}
-.status:has(#jobs:empty){padding-bottom:0}
+.status{padding:8px 0;border-bottom:1px solid var(--line)}
+.status:has(#jobs:empty){display:none}
 .link{border:0;background:none;padding:2px 0;font-size:13px;font-weight:600;text-decoration:underline;color:var(--ink)}
 #jobs{list-style:none;margin:0;padding:0;flex-basis:100%;display:grid;gap:2px}
 #jobs:empty{display:none}
@@ -61,11 +66,9 @@ body:not([data-view=tt]) .tonly,body:not([data-view=grades]) .gonly,body:not([da
 .dropover.on{display:grid}
 
 /* layout */
-.wrap{display:grid;grid-template-columns:230px minmax(0,1fr);grid-template-areas:"side main" "bk main";grid-template-rows:auto 1fr}
-aside{grid-area:side;padding:16px 18px 8px 0}
-main{grid-area:main;border-left:1px solid var(--line);padding:16px 0 40px 24px}
-.backup{grid-area:bk;padding:8px 18px 24px 0;font-size:12px;color:var(--mute)}
-.bk{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}
+.wrap{display:grid;grid-template-columns:230px minmax(0,1fr);grid-template-areas:"side main"}
+aside{grid-area:side;padding:14px 18px 24px 0}
+main{grid-area:main;border-left:1px solid var(--line);padding:14px 0 32px 22px}
 aside h2{font-size:12px;color:var(--mute);margin:0 0 6px;font-weight:600}
 .gpacard{display:grid;width:100%;text-align:left;border:1.5px solid var(--ink);border-radius:var(--rad);background:transparent;padding:10px 12px;margin-bottom:14px}
 .gpacard span{font-size:12px;color:var(--mute)}.gpacard b{font-size:30px;font-weight:900;font-stretch:118%;line-height:1.1;font-variant-numeric:tabular-nums}.gpacard b.nil{font-size:15px;font-weight:600;line-height:1.6}.gpacard small{font-size:12px;color:var(--mute)}
@@ -200,9 +203,9 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 
 /* timetable */
-.ttwrap{display:grid;grid-template-columns:250px minmax(0,1fr);border-top:2px solid var(--ink)}
+.ttwrap{display:grid;grid-template-columns:250px minmax(0,1fr)}
 .ttwrap.empty{grid-template-columns:1fr}.ttwrap.empty .ttside{display:none}
-.ttside{padding:12px 18px 24px 0;border-right:1px solid var(--line)}
+.ttside{position:sticky;top:0;align-self:start;max-height:calc(100dvh - 150px);overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;padding:10px 14px 24px 0;border-right:1px solid var(--line)}
 .tsec{border-bottom:1px solid var(--line);padding:4px 0 10px}
 .tsec summary{font-size:12px;color:var(--mute);font-weight:700;cursor:pointer;padding:8px 0;list-style:none;display:flex;justify-content:space-between}
 .tsec summary::-webkit-details-marker{display:none}.tsec summary::after{content:'▾';font-size:11px}.tsec:not([open]) summary::after{content:'▸'}
@@ -223,8 +226,8 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 .ib{width:30px;height:30px;border:0;background:none;border-radius:7px;display:grid;place-items:center;color:var(--mute);padding:0;flex:none}
 .ib svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
 .tbtns{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
-.ttmain{padding:12px 0 28px 20px;min-width:0}
-.tthead{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:6px}.tthead .seg{margin:0}
+.ttmain{padding:12px 0 24px 20px;min-width:0}
+.tthead .seg{margin:0}
 .ttempty{max-width:560px;margin:48px auto;text-align:center;padding:28px;border:2px dashed var(--line);border-radius:16px}
 .ttempty h2{margin:0 0 8px;font-size:22px}.ttempty p{color:var(--mute);font-size:14px;margin:0 0 16px}
 .tgrid{--g:56px}
@@ -255,11 +258,10 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 .xctl{display:grid;gap:10px;align-content:start}.xl{display:grid;gap:4px;font-size:12px;color:var(--mute)}.xl .seg{margin:0;justify-self:start}
 .xwh{display:grid;grid-template-columns:1fr auto 1fr;gap:6px;align-items:end}
 /* home */
-#v-home,#v-tasks{border-top:2px solid var(--ink)}
-.hhero{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 0 12px;flex-wrap:wrap}
-.hhero h2{margin:2px 0;font-size:clamp(28px,4vw,42px);line-height:1.05;font-weight:900;font-stretch:115%}
+.hhero>div{display:flex;align-items:baseline;gap:4px 14px;flex-wrap:wrap}
+.hhero h2{margin:0;font-size:clamp(22px,2.6vw,30px);line-height:1.1;font-weight:900;font-stretch:115%}
 .hsem{font-size:13px;font-weight:700;color:var(--red);text-transform:none}
-.hgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;padding-bottom:28px}
+.hgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;padding:14px 0 24px}
 .hcard{border:1px solid var(--line);border-radius:14px;padding:4px 14px 14px;min-width:0;display:flex;flex-direction:column;gap:6px}
 .htitle{display:flex;align-items:center;gap:8px;color:var(--ink);text-decoration:none;padding:10px 0 6px;border-bottom:2px solid var(--ink);margin-bottom:2px}
 .htitle h3{margin:0;font-size:17px;font-weight:800}.harr{margin-left:auto;font-size:18px;transition:transform .15s}.htitle:hover .harr{transform:translateX(3px)}
@@ -279,15 +281,17 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 @media(hover:hover){.hcourses li:hover,.hclasses li.linked:hover{background:var(--soft)}}
 /* tasks */
 .kwrap{display:grid;grid-template-columns:240px minmax(0,1fr)}
-.kside{padding:14px 18px 24px 0;border-right:1px solid var(--line)}
-.kmain{padding:12px 0 28px 20px;min-width:0}
+.kside{position:sticky;top:0;align-self:start;max-height:calc(100dvh - 150px);overflow:auto;scrollbar-width:thin;padding:10px 18px 24px 0;border-right:1px solid var(--line)}
+.kmain{padding:4px 0 24px 20px;min-width:0}
 .fchips{display:flex;flex-direction:column;gap:2px}
 .fchip{display:flex;align-items:center;gap:8px;border:0;background:none;border-radius:8px;padding:7px 10px;font-weight:600;font-size:14px;text-align:left;min-height:36px;color:var(--ink)}
 .fchip .cdot{background:var(--tc);margin:0}.fchip b{margin-left:auto;font-size:12px;color:var(--mute);font-weight:600}
 .fchip.on{background:var(--soft);box-shadow:inset 3px 0 0 var(--tc,var(--ink))}
 .kopts{display:grid;margin:12px 0 4px;padding-top:10px;border-top:1px solid var(--line)}.kopts .chk{display:flex;min-height:32px;font-size:14px;align-self:auto}
 .kcats{margin-top:8px}
-.semline{display:flex;align-items:baseline;gap:10px 14px;flex-wrap:wrap;padding:2px 0 8px}.semline b{font-size:14px}.semline .wk{font-size:22px;font-weight:900;font-stretch:112%}
+.semline{display:flex;align-items:baseline;gap:4px 14px;flex-wrap:wrap}.semline b{font-size:14px}.semline .wk{font-size:22px;font-weight:900;font-stretch:112%}
+.klater{margin-top:14px;border-top:2px solid var(--ink)}.klater>summary{cursor:pointer;font-weight:700;font-size:14px;padding:10px 0;display:flex;gap:10px;align-items:baseline;list-style:none}.klater>summary::-webkit-details-marker{display:none}.klater>summary::before{content:'▸';font-size:12px}.klater[open]>summary::before{content:'▾'}.klater .kgroup:first-of-type h3{margin-top:2px}
+.kmore{display:block;margin:6px 0 0 2px;font-size:13px;font-weight:600}
 .kgroup h3{font-size:14px;margin:14px 0 2px;border-bottom:2px solid var(--ink);padding-bottom:4px;display:flex;gap:10px;align-items:baseline}.kgroup h3 .hint{margin:0;font-weight:500}
 .tasks{list-style:none;margin:0;padding:0;display:grid}
 .task,.crow{display:flex;align-items:flex-start;gap:10px;padding:8px 2px;border-bottom:1px solid var(--line);position:relative}
@@ -312,12 +316,12 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 .sadd{margin:10px 0}.sadd summary{cursor:pointer;font-size:13px;font-weight:600}
 .err{color:var(--red)!important}
 /* tablet */
-@media(max-width:1020px){.top{grid-template-columns:minmax(0,1fr) auto auto;grid-template-areas:"title acts theme" "tabs rline rline"}.tabs{margin-left:0;justify-self:start}}
+@media(max-width:880px){.top{grid-template-columns:minmax(0,1fr) auto auto;grid-template-areas:"title data theme" "tabs tabs tabs"}.tabs{margin-left:0;justify-self:start}}
 @media(max-width:900px){
  .hgrid{grid-template-columns:1fr}.kwrap{grid-template-columns:1fr}.kside{border-right:0;padding:10px 0 4px;border-bottom:1px solid var(--line)}.fchips{flex-direction:row;overflow-x:auto;scrollbar-width:none;padding-bottom:6px}.fchips::-webkit-scrollbar{display:none}.fchip{flex:none;border:1px solid var(--line)}.fchip.on{box-shadow:inset 0 -3px 0 var(--tc,var(--ink))}.kopts{grid-auto-flow:column;justify-content:start;gap:16px;border-top:0;margin:4px 0;padding-top:0}.kmain{padding:10px 0 24px 12px}.sgrid{grid-template-columns:1fr 1fr!important}
- .ttwrap{grid-template-columns:1fr}.ttside{border-right:0;padding:6px 0 4px;display:grid;grid-template-columns:1fr 1fr;gap:0 18px}.tbtns{grid-column:1/-1;margin-top:8px}.ttmain{padding:10px 0 24px}
+ .ttwrap{grid-template-columns:1fr}.ttside,.kside{position:static;max-height:none;overflow:visible}.ttside{border-right:0;padding:6px 0 4px;display:grid;grid-template-columns:1fr 1fr;gap:0 18px}.tbtns{grid-column:1/-1;margin-top:8px}.ttmain{padding:10px 0 24px}
  .xcard{grid-template-columns:1fr}.xprev{min-height:200px}#xcanvas{max-height:42dvh}
- .wrap{grid-template-columns:1fr;grid-template-areas:"side" "main" "bk";grid-template-rows:auto}
+ .wrap{grid-template-columns:1fr;grid-template-areas:"side" "main"}
  aside{padding:12px 0 10px;border-bottom:1px solid var(--line);display:flex;gap:8px;align-items:stretch;overflow-x:auto;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;scrollbar-width:none}
  aside::-webkit-scrollbar{display:none}
  aside h2{display:none}
@@ -327,17 +331,18 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
  .ci.sel{box-shadow:inset 0 -3px 0 var(--cc,var(--red));border-color:var(--soft)}
  #snote{display:none}
  main{border-left:0;padding:14px 0 24px}
- .backup{border-top:1px solid var(--line);padding:12px 0 calc(20px + env(safe-area-inset-bottom))}
 }
 /* phone */
 @media(max-width:600px){
  .shell{padding:0 max(14px,env(safe-area-inset-left)) 0 max(14px,env(safe-area-inset-right))}
- .top{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"title theme" "tabs tabs" "acts acts" "rline rline";padding:12px 0 8px;gap:8px}
+ .top{grid-template-columns:minmax(0,1fr) auto auto;grid-template-areas:"title data theme" "tabs tabs tabs";padding:10px 0;gap:8px}
+ .dbtn span{display:none}.dbtn{width:38px;min-height:38px!important;padding:0!important;justify-content:center}
+ .theme{width:38px;height:38px}
+ .pbar{min-height:0;padding:8px 0}#v-grades .pbar .pleft{order:2}.pbar .acts{flex:1 1 100%;display:grid;grid-auto-columns:1fr;grid-auto-flow:column}
+ .pleft{flex-basis:100%}
  h1{font-size:21px}
- .acts{display:grid;grid-template-columns:repeat(3,1fr)}
  .acts .btn{padding:0 8px;min-width:0}
- .rline{text-align:left}
- .tabs{display:grid;grid-template-columns:repeat(4,1fr)}.tabs a{padding:7px 4px;font-size:13px}
+ .tabs{display:grid;grid-template-columns:repeat(4,1fr);justify-self:stretch}.tabs a{padding:7px 4px;font-size:13px;min-height:34px}
  .kopts{grid-auto-flow:row}
  .rgrid{grid-template-columns:1fr!important}
  .ttside{grid-template-columns:1fr}
@@ -359,38 +364,46 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 <header class="top">
   <h1>Course Manager</h1>
   <nav class="tabs" aria-label="Sections"><a href="#home" id="tab-home">Home</a><a href="#grades" id="tab-grades">Grades</a><a href="#timetable" id="tab-tt">Timetable</a><a href="#tasks" id="tab-tasks">Tasks</a></nav>
-  <div class="acts gonly">
+  <div class="dacts">
+    <button class="btn ghost sm dbtn" id="impbtn" title="Import a backup file"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2v8M4.5 6.5 8 10l3.5-3.5M2.5 11v2.5h11V11"/></svg><span>Import</span></button>
+    <button class="btn ghost sm dbtn" id="expbtn" title="Export a backup file"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 10V2M4.5 5.5 8 2l3.5 3.5M2.5 11v2.5h11V11"/></svg><span>Export</span></button>
+  </div>
+  <button class="theme" id="theme" aria-label="Switch to dark mode" title="Light / dark mode"><svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 1.5v2.5M12 20v2.5M4.6 4.6l1.8 1.8M17.6 17.6l1.8 1.8M1.5 12H4M20 12h2.5M4.6 19.4l1.8-1.8M17.6 6.4l1.8-1.8"/></svg></button>
+  <input type="file" id="file" multiple hidden accept=".pdf,.docx,.txt,.md,.rtf,.html,.htm,image/*">
+  <input type="file" id="icsfile" hidden accept=".ics,text/calendar">
+  <input type="file" id="impf" accept=".json,application/json" hidden>
+  <input type="file" id="calfile" hidden accept=".ics,text/calendar,.pdf,.docx,.txt,.md,.html,.htm,image/*">
+</header>
+<section id="v-home" hidden><div class="pbar hhero" id="hhero"></div><div class="hgrid" id="hgrid"></div></section>
+<section id="v-tasks" hidden><div class="pbar"><div class="pleft" id="khead"></div>
+  <div class="acts">
+    <button class="btn" id="ktaskadd">Add task</button>
+    <button class="btn ghost" id="ksem">Semester</button>
+  </div>
+</div><div class="kwrap"><div class="kside" id="kside"></div><div class="kmain"><div id="klist"></div></div></div></section>
+<section id="v-grades" hidden>
+<div class="pbar"><div class="pleft"><p class="rline"><span id="reader"></span> <button class="link" id="setbtn">Reading settings</button></p></div>
+  <div class="acts">
     <button class="btn" id="pick" title="Upload syllabus files (PDF, Word, photos or text)">Upload</button>
     <button class="btn ghost" id="pastebtn" title="Paste syllabus text">Text</button>
     <button class="btn ghost" id="manual" title="Add a course by hand">Manual</button>
   </div>
-  <div class="acts konly">
-    <button class="btn" id="ktaskadd">Add task</button>
-    <button class="btn ghost" id="ksem">Semester</button>
-  </div>
-  <div class="acts tonly">
-    <button class="btn" id="icspick" title="Upload your schedule as an .ics calendar file">Upload .ics</button>
-    <button class="btn ghost" id="ttexp" title="Save the timetable as an image">Export image</button>
-  </div>
-  <button class="theme" id="theme" aria-label="Switch to dark mode" title="Light / dark mode"><svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 1.5v2.5M12 20v2.5M4.6 4.6l1.8 1.8M17.6 17.6l1.8 1.8M1.5 12H4M20 12h2.5M4.6 19.4l1.8-1.8M17.6 6.4l1.8-1.8"/></svg></button>
-  <p class="rline gonly"><span id="reader"></span> <button class="link" id="setbtn">Reading settings</button></p>
-  <input type="file" id="file" multiple hidden accept=".pdf,.docx,.txt,.md,.rtf,.html,.htm,image/*">
-  <input type="file" id="icsfile" hidden accept=".ics,text/calendar">
-  <input type="file" id="calfile" hidden accept=".ics,text/calendar,.pdf,.docx,.txt,.md,.html,.htm,image/*">
-</header>
-<section id="v-home" hidden><div class="hhero" id="hhero"></div><div class="hgrid" id="hgrid"></div></section>
-<section id="v-tasks" hidden><div class="kwrap"><div class="kside" id="kside"></div><div class="kmain"><div id="khead"></div><div id="klist"></div></div></div></section>
-<section id="v-grades" hidden>
+</div>
 <div class="status"><ul id="jobs"></ul></div>
 
 <div class="wrap">
   <aside><button class="gpacard" id="gpacard" data-sel="gpa" hidden></button><h2>Your courses</h2><div class="clist" id="side"></div><div class="side-note" id="snote"></div></aside>
   <main id="panel"></main>
-  <section class="backup"><div class="sync" id="sync">Saved in this browser</div><div class="bk"><button class="btn ghost sm" id="exp">Export backup</button><button class="btn ghost sm" id="imp">Import backup</button><input type="file" id="impf" accept=".json,application/json" hidden></div><button class="btn sm danger-ghost" id="resetall">Reset everything</button><p class="side-note">Scores are kept in this browser. Export a backup to move them to another device.</p></section>
 </div>
 </section>
 <section id="v-tt" hidden>
-  <div class="ttwrap"><div class="ttside" id="ttside"></div><div class="ttmain"><div class="tthead" id="tthead"></div><div id="ttgrid"></div></div></div>
+  <div class="pbar"><div class="pleft tthead" id="tthead"></div>
+  <div class="acts">
+    <button class="btn" id="icspick" title="Upload your schedule as an .ics calendar file">Upload .ics</button>
+    <button class="btn ghost" id="ttexp" title="Save the timetable as an image">Export image</button>
+  </div>
+</div>
+  <div class="ttwrap"><div class="ttside" id="ttside"></div><div class="ttmain"><div id="ttgrid"></div></div></div>
 </section>
 <div class="dropover" id="dropover">Drop files to add them</div>
 </div>
@@ -439,6 +452,11 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 <ul id="scal" class="tasks scal"></ul>
 <details class="sadd"><summary>Add a date by hand</summary><div class="grid2 sgrid"><label class="rlink">Name<input id="sat" autocomplete="off" placeholder="e.g. Spring break"></label><label>From<input type="date" id="sas"></label><label>To (optional)<input type="date" id="sae"></label><label>Type<select id="satype"><option value="break">Break</option><option value="holiday">Holiday</option><option value="makeup">Make-up day</option><option value="exam">Exams</option><option value="deadline">Deadline</option><option value="event">Event</option><option value="start">Classes begin</option><option value="end">Classes end</option></select></label><div class="xl"><span>&nbsp;</span><button class="btn ghost sm" id="sadd">Add date</button></div></div></details>
 <div class="mact"><button class="btn" id="sclose">Done</button></div></div></div>
+<div id="dmodal" class="modal"><div class="card cnf dcard"><h3>Export data</h3><p class="hint">Saves a backup file you can import later, on this device or another one.</p>
+<div class="dopts"><label class="dopt" id="doptpage"><input type="radio" name="dscope" value="page"><span><b id="dpage">This page</b><small id="dpagesub"></small></span></label>
+<label class="dopt"><input type="radio" name="dscope" value="all"><span><b>Whole site</b><small>Grades, timetable, tasks, semester and academic calendar</small></span></label></div>
+<div class="mact"><button class="btn ghost" id="dcancel">Cancel</button><button class="btn" id="ddo">Export</button></div>
+<div class="dfoot"><span class="hint">Everything is saved in this browser.</span><button class="lnkbtn dreset" id="resetall">Reset everything…</button></div></div></div>
 <div id="toast"><span id="tmsg"></span><button id="tundo" hidden>Undo</button></div>
 <script>
 /* ======== SETUP: paste your Cloudflare Worker address between the quotes, e.g. 'https://syllabus-reader.yourname.workers.dev' ======== */
@@ -608,7 +626,7 @@ function numbers(){
 }
 
 /* ---------- persistence ---------- */
-function save(){S.at=Date.now();try{localStorage.setItem(KEY,JSON.stringify(S))}catch{$('#sync').textContent='Couldn’t save: browser storage is off or full';}}
+let saveWarned=false;function save(){S.at=Date.now();try{localStorage.setItem(KEY,JSON.stringify(S));saveWarned=false;}catch{if(!saveWarned){saveWarned=true;toast('Couldn’t save: browser storage is off or full. Export a backup.');}}}
 
 /* ---------- toast ---------- */
 let tT,undoSnap=null;
@@ -913,9 +931,31 @@ function sUI(){const p=$('#sprov').value,k=p==='gemini'||p==='anthropic';$('#ske
 const openSettings=()=>{$('#sprov').value=(CFG.provider==='site'&&!RELAY)?'basic':CFG.provider;$('#skey').value=CFG.key;$('#smod').value=CFG.model;sUI();sm.classList.add('on');};
 $('#setbtn').onclick=openSettings;$('#sprov').onchange=sUI;$('#scancel').onclick=()=>sm.classList.remove('on');
 $('#ssave').onclick=()=>{CFG={provider:$('#sprov').value,key:$('#skey').value.trim(),model:$('#smod').value.trim()};try{localStorage.setItem(SKEY,JSON.stringify(CFG));}catch{}sm.classList.remove('on');readerLabel();toast((CFG.provider==='gemini'||CFG.provider==='anthropic')&&!CFG.key?'No key entered, so '+NAMES[provider()]+' stays on':'Reading settings saved');};
-$('#exp').onclick=()=>{try{const blob=new Blob([JSON.stringify({app:'syllabus-grade-calculator',v:1,...S},null,1)],{type:'application/json'});const u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download='grade-calculators-'+new Date().toISOString().slice(0,10)+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),2000);toast('Backup downloaded');}catch{toast('Your browser blocked the download');}};
-$('#imp').onclick=()=>$('#impf').click();
-$('#impf').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;try{const v=JSON.parse(await f.text());if(!v||!Array.isArray(v.courses))throw 0;const snap=JSON.stringify(S);S={...v,at:Date.now()};delete S.app;delete S.v;fix();render();save();toast(`Imported ${S.courses.length} course${S.courses.length===1?'':'s'}`,snap);}catch{toast('That file isn’t a grade calculator backup');}};
+/* ---------- backup: export this page or the whole site; import detects what a file holds ---------- */
+const SCOPES={grades:{name:'Grades',sub:'Courses, weights, scores, professors and missed-exam make-ups',get:()=>({courses:S.courses,sel:S.sel}),set:d=>{S.courses=Array.isArray(d.courses)?d.courses:[];S.sel=d.sel;}},
+  timetable:{name:'Timetable',sub:'Your class schedule, colours, names and display options',get:()=>({tt:S.tt||{}}),set:d=>{S.tt=d.tt||{};}},
+  tasks:{name:'Tasks',sub:'Your tasks, categories, semester, weeks off and academic calendar',get:()=>({tasks:S.tasks||[],cats:S.cats||[],tstate:S.tstate||{},sem:S.sem||null}),set:d=>{S.tasks=d.tasks||[];S.cats=d.cats||[];S.tstate=d.tstate||{};S.sem=d.sem||null;}}};
+const viewScope=()=>({grades:'grades',tt:'timetable',tasks:'tasks'})[document.body.dataset.view]||null;
+function openData(){const sc=viewScope(),m=$('#dmodal'),pg=$('#doptpage');
+  if(sc){pg.classList.remove('dis');pg.querySelector('input').disabled=false;$('#dpage').textContent='This page: '+SCOPES[sc].name;$('#dpagesub').textContent=SCOPES[sc].sub;}
+  else{pg.classList.add('dis');pg.querySelector('input').disabled=true;$('#dpage').textContent='This page';$('#dpagesub').textContent='Home shows data from every section, so export the whole site.';}
+  document.querySelector(`input[name=dscope][value=${sc?'page':'all'}]`).checked=true;m.classList.add('on');setTimeout(()=>$('#ddo').focus(),0);}
+$('#expbtn').onclick=openData;$('#dcancel').onclick=()=>$('#dmodal').classList.remove('on');
+$('#dmodal').addEventListener('click',e=>{if(e.target===$('#dmodal'))$('#dmodal').classList.remove('on');});
+$('#ddo').onclick=()=>{const page=document.querySelector('input[name=dscope]:checked').value==='page',sc=page?viewScope():'all';
+  const data=sc==='all'?JSON.parse(JSON.stringify(S)):SCOPES[sc].get();
+  try{const blob=new Blob([JSON.stringify({app:'course-manager',v:2,scope:sc,exported:new Date().toISOString(),data},null,1)],{type:'application/json'}),u=URL.createObjectURL(blob),a=document.createElement('a');
+    a.href=u;a.download=`course-manager-${sc==='all'?'all':sc}-${iso(new Date())}.json`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),2000);
+    $('#dmodal').classList.remove('on');toast(sc==='all'?'Whole-site backup downloaded':SCOPES[sc].name+' backup downloaded');}catch{toast('Your browser blocked the download');}};
+$('#impbtn').onclick=()=>$('#impf').click();
+$('#impf').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;let v;try{v=JSON.parse(await f.text());}catch{toast('That file isn’t a Course Manager backup');return;}
+  let sc='all',data=v;if(v&&v.app==='course-manager'&&v.data){sc=SCOPES[v.scope]?v.scope:'all';data=v.data;}else if(!(v&&Array.isArray(v.courses))){toast('That file isn’t a Course Manager backup');return;}
+  else if(!('tt' in v||'tasks' in v||'sem' in v))sc='grades';
+  if(sc==='all'&&!Array.isArray(data.courses)){toast('That backup looks damaged');return;}
+  const ok=await confirmBox(sc==='all'?'Replace everything with this backup?':`Replace your ${SCOPES[sc].name} with this backup?`,sc==='all'?'All courses, grades, timetable, tasks, semester and calendar in this browser are replaced by the file.':`Only ${SCOPES[sc].name} is replaced. Everything else stays as it is.`,'Import');if(!ok)return;
+  const snap=JSON.stringify(S);if(sc==='all'){S={...data,at:Date.now()};delete S.app;delete S.v;}else SCOPES[sc].set(data);
+  fix();save();const target={grades:'#grades',timetable:'#timetable',tasks:'#tasks'}[sc];if(target&&location.hash!==target)location.hash=target;else route();
+  toast(sc==='all'?'Backup imported':SCOPES[sc].name+' imported',snap);};
 
 new MutationObserver(()=>{for(const c of document.querySelectorAll('.stack td:not([data-l])')){let i=0,p=c;while(p=p.previousElementSibling)i++;c.dataset.l=c.closest('table').rows[0].cells[i]?.textContent||'';}}).observe(document.getElementById('panel'),{childList:true,subtree:true});
 
@@ -934,7 +974,7 @@ async function clearGrades(co){
   for(const c of scope)for(const k of c.comps){k.scores=k.scores.map(()=>'');delete k.miss;}
   render();save();toast(`Grades cleared for ${co.code||'course'}`,snap);
 }
-$('#resetall').onclick=async()=>{
+$('#resetall').onclick=async()=>{$('#dmodal').classList.remove('on');
   if(!S.courses.length&&!(S.tt&&S.tt.slots&&S.tt.slots.length)){toast('There’s nothing to reset');return;}
   const ok=await confirmBox('Reset everything?',`This deletes all ${S.courses.length} course${S.courses.length===1?'':'s'}, every grade${S.tt&&S.tt.slots&&S.tt.slots.length?' and your timetable':''} from this browser. Export a backup first if you might want them later.`,'Reset everything');
   if(!ok)return;const snap=JSON.stringify(S);S={courses:[],sel:null,at:Date.now()};edit=false;render();if(document.body.dataset.view==='tt')renderTT();save();toast('Everything was reset',snap);
@@ -1124,7 +1164,7 @@ function ttWeek(vis,t){
   const days=weekDays(vis);if(!days.length)return'<p class="hint">Nothing to show. Turn a course back on in the list.</p>';
   const lo=Math.floor(Math.min(...vis.map(s=>s.start))/60)*60,hi=Math.ceil(Math.max(...vis.map(s=>s.end))/60)*60,range=Math.max(60,hi-lo);
   const top=$('#ttgrid').getBoundingClientRect().top+scrollY,avail=Math.max(360,innerHeight-Math.max(0,top-scrollY)-40);
-  const ppm=Math.min(1.7,Math.max(.95,(avail-34)/range)),H=Math.round(range*ppm);
+  const ppm=Math.min(1.7,Math.max(.8,(avail-34)/range)),H=Math.round(range*ppm);
   const hours=[];for(let m=lo;m<=hi;m+=60)hours.push(m);
   const col=d=>{const list=layoutDay(vis.filter(s=>s.day===d));return`<div class="tcol" style="height:${H}px">${list.map(s=>{const a=blockAttrs(s),h=(s.end-s.start)*ppm-3,lines=Math.max(1,Math.floor((h-8)/15)),all=fieldsFor(s,t.opts,t.h24),fl=all.slice(0,lines),extra=lines-fl.length;
       return`<button class="tb${a.g?' linked':''}" data-act="ttblock" data-key="${esc(s.key)}" style="top:${(s.start-lo)*ppm+1}px;height:${h}px;left:calc(${s._c/s._n*100}% + 2px);width:calc(${100/s._n}% - 4px);background:${a.bg};color:${a.ink}" title="${esc(a.title)}">${fl.map((x,i)=>`<span class="${i===0?'t1':''}${x.f==='name'&&extra>0?' w2':''}">${esc(x.v)}</span>`).join('')}${a.g?'<i class="go" aria-hidden="true">↗</i>':''}</button>`;}).join('')}</div>`;};
@@ -1415,7 +1455,7 @@ function calRow(c){const a=pd(c.start),b=pd(c.end);return`<li class="crow ct-${c
 function toggleTask(key,done){TS();if(key.startsWith('m:')){const m=S.tasks.find(x=>'m:'+x.id===key);if(m)m.done=done;}else{S.tstate[key]=Object.assign(S.tstate[key]||{},{done});}save();}
 
 /* ---- Tasks page ---- */
-let tFilter='all',tShowDone=false,tShowCal=true;
+let tFilter='all',tShowDone=false,tShowCal=true,tLaterOpen=false,tOverOpen=false;
 function renderTasks(){TS();const s=SEM(),all=allTasks(),wi=weekInfo();
   const courses=S.courses.filter(c=>!(c.isLab&&linkedBy(c.id))||all.some(t=>t.courseId===c.id));
   const chip=(id,label,color,n)=>`<button class="fchip${tFilter===id?' on':''}" data-tf="${esc(id)}"${color?` style="--tc:${color}"`:''}>${color?'<i class="cdot"></i>':''}${esc(label)}${n?`<b>${n}</b>`:''}</button>`;
@@ -1436,8 +1476,14 @@ function renderTasks(){TS();const s=SEM(),all=allTasks(),wi=weekInfo();
     const w=weekOfDate(d);if(w)put('w'+w.i,wkLabel(w),+w.a,item);else{const ws=new Date(d);ws.setDate(d.getDate()-((d.getDay()+6)%7));put('d'+iso(ws),`Week of ${fmtD(ws,false)}`,+ws,item);}};
   for(const t of list)place(t.date,{t,sort:t.date||'9'});
   const wsAll=semWeeks();for(const c of cal){const ow=isBreak(c)&&wsAll.find(w=>w.off&&w.auto===c.title&&w.b>=T0);place(iso(ow?(ow.a<T0?T0:ow.a):(pd(c.start)<T0?T0:pd(c.start))),{c,sort:c.start},true);}
-  const html=[...groups.values()].sort((a,b)=>a.sort-b.sort).map(g=>`<section class="kgroup"><h3>${g.label}</h3><ul class="tasks">${g.items.sort((x,y)=>String(x.sort).localeCompare(String(y.sort))).map(x=>x.t?taskRow(x.t):calRow(x.c)).join('')}</ul></section>`).join('');
-  $('#klist').innerHTML=html;}
+  const gs=[...groups.values()].sort((a,b)=>a.sort-b.sort),grp=g=>{let items=g.items.sort((x,y)=>String(x.sort).localeCompare(String(y.sort))),more='';
+    if(g.sort===-1&&items.length>4&&!tOverOpen){more=`<button class="lnkbtn kmore" data-act="overall">Show all ${items.length} overdue</button>`;items=items.slice(-3);}
+    return`<section class="kgroup"><h3>${g.label}</h3><ul class="tasks">${items.map(x=>x.t?taskRow(x.t):calRow(x.c)).join('')}</ul>${more}</section>`;};
+  /* keep the page short: overdue + the next three weeks open, later weeks folded */
+  const nearEnd=+addD(T0,21),near=gs.filter(g=>g.sort<nearEnd||g.sort===9e15),later=gs.filter(g=>!near.includes(g)),undated=near.filter(g=>g.sort===9e15),shown=near.filter(g=>g.sort!==9e15);
+  const nLater=later.reduce((n,g)=>n+g.items.length,0);
+  $('#klist').innerHTML=shown.map(grp).join('')+(later.length?`<details class="klater"${tLaterOpen?' open':''}><summary>Later in the semester<span class="hint">${nLater} item${nLater>1?'s':''} · ${later.length} week${later.length>1?'s':''}</span></summary>${later.map(grp).join('')}</details>`:'')+undated.map(grp).join('');
+  const kl=$('#klist').querySelector('.klater');if(kl)kl.addEventListener('toggle',()=>{tLaterOpen=kl.open;});}
 function renderPlanner(){const v=document.body.dataset.view;if(v==='tasks')renderTasks();else if(v==='home')renderHome();else if(v==='tt')renderTT();else render();}
 
 /* ---- task dialog ---- */
@@ -1490,6 +1536,7 @@ $('#semmodal').addEventListener('click',e=>{if(e.target===$('#semmodal'))$('#sem
 /* ---- Tasks page events ---- */
 const VK=$('#v-tasks');
 VK.addEventListener('click',e=>{const f=e.target.closest('[data-tf]');if(f){tFilter=f.dataset.tf;renderTasks();return;}const b=e.target.closest('[data-act]');if(!b)return;const a=b.dataset.act;
+  if(a==='overall'){tOverOpen=true;renderTasks();return;}
   if(a==='tadd')openTask(null);else if(a==='tedit')openTask(b.dataset.key);else if(a==='tdel')deleteTask(b.dataset.key);else if(a==='semopen')openSem();
   else if(a==='catcolor'){const k=catOf(b.dataset.id);pickColor(b,k.color,c=>{k.color=c;save();renderTasks();});}
   else if(a==='catdel'){const k=catOf(b.dataset.id);confirmBox(`Delete “${k.name}”?`,'Its tasks stay, without a category.','Delete category').then(ok=>{if(!ok)return;const snap=JSON.stringify(S);S.cats=S.cats.filter(x=>x!==k);S.tasks.forEach(t=>{if(t.catId===k.id)t.catId=null;});if(tFilter==='k:'+k.id)tFilter='all';save();renderTasks();toast('Category deleted',snap);});}});
@@ -1511,8 +1558,8 @@ function renderHome(){TS();const s=SEM(),wi=weekInfo(),T0=today0(),all=allTasks(
   let nextLbl='',nextCls=[];if(vis.length&&!todayCls.length){for(let k=1;k<=7;k++){const d=addD(T0,k),l=vis.filter(x=>x.day===d.getDay()).sort((a,b)=>a.start-b.start);if(l.length){nextLbl=k===1?'Tomorrow':DAYN[d.getDay()];nextCls=l;break;}}}
   const nowMin=new Date().getHours()*60+new Date().getMinutes();
   const clsRow=x=>{const n=nm(x),g=gradeFor(x.ckey,n.code),live=todayCls.includes(x)&&nowMin>=x.start&&nowMin<x.end;return`<li class="hcls${live?' now':''}${g?' linked':''}" ${g?`data-hopen="${g.id}" tabindex="0" role="link"`:''}><span class="hct">${esc(fmtClock(x.start,TT().h24))}<small>${esc(fmtClock(x.end,TT().h24))}</small></span><span class="tlb" style="background:${ttColor(x.ckey)}"></span><span class="hcb"><b>${esc(n.code||n.name)}</b><span>${esc([n.name&&n.code?n.name:'',x.room].filter(Boolean).join(' · '))}</span></span>${live?'<em>Now</em>':''}</li>`;};
-  $('#hhero').innerHTML=s?`<div><span class="hsem">${esc(semName())}</span><h2>${esc(weekLine())}</h2><span class="hint">${esc(fmtD(T0))}</span></div><button class="btn ghost sm" data-act="semopen">Semester</button>`
-    :`<div><span class="hsem">${esc(fmtD(T0))}</span><h2>Welcome</h2><span class="hint">Set your semester to see week numbers and place syllabus dates.</span></div><button class="btn sm" data-act="semopen">Set up semester</button>`;
+  $('#hhero').innerHTML=s?`<div><span class="hsem">${esc(semName())}</span><h2>${esc(weekLine())}</h2><span class="hint">${esc(fmtD(T0))}</span></div><button class="btn ghost" data-act="semopen">Semester</button>`
+    :`<div><span class="hsem">${esc(fmtD(T0))}</span><h2>Welcome</h2><span class="hint">Set your semester to see week numbers and place syllabus dates.</span></div><button class="btn" data-act="semopen">Set up semester</button>`;
   const card=(href,title,count,body)=>`<section class="hcard"><a class="htitle" href="${href}"><h3>${title}</h3>${count!=null?`<span class="hcount">${count}</span>`:''}<span class="harr" aria-hidden="true">→</span></a>${body}</section>`;
   $('#hgrid').innerHTML=
     card('#tasks','Tasks',due.length||null,`${overdue.length?`<a class="hover" href="#tasks"><b>${overdue.length} overdue</b><span>Review →</span></a>`:''}${due.length?`<ul class="tasks">${due.slice(0,6).map(t=>taskRow(t,true)).join('')}</ul>${due.length>6?`<a class="hmore" href="#tasks">${due.length-6} more due this week</a>`:''}`:`<p class="hint hempty">Nothing due in the next 7 days.${undated.length?` ${undated.length} task${undated.length>1?'s have':' has'} no date.`:''}</p><button class="btn ghost sm" data-act="tadd">Add a task</button>`}`)+
