@@ -356,7 +356,7 @@ async function ask(input,name){
       const j=await r.json().catch(()=>({}));
       if(r.ok&&Array.isArray(j.courses))return{courses:j.courses};
       why=j.error||('error '+r.status);
-    }catch(e){why=(e&&e.message)||'couldn’t reach it';if(/Failed to fetch|NetworkError|Load failed/i.test(why))why='couldn’t reach it';}
+    }catch(e){why=(e&&e.message)||'couldn’t reach it';if(/Failed to fetch|NetworkError|Load failed/i.test(why))why='couldn’t reach it from '+(location.origin&&location.origin!=='null'?location.origin:'a file opened from your computer; open the site from its web address instead');}
     if(!input.text.trim())throw new Error('The AI reader is unavailable ('+why+'), and photos or scans need it. Try again later.');
     const b=basicRead(input.text,name);b.fallback='AI reader unavailable ('+why+'), so the built-in reader was used';return b;
   }
