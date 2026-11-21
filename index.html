@@ -31,6 +31,14 @@ input[type=checkbox]{accent-color:var(--red);width:20px;height:20px;margin:0}
 h1{grid-area:title;font-size:clamp(22px,2.4vw,30px);line-height:1.1;margin:0;font-stretch:112%;font-weight:800;letter-spacing:-.01em}
 .acts{display:flex;gap:8px;flex:none}
 .dacts{grid-area:data;display:flex;gap:6px}
+.dopts{display:grid;gap:8px;margin:14px 0 6px}
+.dopt{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border:1.5px solid var(--line);border-radius:var(--rad);cursor:pointer;transition:border-color .15s,background .15s}
+.dopt:hover{border-color:var(--mute)}.dopt:has(input:checked){border-color:var(--ink);background:var(--soft)}
+.dopt input{margin:3px 0 0;width:17px;height:17px;accent-color:var(--ink);flex:none}
+.dopt span{display:grid;gap:3px;min-width:0}.dopt b{font-size:15px}.dopt small{color:var(--mute);font-size:13px;line-height:1.4}
+.dopt.dis{opacity:.5;cursor:default}.dopt.dis:hover{border-color:var(--line)}
+#zmodal .dopt:has(input:checked){border-color:var(--red)}#zmodal .dopt input{accent-color:var(--red)}
+.btn.danger{background:var(--red,#d0021b);border-color:var(--red,#d0021b);color:#fff}
 .dbtn{display:inline-flex;align-items:center;gap:6px}.dbtn svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
 .acts .btn{min-width:84px}
 .theme{grid-area:theme}
@@ -340,7 +348,8 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
  .theme{width:38px;height:38px}
  .pbar{min-height:0;padding:8px 0}#v-grades .pbar .pleft{order:2}.pbar .acts{flex:1 1 100%;display:grid;grid-auto-columns:1fr;grid-auto-flow:column}
  .pleft{flex-basis:100%}
- h1{font-size:21px}
+ h1{font-size:min(21px,5.3vw);white-space:nowrap}
+ .dacts{gap:4px}.top{column-gap:6px}
  .acts .btn{padding:0 8px;min-width:0}
  .tabs{display:grid;grid-template-columns:repeat(4,1fr);justify-self:stretch}.tabs a{padding:7px 4px;font-size:13px;min-height:34px}
  .kopts{grid-auto-flow:row}
@@ -367,6 +376,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
   <div class="dacts">
     <button class="btn ghost sm dbtn" id="impbtn" title="Import a backup file"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2v8M4.5 6.5 8 10l3.5-3.5M2.5 11v2.5h11V11"/></svg><span>Import</span></button>
     <button class="btn ghost sm dbtn" id="expbtn" title="Export a backup file"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 10V2M4.5 5.5 8 2l3.5 3.5M2.5 11v2.5h11V11"/></svg><span>Export</span></button>
+    <button class="btn ghost sm dbtn dz" id="rstbtn" title="Reset data"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 8a5.5 5.5 0 1 0 1.7-4M2.5 2v3h3"/></svg><span>Reset</span></button>
   </div>
   <button class="theme" id="theme" aria-label="Switch to dark mode" title="Light / dark mode"><svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 1.5v2.5M12 20v2.5M4.6 4.6l1.8 1.8M17.6 17.6l1.8 1.8M1.5 12H4M20 12h2.5M4.6 19.4l1.8-1.8M17.6 6.4l1.8-1.8"/></svg></button>
   <input type="file" id="file" multiple hidden accept=".pdf,.docx,.txt,.md,.rtf,.html,.htm,image/*">
@@ -456,7 +466,11 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 <div class="dopts"><label class="dopt" id="doptpage"><input type="radio" name="dscope" value="page"><span><b id="dpage">This page</b><small id="dpagesub"></small></span></label>
 <label class="dopt"><input type="radio" name="dscope" value="all"><span><b>Whole site</b><small>Grades, timetable, tasks, semester and academic calendar</small></span></label></div>
 <div class="mact"><button class="btn ghost" id="dcancel">Cancel</button><button class="btn" id="ddo">Export</button></div>
-<div class="dfoot"><span class="hint">Everything is saved in this browser.</span><button class="lnkbtn dreset" id="resetall">Reset everything…</button></div></div></div>
+</div></div>
+<div id="zmodal" class="modal"><div class="card cnf dcard"><h3>Reset data</h3><p class="hint">Deletes data from this browser. You can undo right after, but export a backup first if you might want it later.</p>
+<div class="dopts"><label class="dopt" id="zoptpage"><input type="radio" name="zscope" value="page"><span><b id="zpage">This page</b><small id="zpagesub"></small></span></label>
+<label class="dopt"><input type="radio" name="zscope" value="all"><span><b>Whole site</b><small id="zallsub"></small></span></label></div>
+<div class="mact"><button class="btn ghost" id="zcancel">Cancel</button><button class="btn danger" id="zdo">Reset…</button></div></div></div>
 <div id="toast"><span id="tmsg"></span><button id="tundo" hidden>Undo</button></div>
 <script>
 /* ======== SETUP: paste your Cloudflare Worker address between the quotes, e.g. 'https://syllabus-reader.yourname.workers.dev' ======== */
@@ -974,11 +988,27 @@ async function clearGrades(co){
   for(const c of scope)for(const k of c.comps){k.scores=k.scores.map(()=>'');delete k.miss;}
   render();save();toast(`Grades cleared for ${co.code||'course'}`,snap);
 }
-$('#resetall').onclick=async()=>{$('#dmodal').classList.remove('on');
-  if(!S.courses.length&&!(S.tt&&S.tt.slots&&S.tt.slots.length)){toast('There’s nothing to reset');return;}
-  const ok=await confirmBox('Reset everything?',`This deletes all ${S.courses.length} course${S.courses.length===1?'':'s'}, every grade${S.tt&&S.tt.slots&&S.tt.slots.length?' and your timetable':''} from this browser. Export a backup first if you might want them later.`,'Reset everything');
-  if(!ok)return;const snap=JSON.stringify(S);S={courses:[],sel:null,at:Date.now()};edit=false;render();if(document.body.dataset.view==='tt')renderTT();save();toast('Everything was reset',snap);
-};
+const ZC={grades:()=>{const n=S.courses.length,g=S.courses.reduce((a,c)=>a+c.comps.reduce((b,k)=>b+k.scores.filter(hasVal).length,0),0);return n?`${n} course${n===1?'':'s'} and ${g} score${g===1?'':'s'}`:'';},
+  timetable:()=>{const n=(S.tt&&S.tt.slots||[]).length;return n?`${n} timetable class${n===1?'':'es'}`:'';},
+  tasks:()=>{const n=(S.tasks||[]).length,c=(S.cats||[]).length,st=S.tstate&&Object.keys(S.tstate).length,sem=S.sem&&(S.sem.start||(S.sem.cal||[]).length);return[n&&`${n} task${n===1?'':'s'} you added`,c&&`${c} categor${c===1?'y':'ies'}`,st&&'task ticks and edits',sem&&'the semester and calendar'].filter(Boolean).join(', ');}};
+const ZSUB={grades:'Courses, weights, scores, professors and make-ups',timetable:'Your class schedule, colours, names and display options',tasks:'Tasks you added, categories, ticks, semester and academic calendar. Tasks from syllabi stay while their courses do.'};
+const zClear={grades:()=>{S.courses=[];S.sel=null;edit=false;},timetable:()=>{S.tt={};},tasks:()=>{S.tasks=[];S.cats=[];S.tstate={};S.sem=null;}};
+function zLine(sc){const v=ZC[sc]();return v?'Deletes '+v+'.':'Nothing here yet.';}
+function openReset(){const sc=viewScope(),pg=$('#zoptpage'),inp=pg.querySelector('input');
+  if(sc){pg.classList.remove('dis');inp.disabled=false;$('#zpage').textContent='This page: '+SCOPES[sc].name;$('#zpagesub').textContent=ZSUB[sc]+' '+zLine(sc);}
+  else{pg.classList.add('dis');inp.disabled=true;$('#zpage').textContent='This page';$('#zpagesub').textContent='Home shows data from every section, so reset the whole site.';}
+  $('#zallsub').textContent='Grades, timetable, tasks, semester and academic calendar. Your light/dark setting stays.';
+  document.querySelector(`input[name=zscope][value=${sc?'page':'all'}]`).checked=true;$('#zmodal').classList.add('on');setTimeout(()=>$('#zcancel').focus(),0);}
+$('#rstbtn').onclick=openReset;$('#zcancel').onclick=()=>$('#zmodal').classList.remove('on');
+$('#zmodal').addEventListener('click',e=>{if(e.target===$('#zmodal'))$('#zmodal').classList.remove('on');});
+$('#zdo').onclick=async()=>{const sc=document.querySelector('input[name=zscope]:checked').value==='page'?viewScope():'all';$('#zmodal').classList.remove('on');
+  const what=sc==='all'?['grades','timetable','tasks'].map(k=>ZC[k]()).filter(Boolean).join('; '):ZC[sc]();
+  if(!what){toast('There’s nothing to reset');return;}
+  const name=sc==='all'?'everything':SCOPES[sc].name.toLowerCase();
+  const ok=await confirmBox(`Reset ${name}?`,`This deletes ${what} from this browser.${sc==='all'?'':' Everything else stays as it is.'}`,sc==='all'?'Reset everything':'Reset '+name);
+  if(!ok)return;const snap=JSON.stringify(S);
+  if(sc==='all'){S={courses:[],sel:null,at:Date.now()};edit=false;}else zClear[sc]();
+  fix();save();route();toast(sc==='all'?'Everything was reset':SCOPES[sc].name+' reset',snap);};
 
 /* ---------- missed exam dialog ---------- */
 let MX=null;const mm=$('#mmodal');
