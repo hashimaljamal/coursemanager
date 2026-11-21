@@ -35,7 +35,7 @@ h1{grid-area:title;font-size:clamp(22px,2.4vw,30px);line-height:1.1;margin:0;fon
 .dopt{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border:1.5px solid var(--line);border-radius:var(--rad);cursor:pointer;transition:border-color .15s,background .15s}
 .dopt:hover{border-color:var(--mute)}.dopt:has(input:checked){border-color:var(--ink);background:var(--soft)}
 .dopt input{margin:3px 0 0;width:17px;height:17px;accent-color:var(--ink);flex:none}
-.dopt span{display:grid;gap:3px;min-width:0}.dopt b{font-size:15px}.dopt small{color:var(--mute);font-size:13px;line-height:1.4}
+.dopt>span{display:grid;gap:3px;min-width:0}.dopt b{font-size:15px}.dopt small{color:var(--mute);font-size:13px;line-height:1.4}
 .dopt.dis{opacity:.5;cursor:default}.dopt.dis:hover{border-color:var(--line)}
 #zmodal .dopt:has(input:checked){border-color:var(--red)}#zmodal .dopt input{accent-color:var(--red)}
 .btn.danger{background:var(--red,#d0021b);border-color:var(--red,#d0021b);color:#fff}
@@ -82,6 +82,9 @@ aside h2{font-size:12px;color:var(--mute);margin:0 0 6px;font-weight:600}
 .gpacard span{font-size:12px;color:var(--mute)}.gpacard b{font-size:30px;font-weight:900;font-stretch:118%;line-height:1.1;font-variant-numeric:tabular-nums}.gpacard b.nil{font-size:15px;font-weight:600;line-height:1.6}.gpacard small{font-size:12px;color:var(--mute)}
 .gpacard.sel{border-color:var(--red);box-shadow:inset 3px 0 0 var(--red)}
 .clist{display:flex;flex-direction:column;gap:2px}
+.reord [data-rid]{touch-action:pan-x pan-y;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.reord .rdrag{background:var(--soft)!important;box-shadow:0 8px 22px rgb(0 0 0/.18);position:relative;z-index:3;opacity:.95}.rsorting{cursor:grabbing}.rsorting *{cursor:grabbing!important}
+.rhint{font-weight:500;opacity:.75;margin-left:4px}
 .ci{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:0 10px;text-align:left;border:0;border-radius:8px;background:transparent;padding:8px 10px;min-height:44px;align-items:center}
 .ci.sel{background:var(--soft);box-shadow:inset 3px 0 0 var(--cc,var(--red))}
 .cdot{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--cc);margin-right:7px;vertical-align:1px;flex:none}
@@ -313,7 +316,8 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 .crow .cflag{width:28px;min-height:28px;display:grid;place-items:center;flex:none}
 .crow .cflag::before{content:'';width:12px;height:12px;border-radius:3px;background:var(--mute);transform:rotate(45deg)}
 .ct-break .cflag::before,.ct-holiday .cflag::before{background:#16a34a}.ct-makeup .cflag::before{background:#d97706}.ct-deadline .cflag::before{background:var(--red)}.ct-exam .cflag::before{background:#7c3aed}.ct-start .cflag::before,.ct-end .cflag::before{background:var(--ink)}
-.crow .ttl{font-weight:700}
+.crow .ttl{font-weight:700}.crow .tchk input{accent-color:var(--ink)}.crow.done .ttl{text-decoration:line-through;color:var(--mute)}.crow.done .cflag{opacity:.45}
+.ttag{display:inline-block;margin-left:6px;padding:1px 7px;border-radius:99px;font-size:11px;font-weight:700;background:var(--soft);color:var(--mute);vertical-align:2px}.ttag.now{background:var(--red);color:#fff}.ttag.old{opacity:.8}
 .kcard{max-width:540px}.knew{display:grid;gap:8px;padding:10px;border-radius:10px;background:var(--soft)}.knew .cgrid button{width:26px;height:26px;border-radius:50%;border:0;padding:0}.knew .cgrid button.on{box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--ink)}
 .kcard textarea{width:100%;resize:vertical;min-height:64px!important;margin:0!important}
 .scard{width:min(720px,100%)}.scard h4{margin:16px 0 2px;font-size:15px}.sgrid{grid-template-columns:repeat(4,minmax(0,1fr))!important;margin:10px 0 4px}
@@ -402,7 +406,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 <div class="status"><ul id="jobs"></ul></div>
 
 <div class="wrap">
-  <aside><button class="gpacard" id="gpacard" data-sel="gpa" hidden></button><h2>Your courses</h2><div class="clist" id="side"></div><div class="side-note" id="snote"></div></aside>
+  <aside><button class="gpacard" id="gpacard" data-sel="gpa" hidden></button><h2>Your courses <span class="rhint">drag to reorder</span></h2><div class="clist reord" id="side"></div><div class="side-note" id="snote"></div></aside>
   <main id="panel"></main>
 </div>
 </section>
@@ -458,10 +462,13 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 <div class="grid2 sgrid"><label>Semester<select id="sterm"><option value="">Choose…</option><option>Fall</option><option>Spring</option><option>Summer</option><option>Winter</option><option>Other</option></select></label><label>Year<input id="syear" inputmode="numeric" placeholder="2027"></label><label>Start date<input type="date" id="sstart"></label><label>End date (optional)<input type="date" id="send"></label></div>
 <h4>Weeks</h4><p class="hint">Tap a week to mark it as a week off, or tap again to count it. Week numbers skip weeks that are off.</p><div id="sweeks" class="wstrip"></div>
 <h4>Academic calendar <span class="hint">(optional)</span></h4><p class="hint">Upload your university’s academic calendar (.ics, PDF, Word, photo or text). Breaks of a week or more are skipped in week numbers automatically, and make-up days are noted.</p>
-<div class="srow"><button class="btn ghost sm" id="scalup">Upload academic calendar</button><button class="btn sm danger-ghost" id="scalclear" hidden>Remove all dates</button></div><p class="hint" id="calstatus"></p>
+<div class="srow"><button class="btn ghost sm" id="scalup">Upload academic calendar</button><button class="btn ghost sm" id="sterms" hidden>Switch semester</button><button class="btn sm danger-ghost" id="scalclear" hidden>Remove all dates</button></div><p class="hint" id="calstatus"></p>
 <ul id="scal" class="tasks scal"></ul>
 <details class="sadd"><summary>Add a date by hand</summary><div class="grid2 sgrid"><label class="rlink">Name<input id="sat" autocomplete="off" placeholder="e.g. Spring break"></label><label>From<input type="date" id="sas"></label><label>To (optional)<input type="date" id="sae"></label><label>Type<select id="satype"><option value="break">Break</option><option value="holiday">Holiday</option><option value="makeup">Make-up day</option><option value="exam">Exams</option><option value="deadline">Deadline</option><option value="event">Event</option><option value="start">Classes begin</option><option value="end">Classes end</option></select></label><div class="xl"><span>&nbsp;</span><button class="btn ghost sm" id="sadd">Add date</button></div></div></details>
 <div class="mact"><button class="btn" id="sclose">Done</button></div></div></div>
+<div id="tmodal" class="modal"><div class="card cnf dcard"><h3>Which semester?</h3><p class="hint">This calendar covers more than one semester. Pick yours: its first and last day of classes fill in your semester, and its dates are added. Dates that have already passed come in marked as done.</p>
+<div class="dopts" id="topts"></div>
+<div class="mact"><button class="btn ghost" id="tcancel">Cancel</button><button class="btn" id="tdo">Use this semester</button></div></div></div>
 <div id="dmodal" class="modal"><div class="card cnf dcard"><h3>Export data</h3><p class="hint">Saves a backup file you can import later, on this device or another one.</p>
 <div class="dopts"><label class="dopt" id="doptpage"><input type="radio" name="dscope" value="page"><span><b id="dpage">This page</b><small id="dpagesub"></small></span></label>
 <label class="dopt"><input type="radio" name="dscope" value="all"><span><b>Whole site</b><small>Grades, timetable, tasks, semester and academic calendar</small></span></label></div>
@@ -550,7 +557,7 @@ function renderSide(){
   $('#gpacard').innerHTML=`<span>Semester GPA</span>${sm.gpa==null?'<b class="nil">No grades yet</b>':`<b>${fmt2(sm.gpa)}</b>`}<small>${sm.n?`${sm.n} course${sm.n===1?'':'s'} · ${fmt(sm.cr)} credits`:'Enter scores to see it'}</small>`;
   $('#gpacard').classList.toggle('sel',S.sel==='gpa');$('#gpacard').hidden=!list.length;
   document.querySelector('.wrap').classList.toggle('nocourses',!list.length);
-  $('#side').innerHTML=list.map(c=>{const p=coursePct(c),inc=c.comps.map(k=>labOf(c,k)).filter(Boolean);return`<button class="ci ${(S.sel===c.id||inc.some(l=>l.id===S.sel))?'sel':''}" data-sel="${c.id}" style="--cc:${courseColor(c)}"><b><i class="cdot" aria-hidden="true"></i>${esc(c.code||'Untitled')}</b><em>${p==null?'':esc(letter(c,p))}</em><small>${p==null?'No grades yet':fmt(p)+'%'}${inc.length?' · incl. '+inc.map(l=>esc(l.code)).join(', '):''}</small></button>`}).join('')||'<p class="hint">No courses yet.</p>';
+  $('#side').innerHTML=list.map(c=>{const p=coursePct(c),inc=c.comps.map(k=>labOf(c,k)).filter(Boolean);return`<button class="ci ${(S.sel===c.id||inc.some(l=>l.id===S.sel))?'sel':''}" data-sel="${c.id}" data-rid="${c.id}" style="--cc:${courseColor(c)}"><b><i class="cdot" aria-hidden="true"></i>${esc(c.code||'Untitled')}</b><em>${p==null?'':esc(letter(c,p))}</em><small>${p==null?'No grades yet':fmt(p)+'%'}${inc.length?' · incl. '+inc.map(l=>esc(l.code)).join(', '):''}</small></button>`}).join('')||'<p class="hint">No courses yet.</p>';
   $('#snote').innerHTML=S.courses.some(c=>c.sample)?'These are sample courses. They’re replaced as soon as your first syllabus is read. <button data-act="clearsamples">Clear them now</button>':'';
 }
 function compHTML(co,k,top){
@@ -1400,7 +1407,7 @@ function classify(t){t=String(t||'');
   if(/make[\s-]?up/i.test(t))return'makeup';if(/(first day of classes|classes (begin|start)|semester (begins|starts)|start of classes)/i.test(t))return'start';
   if(/(last day of classes|classes end|end of classes)/i.test(t))return'end';if(/(break|vacation|recess|holidays\b)/i.test(t))return'break';
   if(/(holiday|eid|national day|commemoration|no classes|university (is )?closed|closure)/i.test(t))return'holiday';
-  if(/(final exam|exam period|examinations|exams\b|reading day)/i.test(t))return'exam';
+  if(/(final exam|exam period|examination|exams\b|reading day|study period)/i.test(t))return'exam';
   if(/(last day|deadline|withdraw|registration|add\s*\/?\s*drop|drop|grades due|petition|apply)/i.test(t))return'deadline';return'event';}
 function calFromICS(txt){const out=[];for(const e of parseICS(txt)){const sp=e.DTSTART;if(!sp)continue;const m=String(sp.val).match(/^(\d{4})(\d{2})(\d{2})/);if(!m)continue;
     const st=new Date(+m[1],m[2]-1,+m[3]);let en=st;const ep=e.DTEND&&String(e.DTEND.val).match(/^(\d{4})(\d{2})(\d{2})(T)?/);
@@ -1409,56 +1416,122 @@ function calFromICS(txt){const out=[];for(const e of parseICS(txt)){const sp=e.D
 const MONRE='(Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|June?|July?|Aug(?:ust)?|Sep(?:t(?:ember)?)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\\.?';
 const monIdx=s=>['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'].indexOf(s.slice(0,3).toLowerCase());
 function yearsIn(text){const c={};for(const m of String(text).matchAll(/\b(20\d\d)\b/g))c[m[1]]=(c[m[1]]||0)+1;return Object.keys(c).map(Number).sort();}
-function pickYear(mon,ys,explicit){if(explicit)return+explicit;if(ys.length>=2)return mon>=6?ys[0]:ys[ys.length-1];return ys[0]||today0().getFullYear();}
+function pickYear(mon,ys,explicit){if(explicit)return+explicit;if(typeof ys==='function')return ys(mon);if(ys.length>=2)return mon>=6?ys[0]:ys[ys.length-1];return ys[0]||today0().getFullYear();}
 /* every date or date range written in a line: "March 22–26", "Mar 29 - Apr 2, 2027", "24 January 2027", "24/01/2027" */
 function datesInLine(ln,ys){const out=[],used=[];const take=(i,len)=>used.push([i,i+len]);
   const re1=new RegExp(`(?:(?:Sun|Mon|Tue|Wed|Thu|Fri|Sat)[a-z]*\\.?,?\\s+)?\\b${MONRE}\\s+(\\d{1,2})(?!\\d)(?:st|nd|rd|th)?(?:,?\\s*(\\d{4}))?(?:\\s*(?:-|–|—|to|through|until)\\s*(?:${MONRE}\\s+)?(\\d{1,2})(?!\\d)(?:st|nd|rd|th)?(?:,?\\s*(\\d{4}))?)?`,'gi');
   for(const m of ln.matchAll(re1)){const mo=monIdx(m[1]),y=pickYear(mo,ys,m[3]||m[6]);const a=new Date(y,mo,+m[2]);let b=a;
-    if(m[5]){const mo2=m[4]?monIdx(m[4]):mo;b=new Date(pickYear(mo2,ys,m[6]||m[3])+(mo2<mo&&!m[6]?1:0),mo2,+m[5]);}if(!isNaN(a))out.push({a,b:b<a?a:b});take(m.index,m[0].length);}
+    if(m[5]){const mo2=m[4]?monIdx(m[4]):mo;b=new Date(pickYear(mo2,ys,m[6]||m[3]),mo2,+m[5]);if(b<a&&!m[6])b=new Date(a.getFullYear()+(mo2<mo?1:0),mo2,+m[5]);}if(!isNaN(a))out.push({a,b:b<a?a:b});take(m.index,m[0].length);}
   const re2=new RegExp(`(?:(?:Sun|Mon|Tue|Wed|Thu|Fri|Sat)[a-z]*\\.?,?\\s+)?\\b(\\d{1,2})(?:st|nd|rd|th)?(?:\\s*(?:-|–|to)\\s*(\\d{1,2})(?:st|nd|rd|th)?)?\\s+${MONRE},?\\s*(\\d{4})?`,'gi');
   for(const m of ln.matchAll(re2)){if(used.some(([s,e])=>m.index<e&&m.index+m[0].length>s))continue;const mo=monIdx(m[3]),y=pickYear(mo,ys,m[4]);const a=new Date(y,mo,+m[1]),b=m[2]?new Date(y,mo,+m[2]):a;if(!isNaN(a))out.push({a,b});take(m.index,m[0].length);}
   for(const m of ln.matchAll(/\b(\d{1,2})[\/.](\d{1,2})[\/.](\d{2,4})\b/g)){if(used.some(([s,e])=>m.index<e&&m.index+m[0].length>s))continue;let d=+m[1],mo=+m[2]-1,y=+m[3];if(y<100)y+=2000;if(mo>11&&d<=12)[d,mo]=[mo+1,d-1];const a=new Date(y,mo,d);if(!isNaN(a)&&mo<12)out.push({a,b:a});take(m.index,m[0].length);}
   for(const m of ln.matchAll(/\b(20\d\d)-(\d{2})-(\d{2})\b/g)){if(used.some(([s,e])=>m.index<e&&m.index+m[0].length>s))continue;out.push({a:pd(m[0]),b:pd(m[0])});take(m.index,m[0].length);}
   let rest=ln;used.sort((x,y)=>y[0]-x[0]).forEach(([s,e])=>{rest=rest.slice(0,s)+' '+rest.slice(e);});
-  rest=rest.replace(/^\s*(Sun|Mon|Tue|Wed|Thu|Fri|Sat)[a-z]*\.?,?\s+/i,' ').replace(/\(\s*\)/g,' ').replace(/\s+/g,' ').replace(/^[\s,;:|\-–—•*()]+|[\s,;:|\-–—•*(]+$/g,'').trim();
+  rest=rest.replace(/^\s*(Sun|Mon|Tue|Wed|Thu|Fri|Sat)[a-z]*\.?(?:\s*(?:-|–|—|to)\s*(Sun|Mon|Tue|Wed|Thu|Fri|Sat)[a-z]*\.?)?,?(\s+|$)/i,' ').replace(/\(\s*\)/g,' ').replace(/\s+/g,' ').replace(/^[\s,;:|\-–—•*()]+|[\s,;:|\-–—•*(]+$/g,'').trim();
   if((rest.match(/\(/g)||[]).length>(rest.match(/\)/g)||[]).length)rest+=')';else if((rest.match(/\)/g)||[]).length>(rest.match(/\(/g)||[]).length)rest=rest.replace(/\)$/,'');
   return{dates:out,rest};}
-function calFromText(text){const ys=yearsIn(text),out=[],lines=String(text).split(/\r?\n/).map(l=>l.replace(/\s+/g,' ').trim()).filter(Boolean);
-  lines.forEach((ln,i)=>{const{dates,rest}=datesInLine(ln,ys);if(!dates.length)return;let title=rest;if(title.length<3&&lines[i+1]&&!datesInLine(lines[i+1],ys).dates.length)title=lines[i+1];if(title.length<3)return;
-    const d=dates[0];out.push({title:title.slice(0,90),start:iso(d.a),end:iso(d.b),type:classify(title)});});
-  const seen=new Set();return out.filter(x=>{const k=x.title+x.start;if(seen.has(k))return false;seen.add(k);return true;});}
+const WDRE='(?:Sun|Mon|Tue|Wed|Thu|Fri|Sat)[a-z]*\.?';
+const TERMHEAD=/^(?:(?:undergraduate|graduate|academic)\s+)?(Fall|Autumn|Spring|Summer|Winter)\s+(?:(?:Semester|Term|Session|Quarter)\s+)?(?:(?:I{1,3}|[123])\s+)?[,–-]?\s*(2\s*0\s*\d\s*\d)(?:\s*[-–]\s*\d{2,4})?(?:\s+(?:Semester|Term|Session|Quarter))?\s*:?$/i;
+/* PDFs sometimes split words into letters ("n ew f irst - y ear s tudent s"): glue the pieces back */
+function tidyTitle(t){return String(t).replace(/\b([b-hj-z]) (?=[a-z]{2,})/g,'$1').replace(/([a-z]{3,}) (s)\b/g,'$1$2').replace(/([a-z]) - ([a-z])/gi,'$1-$2').replace(/\s*\*+\s*$/,'').replace(/\s+/g,' ').trim();}
+function termYearFn(term,Y){term=term.toLowerCase();return mon=>term==='fall'||term==='autumn'?(mon<=1?Y+1:Y):term==='spring'||term==='winter'?(mon>=9?Y-1:Y):Y;}
+const termOfDate=d=>{const m=d.getMonth();return m<=3?'Spring':m<=6?'Summer':m<=9?'Fall':'Winter';};
+function calFromText(text){const lines=String(text).split(/\r?\n/).map(l=>l.replace(/\s+/g,' ').trim()).filter(Boolean),ys0=yearsIn(text);
+  const terms=[];let cur=null,lastMon=null,prev=null;const startDay=new RegExp(`^(\\d{1,2})(?!\\d)(?:st|nd|rd|th)?(?:\\s*(?:-|–|—|to)\\s*(?:${MONRE}\\s+)?\\d{1,2})?\\s+${WDRE}`,'i');
+  const newTerm=(term,year)=>{cur={term:term.replace(/autumn/i,'Fall').replace(/^./,c=>c.toUpperCase()).replace(/^(.)(.*)$/,(m,a,b)=>a+b.toLowerCase()),year:+year,dates:[]};terms.push(cur);lastMon=null;prev=null;};
+  for(let ln of lines){ln=ln.replace(/\b([SMTWFJADNO]) (?=(?:unday|onday|uesday|ednesday|hursday|riday|aturday|anuary|ebruary|arch|pril|une|uly|ugust|eptember|ctober|ovember|ecember)\b)/g,'$1').replace(/\b([b-hj-z]) (?=[a-z]{2,})/g,'$1');const h=ln.match(TERMHEAD);if(h&&ln.length<60){newTerm(h[1],h[2].replace(/\s/g,''));continue;}
+    if(/^updated\b|^last updated|^revised\b|^page \d/i.test(ln))continue;
+    if(/^(\*|note\b|notes\b|†)/i.test(ln)){prev=null;continue;}
+    const mm=ln.match(new RegExp('^'+MONRE+'\\s+\\d','i'));if(mm)lastMon=mm[1];
+    else if(lastMon&&startDay.test(ln))ln=lastMon+' '+ln;
+    const ys=cur?termYearFn(cur.term,cur.year):ys0;const{dates,rest}=datesInLine(ln,ys);
+    if(!dates.length){if(!prev)continue;const t=tidyTitle(ln);if(t.length<3||t.length>140)continue;
+      if(/^[a-z(]/.test(t)||/[,(–-]$/.test(prev.title)){prev.title=(prev.title+' '+t).slice(0,140);prev.type=classify(prev.title);}
+      else{const it={...prev,title:t.slice(0,140),type:classify(t)};(cur?cur.dates:(terms.loose=terms.loose||[])).push(it);prev=it;}continue;}
+    const title=tidyTitle(rest);if(title.length<3){prev=null;continue;}
+    const d=dates[0],it={title:title.slice(0,140),start:iso(d.a),end:iso(d.b),type:classify(title)};
+    if(!cur){if(!terms.loose)terms.loose=[];terms.loose.push(it);}else cur.dates.push(it);prev=it;}
+  const dedupe=a=>{const seen=new Set();return a.filter(x=>{const k=x.title+x.start;if(seen.has(k))return false;seen.add(k);return true;});};
+  if(terms.length){const out=terms.filter(t=>t.dates.length).map(t=>({...t,dates:dedupe(t.dates)}));if(out.length)return withBounds(out);}
+  return splitByStarts(dedupe(terms.loose||[]));}
+/* first/last day of classes for each term */
+function withBounds(terms){return terms.map(t=>{const fs=t.dates.find(d=>d.type==='start'),fe=[...t.dates].reverse().find(d=>d.type==='end');
+  const start=t.start||fs&&fs.start||'',end=t.end||fe&&fe.end||'';let term=t.term,year=t.year;
+  if((!term||!TERMS.includes(term))&&start)term=termOfDate(pd(start));if(!year&&start)year=pd(start).getFullYear();return{...t,term,year:+year||'',start,end};});}
+/* a calendar with no semester headings (an .ics, say): split it at each "first day of classes" */
+function splitByStarts(dates){dates=[...dates].sort((a,b)=>a.start.localeCompare(b.start));const starts=dates.filter(d=>d.type==='start');
+  if(starts.length<2)return withBounds([{term:'',year:'',dates}]);
+  const groups=starts.map(()=>[]);for(const d of dates){let k=0;for(let i=0;i<starts.length;i++)if(d.start>=starts[i].start)k=i;
+    /* between one term's last day of classes and the next term's first day: registration and the like belong to the next term, exams to this one */
+    if(k+1<starts.length&&!['exam','end'].includes(d.type)){const inK=x=>x.start>=starts[k].start&&x.start<starts[k+1].start,last=dates.filter(x=>inK(x)&&(x.type==='end'||x.type==='exam'));
+      if(last.length){const edge=addD(pd(last.reduce((m,x)=>x.end>m?x.end:m,'')),14);if(pd(d.start)>edge)k++;}}
+    groups[k].push(d);}
+  return withBounds(groups.map(g=>({term:'',year:'',dates:g})));}
 const CAL_INSTR=`You read a university academic calendar. Reply with ONLY a JSON object, no prose:
-{"term":"Spring","year":2027,"start":"2027-01-25","end":"2027-05-13","dates":[{"title":"Spring Break","start":"2027-03-21","end":"2027-03-25","type":"break"}]}
+{"terms":[{"term":"Spring","year":2027,"start":"2027-01-25","end":"2027-05-13","dates":[{"title":"Spring Break","start":"2027-03-21","end":"2027-03-25","type":"break"}]}]}
 Rules:
 - dates: every notable date or period. start/end as YYYY-MM-DD (end = start for one-day items). Keep the calendar's own wording for title.
 - type: "start" first day of classes, "end" last day of classes, "break" vacations/recess, "holiday" public holidays or university closed, "makeup" make-up/compensation days (say in the title which weekday's schedule is followed, if stated), "exam" exam periods, "deadline" add/drop/withdrawal/registration/grade deadlines, otherwise "event".
-- If it covers several semesters, set term/year/start/end and dates for the semester that is current or next after the date given below, and leave out the other semesters.`;
+- terms: one entry per semester or term the calendar covers (Fall, Spring, Summer, Winter), in order. term is one of Fall, Spring, Summer, Winter; year is the year the term is named for; start = first day of classes, end = last day of classes. Put each date in the term whose section it is listed under.`;
 async function askCal(input,name,onStatus){const pv=provider(),today=iso(today0());
   if(pv==='relay'){try{const imgs=[];for(const im of input.images.slice(0,4)){const j=await toJpeg(im);if(/^image\/(jpeg|png|webp)$/.test(j.type))imgs.push({mime:j.type,data:await b64(j)});}
       for(let a=0;a<2;a++){onStatus&&onStatus('Reading the calendar…');const ac=new AbortController(),kill=setTimeout(()=>ac.abort(),75000);let r,j;
         try{r=await fetch(RELAY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({mode:'calendar',today,name,text:input.text.slice(0,80000),images:imgs}),signal:ac.signal});j=await r.json().catch(()=>({}));}catch(e){r={ok:false,status:e&&e.name==='AbortError'?504:0};j={};}finally{clearTimeout(kill);}
         if(r.ok&&j.calendar)return j.calendar;if(!(r.status>=500||r.status===429))break;await new Promise(res=>setTimeout(res,4000));}}catch{}
-    if(!input.text.trim())throw new Error('Reading a photo or scan needs the AI reader, which isn’t available right now.');return{dates:calFromText(input.text),basic:true};}
-  if(pv==='basic'){if(!input.text.trim())throw new Error('Photos and scans need an AI reader. Paste the text instead, or upload the .ics version.');return{dates:calFromText(input.text),basic:true};}
+    if(!input.text.trim())throw new Error('Reading a photo or scan needs the AI reader, which isn’t available right now.');return{local:calFromText(input.text),basic:true};}
+  if(pv==='basic'){if(!input.text.trim())throw new Error('Photos and scans need an AI reader. Paste the text instead, or upload the .ics version.');return{local:calFromText(input.text),basic:true};}
   const msg=CAL_INSTR+`\nToday is ${today}.\n\nFile name: ${name}\nCalendar:\n<<<\n${input.text.slice(0,80000)}\n>>>`;
   if(pv==='gemini'){const parts=[{text:msg}];for(const im of input.images)parts.push({inline_data:{mime_type:im.type||'image/png',data:await b64(im)}});
     const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(CFG.model||DEF_MODEL.gemini)}:generateContent?key=${encodeURIComponent(CFG.key)}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{role:'user',parts}],generationConfig:{responseMimeType:'application/json'}})});
     const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error('Gemini: '+(j.error?.message||r.status));return parseJSON((j.candidates?.[0]?.content?.parts||[]).map(p=>p.text||'').join(''));}
   const content=[];for(const im of input.images)content.push({type:'image',source:{type:'base64',media_type:im.type||'image/png',data:await b64(im)}});content.push({type:'text',text:msg});
-  const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'content-type':'application/json','x-api-key':CFG.key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:CFG.model||DEF_MODEL.anthropic,max_tokens:4000,messages:[{role:'user',content}]})});
+  const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'content-type':'application/json','x-api-key':CFG.key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:CFG.model||DEF_MODEL.anthropic,max_tokens:8000,messages:[{role:'user',content}]})});
   const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error('Claude API: '+(j.error?.message||r.status));return parseJSON((j.content||[]).map(c=>c.text||'').join(''));}
+function normDates(a){return(Array.isArray(a)?a:[]).map(x=>({id:rid(),title:tidyTitle(String(x.title||'')).slice(0,140),start:iso(pd(x.start)),end:iso(pd(x.end)||pd(x.start)),type:CTYPES[x.type]?x.type:classify(x.title)})).filter(x=>x.title&&x.start&&x.end).map(x=>x.end<x.start?{...x,end:x.start}:x).sort((a,b)=>a.start.localeCompare(b.start));}
+function calTerms(res,text){let terms;
+  if(Array.isArray(res.terms)&&res.terms.length)terms=withBounds(res.terms.map(t=>({term:TERMS.includes(t.term)?t.term:'',year:+t.year||'',start:iso(pd(t.start))||'',end:iso(pd(t.end))||'',dates:normDates(t.dates)})));
+  else if(Array.isArray(res.dates)){const local=text&&!res.basic?calFromText(text):null;
+    if(local&&local.length>1){terms=local.map(t=>({...t,dates:normDates(t.dates)}));terms.basic=true;}/* AI gave one semester but the file has several: use the headings */
+    else{const one=splitByStarts(normDates(res.dates));terms=one.length>1?one:[{...one[0],term:TERMS.includes(res.term)?res.term:one[0].term,year:+res.year||one[0].year,start:iso(pd(res.start))||one[0].start,end:iso(pd(res.end))||one[0].end}];}}
+  else terms=(res.local||[]).map(t=>({...t,dates:normDates(t.dates)}));
+  const out=terms.filter(t=>t.dates.length);out.basic=!!terms.basic;return out;}
 async function importCalendar(file){const st=$('#calstatus');st.textContent='Reading '+file.name+'…';st.className='hint';
-  try{let res;if(/\.ics$/i.test(file.name)||file.type==='text/calendar')res={dates:calFromICS(await file.text())};else res=await askCal(await readFile(file),file.name,t=>st.textContent=t);
-    const dates=(Array.isArray(res.dates)?res.dates:[]).map(x=>({id:rid(),title:String(x.title||'').slice(0,120),start:iso(pd(x.start)),end:iso(pd(x.end)||pd(x.start)),type:CTYPES[x.type]?x.type:classify(x.title)})).filter(x=>x.title&&x.start);
-    if(!dates.length)throw new Error('No dates were found in that file.');
-    const s=semObj(),snap=JSON.stringify(S);s.cal=dates.sort((a,b)=>a.start.localeCompare(b.start));
-    if(!s.start){const fs=dates.find(d=>d.type==='start');const st2=pd(res.start)||(fs&&pd(fs.start));if(st2)s.start=iso(st2);}
-    if(!s.end){const fe=[...dates].reverse().find(d=>d.type==='end');const en=pd(res.end)||(fe&&pd(fe.end));if(en)s.end=iso(en);}
-    if(!s.term&&res.term&&TERMS.includes(res.term))s.term=res.term;if(!s.year&&res.year)s.year=String(res.year);
-    if(!s.year&&s.start)s.year=String(pd(s.start).getFullYear());if(!s.term&&s.start){const m=pd(s.start).getMonth();s.term=m>=7&&m<=9?'Fall':m<=2?'Spring':m<=6?'Summer':'Winter';}
-    save();fillSem();renderPlanner();const brk=dates.filter(isBreak).length,mk=dates.filter(d=>d.type==='makeup').length;
-    st.textContent=`Added ${dates.length} dates${brk?`, ${brk} break${brk>1?'s':''} of a week or more (skipped in week numbers)`:''}${mk?`, ${mk} make-up day${mk>1?'s':''}`:''}${res.basic?'. Read with the built-in reader, so check them.':'.'}`;toast('Academic calendar added',snap);}
+  try{let res,text='';if(/\.ics$/i.test(file.name)||file.type==='text/calendar')res={dates:calFromICS(await file.text())};
+    else{const input=await readFile(file);text=input.text||'';const pv=provider();
+      res=await askCal(input,file.name,t=>st.textContent=t);}
+    const terms=calTerms(res,text);if(!terms.length)throw new Error('No dates were found in that file.');
+    st.textContent='';semObj().terms=terms.length>1?terms:null;
+    const basic=res.basic||terms.basic;if(terms.length===1){applyTerm(terms[0],{basic,keep:true});return;}
+    pickTerm(terms,{basic});}
   catch(e){st.className='hint err';st.textContent=(e&&e.message)||'Couldn’t read that calendar.';}}
+const termLabel=t=>[t.term,t.year].filter(Boolean).join(' ')||'Semester';
+function termState(t){const T0=today0(),a=pd(t.start)||pd(t.dates[0].start),b=pd(t.end)||pd(t.dates[t.dates.length-1].end);if(b&&b<T0)return'done';if(a&&a<=T0)return'now';return'next';}
+/* default: the semester you're in, else the next one to start */
+function defaultTerm(terms){const s=S.sem;const same=!s?-1:terms.findIndex(t=>t.term===s.term&&String(t.year)===String(s.year)&&termState(t)!=='done');if(same>=0)return same;
+  const now=terms.findIndex(t=>termState(t)==='now');if(now>=0)return now;const nx=terms.findIndex(t=>termState(t)==='next');return nx>=0?nx:terms.length-1;}
+let PT=null;
+function pickTerm(terms,opt){PT={terms,opt};const def=defaultTerm(terms),T0=today0();
+  $('#topts').innerHTML=terms.map((t,i)=>{const stt=termState(t),past=t.dates.filter(d=>pd(d.end)<T0).length;
+    const tag=stt==='now'?'<span class="ttag now">Now</span>':stt==='next'?(terms.findIndex(x=>termState(x)==='next')===i?'<span class="ttag">Next</span>':''):'<span class="ttag old">Finished</span>';
+    return`<label class="dopt"><input type="radio" name="tpick" value="${i}" ${i===def?'checked':''}><span><b>${esc(termLabel(t))} ${tag}</b><small>${t.start?'Classes '+esc(fmtRangeD(pd(t.start),pd(t.end)||null)):'No first day of classes found'} · ${t.dates.length} date${t.dates.length===1?'':'s'}${past&&stt!=='done'?` · ${past} already passed`:''}</small></span></label>`;}).join('');
+  $('#tmodal').classList.add('on');setTimeout(()=>$('#tdo').focus(),0);}
+$('#tcancel').onclick=()=>{$('#tmodal').classList.remove('on');PT=null;};
+$('#tmodal').addEventListener('click',e=>{if(e.target===$('#tmodal')){$('#tmodal').classList.remove('on');PT=null;}});
+$('#tdo').onclick=()=>{if(!PT)return;const i=+document.querySelector('input[name=tpick]:checked').value;$('#tmodal').classList.remove('on');applyTerm(PT.terms[i],PT.opt);PT=null;};
+$('#sterms').onclick=()=>{const s=semObj();if(s.terms&&s.terms.length>1)pickTerm(s.terms,{});};
+function applyTerm(t,opt={}){const s=semObj(),snap=JSON.stringify(S),T0=today0();
+  s.cal=t.dates.map(d=>({...d,id:d.id||rid()}));delete s.cal.done;
+  if(opt.keep){if(!s.start&&t.start)s.start=t.start;if(!s.end&&t.end)s.end=t.end;if(!s.term&&t.term)s.term=t.term;if(!s.year&&t.year)s.year=String(t.year);}
+  else{if(t.start&&t.start!==s.start){s.ov={};s.start=t.start;}if(t.end)s.end=t.end;else if(t.start)s.end='';if(t.term)s.term=t.term;if(t.year)s.year=String(t.year);}
+  if(!s.year&&s.start)s.year=String(pd(s.start).getFullYear());if(!s.term&&s.start)s.term=termOfDate(pd(s.start));
+  save();fillSem();renderPlanner();const dates=s.cal,brk=dates.filter(isBreak).length,mk=dates.filter(d=>d.type==='makeup').length,past=dates.filter(d=>pd(d.end)<T0).length;
+  const st=$('#calstatus');st.className='hint';
+  st.textContent=`${termLabel(t)}: added ${dates.length} dates${past?` (${past} already passed, marked done)`:''}${brk?`, ${brk} break${brk>1?'s':''} of a week or more skipped in week numbers`:''}${mk?`, ${mk} make-up day${mk>1?'s':''}`:''}.${opt.basic?' Read with the built-in reader, so check them.':''}`;
+  toast(termLabel(t)+' calendar added',snap);}
+
+/* calendar dates complete themselves once they're over; ticking one overrides that */
+const calDone=c=>c.done!=null?!!c.done:pd(c.end||c.start)<today0();
+function toggleCal(id,v){const c=(SEM()&&SEM().cal||[]).find(x=>x.id===id);if(!c)return;const auto=pd(c.end||c.start)<today0();if(v===auto)delete c.done;else c.done=v;save();}
 
 /* ================= TASKS ================= */
 function TS(){S.tasks=S.tasks||[];S.cats=S.cats||[];S.tstate=S.tstate||{};return S;}
@@ -1481,7 +1554,7 @@ function taskRow(t,compact){const d=pd(t.date),over=d&&!t.done&&d<today0();
   return`<li class="task${t.done?' done':''}${over?' over':''}" style="--tc:${taskColor(t)}"><label class="tchk"><input type="checkbox" data-task="${esc(t.key)}" ${t.done?'checked':''} aria-label="Done: ${esc(t.title)}"></label>
     <span class="tbody"><span class="ttl">${esc(t.title)}</span><span class="tmeta"><i class="cdot"></i>${esc(taskTag(t)||'Task')}<span class="twhen">${esc(taskWhen(t))}</span>${t.note?`<span class="tnote">${esc(t.note)}</span>`:''}</span></span>
     ${compact?'':`<button class="ib" data-act="tedit" data-key="${esc(t.key)}" title="Edit" aria-label="Edit ${esc(t.title)}"><svg viewBox="0 0 16 16"><path d="M11 2.5l2.5 2.5L6 12.5H3.5V10z"/></svg></button><button class="ib" data-act="tdel" data-key="${esc(t.key)}" title="Delete" aria-label="Delete ${esc(t.title)}"><svg viewBox="0 0 16 16"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>`}</li>`;}
-function calRow(c){const a=pd(c.start),b=pd(c.end);return`<li class="crow ct-${c.type}"><span class="cflag" aria-hidden="true"></span><span class="tbody"><span class="ttl">${esc(c.title)}</span><span class="tmeta">${esc(CTYPES[c.type]||'Event')}<span class="twhen">${esc(fmtRangeD(a,b))}</span>${isBreak(c)?'<span class="tnote">Not counted in week numbers</span>':''}</span></span></li>`;}
+function calRow(c){const a=pd(c.start),b=pd(c.end),dn=calDone(c);return`<li class="crow ct-${c.type}${dn?' done':''}"><label class="tchk"><input type="checkbox" data-cal="${esc(c.id)}" ${dn?'checked':''} aria-label="Done: ${esc(c.title)}"></label><span class="cflag" aria-hidden="true"></span><span class="tbody"><span class="ttl">${esc(c.title)}</span><span class="tmeta">${esc(CTYPES[c.type]||'Event')}<span class="twhen">${esc(fmtRangeD(a,b))}</span>${isBreak(c)?'<span class="tnote">Not counted in week numbers</span>':''}</span></span></li>`;}
 function toggleTask(key,done){TS();if(key.startsWith('m:')){const m=S.tasks.find(x=>'m:'+x.id===key);if(m)m.done=done;}else{S.tstate[key]=Object.assign(S.tstate[key]||{},{done});}save();}
 
 /* ---- Tasks page ---- */
@@ -1496,7 +1569,7 @@ function renderTasks(){TS();const s=SEM(),all=allTasks(),wi=weekInfo();
   $('#khead').innerHTML=s?`<div class="semline"><b>${esc(semName())}</b><span class="wk">${esc(weekLine())}</span><span class="hint">${esc(fmtRangeD(pd(s.start),pd(s.end)||semWeeks().slice(-1)[0].b))}</span></div>`:`<div class="note warn">Set your semester so week numbers and syllabus dates like “Week 7” land on the right days. <button data-act="semopen">Set up semester</button></div>`;
   let list=all.filter(t=>tFilter==='all'||(tFilter.startsWith('c:')&&t.courseId===tFilter.slice(2))||(tFilter.startsWith('k:')&&t.catId===tFilter.slice(2)));
   if(!tShowDone)list=list.filter(t=>!t.done);
-  const cal=tShowCal&&tFilter==='all'&&s?(s.cal||[]).filter(c=>pd(c.end||c.start)>=today0()):[];
+  const cal=tShowCal&&tFilter==='all'&&s?(s.cal||[]).filter(c=>tShowDone||!calDone(c)):[];
   if(!list.length&&!cal.length){$('#klist').innerHTML=`<div class="ttempty"><h2>${all.length?'All caught up':'No tasks yet'}</h2><p>${all.length?'Nothing left to do here.':'Tasks with dates in your syllabi show up here automatically. You can also add your own, for any course or your own categories.'}</p><button class="btn" data-act="tadd">Add a task</button></div>`;return;}
   const T0=today0(),groups=new Map(),put=(k,label,sort,item)=>{if(!groups.has(k))groups.set(k,{label,sort,items:[]});groups.get(k).items.push(item);};
   const wkLabel=(w)=>{const wi2=weekInfo();const cur=wi2&&wi2.w&&wi2.w.i===w.i,next=wi2&&wi2.w&&wi2.w.i+1===w.i;
@@ -1505,7 +1578,7 @@ function renderTasks(){TS();const s=SEM(),all=allTasks(),wi=weekInfo();
     if(!isCal&&!item.done&&d<T0){put('a','Overdue',-1,item);return;}
     const w=weekOfDate(d);if(w)put('w'+w.i,wkLabel(w),+w.a,item);else{const ws=new Date(d);ws.setDate(d.getDate()-((d.getDay()+6)%7));put('d'+iso(ws),`Week of ${fmtD(ws,false)}`,+ws,item);}};
   for(const t of list)place(t.date,{t,sort:t.date||'9'});
-  const wsAll=semWeeks();for(const c of cal){const ow=isBreak(c)&&wsAll.find(w=>w.off&&w.auto===c.title&&w.b>=T0);place(iso(ow?(ow.a<T0?T0:ow.a):(pd(c.start)<T0?T0:pd(c.start))),{c,sort:c.start},true);}
+  const wsAll=semWeeks();for(const c of cal){const ow=isBreak(c)&&wsAll.find(w=>w.off&&w.auto===c.title&&w.b>=T0);place(calDone(c)?c.start:iso(ow?(ow.a<T0?T0:ow.a):(pd(c.start)<T0?T0:pd(c.start))),{c,sort:c.start},true);}
   const gs=[...groups.values()].sort((a,b)=>a.sort-b.sort),grp=g=>{let items=g.items.sort((x,y)=>String(x.sort).localeCompare(String(y.sort))),more='';
     if(g.sort===-1&&items.length>4&&!tOverOpen){more=`<button class="lnkbtn kmore" data-act="overall">Show all ${items.length} overdue</button>`;items=items.slice(-3);}
     return`<section class="kgroup"><h3>${g.label}</h3><ul class="tasks">${items.map(x=>x.t?taskRow(x.t):calRow(x.c)).join('')}</ul>${more}</section>`;};
@@ -1547,8 +1620,8 @@ function openSem(){semObj();fillSem();$('#semmodal').classList.add('on');}
 function fillSem(){const s=semObj();$('#sterm').value=s.term||'';$('#syear').value=s.year||'';$('#sstart').value=s.start||'';$('#send').value=s.end||'';
   const ws=semWeeks(),wi=weekInfo();
   $('#sweeks').innerHTML=ws.length?ws.map(w=>`<button type="button" class="wchip${w.off?' off':''}${wi&&wi.w&&wi.w.i===w.i?' cur':''}" data-wk="${w.i}" title="${esc(w.off?(w.reason||'Week off')+' (tap to count it)':'Tap to mark as a week off')}"><b>${w.off?'Off':'W'+w.teach}</b><span>${MONS[w.a.getMonth()]} ${w.a.getDate()}</span></button>`).join(''):'<p class="hint">Pick a start date to see the weeks.</p>';
-  const cal=s.cal||[];$('#scal').innerHTML=cal.length?cal.map(c=>`<li class="crow ct-${c.type}"><span class="cflag"></span><span class="tbody"><span class="ttl">${esc(c.title)}</span><span class="tmeta">${esc(CTYPES[c.type])}<span class="twhen">${esc(fmtRangeD(pd(c.start),pd(c.end)))}</span></span></span><button class="ib" data-act="caldel" data-id="${c.id}" title="Remove" aria-label="Remove ${esc(c.title)}"><svg viewBox="0 0 16 16"><path d="M4 4l8 8M12 4l-8 8"/></svg></button></li>`).join(''):'';
-  $('#scalclear').hidden=!cal.length;}
+  const cal=s.cal||[];$('#scal').innerHTML=cal.length?cal.map(c=>`<li class="crow ct-${c.type}${calDone(c)?' done':''}"><label class="tchk"><input type="checkbox" data-cal="${c.id}" ${calDone(c)?'checked':''} aria-label="Done: ${esc(c.title)}"></label><span class="cflag"></span><span class="tbody"><span class="ttl">${esc(c.title)}</span><span class="tmeta">${esc(CTYPES[c.type])}<span class="twhen">${esc(fmtRangeD(pd(c.start),pd(c.end)))}</span></span></span><button class="ib" data-act="caldel" data-id="${c.id}" title="Remove" aria-label="Remove ${esc(c.title)}"><svg viewBox="0 0 16 16"><path d="M4 4l8 8M12 4l-8 8"/></svg></button></li>`).join(''):'';
+  $('#scalclear').hidden=!cal.length;$('#sterms').hidden=!(s.terms&&s.terms.length>1);}
 const semInput=()=>{const s=semObj();s.term=$('#sterm').value;s.year=$('#syear').value.trim();const st=$('#sstart').value,en=$('#send').value;
   if(st!==s.start)s.ov={};s.start=st;s.end=en&&st&&en>st?en:'';if(!s.year&&st)s.year=String(pd(st).getFullYear());save();fillSem();renderPlanner();};
 ['#sterm','#syear','#sstart','#send'].forEach(id=>$(id).addEventListener('change',semInput));
@@ -1570,7 +1643,8 @@ VK.addEventListener('click',e=>{const f=e.target.closest('[data-tf]');if(f){tFil
   if(a==='tadd')openTask(null);else if(a==='tedit')openTask(b.dataset.key);else if(a==='tdel')deleteTask(b.dataset.key);else if(a==='semopen')openSem();
   else if(a==='catcolor'){const k=catOf(b.dataset.id);pickColor(b,k.color,c=>{k.color=c;save();renderTasks();});}
   else if(a==='catdel'){const k=catOf(b.dataset.id);confirmBox(`Delete “${k.name}”?`,'Its tasks stay, without a category.','Delete category').then(ok=>{if(!ok)return;const snap=JSON.stringify(S);S.cats=S.cats.filter(x=>x!==k);S.tasks.forEach(t=>{if(t.catId===k.id)t.catId=null;});if(tFilter==='k:'+k.id)tFilter='all';save();renderTasks();toast('Category deleted',snap);});}});
-document.addEventListener('change',e=>{const c=e.target;if(c.dataset&&c.dataset.task!=null){toggleTask(c.dataset.task,c.checked);setTimeout(renderPlanner,c.checked?350:0);return;}
+document.addEventListener('change',e=>{const c=e.target;if(c.dataset&&c.dataset.cal!=null){toggleCal(c.dataset.cal,c.checked);c.closest('.crow')?.classList.toggle('done',c.checked);setTimeout(()=>{renderPlanner();if($('#semmodal').classList.contains('on'))fillSem();},c.checked?350:0);return;}
+  if(c.dataset&&c.dataset.task!=null){toggleTask(c.dataset.task,c.checked);setTimeout(renderPlanner,c.checked?350:0);return;}
   if(c.id==='kdone'){tShowDone=c.checked;renderTasks();}if(c.id==='kcal'){tShowCal=c.checked;renderTasks();}});
 $('#ktaskadd').onclick=()=>openTask(null);$('#ksem').onclick=openSem;
 function pickColor(btn,cur,cb){closeColor();const pop=document.createElement('div');pop.className='cpop';
@@ -1582,7 +1656,7 @@ function pickColor(btn,cur,cb){closeColor();const pop=document.createElement('di
 /* ================= HOME ================= */
 function renderHome(){TS();const s=SEM(),wi=weekInfo(),T0=today0(),all=allTasks();
   const overdue=all.filter(t=>!t.done&&t.date&&pd(t.date)<T0),due=all.filter(t=>!t.done&&t.date&&pd(t.date)>=T0&&pd(t.date)<=addD(T0,7)).sort((a,b)=>a.date.localeCompare(b.date)),undated=all.filter(t=>!t.done&&!t.date);
-  const cal=s?(s.cal||[]).filter(c=>pd(c.end||c.start)>=T0).slice(0,6):[];
+  const cal=s?(s.cal||[]).filter(c=>!calDone(c)).slice(0,6):[];
   const sm=semester(),gc=S.courses.filter(c=>!(c.isLab&&linkedBy(c.id)));
   const vis=TT().slots.length?ttVisible():[],todayCls=vis.filter(x=>x.day===T0.getDay()).sort((a,b)=>a.start-b.start);
   let nextLbl='',nextCls=[];if(vis.length&&!todayCls.length){for(let k=1;k<=7;k++){const d=addD(T0,k),l=vis.filter(x=>x.day===d.getDay()).sort((a,b)=>a.start-b.start);if(l.length){nextLbl=k===1?'Tomorrow':DAYN[d.getDay()];nextCls=l;break;}}}
@@ -1594,10 +1668,39 @@ function renderHome(){TS();const s=SEM(),wi=weekInfo(),T0=today0(),all=allTasks(
   $('#hgrid').innerHTML=
     card('#tasks','Tasks',due.length||null,`${overdue.length?`<a class="hover" href="#tasks"><b>${overdue.length} overdue</b><span>Review →</span></a>`:''}${due.length?`<ul class="tasks">${due.slice(0,6).map(t=>taskRow(t,true)).join('')}</ul>${due.length>6?`<a class="hmore" href="#tasks">${due.length-6} more due this week</a>`:''}`:`<p class="hint hempty">Nothing due in the next 7 days.${undated.length?` ${undated.length} task${undated.length>1?'s have':' has'} no date.`:''}</p><button class="btn ghost sm" data-act="tadd">Add a task</button>`}`)+
     card('#tasks','Coming up',null,cal.length?`<ul class="tasks">${cal.map(calRow).join('')}</ul>`:`<p class="hint hempty">${s?'Upload your academic calendar to see breaks, holidays, deadlines and make-up days here.':'Set up your semester, then add your academic calendar to see notable dates here.'}</p><button class="btn ghost sm" data-act="semopen">${s?'Add academic calendar':'Set up semester'}</button>`)+
-    card('#grades','Courses',null,gc.length?`<div class="hgpa"><span>Semester GPA</span><b class="${sm.gpa==null?'nil':''}">${sm.gpa==null?'No grades yet':fmt2(sm.gpa)}</b></div><ul class="hcourses">${gc.map(c=>{const p=coursePct(c);return`<li data-hopen="${c.id}" tabindex="0" role="link" style="--cc:${courseColor(c)}"><i class="cdot"></i><span class="hcb"><b>${esc(c.code||'Course')}</b><span>${esc(c.title||'')}</span></span><span class="hg">${p==null?'<span class="nil">–</span>':`${fmt(p)}%<em>${esc(letter(c,p))}</em>`}</span></li>`;}).join('')}</ul>`:`<p class="hint hempty">Upload a syllabus to start tracking grades.</p><a class="btn ghost sm" href="#grades">Go to Grades</a>`)+
+    card('#grades','Courses',null,gc.length?`<div class="hgpa"><span>Semester GPA</span><b class="${sm.gpa==null?'nil':''}">${sm.gpa==null?'No grades yet':fmt2(sm.gpa)}</b></div><ul class="hcourses reord">${gc.map(c=>{const p=coursePct(c);return`<li data-hopen="${c.id}" data-rid="${c.id}" tabindex="0" role="link" style="--cc:${courseColor(c)}"><i class="cdot"></i><span class="hcb"><b>${esc(c.code||'Course')}</b><span>${esc(c.title||'')}</span></span><span class="hg">${p==null?'<span class="nil">–</span>':`${fmt(p)}%<em>${esc(letter(c,p))}</em>`}</span></li>`;}).join('')}</ul>`:`<p class="hint hempty">Upload a syllabus to start tracking grades.</p><a class="btn ghost sm" href="#grades">Go to Grades</a>`)+
     card('#timetable',todayCls.length?'Today’s classes':nextLbl?`Next classes · ${nextLbl}`:'Schedule',null,vis.length?`<ul class="hclasses">${(todayCls.length?todayCls:nextCls).map(clsRow).join('')}</ul>${todayCls.length?'':'<p class="hint">No classes today.</p>'}`:`<p class="hint hempty">Upload your .ics schedule to see today’s classes here.</p><a class="btn ghost sm" href="#timetable">Go to Timetable</a>`);}
 $('#v-home').addEventListener('click',e=>{const o=e.target.closest('[data-hopen]');if(o){openGrades(o.dataset.hopen);return;}const b=e.target.closest('[data-act]');if(!b)return;if(b.dataset.act==='semopen')openSem();if(b.dataset.act==='tadd')openTask(null);});
 $('#v-home').addEventListener('keydown',e=>{const o=e.target.closest('[data-hopen]');if(o&&(e.key==='Enter'||e.key===' ')){e.preventDefault();openGrades(o.dataset.hopen);}});
+
+/* ---------- reorder courses: drag with a mouse, press and hold on touch, or Alt+arrow keys ---------- */
+function moveCourses(ids){const vis=new Set(ids),rest=S.courses.filter(c=>!vis.has(c.id)),byid=new Map(S.courses.map(c=>[c.id,c]));
+  const before=S.courses.map(c=>c.id).join();S.courses=[...ids.map(id=>byid.get(id)).filter(Boolean),...rest];
+  /* keep a linked lab right after its course */
+  for(const c of [...S.courses]){const parent=c.isLab&&linkedBy(c.id)?.co;if(c.isLab&&parent){S.courses.splice(S.courses.indexOf(c),1);S.courses.splice(S.courses.indexOf(parent)+1,0,c);}}
+  if(S.courses.map(c=>c.id).join()===before)return false;save();route();return true;}
+let RD=null,rdSkipClick=false;
+document.addEventListener('pointerdown',e=>{const it=e.target.closest('.reord [data-rid]');if(!it||e.button>0||it.closest('.sortable'))return;
+  const box=it.parentElement,touch=e.pointerType!=='mouse';RD={it,box,x:e.clientX,y:e.clientY,on:false,id:e.pointerId,touch,timer:null};
+  if(touch)RD.timer=setTimeout(()=>{if(RD&&!RD.on)rdStart();},380);});
+function rdStart(){RD.on=true;const cs=getComputedStyle(RD.box);RD.horiz=cs.flexDirection==='row'||(cs.display.includes('flex')&&cs.flexDirection==='row');
+  RD.it.classList.add('rdrag');RD.box.classList.add('rsorting');if(navigator.vibrate&&RD.touch)try{navigator.vibrate(12)}catch{}}
+document.addEventListener('pointermove',e=>{if(!RD||e.pointerId!==RD.id)return;const dx=e.clientX-RD.x,dy=e.clientY-RD.y,dist=Math.hypot(dx,dy);
+  if(!RD.on){if(RD.touch){if(dist>10){clearTimeout(RD.timer);RD=null;}return;}if(dist<6)return;rdStart();}
+  e.preventDefault();const items=[...RD.box.querySelectorAll(':scope > [data-rid]')];let before=null;
+  for(const o of items){if(o===RD.it)continue;const r=o.getBoundingClientRect();if(RD.horiz?e.clientX<r.left+r.width/2:e.clientY<r.top+r.height/2){before=o;break;}}
+  if(before!==RD.it.nextElementSibling&&!(before===null&&RD.it===items[items.length-1]))RD.box.insertBefore(RD.it,before||null);
+  if(RD.horiz){const sc=RD.box.closest('aside')||RD.box,r=sc.getBoundingClientRect();if(e.clientX>r.right-30)sc.scrollLeft+=8;else if(e.clientX<r.left+30)sc.scrollLeft-=8;}},{passive:false});
+document.addEventListener('touchmove',e=>{if(RD&&RD.on)e.preventDefault();},{passive:false});
+document.addEventListener('contextmenu',e=>{if(RD&&RD.touch)e.preventDefault();});
+const rdEnd=e=>{if(!RD||(e&&e.pointerId!==RD.id))return;clearTimeout(RD.timer);const r=RD;RD=null;if(!r.on)return;
+  r.it.classList.remove('rdrag');r.box.classList.remove('rsorting');rdSkipClick=true;setTimeout(()=>rdSkipClick=false,50);
+  const ids=[...r.box.querySelectorAll(':scope > [data-rid]')].map(x=>x.dataset.rid);if(moveCourses(ids))toast('Course order saved');};
+document.addEventListener('pointerup',rdEnd);document.addEventListener('pointercancel',rdEnd);
+document.addEventListener('click',e=>{if(rdSkipClick&&e.target.closest('.reord')){e.preventDefault();e.stopPropagation();rdSkipClick=false;}},true);
+document.addEventListener('keydown',e=>{const it=e.target.closest&&e.target.closest('.reord [data-rid]');if(!it||!e.altKey||!/^Arrow(Up|Down|Left|Right)$/.test(e.key))return;e.preventDefault();
+  const ids=[...it.parentElement.querySelectorAll(':scope > [data-rid]')].map(x=>x.dataset.rid),i=ids.indexOf(it.dataset.rid),j=i+(/Up|Left/.test(e.key)?-1:1);if(j<0||j>=ids.length)return;
+  [ids[i],ids[j]]=[ids[j],ids[i]];const sel=it.closest('#side')?'#side':'.hcourses';if(moveCourses(ids))document.querySelector(`${sel} [data-rid="${it.dataset.rid}"]`)?.focus();});
 
 /* ---------- sections ---------- */
 const VIEWS={home:['#home','Home'],grades:['#grades','Grades'],tt:['#timetable','Timetable'],tasks:['#tasks','Tasks']};
