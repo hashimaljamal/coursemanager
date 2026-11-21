@@ -28,7 +28,7 @@ input[type=checkbox]{accent-color:var(--red);width:20px;height:20px;margin:0}
 
 /* toolbar */
 .top{display:grid;grid-template-columns:auto auto minmax(0,1fr) auto auto;grid-template-areas:"title tabs . data theme";align-items:center;gap:8px 12px;padding:12px 0;border-bottom:2px solid var(--ink)}
-h1{grid-area:title;font-size:clamp(22px,2.4vw,30px);line-height:1.1;margin:0;font-stretch:112%;font-weight:800;letter-spacing:-.01em}
+h1{font-size:clamp(22px,2.4vw,30px);line-height:1.1;margin:0;font-stretch:112%;font-weight:800;letter-spacing:-.01em}
 .acts{display:flex;gap:8px;flex:none}
 .dacts{grid-area:data;display:flex;gap:6px}
 .dopts{display:grid;gap:8px;margin:14px 0 6px}
@@ -321,9 +321,24 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 .fnlist{list-style:none;margin:0;padding:0}.fnlist li{display:grid;grid-template-columns:auto auto 1fr;gap:2px 8px;align-items:baseline;padding:7px 0;border-bottom:1px solid var(--line)}
 .fnlist li:last-child{border-bottom:0}.fnlist .cdot{background:var(--cc);align-self:center}.fnlist small{grid-column:2/-1;color:var(--mute);font-size:12.5px}.fnlist.skip li{grid-template-columns:auto 1fr}.fnlist.skip small{grid-column:auto}
 .fnfiles{margin:8px 0 0}#fnres{max-height:min(48dvh,420px);overflow:auto}
-.hhero>.hcds{display:flex;gap:8px;margin-left:auto;align-items:stretch}.hcd{display:flex;align-items:center;gap:8px;padding:6px 12px 6px 10px;border:1px solid var(--line);border-radius:var(--rad);color:inherit;text-decoration:none;min-height:44px}
+.hhero>.hcds{display:flex;flex-wrap:wrap;gap:8px;margin-left:auto;align-items:stretch}.hcd{display:flex;align-items:center;gap:8px;padding:6px 12px 6px 10px;border:1px solid var(--line);border-radius:var(--rad);color:inherit;text-decoration:none;min-height:44px}
 .hcd:hover{border-color:var(--ink)}.hcd b{font-size:22px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}.hcd span{font-size:11.5px;line-height:1.2;color:var(--mute)}
 #cmodal{z-index:60}#tmodal{z-index:55}
+.xfs{display:flex;align-items:center;gap:10px}.xfs input{flex:1;accent-color:var(--ink)}.xfs output{min-width:44px;font-weight:700;font-variant-numeric:tabular-nums}
+.hclass{gap:10px;min-width:0;max-width:360px}.hclass .hcl{min-width:120px}.hcl{display:grid;grid-template-columns:auto auto 1fr;align-items:center;gap:0 5px;min-width:0;font-size:13px;line-height:1.2}
+.hcl em{font-style:normal;font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--mute)}.hclass.live .hcl em{color:var(--red)}
+.hcl .cdot{background:var(--cc)}.hcl strong{font-weight:800;white-space:nowrap}.hcl small{grid-column:1/-1;color:var(--mute);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:11.5px}
+.hcr{display:grid;justify-items:end;margin-left:auto;padding-left:10px;border-left:1px solid var(--line)}.hcr b{font-size:20px!important;font-variant-numeric:tabular-nums}.hcr small{font-size:11px;color:var(--mute);white-space:nowrap}
+.hclass.live{border-color:var(--red)}
+.brand{grid-area:title;display:flex;align-items:center;gap:4px 12px;flex-wrap:wrap;min-width:0}
+.semsw{display:inline-flex;align-items:center;gap:4px;border:1px solid var(--line);background:var(--soft);color:var(--ink);border-radius:99px;padding:4px 8px 4px 11px;font:inherit;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;min-height:30px;max-width:100%}
+.semsw:hover{border-color:var(--ink)}.semsw svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}.semsw span{overflow:hidden;text-overflow:ellipsis}
+.smenu{position:absolute;z-index:40;min-width:250px;max-width:calc(100vw - 16px);background:var(--bg);border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 32px rgb(0 0 0/.18);padding:6px}
+.smenu ul{list-style:none;margin:0;padding:0;max-height:min(60dvh,420px);overflow:auto}.smenu li{display:flex;align-items:center;gap:4px}
+.smenu .si{flex:1;display:grid;grid-template-columns:18px 1fr;gap:0 6px;text-align:left;border:0;background:none;color:inherit;font:inherit;padding:8px 8px;border-radius:8px;cursor:pointer;min-height:44px;align-items:center}
+.smenu .si:hover,.smenu .si:focus-visible{background:var(--soft)}.smenu .si b{font-size:14px}.smenu .si small{grid-column:2;color:var(--mute);font-size:12px}.smenu .si .ck{grid-row:1/3;color:var(--red);font-weight:900}
+.smenu .sadd2{width:100%;text-align:left;border:0;border-top:1px solid var(--line);background:none;color:inherit;font:inherit;font-weight:700;padding:11px 10px 7px;margin-top:4px;cursor:pointer;border-radius:0 0 8px 8px}.smenu .sadd2:hover{background:var(--soft)}
+@media(max-width:360px){.top .dbtn,.top .theme{width:34px!important;height:34px;min-height:34px!important}h1{font-size:16px!important}}
 .ttag{display:inline-block;margin-left:6px;padding:1px 7px;border-radius:99px;font-size:11px;font-weight:700;background:var(--soft);color:var(--mute);vertical-align:2px}.ttag.now{background:var(--red);color:#fff}.ttag.old{opacity:.8}
 .kcard{max-width:540px}.knew{display:grid;gap:8px;padding:10px;border-radius:10px;background:var(--soft)}.knew .cgrid button{width:26px;height:26px;border-radius:50%;border:0;padding:0}.knew .cgrid button.on{box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--ink)}
 .kcard textarea{width:100%;resize:vertical;min-height:64px!important;margin:0!important}
@@ -357,10 +372,10 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
  .top{grid-template-columns:minmax(0,1fr) auto auto;grid-template-areas:"title data theme" "tabs tabs tabs";padding:10px 0;gap:8px}
  .dbtn span{display:none}.dbtn{width:38px;min-height:38px!important;padding:0!important;justify-content:center}
  .theme{width:38px;height:38px}
- .hhero>div:first-child{flex:1 1 100%}.hhero>.hcds{margin-left:0;flex:1 1 200px;min-width:0}.hhero .hcd{flex:1 1 0;min-width:0;padding:6px 8px}.hhero .hcd span{font-size:11px}
+ .hhero>div:first-child{flex:1 1 100%}.hhero .hclass{flex:1 1 100%!important;max-width:none}.hhero>.hcds{margin-left:0;flex:1 1 200px;min-width:0}.hhero .hcd{flex:1 1 0;min-width:0;padding:6px 8px}.hhero .hcd span{font-size:11px}
  .pbar{min-height:0;padding:8px 0}#v-grades .pbar .pleft{order:2}.pbar .acts{flex:1 1 100%;display:grid;grid-auto-columns:1fr;grid-auto-flow:column}
  .pleft{flex-basis:100%}
- h1{font-size:min(21px,5.3vw);white-space:nowrap}
+ h1{font-size:min(21px,5.3vw);white-space:nowrap}.brand{flex-direction:column;align-items:flex-start;gap:3px}.semsw{min-height:24px;padding:1px 6px 1px 9px;font-size:12px}
  .dacts{gap:4px}.top{column-gap:6px}
  .acts .btn{padding:0 8px;min-width:0}
  .tabs{display:grid;grid-template-columns:repeat(4,1fr);justify-self:stretch}.tabs a{padding:7px 4px;font-size:13px;min-height:34px}
@@ -383,7 +398,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 </style></head><body>
 <div class="shell">
 <header class="top">
-  <h1>Course Manager</h1>
+  <div class="brand"><h1>Course Manager</h1><button class="semsw" id="semsw" aria-haspopup="menu" aria-expanded="false"><span id="semswl">Semester</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg></button></div>
   <nav class="tabs" aria-label="Sections"><a href="#home" id="tab-home">Home</a><a href="#grades" id="tab-grades">Grades</a><a href="#timetable" id="tab-tt">Timetable</a><a href="#tasks" id="tab-tasks">Tasks</a></nav>
   <div class="dacts">
     <button class="btn ghost sm dbtn" id="impbtn" title="Import a backup file"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2v8M4.5 6.5 8 10l3.5-3.5M2.5 11v2.5h11V11"/></svg><span>Import</span></button>
@@ -456,6 +471,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 <div class="xwh"><label class="xl">Width<input id="xw" inputmode="numeric"></label><button class="ib" id="xswap" title="Swap width and height" aria-label="Swap width and height"><svg viewBox="0 0 16 16"><path d="M4 2v12M4 14l-2.5-2.5M4 14l2.5-2.5M12 14V2M12 2 9.5 4.5M12 2l2.5 2.5"/></svg></button><label class="xl">Height<input id="xh" inputmode="numeric"></label></div>
 <div class="xl">Layout<div class="seg"><button data-xl="grid">Week grid</button><button data-xl="list">List</button></div></div>
 <div class="xl">Theme<div class="seg"><button data-xt="light">Light</button><button data-xt="dark">Dark</button></div></div>
+<div class="xl">Text size<div class="xfs"><input type="range" id="xfs" min="60" max="200" step="5" aria-label="Text size"><output id="xfsv">100%</output><button class="lnkbtn" id="xfsr">Reset</button></div></div>
 <label class="xl">Title<input id="xtitle" placeholder="Leave empty for no title"></label>
 <div class="xl">Show on classes<div id="xfields" class="tfields"></div></div>
 <div class="mact"><button class="btn ghost" id="xclose">Close</button><button class="btn" id="xdl">Download PNG</button></div></div></div></div>
@@ -481,12 +497,16 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 <p class="hint" id="fnstatus"></p><div id="fnres"></div>
 <div class="mact"><button class="btn ghost" id="fnclose">Done</button></div></div></div>
 <input type="file" id="finfile" accept=".pdf,.docx,.txt,.html,image/*" multiple hidden>
+<div id="nsmodal" class="modal"><div class="card cnf dcard"><h3>Add a semester</h3><p class="hint">Starts a fresh semester: courses, grades, timetable, tasks and finals start empty. Your current semester is kept, and you can switch back to it from the semester menu at the top.</p>
+<div class="grid2 sgrid"><label>Semester<select id="nsterm"><option>Fall</option><option>Spring</option><option>Summer</option><option>Winter</option><option>Other</option></select></label><label>Year<input id="nsyear" inputmode="numeric" placeholder="2027"></label></div>
+<p class="hint" id="nsnote"></p>
+<div class="mact"><button class="btn ghost" id="nscancel">Cancel</button><button class="btn" id="nsdo">Add semester</button></div></div></div>
 <div id="tmodal" class="modal"><div class="card cnf dcard"><h3>Which semester?</h3><p class="hint">This calendar covers more than one semester. Pick yours: its first and last day of classes fill in your semester, and its dates are added. Dates that have already passed come in marked as done.</p>
 <div class="dopts" id="topts"></div>
 <div class="mact"><button class="btn ghost" id="tcancel">Cancel</button><button class="btn" id="tdo">Use this semester</button></div></div></div>
 <div id="dmodal" class="modal"><div class="card cnf dcard"><h3>Export data</h3><p class="hint">Saves a backup file you can import later, on this device or another one.</p>
 <div class="dopts"><label class="dopt" id="doptpage"><input type="radio" name="dscope" value="page"><span><b id="dpage">This page</b><small id="dpagesub"></small></span></label>
-<label class="dopt"><input type="radio" name="dscope" value="all"><span><b>Whole site</b><small>Grades, timetable, tasks, semester and academic calendar</small></span></label></div>
+<label class="dopt"><input type="radio" name="dscope" value="all"><span><b>Whole site</b><small>Every semester: grades, timetable, tasks, calendar and finals</small></span></label></div>
 <div class="mact"><button class="btn ghost" id="dcancel">Cancel</button><button class="btn" id="ddo">Export</button></div>
 </div></div>
 <div id="zmodal" class="modal"><div class="card cnf dcard"><h3>Reset data</h3><p class="hint">Deletes data from this browser. You can undo right after, but export a backup first if you might want it later.</p>
@@ -1019,12 +1039,12 @@ function zLine(sc){const v=ZC[sc]();return v?'Deletes '+v+'.':'Nothing here yet.
 function openReset(){const sc=viewScope(),pg=$('#zoptpage'),inp=pg.querySelector('input');
   if(sc){pg.classList.remove('dis');inp.disabled=false;$('#zpage').textContent='This page: '+SCOPES[sc].name;$('#zpagesub').textContent=ZSUB[sc]+' '+zLine(sc);}
   else{pg.classList.add('dis');inp.disabled=true;$('#zpage').textContent='This page';$('#zpagesub').textContent='Home shows data from every section, so reset the whole site.';}
-  $('#zallsub').textContent='Grades, timetable, tasks, semester and academic calendar. Your light/dark setting stays.';
+  $('#zallsub').textContent='Every semester: grades, timetable, tasks, calendar and finals. Your light/dark setting stays.';
   document.querySelector(`input[name=zscope][value=${sc?'page':'all'}]`).checked=true;$('#zmodal').classList.add('on');setTimeout(()=>$('#zcancel').focus(),0);}
 $('#rstbtn').onclick=openReset;$('#zcancel').onclick=()=>$('#zmodal').classList.remove('on');
 $('#zmodal').addEventListener('click',e=>{if(e.target===$('#zmodal'))$('#zmodal').classList.remove('on');});
 $('#zdo').onclick=async()=>{const sc=document.querySelector('input[name=zscope]:checked').value==='page'?viewScope():'all';$('#zmodal').classList.remove('on');
-  const what=sc==='all'?['grades','timetable','tasks'].map(k=>ZC[k]()).filter(Boolean).join('; '):ZC[sc]();
+  const na=(S.archive||[]).length,what=sc==='all'?[...['grades','timetable','tasks'].map(k=>ZC[k]()),na&&`${na} other semester${na===1?'':'s'}`].filter(Boolean).join('; '):ZC[sc]();
   if(!what){toast('There’s nothing to reset');return;}
   const name=sc==='all'?'everything':SCOPES[sc].name.toLowerCase();
   const ok=await confirmBox(`Reset ${name}?`,`This deletes ${what} from this browser.${sc==='all'?'':' Everything else stays as it is.'}`,sc==='all'?'Reset everything':'Reset '+name);
@@ -1287,20 +1307,22 @@ let rzT;addEventListener('resize',()=>{clearTimeout(rzT);rzT=setTimeout(()=>{if(
 
 /* ---- image export ---- */
 const SIZES=[['16:9 Desktop',1920,1080],['9:16 Phone',1080,1920],['iPhone wallpaper',1179,2556],['4:3',1600,1200],['3:4',1200,1600],['1:1 Square',1600,1600],['A4 landscape',3508,2480],['A4 portrait',2480,3508],['Custom',0,0]];
-function xcfg(){const t=TT();t.exp=Object.assign({size:0,w:1920,h:1080,layout:'grid',theme:'light',title:'My timetable',opts:{...t.opts}},t.exp||{});return t.exp;}
+function xcfg(){const t=TT();t.exp=Object.assign({size:0,w:1920,h:1080,layout:'grid',theme:'light',title:'My timetable',fs:100,opts:{...t.opts}},t.exp||{});return t.exp;}
+const xfsShow=()=>{const v=xcfg().fs;$('#xfs').value=v;$('#xfsv').textContent=v===100?'Auto':v+'%';$('#xfsr').hidden=v===100;};
 function openExport(){if(!ttVisible().length){toast('Upload a schedule first');return;}const x=xcfg(),m=$('#xmodal');
   $('#xsize').innerHTML=SIZES.map((s,i)=>`<option value="${i}">${s[0]}${s[1]?` · ${s[1]}×${s[2]}`:''}</option>`).join('');$('#xsize').value=x.size;
-  $('#xw').value=x.w;$('#xh').value=x.h;$('#xtitle').value=x.title;
+  $('#xw').value=x.w;$('#xh').value=x.h;$('#xtitle').value=x.title;xfsShow();
   $('#xfields').innerHTML=`<ul class="tfields sortable" data-sort="x">${ttOrder().map(([k,l])=>sortRow(k,l,`<input type="checkbox" data-k="${k}" ${x.opts[k]?'checked':''}>`)).join('')}</ul>`;
   m.querySelectorAll('[data-xl]').forEach(b=>b.classList.toggle('on',b.dataset.xl===x.layout));m.querySelectorAll('[data-xt]').forEach(b=>b.classList.toggle('on',b.dataset.xt===x.theme));
   m.classList.add('on');xdraw();}
 $('#ttexp').onclick=openExport;
 let xT;const xdraw=()=>{clearTimeout(xT);xT=setTimeout(async()=>{const x=xcfg(),c=$('#xcanvas');x.w=Math.max(300,Math.min(6000,parseInt($('#xw').value)||1920));x.h=Math.max(300,Math.min(6000,parseInt($('#xh').value)||1080));
   try{await document.fonts.load('700 20px Archivo');await document.fonts.load('500 20px Archivo');}catch{}
-  drawTT(c,x.w,x.h,x);c.style.aspectRatio=`${x.w}/${x.h}`;$('#xdim').textContent=`${x.w} × ${x.h} px`;save();},60);};
+  delete x._clip;drawTT(c,x.w,x.h,x);c.style.aspectRatio=`${x.w}/${x.h}`;$('#xdim').textContent=`${x.w} × ${x.h} px`+(x._clip?' · text is as large as fits this size':'');delete x._clip;save();},60);};
 $('#xsize').onchange=e=>{const x=xcfg(),i=+e.target.value,s=SIZES[i];x.size=i;if(s[1]){$('#xw').value=s[1];$('#xh').value=s[2];}xdraw();};
 ['#xw','#xh'].forEach(id=>$(id).addEventListener('input',()=>{xcfg().size=SIZES.length-1;$('#xsize').value=SIZES.length-1;xdraw();}));
 $('#xtitle').addEventListener('input',e=>{xcfg().title=e.target.value;xdraw();});
+$('#xfs').addEventListener('input',e=>{xcfg().fs=+e.target.value;xfsShow();xdraw();});$('#xfsr').onclick=()=>{xcfg().fs=100;xfsShow();xdraw();};
 $('#xfields').addEventListener('change',e=>{const k=e.target.dataset.k;if(k){xcfg().opts[k]=e.target.checked;xdraw();}});
 $('#xmodal').addEventListener('click',e=>{const b=e.target.closest('[data-xl],[data-xt]');const x=xcfg();
   if(b&&b.dataset.xl){x.layout=b.dataset.xl;$('#xmodal').querySelectorAll('[data-xl]').forEach(y=>y.classList.toggle('on',y===b));xdraw();}
@@ -1332,17 +1354,17 @@ function drawTT(cv,W,H,x){
   cv.width=W;cv.height=H;const ctx=cv.getContext('2d'),t=TT(),vis=ttVisible(),dark=x.theme==='dark';
   const C=dark?{bg:'#111113',ink:'#f2f2f2',mute:'#a6a6ab',line:'#2c2c30',soft:'#1b1b1e'}:{bg:'#ffffff',ink:'#111111',mute:'#62626a',line:'#e3e3e6',soft:'#f4f4f5'};
   ctx.fillStyle=C.bg;ctx.fillRect(0,0,W,H);ctx.textBaseline='top';
-  const S0=Math.min(W,H),m=Math.round(S0*.045),title=(x.title||'').trim();
-  let top=m;if(title){const ts=Math.round(Math.max(22,Math.min(S0*.05,W*.05)));ctx.fillStyle=C.ink;ctx.font=`800 ${ts}px ${FONT}`;ctx.fillText(ellip(ctx,title,W-2*m),m,top);top+=ts*1.55;}
+  const S0=Math.min(W,H),m=Math.round(S0*.045),title=(x.title||'').trim(),K=(x.fs||100)/100;
+  let top=m;if(title){const ts=Math.round(Math.max(22,Math.min(S0*.05,W*.05))*K);ctx.fillStyle=C.ink;ctx.font=`800 ${ts}px ${FONT}`;ctx.fillText(ellip(ctx,title,W-2*m),m,top);top+=ts*1.55;}
   const days=weekDays(vis);if(!days.length)return;
-  if(x.layout==='list')return drawList(ctx,W,H,x,C,vis,days,m,top);
+  if(x.layout==='list')return drawList(ctx,W,H,x,C,vis,days,m,top,K);
   const lo=Math.floor(Math.min(...vis.map(s=>s.start))/60)*60,hi=Math.ceil(Math.max(...vis.map(s=>s.end))/60)*60,range=Math.max(60,hi-lo);
-  const hs=Math.round(Math.max(14,Math.min(Math.sqrt(W*H)*.019,W/days.length/7))),tsz=Math.round(hs*.82);
+  const hs0=Math.max(14,Math.min(Math.sqrt(W*H)*.019,W/days.length/7)),hs=Math.round(Math.min(hs0*K,W/days.length/4.2)),tsz=Math.round(hs0*.82*K);
   ctx.font=`600 ${tsz}px ${FONT}`;const gut=Math.ceil(ctx.measureText(t.h24?'00:00':'12 pm').width+tsz*.9);
   const gx=m+gut,gw=W-m-gx,colW=gw/days.length,hh=Math.round(hs*2.1),gy=top+hh,gh=H-m-gy,ppm=gh/range;
   // day headers
   ctx.textAlign='center';ctx.fillStyle=C.ink;ctx.font=`800 ${hs}px ${FONT}`;
-  const full=days.every(d=>ctx.measureText(DAYN[d]).width<colW-hs*.6);days.forEach((d,i)=>ctx.fillText(full?DAYN[d]:DAYS[d],gx+colW*i+colW/2,top+hs*.45));
+  const full=days.every(d=>ctx.measureText(DAYN[d]).width<colW-hs*.6);days.forEach((d,i)=>ctx.fillText(full?DAYN[d]:ellip(ctx,DAYS[d],colW-4),gx+colW*i+colW/2,top+hs*.45));
   // hour lines + labels
   ctx.textAlign='right';ctx.font=`600 ${tsz}px ${FONT}`;ctx.lineWidth=Math.max(1,S0/1400);
   for(let mm=lo;mm<=hi;mm+=60){const y=Math.round(gy+(mm-lo)*ppm)+.5;ctx.strokeStyle=C.line;ctx.beginPath();ctx.moveTo(gx,y);ctx.lineTo(W-m,y);ctx.stroke();
@@ -1354,21 +1376,21 @@ function drawTT(cv,W,H,x){
     blocks.push({s,x:gx+colW*i+bw*s._c+gap,y:gy+(s.start-lo)*ppm+gap,w,h,pad,iw:w-pad*2,ih:h-pad*1.6,fields:fieldsFor(s,x.opts,t.h24)});}});
   const fitsAt=(bk,f)=>{let used=0;for(let i=0;i<bk.fields.length;i++){ctx.font=`${i===0?800:500} ${f}px ${FONT}`;const n=wrapText(ctx,bk.fields[i].v,bk.iw,2).length;used+=n*f*1.2;if(used>bk.ih)return false;}return true;};
   const best=blocks.map(bk=>{let f=base;while(f>minF&&!fitsAt(bk,f))f=Math.max(minF,f*.94);return f;}).sort((a,b)=>a-b);
-  const U=Math.max(minF,best.length?best[Math.floor(best.length*.25)]:base);
+  const U0=Math.max(minF,best.length?best[Math.floor(best.length*.25)]:base),U=U0*K;
   for(const bk of blocks){const bg=ttColor(bk.s.ckey),ink=inkOn(bg),r=Math.max(4,base*.45);
     ctx.fillStyle=bg;rrect(ctx,bk.x,bk.y,bk.w,bk.h,r);ctx.fill();ctx.save();rrect(ctx,bk.x,bk.y,bk.w,bk.h,r);ctx.clip();ctx.fillStyle=ink;
-    let f=U;ctx.font=`800 ${f}px ${FONT}`;let widest=ctx.measureText(bk.fields[0].v).width;ctx.font=`500 ${f}px ${FONT}`;for(const fl of bk.fields.slice(1))for(const wd of glue(fl.v).split(/ +|(?<=–)/))widest=Math.max(widest,ctx.measureText(wd).width);if(widest>bk.iw)f=Math.max(Math.min(minF*.8,11),f*bk.iw/widest);
+    let f=U;ctx.font=`800 ${f}px ${FONT}`;let widest=ctx.measureText(bk.fields[0].v).width;ctx.font=`500 ${f}px ${FONT}`;for(const fl of bk.fields.slice(1))for(const wd of glue(fl.v).split(/ +|(?<=–)/))widest=Math.max(widest,ctx.measureText(wd).width);if(widest>bk.iw)f=Math.max(Math.min(minF*.8,11)*K,f*bk.iw/widest);
     const lh=f*1.2,maxLines=Math.max(1,Math.floor(bk.ih/lh));let used=0,yy=bk.y+bk.pad*.8;
     for(let i=0;i<bk.fields.length&&used<maxLines;i++){ctx.font=`${i===0?800:500} ${f}px ${FONT}`;const left=maxLines-used,remainingFields=bk.fields.length-i-1;
       const allow=Math.max(1,Math.min(bk.fields[i].f==='name'?3:2,left-Math.min(remainingFields,left-1)));
       for(const l of wrapText(ctx,bk.fields[i].v,bk.iw,allow)){if(used>=maxLines)break;ctx.fillText(l,bk.x+bk.pad,yy);yy+=lh;used++;}}
     ctx.restore();}
 }
-function drawList(ctx,W,H,x,C,vis,days,m,top){
-  const t=TT(),ratio=W/H,ncol=Math.min(days.length,ratio>=1.6?days.length>4?3:2:ratio>=.9&&days.length>2?2:1);
-  const cols=Array.from({length:ncol},()=>[]);{const per=Math.ceil(days.length/ncol);days.forEach((d,i)=>cols[Math.min(ncol-1,Math.floor(i/per))].push(d));}
-  const gapX=m*.8,cw=(W-2*m-gapX*(ncol-1))/ncol,availH=H-m-top;
-  const measure=(f,draw)=>{let maxH=0;cols.forEach((dl,ci)=>{let y=top;const x0=m+ci*(cw+gapX),tw=f*5.4,bx=x0+tw+f*.6,bw=f*.35,cx=bx+bw+f*.7,cwid=x0+cw-cx;
+function drawList(ctx,W,H,x,C,vis,days,m,top,K=1){
+  const t=TT(),ratio=W/H,n0=Math.min(days.length,ratio>=1.6?days.length>4?3:2:ratio>=.9&&days.length>2?2:1);
+  const plan=ncol=>{const cols=Array.from({length:ncol},()=>[]);{const per=Math.ceil(days.length/ncol);days.forEach((d,i)=>cols[Math.min(ncol-1,Math.floor(i/per))].push(d));}
+const gapX=m*.8,cw=(W-2*m-gapX*(ncol-1))/ncol,availH=H-m-top;
+  const measure=(f,draw)=>{if(!draw&&cw-f*6.7<f*7)return 1e9;let maxH=0;cols.forEach((dl,ci)=>{let y=top;const x0=m+ci*(cw+gapX),tw=f*5.4,bx=x0+tw+f*.6,bw=f*.35,cx=bx+bw+f*.7,cwid=x0+cw-cx;
       dl.forEach((d,di)=>{const l=vis.filter(s=>s.day===d).sort((a,b)=>a.start-b.start);if(!l.length)return;
         if(di)y+=f*.9;if(draw){ctx.fillStyle=C.ink;ctx.font=`800 ${f*1.15}px ${FONT}`;ctx.fillText(DAYN[d],x0,y);}y+=f*1.75;
         for(const s of l){const fl=fieldsFor(s,x.opts,t.h24).filter(q=>q.f!=='time');let hEntry=0;const rows=[];
@@ -1378,8 +1400,11 @@ function drawList(ctx,W,H,x,C,vis,days,m,top){
             ctx.fillStyle=ttColor(s.ckey);rrect(ctx,bx,y,bw,hEntry-f*.3,bw/2);ctx.fill();let yy=y;ctx.fillStyle=C.ink;
             for(const r of rows){ctx.font=`${r.bold?800:500} ${f}px ${FONT}`;for(const ln of r.ls){ctx.fillText(ln,cx,yy);yy+=f*1.25;}}}
           y+=hEntry+f*.65;}});maxH=Math.max(maxH,y-top);});return maxH;};
-  let lo=10,hi=Math.max(12,Math.min(W,H)*.06);for(let i=0;i<18;i++){const mid=(lo+hi)/2;if(measure(mid,false)<=availH)lo=mid;else hi=mid;}
-  measure(Math.max(10,lo),true);
+  let lo=10,hi=Math.max(12,Math.min(W,H)*.06)*Math.max(1,K);for(let i=0;i<20;i++){const mid=(lo+hi)/2;if(measure(mid,false)<=availH)lo=mid;else hi=mid;}
+  return{lo,measure};};
+  const base=plan(n0),want=base.lo*K;let best=base;
+  if(K>1)for(let n=n0+1;n<=days.length&&best.lo<want*.98;n++){const p=plan(n);if(p.lo>best.lo)best=p;}
+  const f=K>1?Math.min(want,best.lo):want;best.measure(Math.max(10,f),true);x._clip=K>1&&best.lo<want*.98;
 }
 
 /* ================= DATES ================= */
@@ -1770,6 +1795,22 @@ function pickColor(btn,cur,cb){closeColor();const pop=document.createElement('di
   setTimeout(()=>document.addEventListener('pointerdown',outsideColor,true),0);}
 
 /* ================= HOME ================= */
+/* the class going on now, or the next one: weekly timetable, skipping breaks/holidays, following make-up days, inside the semester */
+function classOn(d){const s=SEM(),vis=TT().slots.length?ttVisible():[];if(!vis.length)return[];const cal=s?s.cal||[]:[],k=iso(d);
+  if(cal.some(c=>(c.type==='break'||c.type==='holiday')&&k>=c.start&&k<=(c.end||c.start)))return[];
+  const mk=cal.find(c=>c.type==='makeup'&&c.start===k),wd=mk?wdIndex((String(mk.title).match(/\b(sun|mon|tue|wed|thu|fri|sat)[a-z]*/i)||[])[1]):null,day=wd!=null?wd:d.getDay();
+  return vis.filter(x=>x.day===day&&(x.first==null||x.first<=+d+864e5)&&(x.last==null||x.last>=+d)).sort((a,b)=>a.start-b.start);}
+function classClock(){const vis=TT().slots.length?ttVisible():[];if(!vis.length)return null;const s=SEM(),now=new Date(),T0=today0(),nowMin=now.getHours()*60+now.getMinutes()+now.getSeconds()/60;
+  const ends=s?(s.cal||[]).filter(c=>c.type==='end').map(c=>c.end||c.start).sort():[],last=pd(ends.length?ends[ends.length-1]:s&&s.end),first=s?pd(s.start):null;
+  for(let k=0;k<21;k++){const d=addD(T0,k);if(last&&d>last)return null;if(first&&d<first)continue;const l=classOn(d);if(!l.length)continue;
+    if(k===0){const cur=l.find(x=>x.start<=nowMin&&nowMin<x.end);if(cur){const e=new Date(d);e.setMinutes(cur.end);return{now:true,s:cur,at:e};}}
+    const nx=l.find(x=>k>0||x.start>nowMin);if(nx){const a=new Date(d);a.setMinutes(nx.start);return{now:false,s:nx,at:a,day:d};}}
+  return null;}
+function fmtLeft(ms){const t=Math.max(0,Math.round(ms/1000)),d=Math.floor(t/86400),h=Math.floor(t%86400/3600),m=Math.floor(t%3600/60),sec=t%60;
+  if(d>0)return`${d}d ${h}h`;return(h?h+':'+pad2(m):m)+':'+pad2(sec);}
+let clockTick=null;
+function tickClocks(){const els=document.querySelectorAll('[data-to]');if(!els.length){clearInterval(clockTick);clockTick=null;return;}
+  for(const el of els){const left=+el.dataset.to-Date.now();if(left<=0){renderHome();return;}el.textContent=fmtLeft(left);}}
 /* days left until the last day of classes, and (once finals are uploaded) until your last final */
 function countdowns(){const s=SEM(),T0=today0(),out=[];if(!s)return out;
   const ends=(s.cal||[]).filter(c=>c.type==='end').map(c=>c.end||c.start).sort(),last=ends.length?ends[ends.length-1]:s.end;
@@ -1784,7 +1825,10 @@ function renderHome(){TS();const s=SEM(),wi=weekInfo(),T0=today0(),all=allTasks(
   let nextLbl='',nextCls=[];if(vis.length&&!todayCls.length){for(let k=1;k<=7;k++){const d=addD(T0,k),l=vis.filter(x=>x.day===d.getDay()).sort((a,b)=>a.start-b.start);if(l.length){nextLbl=k===1?'Tomorrow':DAYN[d.getDay()];nextCls=l;break;}}}
   const nowMin=new Date().getHours()*60+new Date().getMinutes();
   const clsRow=x=>{const n=nm(x),g=gradeFor(x.ckey,n.code),live=todayCls.includes(x)&&nowMin>=x.start&&nowMin<x.end;return`<li class="hcls${live?' now':''}${g?' linked':''}" ${g?`data-hopen="${g.id}" tabindex="0" role="link"`:''}><span class="hct">${esc(fmtClock(x.start,TT().h24))}<small>${esc(fmtClock(x.end,TT().h24))}</small></span><span class="tlb" style="background:${ttColor(x.ckey)}"></span><span class="hcb"><b>${esc(n.code||n.name)}</b><span>${esc([n.name&&n.code?n.name:'',x.room].filter(Boolean).join(' · '))}</span></span>${live?'<em>Now</em>':''}</li>`;};
-  const cds=countdowns(),cdh=cds.length?`<div class="hcds">${cds.map(c=>`<a class="hcd" href="#tasks" title="${esc(c.title)}"><b>${c.n===0?'Today':c.n}</b><span>${c.n===0?'':c.n===1?'day<br>':'days<br>'}${esc(c.label)}</span></a>`).join('')}</div>`:'';
+  const cc=classClock(),ccn=cc&&nm(cc.s),ccDay=cc&&!cc.now?(dDiff(T0,cc.day)===0?'':dDiff(T0,cc.day)===1?'Tomorrow ':DAYS[cc.day.getDay()]+' '):'';
+  const cch=cc?`<a class="hcd hclass${cc.now?' live':''}" href="#timetable" style="--cc:${ttColor(cc.s.ckey)}" title="${esc((cc.now?'Now: ':'Next: ')+[ccn.code,ccn.name].filter(Boolean).join(' '))}"><span class="hcl"><em>${cc.now?'Now':'Next'}</em> <i class="cdot"></i><strong>${esc(ccn.code||ccn.name||'Class')}</strong>${ccn.code&&ccn.name?`<small>${esc(ccn.name)}</small>`:''}</span><span class="hcr"><b data-to="${+cc.at}">${fmtLeft(cc.at-Date.now())}</b><small>${cc.now?'left · ends '+esc(fmtClock(cc.s.end,TT().h24)+(TT().h24?'':' '+ampm(cc.s.end))):'until '+esc(ccDay+fmtClock(cc.s.start,TT().h24)+(TT().h24?'':' '+ampm(cc.s.start)))}${!cc.now&&nm(cc.s).room?' · '+esc(nm(cc.s).room):''}${cc.now&&ccn.room?' · '+esc(ccn.room):''}</small></span></a>`:'';
+  const cds=countdowns(),cdh=cds.length||cc?`<div class="hcds">${cch}${cds.map(c=>`<a class="hcd" href="#tasks" title="${esc(c.title)}"><b>${c.n===0?'Today':c.n}</b><span>${c.n===0?'':c.n===1?'day<br>':'days<br>'}${esc(c.label)}</span></a>`).join('')}</div>`:'';
+  if(cc&&!clockTick)clockTick=setInterval(tickClocks,1000);
   $('#hhero').innerHTML=s?`<div><span class="hsem">${esc(semName())}</span><h2>${esc(weekLine())}</h2><span class="hint">${esc(fmtD(T0))}</span></div>${cdh}<button class="btn ghost" data-act="semopen">Semester</button>`
     :`<div><span class="hsem">${esc(fmtD(T0))}</span><h2>Welcome</h2><span class="hint">Set your semester to see week numbers and place syllabus dates.</span></div><button class="btn" data-act="semopen">Set up semester</button>`;
   const card=(href,title,count,body)=>`<section class="hcard"><a class="htitle" href="${href}"><h3>${title}</h3>${count!=null?`<span class="hcount">${count}</span>`:''}<span class="harr" aria-hidden="true">→</span></a>${body}</section>`;
@@ -1825,12 +1869,53 @@ document.addEventListener('keydown',e=>{const it=e.target.closest&&e.target.clos
   const ids=[...it.parentElement.querySelectorAll(':scope > [data-rid]')].map(x=>x.dataset.rid),i=ids.indexOf(it.dataset.rid),j=i+(/Up|Left/.test(e.key)?-1:1);if(j<0||j>=ids.length)return;
   [ids[i],ids[j]]=[ids[j],ids[i]];const sel=it.closest('#side')?'#side':'.hcourses';if(moveCourses(ids))document.querySelector(`${sel} [data-rid="${it.dataset.rid}"]`)?.focus();});
 
+/* ---------- semesters: the one you're in lives at the top of S; the others are kept in S.archive ---------- */
+const SEMKEYS=['courses','sel','tt','tasks','tstate','sem','finals'],TORD={Spring:1,Summer:2,Fall:3,Winter:4};
+const termKey=d=>{const s=d.sem||{};const y=+s.year||(pd(s.start)||new Date(d.created||0)).getFullYear();return y*10+(TORD[s.term]||(pd(s.start)?pd(s.start).getMonth()/2:0));};
+const termNm=d=>{const s=d.sem||{};return[s.term&&s.term!=='Other'?s.term:'',s.year].filter(Boolean).join(' ')||'Untitled semester';};
+function curData(){const d={};for(const k of SEMKEYS)if(S[k]!==undefined)d[k]=S[k];d.id=S.termId||(S.termId=rid());return d;}
+function allTerms(){return[{...curData(),cur:true},...(S.archive||[])].sort((a,b)=>termKey(b)-termKey(a));}
+function loadTerm(d){for(const k of SEMKEYS)delete S[k];for(const k of SEMKEYS)if(d[k]!==undefined)S[k]=JSON.parse(JSON.stringify(d[k]));S.courses=S.courses||[];S.termId=d.id;}
+function switchTerm(id){if(id===S.termId)return;const tgt=(S.archive||[]).find(x=>x.id===id);if(!tgt)return;const snap=JSON.stringify(S);
+  S.archive=(S.archive||[]).filter(x=>x!==tgt);S.archive.push(curData());loadTerm(tgt);edit=false;tFilter='all';fix();save();route();toast('Switched to '+termNm(tgt),snap);}
+function renderSemBtn(){const n=allTerms().length,nmv=S.sem&&(S.sem.term||S.sem.year)?termNm(S):n>1?'Untitled semester':'Semester';$('#semswl').textContent=nmv;$('#semsw').title=n>1?`${n} semesters`:'Semesters';}
+function closeSemMenu(){document.querySelectorAll('.smenu').forEach(m=>m.remove());$('#semsw').setAttribute('aria-expanded','false');document.removeEventListener('pointerdown',semOutside,true);}
+const semOutside=e=>{if(!e.target.closest('.smenu,#semsw'))closeSemMenu();};
+function openSemMenu(){if(document.querySelector('.smenu')){closeSemMenu();return;}const ts=allTerms(),m=document.createElement('div');m.className='smenu';m.setAttribute('role','menu');
+  const meta=d=>{const cs=(d.courses||[]).filter(c=>!c.isLab).length,tk=(d.tasks||[]).length;return[cs?`${cs} course${cs===1?'':'s'}`:'No courses',(d.tt&&d.tt.slots||[]).length?'timetable':'',d.sem&&d.sem.start?fmtRangeD(pd(d.sem.start),pd(d.sem.end)||null):''].filter(Boolean).join(' · ');};
+  m.innerHTML=`<ul>${ts.map(d=>`<li><button class="si" role="menuitem" data-term="${esc(d.id)}"><span class="ck">${d.cur?'✓':''}</span><b>${esc(termNm(d))}</b><small>${esc(meta(d))}</small></button>${d.cur?'':`<button class="ib" data-termdel="${esc(d.id)}" title="Delete this semester" aria-label="Delete ${esc(termNm(d))}"><svg viewBox="0 0 16 16"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>`}</li>`).join('')}</ul><button class="sadd2" data-termadd role="menuitem">+ Add semester</button>`;
+  document.body.appendChild(m);const r=$('#semsw').getBoundingClientRect();m.style.left=Math.max(8,Math.min(innerWidth-m.offsetWidth-8,r.left))+'px';m.style.top=(r.bottom+scrollY+6)+'px';
+  $('#semsw').setAttribute('aria-expanded','true');setTimeout(()=>document.addEventListener('pointerdown',semOutside,true),0);(m.querySelector('.si:not([data-term="'+S.termId+'"])')||m.querySelector('.sadd2')).focus();
+  m.addEventListener('click',async e=>{const a=e.target.closest('[data-term]'),dl=e.target.closest('[data-termdel]'),ad=e.target.closest('[data-termadd]');
+    if(a){closeSemMenu();switchTerm(a.dataset.term);}
+    else if(ad){closeSemMenu();openNewSem();}
+    else if(dl){const d=(S.archive||[]).find(x=>x.id===dl.dataset.termdel);if(!d)return;closeSemMenu();
+      if(!await confirmBox(`Delete ${termNm(d)}?`,'Its courses, grades, timetable, tasks and finals are deleted from this browser.','Delete semester'))return;const snap=JSON.stringify(S);S.archive=S.archive.filter(x=>x!==d);save();renderSemBtn();toast(termNm(d)+' deleted',snap);}});
+  m.addEventListener('keydown',e=>{if(e.key==='Escape'){closeSemMenu();$('#semsw').focus();}const it=[...m.querySelectorAll('.si,.sadd2')],i=it.indexOf(document.activeElement);
+    if(e.key==='ArrowDown'){e.preventDefault();it[(i+1)%it.length].focus();}if(e.key==='ArrowUp'){e.preventDefault();it[(i-1+it.length)%it.length].focus();}});}
+$('#semsw').onclick=openSemMenu;
+const NEXTT={Fall:['Spring',1],Spring:['Summer',0],Summer:['Fall',0],Winter:['Spring',0]};
+function calTermFor(term,year){const ts=(S.sem&&S.sem.terms)||[];return ts.find(t=>t.term===term&&String(t.year)===String(year));}
+function nsNote(){const t=$('#nsterm').value,y=$('#nsyear').value.trim(),c=calTermFor(t,y),dup=allTerms().find(d=>d.sem&&d.sem.term===t&&String(d.sem.year)===y);
+  $('#nsnote').textContent=dup?`You already have ${t} ${y}. Adding it will switch to it.`:c?`Dates for ${t} ${y} come from your academic calendar: classes ${fmtRangeD(pd(c.start),pd(c.end)||null)}.`:'You can set its dates in the Semester dialog afterwards.';}
+function openNewSem(){const s=S.sem||{},n=NEXTT[s.term];let t='Fall',y=new Date().getFullYear();if(n&&s.year){t=n[0];y=+s.year+n[1];}else{const m=new Date().getMonth();t=m<=3?'Spring':m<=6?'Fall':'Spring';if(t==='Spring'&&m>6)y++;}
+  $('#nsterm').value=t;$('#nsyear').value=y;nsNote();$('#nsmodal').classList.add('on');setTimeout(()=>$('#nsdo').focus(),0);}
+['#nsterm','#nsyear'].forEach(id=>$(id).addEventListener('input',nsNote));
+$('#nscancel').onclick=()=>$('#nsmodal').classList.remove('on');$('#nsmodal').addEventListener('click',e=>{if(e.target===$('#nsmodal'))$('#nsmodal').classList.remove('on');});
+$('#nsdo').onclick=()=>{const t=$('#nsterm').value,y=$('#nsyear').value.trim();if(!/^\d{4}$/.test(y)){$('#nsyear').focus();return;}$('#nsmodal').classList.remove('on');
+  const dup=allTerms().find(d=>d.sem&&d.sem.term===t&&String(d.sem.year)===y);if(dup){if(dup.cur)toast(`You’re already in ${t} ${y}`);else switchTerm(dup.id);return;}
+  const snap=JSON.stringify(S),old=curData(),c=calTermFor(t,y),terms=S.sem&&S.sem.terms,ot=S.tt||{};
+  S.archive=[...(S.archive||[]),old];const tt={};for(const k of ['opts','order','view','h24','exp','colors'])if(ot[k]!==undefined)tt[k]=JSON.parse(JSON.stringify(ot[k]));
+  loadTerm({id:rid(),courses:[],sel:null,tt,tasks:[],tstate:{},sem:{term:t,year:y,start:'',end:'',ov:{},cal:[],terms:terms||null}});
+  if(c){S.sem.start=c.start||'';S.sem.end=c.end||'';S.sem.cal=c.dates.map(d=>({...d,id:rid()}));}
+  edit=false;tFilter='all';fix();save();location.hash='#home';route();toast(`${t} ${y} added`,snap);if(!c)setTimeout(openSem,250);};
+
 /* ---------- sections ---------- */
 const VIEWS={home:['#home','Home'],grades:['#grades','Grades'],tt:['#timetable','Timetable'],tasks:['#tasks','Tasks']};
 function route(){const h=location.hash,v=h==='#grades'?'grades':h==='#timetable'?'tt':h==='#tasks'?'tasks':'home';document.body.dataset.view=v;
   for(const k in VIEWS){$('#v-'+k).hidden=k!==v;$('#tab-'+k).setAttribute('aria-current',k===v?'page':'false');}
   $('#dropover').textContent=v==='tt'?'Drop your .ics schedule':'Drop syllabi to add them';document.title=VIEWS[v][1]+' · Course Manager';
-  closeColor();if(v==='tt')renderTT();else if(v==='tasks')renderTasks();else if(v==='home')renderHome();else render();}
+  closeColor();closeSemMenu();renderSemBtn();if(v==='tt')renderTT();else if(v==='tasks')renderTasks();else if(v==='home')renderHome();else render();}
 addEventListener('hashchange',route);
 
 /* ---------- start ---------- */
