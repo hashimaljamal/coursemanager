@@ -27,9 +27,12 @@ input[type=checkbox]{accent-color:var(--red);width:20px;height:20px;margin:0}
 .nil{color:var(--mute);font-weight:500}
 
 /* toolbar */
-.top{display:flex;align-items:center;gap:10px 14px;flex-wrap:wrap;padding:16px 0 12px}
-h1{font-size:clamp(22px,2.4vw,30px);line-height:1.1;margin:0 auto 0 0;font-stretch:112%;font-weight:800;letter-spacing:-.01em}
-.acts{display:flex;gap:8px;flex-wrap:wrap}
+.top{display:grid;grid-template-columns:minmax(0,1fr) auto auto;grid-template-areas:"title acts theme" "title rline rline";align-items:center;gap:6px 10px;padding:14px 0 10px}
+h1{grid-area:title;font-size:clamp(22px,2.4vw,30px);line-height:1.1;margin:0;font-stretch:112%;font-weight:800;letter-spacing:-.01em}
+.acts{grid-area:acts;display:flex;gap:8px}
+.acts .btn{min-width:84px}
+.theme{grid-area:theme}
+.rline{grid-area:rline;margin:0;text-align:right;font-size:12px;color:var(--mute)}
 .btn{min-height:40px;padding:0 14px;border:1.5px solid var(--ink);border-radius:var(--rad);background:var(--ink);color:var(--bg);font-weight:700;font-size:14px;white-space:nowrap}
 .btn.ghost{background:transparent;color:var(--ink)}
 .btn.sm{min-height:34px;padding:0 11px;font-size:13px}
@@ -38,7 +41,8 @@ h1{font-size:clamp(22px,2.4vw,30px);line-height:1.1;margin:0 auto 0 0;font-stret
 .theme .sun{display:none}
 :root[data-theme=dark] .theme .sun{display:block}:root[data-theme=dark] .theme .moon{display:none}
 @media(prefers-color-scheme:dark){:root:not([data-theme=light]) .theme .sun{display:block}:root:not([data-theme=light]) .theme .moon{display:none}}
-.status{display:flex;flex-wrap:wrap;gap:4px 14px;align-items:baseline;font-size:13px;color:var(--mute);padding-bottom:10px;border-bottom:2px solid var(--ink)}
+.status{padding-bottom:10px;border-bottom:2px solid var(--ink)}
+.status:has(#jobs:empty){padding-bottom:0}
 .link{border:0;background:none;padding:2px 0;font-size:13px;font-weight:600;text-decoration:underline;color:var(--ink)}
 #jobs{list-style:none;margin:0;padding:0;flex-basis:100%;display:grid;gap:2px}
 #jobs:empty{display:none}
@@ -69,6 +73,21 @@ aside h2{font-size:12px;color:var(--mute);margin:0 0 6px;font-weight:600}
 .ci em{font-style:normal;font-weight:800;grid-row:1/3;grid-column:2;font-stretch:112%;font-size:18px}
 .side-note{font-size:12px;color:var(--mute);margin:8px 0 0}
 .side-note button{border:0;background:none;padding:0;text-decoration:underline;color:var(--ink);font-size:12px}
+.profw{position:relative;display:inline-block}
+.csub{display:flex;flex-wrap:wrap;align-items:center;gap:2px 0;margin:2px 0 0;color:var(--mute);font-size:14px}.cs{display:inline-flex;align-items:center}.cs+.cs::before{content:'·';margin:0 7px}
+.prof{border:0;background:var(--soft);padding:2px 6px 2px 8px;margin:0 2px;border-radius:6px;font-size:14px;font-weight:600;color:var(--ink);display:inline-flex;align-items:center;gap:3px;min-height:28px}
+.prof svg{width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:1.6;transition:transform .15s}
+.prof[aria-expanded=true] svg{transform:rotate(180deg)}
+.profpop{position:absolute;left:0;top:calc(100% + 4px);z-index:15;background:var(--bg);border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 32px rgb(0 0 0/.16);padding:10px 14px;min-width:240px;max-width:min(340px,88vw)}
+.profpop:not([hidden]){display:grid;gap:8px}.pr{display:grid}.pl{font-size:11px;color:var(--mute)}.pv{font-size:14px;color:var(--ink);overflow-wrap:anywhere}
+.profpop a{color:var(--ink);font-weight:600}
+.box.mu{grid-column:span 2}.box.mu span{color:var(--red);padding-right:0}
+.hmiss{font-size:12px;color:var(--mute)}
+.madeup{min-height:38px;border:1px dashed var(--red);border-radius:8px;background:var(--soft);font-size:15px;font-weight:600;text-align:right;padding:4px 7px;font-variant-numeric:tabular-nums;font-style:italic}
+.madeup.dropped{text-decoration:line-through;color:var(--mute)}
+.mfs{border:0;padding:0;margin:4px 0;display:grid;gap:8px}.mfs legend{font-size:12px;color:var(--mute);margin-bottom:4px;padding:0}
+.mopt{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600}.mopt input{width:18px;height:18px;margin:0;accent-color:var(--red)}
+#mcopy{margin-left:26px}.mavg{display:grid;gap:4px;margin-left:26px}.mavg .chk{min-height:30px;font-size:14px}
 .empty{padding:32px 0;color:var(--mute)}.empty h2{color:var(--ink);margin:0 0 6px}
 
 /* course head + notes */
@@ -184,12 +203,11 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 /* phone */
 @media(max-width:600px){
  .shell{padding:0 max(14px,env(safe-area-inset-left)) 0 max(14px,env(safe-area-inset-right))}
- .top{padding:12px 0 10px;gap:10px}
+ .top{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:"title theme" "acts acts" "rline rline";padding:12px 0 8px;gap:8px}
  h1{font-size:21px}
- .theme{order:2}
- .acts{order:3;flex-basis:100%;display:grid;grid-template-columns:1.3fr 1fr 1fr}
- .acts .btn{padding:0 8px}
- .long{display:none}
+ .acts{display:grid;grid-template-columns:repeat(3,1fr)}
+ .acts .btn{padding:0 8px;min-width:0}
+ .rline{text-align:left}
  #jobs li{grid-template-columns:minmax(0,1fr) auto}#jobs li span{grid-column:1/-1;grid-row:2}
  .chead h2{font-size:22px}
  #res{grid-template-columns:1fr;gap:10px}
@@ -201,21 +219,20 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
  .stack thead{display:none}.stack tr{display:grid;grid-template-columns:1fr 1fr;gap:2px 12px;padding:8px 0;border-bottom:1px solid var(--line)}.stack td{display:flex;align-items:center;gap:8px;border:0;padding:2px 0;font-size:13px}.stack td::before{content:attr(data-l);font-size:12px;color:var(--mute)}.stack td:first-child{grid-column:1/-1;display:block}.stack td:first-child::before{content:none}
  .mact .btn{flex:1}
 }
-@media(min-width:601px){.short{display:none}}
-@media(hover:none),(pointer:coarse){.dragtip{display:none}}
 </style></head><body>
 <div class="shell">
 <header class="top">
   <h1>Syllabus Grade Calculator</h1>
   <div class="acts">
-    <button class="btn" id="pick"><span class="long">Upload syllabi</span><span class="short">Upload</span></button>
-    <button class="btn ghost" id="pastebtn"><span class="long">Paste text</span><span class="short">Paste</span></button>
-    <button class="btn ghost" id="manual"><span class="long">Add by hand</span><span class="short">Add</span></button>
+    <button class="btn" id="pick" title="Upload syllabus files (PDF, Word, photos or text)">Upload</button>
+    <button class="btn ghost" id="pastebtn" title="Paste syllabus text">Text</button>
+    <button class="btn ghost" id="manual" title="Add a course by hand">Manual</button>
   </div>
   <button class="theme" id="theme" aria-label="Switch to dark mode" title="Light / dark mode"><svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 1.5v2.5M12 20v2.5M4.6 4.6l1.8 1.8M17.6 17.6l1.8 1.8M1.5 12H4M20 12h2.5M4.6 19.4l1.8-1.8M17.6 6.4l1.8-1.8"/></svg></button>
+  <p class="rline"><span id="reader"></span> <button class="link" id="setbtn">Reading settings</button></p>
   <input type="file" id="file" multiple hidden accept=".pdf,.docx,.txt,.md,.rtf,.html,.htm,image/*">
 </header>
-<div class="status"><span>PDF, Word, photos or text.<span class="dragtip"> Drop files anywhere on the page.</span></span><span><span id="reader"></span> <button class="link" id="setbtn">Reading settings</button></span><ul id="jobs"></ul></div>
+<div class="status"><ul id="jobs"></ul></div>
 <div class="dropover" id="dropover">Drop syllabi to add them</div>
 <div class="wrap">
   <aside><button class="gpacard" id="gpacard" data-sel="gpa" hidden></button><h2>Your courses</h2><div class="clist" id="side"></div><div class="side-note" id="snote"></div></aside>
@@ -224,6 +241,16 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 </div>
 </div>
 <div id="modal" class="modal"><div class="card"><h3 style="margin:0">Paste a syllabus</h3><p class="hint">Paste the whole thing, or just the grading section and grade scale.</p><textarea id="ptext" aria-label="Syllabus text"></textarea><div class="mact"><button class="btn ghost" id="pcancel">Cancel</button><button class="btn" id="pgo">Read it</button></div></div></div>
+<div id="mmodal" class="modal"><div class="card"><h3>Missed exam</h3>
+<p class="hint">Pick the exam you missed and how your professor will make it up.</p>
+<div class="grid2" style="grid-template-columns:1fr"><label>Exam you missed<select id="mwhich"></select></label></div>
+<fieldset class="mfs"><legend>Make it up with</legend>
+<label class="mopt"><input type="radio" name="mmode" value="copy" checked> <span>The score from another exam</span></label>
+<select id="mcopy" aria-label="Exam whose score is used"></select>
+<label class="mopt"><input type="radio" name="mmode" value="avg"> <span>The average of these exams</span></label>
+<div id="mavg" class="mavg"></div></fieldset>
+<p class="hint" id="mmsg"></p>
+<div class="mact"><button class="btn ghost" id="mclear">I took it (remove)</button><span style="flex:1"></span><button class="btn ghost" id="mcancel">Cancel</button><button class="btn" id="msave">Save</button></div></div></div>
 <div id="smodal" class="modal"><div class="card"><h3 style="margin:0">Reading settings</h3>
 <p class="hint">How uploaded syllabi are read. Your key is stored only in this browser and sent only to the provider you pick.</p>
 <div class="grid2" style="grid-template-columns:1fr"><label>Reader<select id="sprov"><option value="site" id="optsite">Site’s AI reader: no key needed</option><option value="basic">Built-in reader: free, offline, no key (best with clear grading tables)</option><option value="gemini">Google Gemini: free API key from aistudio.google.com</option><option value="anthropic">Anthropic Claude: paid API key from console.anthropic.com</option></select></label>
@@ -275,10 +302,22 @@ function autoLink(){for(const co of S.courses){if(co.isLab)continue;for(const k 
 function parseScore(s,outOf){if(s==null)return null;s=String(s).trim();if(!s)return null;const m=s.match(/^(-?\d*\.?\d+)\s*\/\s*(\d*\.?\d+)$/);if(m)return +m[2]?m[1]/m[2]*100:null;const v=parseFloat(s.replace('%',''));return isNaN(v)?null:v/(outOf||100)*100;}
 const nItems=k=>Math.max(0,k.count|0);
 const labOf=(co,k)=>!co.isLab&&k.kind==='lab'&&k.link?byId(k.link):null;
-function compPct(co,k,fill,d=0){const L=labOf(co,k);if(L&&d<2)return coursePct(L,fill,d+1);if(nItems(k)===0)return fill;let v=[];for(let i=0;i<nItems(k);i++){const p=parseScore(k.scores[i],k.outOf);if(p!=null)v.push(p);else if(fill!=null)v.push(fill);}if(!v.length)return null;v.sort((a,b)=>a-b);v=v.slice(Math.max(0,Math.min(k.drop|0,v.length-1)));return v.reduce((a,b)=>a+b,0)/v.length;}
+/* An exam item can be "made up": its value comes from another exam's score, or the average of chosen exams. */
+function itemVal(co,k,i,fill,d=0){
+  const m=k.miss&&k.miss[i];if(!m||d>3)return parseScore(k.scores[i],k.outOf);
+  const vals=(m.src||[]).map(r=>{const[c,j]=String(r).split(':'),sk=co.comps.find(x=>x.id===c);if(!sk||+j>=nItems(sk))return null;const v=itemVal(co,sk,+j,fill,d+1);return v!=null?v:fill;}).filter(v=>v!=null);
+  if(!vals.length)return null;return m.mode==='copy'?vals[0]:vals.reduce((a,b)=>a+b,0)/vals.length;
+}
+const isMissed=(k,i)=>!!(k.miss&&k.miss[i]);
+const examItems=co=>co.comps.filter(k=>k.kind==='exam').flatMap(k=>Array.from({length:nItems(k)},(_,i)=>({k,i,ref:`${k.id}:${i}`,label:nItems(k)>1?`${k.name} ${i+1}`:k.name})));
+const refLabel=(co,r)=>{const x=examItems(co).find(e=>e.ref===r);return x?x.label:'a removed exam';};
+function removeItem(co,k,i){k.scores.splice(i,1);k.count=Math.max(0,nItems(k)-1);k.zeroOk=true;
+  if(k.miss){const m={};for(const[key,v]of Object.entries(k.miss)){const n=+key;if(n<i)m[n]=v;else if(n>i)m[n-1]=v;}k.miss=m;}
+  for(const x of co.comps)if(x.miss)for(const key of Object.keys(x.miss)){const r=x.miss[key];r.src=(r.src||[]).map(s=>{const[c,j]=s.split(':');if(c!==k.id)return s;return +j===i?null:+j>i?`${c}:${+j-1}`:s;}).filter(Boolean);if(!r.src.length)delete x.miss[key];}}
+function compPct(co,k,fill,d=0){const L=labOf(co,k);if(L&&d<2)return coursePct(L,fill,d+1);if(nItems(k)===0)return fill;let v=[];for(let i=0;i<nItems(k);i++){const p=itemVal(co,k,i,fill);if(p!=null)v.push(p);else if(fill!=null)v.push(fill);}if(!v.length)return null;v.sort((a,b)=>a-b);v=v.slice(Math.max(0,Math.min(k.drop|0,v.length-1)));return v.reduce((a,b)=>a+b,0)/v.length;}
 function coursePct(co,fill=null,d=0){let s=0,w=0;for(const k of co.comps){const wt=+k.weight||0;if(wt<=0)continue;const p=compPct(co,k,fill,d);if(p==null)continue;s+=p*wt;w+=wt;}return w?s/w:null;}
-function tally(co,d=0){let g=0,t=0;for(const k of co.comps){if(!(+k.weight>0))continue;const L=labOf(co,k);if(L&&d<2){const r=tally(L,d+1);g+=r.g;t+=r.t;continue;}if(nItems(k)===0){t++;continue;}for(let i=0;i<nItems(k);i++){t++;if(parseScore(k.scores[i],k.outOf)!=null)g++;}}return{g,t};}
-function droppedSet(k){const e=[];for(let i=0;i<nItems(k);i++){const p=parseScore(k.scores[i],k.outOf);if(p!=null)e.push([p,i]);}e.sort((a,b)=>a[0]-b[0]);return new Set(e.slice(0,Math.max(0,Math.min(k.drop|0,e.length-1))).map(x=>x[1]));}
+function tally(co,d=0){let g=0,t=0;for(const k of co.comps){if(!(+k.weight>0))continue;const L=labOf(co,k);if(L&&d<2){const r=tally(L,d+1);g+=r.g;t+=r.t;continue;}if(nItems(k)===0){t++;continue;}for(let i=0;i<nItems(k);i++){t++;if(itemVal(co,k,i,null)!=null)g++;}}return{g,t};}
+function droppedSet(co,k){const e=[];for(let i=0;i<nItems(k);i++){const p=itemVal(co,k,i,null);if(p!=null)e.push([p,i]);}e.sort((a,b)=>a[0]-b[0]);return new Set(e.slice(0,Math.max(0,Math.min(k.drop|0,e.length-1))).map(x=>x[1]));}
 function gpFor(co,g){const b=co.bounds.find(x=>x.g===g);if(b&&b.gp!==''&&b.gp!=null&&!isNaN(+b.gp))return +b.gp;const k=String(g||'').toUpperCase().trim();return k in STDGP?STDGP[k]:null;}
 const creditsOf=co=>co.credits!=null&&co.credits!==''&&!isNaN(+co.credits)?+co.credits:DEF_CREDITS;
 const gpaCourses=()=>S.courses.filter(c=>!(c.isLab&&linkedBy(c.id)));
@@ -304,7 +343,7 @@ function renderSide(){
 function compHTML(co,k,top){
   const a=`data-co="${co.id}" data-cid="${k.id}"`,L=labOf(co,k),ed=edit&&top;
   const h=ed?`<div class="erow"><input ${a} data-f="name" value="${esc(k.name)}" aria-label="Section name"><select ${a} data-f="kind" aria-label="Type">${KINDS.map(x=>`<option ${x===k.kind?'selected':''}>${x}</option>`).join('')}</select><label class="wt"><input ${a} data-f="weight" inputmode="decimal" value="${esc(k.weight)}" aria-label="Weight"> %</label><button class="x" data-act="delcomp" ${a} aria-label="Remove ${esc(k.name)}">×</button></div>`
-    :`<h3>${esc(k.name)}</h3><span class="wt">${fmt(+k.weight)}%</span>`;
+    :`<h3>${esc(k.name)}</h3><span class="wt">${fmt(+k.weight)}%</span>${k.kind==='exam'&&nItems(k)>0&&examItems(co).length>1?`<button class="lnkbtn hmiss" data-act="missed" ${a}>${k.miss&&Object.keys(k.miss).length?'Make-ups':'Missed?'}</button>`:''}`;
   let o=`<section class="comp${L||(k.kind==='lab'&&!co.isLab)?' wide':''}"><header>${h}<b class="avg" data-avg="${k.id}"></b></header>`;
   if(k.kind==='lab'&&!co.isLab){const labs=S.courses.filter(x=>x.isLab&&(!linkedBy(x.id)||x.id===k.link));
     o+=`<label class="lnk">Lab syllabus <select ${a} data-f="link"><option value="">None, enter lab grades here</option>${labs.map(l=>`<option value="${l.id}" ${l.id===k.link?'selected':''}>${esc(l.code||l.title)}</option>`).join('')}</select>${L?`<button class="lnkbtn" data-act="open" data-id="${L.id}">Edit lab structure</button>`:''}</label>`;}
@@ -313,7 +352,9 @@ function compHTML(co,k,top){
   const dl=k.kind==='lab'?'Labs dropped':k.kind==='quiz'?'Quizzes dropped':'Drop lowest';
   const showDrop=k.kind==='lab'||k.kind==='quiz'||k.drop>0||edit,showOut=+k.outOf!==100||edit;
   o+=`<div class="ctl">${edit?`<label>Items <input ${a} data-f="count" inputmode="numeric" value="${n}"></label>`:''}${showDrop?`<label>${dl} <input ${a} data-f="drop" inputmode="numeric" value="${k.drop|0}"></label>`:''}${showOut?`<label>Out of <input ${a} data-f="outOf" inputmode="decimal" value="${k.outOf}"></label>`:''}</div>`;
-  o+=`<div class="boxes">${Array.from({length:n},(_,i)=>`<div class="box"><span>${pre} ${i+1}</span><input ${a} data-f="score" data-i="${i}" inputmode="decimal" value="${esc(k.scores[i]??'')}" placeholder=" " aria-label="${esc(k.name)} ${pre} ${i+1} score"><button class="rm" data-act="rmitem" data-i="${i}" ${a} aria-label="Remove ${pre} ${i+1}" title="Remove this box">−</button></div>`).join('')}${n<60?`<button class="plus" data-act="inc" ${a} aria-label="Add a ${pre}" title="Add a ${pre.toLowerCase()}">+</button>`:''}${n===0?`<span class="none-yet">None yet. Use + to add one.</span>`:''}</div>`;
+  const ds=droppedSet(co,k);
+  o+=`<div class="boxes">${Array.from({length:n},(_,i)=>isMissed(k,i)?(()=>{const m=k.miss[i],v=itemVal(co,k,i,null),src=(m.src||[]).map(r=>refLabel(co,r));
+      return`<div class="box mu"><span>${n>1?pre+' '+(i+1)+' · ':''}made up</span><button class="madeup${ds.has(i)?' dropped':''}" data-act="missed" data-i="${i}" ${a} data-mu="${k.id}:${i}" title="${esc(m.mode==='copy'?'Uses '+src[0]:'Average of '+src.join(', '))}. Click to change.">${v==null?'waiting':fmt(v)+'%'}</button></div>`;})():`<div class="box"><span>${pre} ${i+1}</span><input ${a} data-f="score" data-i="${i}" inputmode="decimal" value="${esc(k.scores[i]??'')}" placeholder=" " aria-label="${esc(k.name)} ${pre} ${i+1} score"><button class="rm" data-act="rmitem" data-i="${i}" ${a} aria-label="Remove ${pre} ${i+1}" title="Remove this box">−</button></div>`).join('')}${n<60?`<button class="plus" data-act="inc" ${a} aria-label="Add a ${pre}" title="Add a ${pre.toLowerCase()}">+</button>`:''}${n===0?`<span class="none-yet">None yet. Use + to add one.</span>`:''}</div>`;
   return o+'</section>';
 }
 function notes(co){
@@ -338,16 +379,20 @@ function resHTML(co){
 function editHTML(co){
   const a=`data-co="${co.id}"`;
   return`<div class="edit"><button class="btn ghost sm" data-act="addcomp" ${a}>+ Add graded part</button></div>
+  <div class="edit"><h3>Professor</h3><div class="grid2">${[['name','Name'],['email','Email'],['hours','Office hours'],['office','Office room']].map(([pk,l])=>`<label>${l}<input ${a} data-f="prof" data-pk="${pk}" value="${esc((co.prof||{})[pk]||'')}"${pk==='email'?' inputmode="email" autocomplete="off"':''}></label>`).join('')}</div></div>
   <div class="edit"><h3>Course</h3><div class="grid2"><label>Code<input ${a} data-f="code" value="${esc(co.code)}"></label><label>Title<input ${a} data-f="title" value="${esc(co.title)}"></label><label>Credit hours<input ${a} data-f="credits" inputmode="decimal" value="${esc(co.credits??DEF_CREDITS)}"></label><label class="chk"><input type="checkbox" ${a} data-f="isLab" ${co.isLab?'checked':''}> This is a lab syllabus</label><label class="chk"><input type="checkbox" ${a} data-f="inGpa" ${co.noGpa?'':'checked'}> Count in semester GPA</label></div>
   <h3>Grade boundaries</h3><p class="hint">Letter, minimum percent and GPA points. Leave points blank to use the standard 4.0 scale.</p><div class="bgrid">${co.bounds.map((b,i)=>`<div class="brow"><input ${a} data-f="bg" data-bi="${i}" value="${esc(b.g)}" aria-label="Grade"><span>from</span><input ${a} data-f="bm" data-bi="${i}" inputmode="decimal" value="${esc(b.min)}" aria-label="Minimum percent"><span>%</span><input ${a} data-f="bp" data-bi="${i}" inputmode="decimal" class="gp" value="${esc(b.gp??'')}" placeholder="${esc(STDGP[String(b.g).toUpperCase()]??'')}" aria-label="Grade points for ${esc(b.g)}"><span>pts</span><button class="x" data-act="delb" data-bi="${i}" ${a} aria-label="Remove boundary">×</button></div>`).join('')}</div>
   <button class="btn ghost sm" data-act="addb" ${a}>+ Add boundary</button>
   <p style="margin-top:20px"><button class="btn ghost sm" data-act="delcourse" ${a}>Delete this course</button></p></div>`;
 }
+function profHTML(co){const p=co.prof||{};if(!p.name&&!p.email&&!p.hours&&!p.office)return'';
+  const row=(l,v,h)=>`<span class="pr"><span class="pl">${l}</span><span class="pv">${v?h||esc(v):'<span class="nil">Not listed</span>'}</span></span>`;
+  return`<span class="profw"><button class="prof" data-act="prof" aria-expanded="false" aria-haspopup="true">${esc(p.name||'Professor')}<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5"/></svg></button><span class="profpop" hidden role="dialog" aria-label="Professor details">${row('Email',p.email,p.email?`<a href="mailto:${esc(p.email)}">${esc(p.email)}</a>`:'')}${row('Office hours',p.hours)}${row('Office',p.office)}</span></span>`;}
 function renderPanel(){
   if(S.sel==='gpa'){renderGPA();return;}
   const co=byId(S.sel);
   if(!co){$('#panel').innerHTML='<div class="empty"><h2>No courses yet</h2><p>Upload a syllabus above, or add a course by hand.</p></div>';return;}
-  $('#panel').innerHTML=`<div class="chead"><div><h2>${esc(co.code||'Untitled course')}</h2><p>${esc(co.title)}${co.title?' · ':''}${co.isLab?'Lab · ':''}${fmt(creditsOf(co))} credit${creditsOf(co)===1?'':'s'}${co.noGpa?' · not in GPA':''}</p></div><button class="btn ${edit?'':'ghost'} sm" data-act="edit">${edit?'Done editing':'Edit structure'}</button></div>${(()=>{const n=notes(co);return n?`<div class="notes">${n}</div>`:'';})()}<div id="res"></div>${co.comps.length?`<div class="comps">${co.comps.map(k=>compHTML(co,k,true)).join('')}</div>`:'<p class="hint">No graded parts yet. Use Edit structure to add some.</p>'}${edit?editHTML(co):''}`;
+  $('#panel').innerHTML=`<div class="chead"><div><h2>${esc(co.code||'Untitled course')}</h2><div class="csub">${[co.title?esc(co.title):'',profHTML(co),co.isLab?'Lab':'',`${fmt(creditsOf(co))} credit${creditsOf(co)===1?'':'s'}`,co.noGpa?'not in GPA':''].filter(Boolean).map(x=>`<span class="cs">${x}</span>`).join('')}</div></div><button class="btn ${edit?'':'ghost'} sm" data-act="edit">${edit?'Done editing':'Edit structure'}</button></div>${(()=>{const n=notes(co);return n?`<div class="notes">${n}</div>`:'';})()}<div id="res"></div>${co.comps.length?`<div class="comps">${co.comps.map(k=>compHTML(co,k,true)).join('')}</div>`:'<p class="hint">No graded parts yet. Use Edit structure to add some.</p>'}${edit?editHTML(co):''}`;
   numbers();
 }
 function renderGPA(){
@@ -374,7 +419,8 @@ function numbers(){
   const co=byId(S.sel);if(!co)return;
   $('#res').innerHTML=resHTML(co);
   for(const c of S.courses)for(const k of c.comps){const el=document.querySelector(`[data-avg="${k.id}"]`);if(!el)continue;const p=compPct(c,k,null);el.textContent=p==null?'no scores':fmt(p)+'%';el.classList.toggle('nil',p==null);
-    const ds=droppedSet(k);document.querySelectorAll(`input[data-cid="${k.id}"][data-f=score]`).forEach(inp=>inp.classList.toggle('dropped',ds.has(+inp.dataset.i)));}
+    const ds=droppedSet(c,k);document.querySelectorAll(`input[data-cid="${k.id}"][data-f=score]`).forEach(inp=>inp.classList.toggle('dropped',ds.has(+inp.dataset.i)));
+    document.querySelectorAll(`[data-mu^="${k.id}:"]`).forEach(el=>{const i=+el.dataset.mu.split(':')[1],v=itemVal(c,k,i,null);el.textContent=v==null?'waiting':fmt(v)+'%';el.classList.toggle('dropped',ds.has(i));});}
   renderSide();
 }
 
@@ -394,6 +440,7 @@ P.addEventListener('input',e=>{const t=e.target,f=t.dataset.f;if(!f)return;const
   else if(k&&(f==='weight'||f==='drop'||f==='outOf')){const v=parseFloat(t.value);k[f]=isNaN(v)?0:(f==='drop'?Math.max(0,v|0):v);if(f==='outOf'&&!(k.outOf>0))k.outOf=100;}
   else if(k&&f==='name')k.name=t.value;
   else if(f==='code'||f==='title'){co[f]=t.value;}
+  else if(f==='prof'){co.prof=co.prof||{};co.prof[t.dataset.pk]=t.value.trim();}
   else if(f==='credits'){const v=parseFloat(t.value);co.credits=isNaN(v)?0:Math.max(0,v);co.creditsGuessed=false;}
   else if(f==='bp'){const b=co.bounds[+t.dataset.bi];if(b){b.gp=t.value.trim()===''?null:parseFloat(t.value);co.gpGuessed=false;}}
   else if(f==='bg'||f==='bm'){const b=co.bounds[+t.dataset.bi];if(b){b[f==='bg'?'g':'min']=f==='bm'?parseFloat(t.value):t.value;co.boundsGuessed=false;}}
@@ -424,7 +471,7 @@ function flushRender(){
   if(d){let sel=`[data-f="${d.f}"]`;for(const k of ['co','cid','i','bi'])if(d[k]!=null)sel+=`[data-${k}="${d[k]}"]`;
     const el=document.querySelector(sel);if(el){el.focus({preventScroll:true});try{if(ss!=null)el.setSelectionRange(ss,ss);}catch{}}}
 }
-document.addEventListener('click',e=>{const b=e.target.closest('[data-act],[data-sel]');if(!b)return;
+document.addEventListener('click',e=>{if(!e.target.closest('.profw'))document.querySelectorAll('.profpop').forEach(p=>{p.hidden=true;p.previousElementSibling?.setAttribute('aria-expanded','false');});const b=e.target.closest('[data-act],[data-sel]');if(!b)return;
   if(b.dataset.sel){S.sel=b.dataset.sel;edit=false;render();save();return;}
   const act=b.dataset.act,{co,k}=target(b);
   if(act==='settings'){openSettings();return;}
@@ -432,7 +479,9 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-act],[data
   if(act==='edit'){const c0=byId(S.sel);if(edit&&c0&&c0.basic){c0.basic=false;save();}edit=!edit;renderPanel();}
   else if(act==='open'){S.sel=b.dataset.id;edit=false;render();save();window.scrollTo({top:$('.wrap').offsetTop-8});}
   else if(act==='delcomp'&&co){const snap=JSON.stringify(S);co.comps=co.comps.filter(x=>x!==k);render();save();toast(`Removed ${k.name||'part'}`,snap);}
-  else if(act==='rmitem'&&k){const i=+b.dataset.i;if(String(k.scores[i]??'').trim())return;k.scores.splice(i,1);k.count=Math.max(0,nItems(k)-1);k.zeroOk=true;render();save();return;}
+  else if(act==='rmitem'&&k){const i=+b.dataset.i;if(String(k.scores[i]??'').trim()||isMissed(k,i))return;removeItem(co,k,i);render();save();return;}
+  else if(act==='missed'&&k){openMissed(co,k,b.dataset.i!=null?+b.dataset.i:null);return;}
+  else if(act==='prof'){const w=b.closest('.profw'),pop=w.querySelector('.profpop'),open=pop.hidden;pop.hidden=!open;b.setAttribute('aria-expanded',open);if(open){pop.style.left='0px';const r=pop.getBoundingClientRect(),over=r.right-(innerWidth-10);if(over>0)pop.style.left=Math.max(-r.left+10,-over)+'px';}return;}
   else if(act==='inc'&&k){k.count=Math.min(60,nItems(k)+1);k.zeroOk=true;render();save();const ins=document.querySelectorAll(`input[data-cid="${k.id}"][data-f=score]`);ins[ins.length-1]?.focus();}
   else if(act==='addcomp'&&co){co.comps.push(C('New part','assignment',0,1,0));render();save();}
   else if(act==='addb'&&co){co.bounds.push({g:'?',min:0});render();save();}
@@ -481,6 +530,7 @@ const INSTR=`You read university course syllabi and extract their grading scheme
 {"courses":[{"code":"CHEM 101","title":"General Chemistry I","isLab":false,
  "components":[{"name":"Quizzes","kind":"quiz","weight":10,"count":10,"drop":2}],
  "credits":3,
+ "instructor":{"name":"Dr. Jane Smith","email":"jsmith@aus.edu","officeHours":"Mon/Wed 10:00-11:30","office":"ESB 2045"},
  "boundaries":[{"grade":"A","min":90,"points":4.0},{"grade":"B+","min":87,"points":3.3}]}]}
 Rules:
 - components: every graded category. weight = percent of the final grade (numbers, should total ~100). If the syllabus gives points, convert to percent of total points. List exams separately when weighted separately (e.g. Midterm 1, Midterm 2, Final), or as one component with count when they share one weight.
@@ -491,6 +541,7 @@ Rules:
 - isLab: true if this syllabus is for a laboratory course or lab section (code ending in L, title containing Lab/Laboratory, or the document is a lab manual/schedule). For a lab syllabus, components describe how the lab grade itself is made up, and count is the number of labs/experiments/reports.
 - credits: the course's credit hours. Many syllabi (e.g. American University of Sharjah) write it after the course code as (lecture hours-lab hours-credit hours): the LAST number is the credits. Examples: "PHY 101 General Physics I (3-0-3)" = 3 credits, "PHY 101L General Physics Laboratory I (0-3-1)" = 1 credit, "AUS 100 (1-0-0)" = 0 credits. Otherwise use a stated value like "3 credit hours" or "4 units". If not stated, null.
 - points: the GPA grade points for that letter if the syllabus lists them (e.g. "A = 4.0"); otherwise null. Never invent them.
+- instructor: the main instructor/professor's name (with title if given, e.g. "Dr."), email, office hours and office room, copied as written. Use null for any field not in the syllabus.
 - code: course code like "PHYS 201L" if present, else a short name. title: course title.
 - If the document holds several separate course syllabi, return one entry for each.`;
 /* ---------- readers: built-in rules, or Gemini / Anthropic with a key ---------- */
@@ -601,8 +652,21 @@ function basicRead(text,fname){
   const head40=lines.slice(0,40).join('\n');
   const aus=(cm&&(head40.match(new RegExp(cm[0].replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'[^\\n]{0,120}?\\(\\s*(\\d{1,2})\\s*-\\s*(\\d{1,2})\\s*-\\s*(\\d{1,2})\\s*\\)'))))||head40.match(/\(\s*(\d{1,2})\s*-\s*(\d{1,2})\s*-\s*(\d{1,2})\s*\)/)||head40.match(/\bcredits?(?: hours?)?\s*[:=]?\s*(\d{1,2})\s*-\s*(\d{1,2})\s*-\s*(\d{1,2})\b/i);
   const crm=aus?[aus[0],aus[3]]:text.match(/\b(\d{1,2}(?:\.\d)?)\s*(?:-\s*)?(?:credit(?:s| hours?)?|cr\.?\s*hrs?\.?|semester hours|units?)\b/i)||text.match(/\b(?:credit(?:s| hours?)|units?)\s*[:=]?\s*(\d{1,2}(?:\.\d)?)\b/i);
-  return{courses:[{code,title,isLab,components,credits:crm?+crm[1]:null,boundaries:basicBounds(text)}],basic:true};
+  return{courses:[{code,title,isLab,components,credits:crm?+crm[1]:null,instructor:basicProf(lines,text),boundaries:basicBounds(text)}],basic:true};
 }
+function cleanProf(x){if(!x||typeof x!=='object')return null;const t=(v,n)=>v==null?'':String(v).replace(/\s+/g,' ').trim().slice(0,n);
+  const p={name:t(x.name,80),email:t(x.email,120),hours:t(x.officeHours??x.hours,160),office:t(x.office,80)};if(p.email&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(p.email))p.email='';
+  return p.name||p.email||p.hours||p.office?p:null;}
+function basicProf(lines,text){
+  const val=re=>{for(let i=0;i<lines.length;i++){const m=lines[i].match(re);if(m){let v=(m[1]||'').trim();if(!v&&lines[i+1])v=lines[i+1].trim();return v;}}return'';};
+  let name=val(/^(?:course\s+)?(?:instructor|professor|lecturer|faculty|teacher|taught by)(?:\s*name)?\s*[:\-–]\s*(.*)$/i);
+  if(!name){const m=text.match(/\b((?:Dr|Prof|Professor)\.?\s+[A-Z][\w'’-]+(?:\s+[A-Z][\w'’-]+){0,3})/);if(m)name=m[1];}
+  name=name.replace(/[\w.+-]+@[\w-]+(\.[\w-]+)+/,'').replace(/\b(email|e-mail|office|phone|tel)\b.*$/i,'').replace(/[,;|·\-–\s]+$/,'');
+  const em=text.match(/[\w.+-]+@[\w-]+(?:\.[\w-]+)+/);
+  const hours=val(/^office\s*hours?\s*[:\-–]?\s*(.*)$/i);
+  let office=val(/^(?:office(?:\s*(?:location|room|no\.?|number))?|room)\s*[:\-–]\s*(?!hours?)(.*)$/i);
+  if(!office){const m=text.match(/\boffice(?:\s*(?:room|location))?\s*[:\-–]?\s*([A-Z]{2,5}[\s-]?\d{2,4}[A-Z]?)\b/i);if(m)office=m[1];}
+  return{name,email:em?em[0]:'',officeHours:hours,office};}
 function toCourse(r,basic){
   const comps=(Array.isArray(r.components)?r.components:[]).map(x=>{const kind=KINDS.includes(x.kind)?x.kind:'other',n=parseInt(x.count);const k=C(String(x.name||'Part'),kind,+x.weight||0,n>0?Math.min(60,n):(['quiz','assignment','lab'].includes(kind)?0:1),Math.max(0,parseInt(x.drop)||0));k.zeroOk=true;return k;});
   if(comps.length&&!comps.some(k=>k.weight>0))comps.forEach(k=>k.weight=Math.round(100/comps.length*10)/10);
@@ -611,7 +675,7 @@ function toCourse(r,basic){
   if(bounds.length&&bounds[bounds.length-1].min>0)bounds.push({g:'F',min:0,gp:bounds.some(b=>b.gp!=null)?0:null});
   const cr=parseFloat(r.credits),hasCr=!isNaN(cr)&&cr>=0&&cr<=12&&r.credits!==null&&r.credits!=='';
   return{id:rid(),code:String(r.code||r.title||'Course'),title:String(r.title||''),isLab:!!r.isLab,bounds,boundsGuessed:guessed,comps,basic:!!basic,
-    credits:hasCr?cr:(r.isLab?1:DEF_CREDITS),creditsGuessed:!hasCr,gpGuessed:!bounds.some(b=>b.gp!=null)};
+    credits:hasCr?cr:(r.isLab?1:DEF_CREDITS),creditsGuessed:!hasCr,gpGuessed:!bounds.some(b=>b.gp!=null),prof:cleanProf(r.instructor)};
 }
 const queue=[];let busyQ=false;
 function runJob(name,getInput){
@@ -656,6 +720,34 @@ $('#imp').onclick=()=>$('#impf').click();
 $('#impf').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;try{const v=JSON.parse(await f.text());if(!v||!Array.isArray(v.courses))throw 0;const snap=JSON.stringify(S);S={courses:v.courses,sel:v.sel,at:Date.now()};fix();render();save();toast(`Imported ${S.courses.length} course${S.courses.length===1?'':'s'}`,snap);}catch{toast('That file isn’t a grade calculator backup');}};
 
 new MutationObserver(()=>{for(const c of document.querySelectorAll('.stack td:not([data-l])')){let i=0,p=c;while(p=p.previousElementSibling)i++;c.dataset.l=c.closest('table').rows[0].cells[i]?.textContent||'';}}).observe(document.getElementById('panel'),{childList:true,subtree:true});
+
+/* ---------- missed exam dialog ---------- */
+let MX=null;const mm=$('#mmodal');
+function openMissed(co,k,i){
+  const own=Array.from({length:nItems(k)},(_,j)=>j);if(i==null)i=own.find(j=>isMissed(k,j))??own.find(j=>!String(k.scores[j]??'').trim())??0;
+  MX={co,k};$('#mwhich').innerHTML=own.map(j=>`<option value="${j}" ${j===i?'selected':''}>${esc(nItems(k)>1?k.name+' '+(j+1):k.name)}${isMissed(k,j)?' (made up)':String(k.scores[j]??'').trim()?' (has a score)':''}</option>`).join('');
+  fillMissed();mm.classList.add('on');
+}
+function fillMissed(){
+  const{co,k}=MX,i=+$('#mwhich').value,me=`${k.id}:${i}`,cur=k.miss&&k.miss[i];
+  const opts=examItems(co).filter(e=>e.ref!==me&&!isMissed(e.k,e.i));
+  $('#mcopy').innerHTML=opts.map(e=>`<option value="${e.ref}" ${cur&&cur.mode==='copy'&&cur.src[0]===e.ref?'selected':''}>${esc(e.label)}</option>`).join('');
+  if(!cur){const fin=opts.find(e=>/final/i.test(e.label));if(fin)$('#mcopy').value=fin.ref;}
+  $('#mavg').innerHTML=opts.map(e=>`<label class="chk"><input type="checkbox" value="${e.ref}" ${cur&&cur.mode==='avg'?(cur.src.includes(e.ref)?'checked':''):(e.k.kind==='exam'?'checked':'')}> ${esc(e.label)}</label>`).join('');
+  document.querySelector(`input[name=mmode][value=${cur?cur.mode:'copy'}]`).checked=true;
+  const had=String(k.scores[i]??'').trim();
+  $('#mclear').hidden=!cur;$('#mmsg').textContent=!opts.length?'There’s no other exam to make it up with yet. Add one first.':had?`This exam has a score (${had}). Saving replaces it with the make-up.`:'';$('#msave').disabled=!opts.length;
+}
+$('#mwhich').onchange=fillMissed;
+$('#mcopy').onfocus=()=>{document.querySelector('input[name=mmode][value=copy]').checked=true;};
+$('#mavg').addEventListener('change',()=>{document.querySelector('input[name=mmode][value=avg]').checked=true;});
+$('#mcancel').onclick=()=>mm.classList.remove('on');
+$('#mclear').onclick=()=>{const{k}=MX,i=+$('#mwhich').value;if(k.miss)delete k.miss[i];mm.classList.remove('on');render();save();toast('Make-up removed');};
+$('#msave').onclick=()=>{const{k}=MX,i=+$('#mwhich').value,mode=document.querySelector('input[name=mmode]:checked').value;
+  const src=mode==='copy'?[$('#mcopy').value]:[...$('#mavg').querySelectorAll('input:checked')].map(x=>x.value);
+  if(!src.length||!src[0]){$('#mmsg').textContent='Pick at least one exam.';return;}
+  k.miss=k.miss||{};k.miss[i]={mode,src};k.scores[i]='';mm.classList.remove('on');render();save();};
+mm.addEventListener('click',e=>{if(e.target===mm)mm.classList.remove('on');});
 
 /* ---------- light / dark ---------- */
 const mq=window.matchMedia?matchMedia('(prefers-color-scheme: dark)'):null;
