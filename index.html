@@ -317,6 +317,13 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 .crow .cflag::before{content:'';width:12px;height:12px;border-radius:3px;background:var(--mute);transform:rotate(45deg)}
 .ct-break .cflag::before,.ct-holiday .cflag::before{background:#16a34a}.ct-makeup .cflag::before{background:#d97706}.ct-deadline .cflag::before{background:var(--red)}.ct-exam .cflag::before{background:#7c3aed}.ct-start .cflag::before,.ct-end .cflag::before{background:var(--ink)}
 .crow .ttl{font-weight:700}.crow .tchk input{accent-color:var(--ink)}.crow.done .ttl{text-decoration:line-through;color:var(--mute)}.crow.done .cflag{opacity:.45}
+.fncard{max-width:560px}.fncard h4{margin:14px 0 6px;font-size:13px;color:var(--mute);font-weight:700}
+.fnlist{list-style:none;margin:0;padding:0}.fnlist li{display:grid;grid-template-columns:auto auto 1fr;gap:2px 8px;align-items:baseline;padding:7px 0;border-bottom:1px solid var(--line)}
+.fnlist li:last-child{border-bottom:0}.fnlist .cdot{background:var(--cc);align-self:center}.fnlist small{grid-column:2/-1;color:var(--mute);font-size:12.5px}.fnlist.skip li{grid-template-columns:auto 1fr}.fnlist.skip small{grid-column:auto}
+.fnfiles{margin:8px 0 0}#fnres{max-height:min(48dvh,420px);overflow:auto}
+.hhero>.hcds{display:flex;gap:8px;margin-left:auto;align-items:stretch}.hcd{display:flex;align-items:center;gap:8px;padding:6px 12px 6px 10px;border:1px solid var(--line);border-radius:var(--rad);color:inherit;text-decoration:none;min-height:44px}
+.hcd:hover{border-color:var(--ink)}.hcd b{font-size:22px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}.hcd span{font-size:11.5px;line-height:1.2;color:var(--mute)}
+#cmodal{z-index:60}#tmodal{z-index:55}
 .ttag{display:inline-block;margin-left:6px;padding:1px 7px;border-radius:99px;font-size:11px;font-weight:700;background:var(--soft);color:var(--mute);vertical-align:2px}.ttag.now{background:var(--red);color:#fff}.ttag.old{opacity:.8}
 .kcard{max-width:540px}.knew{display:grid;gap:8px;padding:10px;border-radius:10px;background:var(--soft)}.knew .cgrid button{width:26px;height:26px;border-radius:50%;border:0;padding:0}.knew .cgrid button.on{box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--ink)}
 .kcard textarea{width:100%;resize:vertical;min-height:64px!important;margin:0!important}
@@ -350,6 +357,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
  .top{grid-template-columns:minmax(0,1fr) auto auto;grid-template-areas:"title data theme" "tabs tabs tabs";padding:10px 0;gap:8px}
  .dbtn span{display:none}.dbtn{width:38px;min-height:38px!important;padding:0!important;justify-content:center}
  .theme{width:38px;height:38px}
+ .hhero>div:first-child{flex:1 1 100%}.hhero>.hcds{margin-left:0;flex:1 1 200px;min-width:0}.hhero .hcd{flex:1 1 0;min-width:0;padding:6px 8px}.hhero .hcd span{font-size:11px}
  .pbar{min-height:0;padding:8px 0}#v-grades .pbar .pleft{order:2}.pbar .acts{flex:1 1 100%;display:grid;grid-auto-columns:1fr;grid-auto-flow:column}
  .pleft{flex-basis:100%}
  h1{font-size:min(21px,5.3vw);white-space:nowrap}
@@ -392,6 +400,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 <section id="v-tasks" hidden><div class="pbar"><div class="pleft" id="khead"></div>
   <div class="acts">
     <button class="btn" id="ktaskadd">Add task</button>
+    <button class="btn ghost" id="kfin">Finals</button>
     <button class="btn ghost" id="ksem">Semester</button>
   </div>
 </div><div class="kwrap"><div class="kside" id="kside"></div><div class="kmain"><div id="klist"></div></div></div></section>
@@ -466,6 +475,12 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 <ul id="scal" class="tasks scal"></ul>
 <details class="sadd"><summary>Add a date by hand</summary><div class="grid2 sgrid"><label class="rlink">Name<input id="sat" autocomplete="off" placeholder="e.g. Spring break"></label><label>From<input type="date" id="sas"></label><label>To (optional)<input type="date" id="sae"></label><label>Type<select id="satype"><option value="break">Break</option><option value="holiday">Holiday</option><option value="makeup">Make-up day</option><option value="exam">Exams</option><option value="deadline">Deadline</option><option value="event">Event</option><option value="start">Classes begin</option><option value="end">Classes end</option></select></label><div class="xl"><span>&nbsp;</span><button class="btn ghost sm" id="sadd">Add date</button></div></div></details>
 <div class="mact"><button class="btn" id="sclose">Done</button></div></div></div>
+<div id="fnmodal" class="modal"><div class="card cnf dcard fncard"><h3>Final exams</h3>
+<p class="hint" id="fnintro">Upload your university’s final exam schedules: the common exams list and the regular schedule that maps class times to exam slots. You can pick both files at once. Courses whose syllabus has no final exam are left out.</p>
+<div class="srow"><button class="btn" id="fnup">Upload schedules</button><button class="btn sm danger-ghost" id="fnclear" hidden>Remove finals</button></div>
+<p class="hint" id="fnstatus"></p><div id="fnres"></div>
+<div class="mact"><button class="btn ghost" id="fnclose">Done</button></div></div></div>
+<input type="file" id="finfile" accept=".pdf,.docx,.txt,.html,image/*" multiple hidden>
 <div id="tmodal" class="modal"><div class="card cnf dcard"><h3>Which semester?</h3><p class="hint">This calendar covers more than one semester. Pick yours: its first and last day of classes fill in your semester, and its dates are added. Dates that have already passed come in marked as done.</p>
 <div class="dopts" id="topts"></div>
 <div class="mact"><button class="btn ghost" id="tcancel">Cancel</button><button class="btn" id="tdo">Use this semester</button></div></div></div>
@@ -955,7 +970,7 @@ $('#ssave').onclick=()=>{CFG={provider:$('#sprov').value,key:$('#skey').value.tr
 /* ---------- backup: export this page or the whole site; import detects what a file holds ---------- */
 const SCOPES={grades:{name:'Grades',sub:'Courses, weights, scores, professors and missed-exam make-ups',get:()=>({courses:S.courses,sel:S.sel}),set:d=>{S.courses=Array.isArray(d.courses)?d.courses:[];S.sel=d.sel;}},
   timetable:{name:'Timetable',sub:'Your class schedule, colours, names and display options',get:()=>({tt:S.tt||{}}),set:d=>{S.tt=d.tt||{};}},
-  tasks:{name:'Tasks',sub:'Your tasks, categories, semester, weeks off and academic calendar',get:()=>({tasks:S.tasks||[],cats:S.cats||[],tstate:S.tstate||{},sem:S.sem||null}),set:d=>{S.tasks=d.tasks||[];S.cats=d.cats||[];S.tstate=d.tstate||{};S.sem=d.sem||null;}}};
+  tasks:{name:'Tasks',sub:'Your tasks, categories, semester, weeks off, academic calendar and finals',get:()=>({tasks:S.tasks||[],cats:S.cats||[],tstate:S.tstate||{},sem:S.sem||null,finals:S.finals||null}),set:d=>{S.tasks=d.tasks||[];S.cats=d.cats||[];S.tstate=d.tstate||{};S.sem=d.sem||null;if(d.finals)S.finals=d.finals;else delete S.finals;}}};
 const viewScope=()=>({grades:'grades',tt:'timetable',tasks:'tasks'})[document.body.dataset.view]||null;
 function openData(){const sc=viewScope(),m=$('#dmodal'),pg=$('#doptpage');
   if(sc){pg.classList.remove('dis');pg.querySelector('input').disabled=false;$('#dpage').textContent='This page: '+SCOPES[sc].name;$('#dpagesub').textContent=SCOPES[sc].sub;}
@@ -997,9 +1012,9 @@ async function clearGrades(co){
 }
 const ZC={grades:()=>{const n=S.courses.length,g=S.courses.reduce((a,c)=>a+c.comps.reduce((b,k)=>b+k.scores.filter(hasVal).length,0),0);return n?`${n} course${n===1?'':'s'} and ${g} score${g===1?'':'s'}`:'';},
   timetable:()=>{const n=(S.tt&&S.tt.slots||[]).length;return n?`${n} timetable class${n===1?'':'es'}`:'';},
-  tasks:()=>{const n=(S.tasks||[]).length,c=(S.cats||[]).length,st=S.tstate&&Object.keys(S.tstate).length,sem=S.sem&&(S.sem.start||(S.sem.cal||[]).length);return[n&&`${n} task${n===1?'':'s'} you added`,c&&`${c} categor${c===1?'y':'ies'}`,st&&'task ticks and edits',sem&&'the semester and calendar'].filter(Boolean).join(', ');}};
-const ZSUB={grades:'Courses, weights, scores, professors and make-ups',timetable:'Your class schedule, colours, names and display options',tasks:'Tasks you added, categories, ticks, semester and academic calendar. Tasks from syllabi stay while their courses do.'};
-const zClear={grades:()=>{S.courses=[];S.sel=null;edit=false;},timetable:()=>{S.tt={};},tasks:()=>{S.tasks=[];S.cats=[];S.tstate={};S.sem=null;}};
+  tasks:()=>{const n=(S.tasks||[]).length,c=(S.cats||[]).length,st=S.tstate&&Object.keys(S.tstate).length,sem=S.sem&&(S.sem.start||(S.sem.cal||[]).length);return[n&&`${n} task${n===1?'':'s'} you added`,c&&`${c} categor${c===1?'y':'ies'}`,st&&'task ticks and edits',sem&&'the semester and calendar',S.finals&&'your final exam schedules'].filter(Boolean).join(', ');}};
+const ZSUB={grades:'Courses, weights, scores, professors and make-ups',timetable:'Your class schedule, colours, names and display options',tasks:'Tasks you added, categories, ticks, semester, academic calendar and final exam schedules. Tasks from syllabi stay while their courses do.'};
+const zClear={grades:()=>{S.courses=[];S.sel=null;edit=false;},timetable:()=>{S.tt={};},tasks:()=>{S.tasks=[];S.cats=[];S.tstate={};S.sem=null;delete S.finals;}};
 function zLine(sc){const v=ZC[sc]();return v?'Deletes '+v+'.':'Nothing here yet.';}
 function openReset(){const sc=viewScope(),pg=$('#zoptpage'),inp=pg.querySelector('input');
   if(sc){pg.classList.remove('dis');inp.disabled=false;$('#zpage').textContent='This page: '+SCOPES[sc].name;$('#zpagesub').textContent=ZSUB[sc]+' '+zLine(sc);}
@@ -1473,14 +1488,14 @@ Rules:
 - dates: every notable date or period. start/end as YYYY-MM-DD (end = start for one-day items). Keep the calendar's own wording for title.
 - type: "start" first day of classes, "end" last day of classes, "break" vacations/recess, "holiday" public holidays or university closed, "makeup" make-up/compensation days (say in the title which weekday's schedule is followed, if stated), "exam" exam periods, "deadline" add/drop/withdrawal/registration/grade deadlines, otherwise "event".
 - terms: one entry per semester or term the calendar covers (Fall, Spring, Summer, Winter), in order. term is one of Fall, Spring, Summer, Winter; year is the year the term is named for; start = first day of classes, end = last day of classes. Put each date in the term whose section it is listed under.`;
-async function askCal(input,name,onStatus){const pv=provider(),today=iso(today0());
+async function askCal(input,name,onStatus,kind='calendar'){const pv=provider(),today=iso(today0()),fin=kind==='finals',local=t=>fin?{finals:finFromText(t),basic:true}:{local:calFromText(t),basic:true};
   if(pv==='relay'){try{const imgs=[];for(const im of input.images.slice(0,4)){const j=await toJpeg(im);if(/^image\/(jpeg|png|webp)$/.test(j.type))imgs.push({mime:j.type,data:await b64(j)});}
-      for(let a=0;a<2;a++){onStatus&&onStatus('Reading the calendar…');const ac=new AbortController(),kill=setTimeout(()=>ac.abort(),75000);let r,j;
-        try{r=await fetch(RELAY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({mode:'calendar',today,name,text:input.text.slice(0,80000),images:imgs}),signal:ac.signal});j=await r.json().catch(()=>({}));}catch(e){r={ok:false,status:e&&e.name==='AbortError'?504:0};j={};}finally{clearTimeout(kill);}
+      for(let a=0;a<2;a++){onStatus&&onStatus(fin?'Reading the exam schedule…':'Reading the calendar…');const ac=new AbortController(),kill=setTimeout(()=>ac.abort(),75000);let r,j;
+        try{r=await fetch(RELAY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({mode:kind,today,name,text:input.text.slice(0,80000),images:imgs}),signal:ac.signal});j=await r.json().catch(()=>({}));}catch(e){r={ok:false,status:e&&e.name==='AbortError'?504:0};j={};}finally{clearTimeout(kill);}
         if(r.ok&&j.calendar)return j.calendar;if(!(r.status>=500||r.status===429))break;await new Promise(res=>setTimeout(res,4000));}}catch{}
-    if(!input.text.trim())throw new Error('Reading a photo or scan needs the AI reader, which isn’t available right now.');return{local:calFromText(input.text),basic:true};}
-  if(pv==='basic'){if(!input.text.trim())throw new Error('Photos and scans need an AI reader. Paste the text instead, or upload the .ics version.');return{local:calFromText(input.text),basic:true};}
-  const msg=CAL_INSTR+`\nToday is ${today}.\n\nFile name: ${name}\nCalendar:\n<<<\n${input.text.slice(0,80000)}\n>>>`;
+    if(!input.text.trim())throw new Error('Reading a photo or scan needs the AI reader, which isn’t available right now.');return local(input.text);}
+  if(pv==='basic'){if(!input.text.trim())throw new Error('Photos and scans need an AI reader. Paste the text instead, or upload the .ics version.');return local(input.text);}
+  const msg=(fin?FIN_INSTR:CAL_INSTR)+`\nToday is ${today}.\n\nFile name: ${name}\n${fin?'Exam schedule':'Calendar'}:\n<<<\n${input.text.slice(0,80000)}\n>>>`;
   if(pv==='gemini'){const parts=[{text:msg}];for(const im of input.images)parts.push({inline_data:{mime_type:im.type||'image/png',data:await b64(im)}});
     const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(CFG.model||DEF_MODEL.gemini)}:generateContent?key=${encodeURIComponent(CFG.key)}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{role:'user',parts}],generationConfig:{responseMimeType:'application/json'}})});
     const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error('Gemini: '+(j.error?.message||r.status));return parseJSON((j.candidates?.[0]?.content?.parts||[]).map(p=>p.text||'').join(''));}
@@ -1533,6 +1548,104 @@ function applyTerm(t,opt={}){const s=semObj(),snap=JSON.stringify(S),T0=today0()
 const calDone=c=>c.done!=null?!!c.done:pd(c.end||c.start)<today0();
 function toggleCal(id,v){const c=(SEM()&&SEM().cal||[]).find(x=>x.id===id);if(!c)return;const auto=pd(c.end||c.start)<today0();if(v===auto)delete c.done;else c.done=v;save();}
 
+/* ================= FINAL EXAM SCHEDULES ================= */
+/* Two kinds of file: a common-exam list (course → date, time, room) and a conversion table (class days + start time → exam slot). */
+const FDAYS=['sunday','monday','tuesday','wednesday','thursday','friday','saturday'],FMONS=['january','february','march','april','may','june','july','august','september','october','november','december'];
+const spacedRe=w=>w.split('').join('\\s*');
+const FDAYRE=new RegExp('\\b('+FDAYS.map(spacedRe).join('|')+')\\b','gi'),FMONRE=new RegExp('\\b('+FMONS.map(spacedRe).join('|')+')\\b','gi');
+/* PDFs split words and times into pieces ("Sun day", "Nov ember", "2 :00", "p .m."): put them back together */
+function finNorm(t){return String(t).replace(/\r/g,'').replace(FDAYRE,m=>m.replace(/\s+/g,'')).replace(FMONRE,m=>m.replace(/\s+/g,''))
+  .replace(/(\d)\s*:\s*(\d)\s*(\d)?/g,(m,a,b,c)=>a+':'+b+(c||'')).replace(/\b([ap])\s*\.?\s*m\b\.?/gi,(m,a)=>a.toLowerCase()+'m').replace(new RegExp('\\b('+FMONS.join('|')+')\\s+(\\d)\\s(\\d)\\b(?!\\s*:)','gi'),'$1 $2$3')
+  .replace(/(\d)\s+(\d)(?=\s*:)/g,'$1$2').replace(/[–—]/g,'-').replace(/[ \t]+/g,' ');}
+const hm=t=>{const m=String(t).match(/(\d{1,2})(?::(\d\d))?/);return m?[+m[1],+(m[2]||0)]:null;};
+/* "11:00-1:00 pm" → 11:00 and 13:00; "8-10 am" → 8:00 and 10:00; "12:30-1:45 pm" → 12:30 and 13:45 */
+function rangeMins(a,b,suf){const A=hm(a),B=hm(b);if(!A||!B)return null;let e=B[0]%12*60+B[1]+(/p/i.test(suf||'')?720:0);if(!suf&&B[0]<7)e+=720;
+  let st=A[0]%12*60+A[1];const cands=[st,st+720].filter(x=>x<e);st=cands.length?cands[cands.length-1]:st;if(e-st>360&&st+720<e)st+=720;return{start:st,end:e};}
+const minHM=m=>String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0');
+const CODERE=/\b([A-Z]{2,4})\s?(\d{3}[A-Z]?)\b(?![\d,])/g;
+function finFromText(text){const t=finNorm(text),lines=t.split('\n').map(l=>l.trim()).filter(Boolean),out={common:[],slots:[],term:'',year:''};
+  const hd=t.match(/\b(Fall|Spring|Summer|Winter)\b[^\n\d]{0,20}((?:\d\s*){4})/i);if(hd){out.term=hd[1][0].toUpperCase()+hd[1].slice(1).toLowerCase();out.year=+hd[2].replace(/\s/g,'');}
+  const Y=out.year||today0().getFullYear(),yearFor=mon=>out.term&&/fall|autumn/i.test(out.term)&&mon<=1?Y+1:out.term&&/spring|winter/i.test(out.term)&&mon>=9?Y-1:Y;
+  /* conversion table rows */
+  let group=null;const slotRe=new RegExp(`(\\d{1,2}:\\d\\d)\\s*-\\s*(\\d{1,2}:\\d\\d)\\s*(am|pm)?\\s+(?:(${FDAYS.join('|')})\\s*,?\\s*)?(${FMONS.join('|')})\\s+(\\d{1,2})(?:\\s*,\\s*\\d{4})?\\s*(?:at|,|from)?\\s*(\\d{1,2}(?::\\d\\d)?)\\s*-\\s*(\\d{1,2}(?::\\d\\d)?)\\s*(am|pm)`,'i');
+  const grpRe=new RegExp(`^(${FDAYS.join('|')})\\s*(?:-|/|&|and|to)\\s*(${FDAYS.join('|')})\\b`,'i');
+  for(const ln of lines){const g=ln.match(grpRe);if(g)group=[FDAYS.indexOf(g[1].toLowerCase()),FDAYS.indexOf(g[2].toLowerCase())];
+    const m=ln.match(slotRe);if(!m||!group)continue;const cls=rangeMins(m[1],m[2],m[3]),ex=rangeMins(m[7],m[8],m[9]),mo=FMONS.indexOf(m[5].toLowerCase());
+    if(!cls||!ex)continue;out.slots.push({days:group,from:cls.start,to:cls.end,date:iso(new Date(yearFor(mo),mo,+m[6])),start:ex.start,end:ex.end});}
+  /* common exams: a date line, then time + course codes; lines with rooms are skipped */
+  if(!out.slots.length){let date=null,tm=null;const dRe=new RegExp(`\\b(\\d{1,2})\\s*-\\s*(${FMONS.map(x=>x.slice(0,3)).join('|')})[a-z]*\\s*-\\s*(\\d{2,4})\\b`,'i'),tRe=/\b(\d{1,2}(?::\d\d)?)\s*-\s*(\d{1,2}(?::\d\d)?)\s*(am|pm)\b/i;
+    const dRe2=new RegExp(`\\b(?:(?:${FDAYS.join('|')})\\s*,?\\s*)?(${FMONS.join('|')})\\s+(\\d{1,2})(?:\\s*,\\s*(\\d{4}))?`,'i');
+    for(let ln of lines){if(/^(note|exam locations|make\s*-?\s*up|\*)/i.test(ln))continue;
+      let m=ln.match(dRe);if(m){const mo=FMONS.findIndex(x=>x.startsWith(m[2].toLowerCase().slice(0,3)));let y=+m[3];if(y<100)y+=2000;date=iso(new Date(y,mo,+m[1]));ln=ln.replace(m[0],' ');}
+      else if((m=ln.match(dRe2))&&!/,/.test(ln.replace(m[0],''))){const mo=FMONS.indexOf(m[1].toLowerCase());date=iso(new Date(m[3]?+m[3]:yearFor(mo),mo,+m[2]));ln=ln.replace(m[0],' ');}
+      const tt=ln.match(tRe);if(tt){tm=rangeMins(tt[1],tt[2],tt[3]);ln=ln.replace(tt[0],' ');}
+      if(/,|\b(TC|MPH|EB\d|ESB|SBA|LIB|ARTS|HSB|Room|Hall|Building|Bldg)\b/.test(ln))continue;/* a rooms line */
+      if(!date||!tm)continue;for(const c of ln.matchAll(CODERE))out.common.push({course:c[1]+' '+c[2],date,start:tm.start,end:tm.end});}}
+  const mk=t.match(new RegExp(`make\\s*-?\\s*up exam[a-z]*[^.\\n]*?(?:on\\s+)?(?:(?:${FDAYS.join('|')})\\s*,?\\s*)?(${FMONS.join('|')})\\s+(\\d{1,2})`,'i'));
+  if(mk){const mo=FMONS.indexOf(mk[1].toLowerCase());out.makeup=iso(new Date(yearFor(mo),mo,+mk[2]));}
+  return out;}
+
+const FIN_INSTR=`You read a university final-exam schedule. Reply with ONLY a JSON object, no prose:
+{"term":"Fall","year":2026,"common":[{"course":"MTH 104","date":"2026-11-28","start":"17:00","end":"19:00","room":"EB2-214, 216"}],"slots":[{"days":["Mon","Wed"],"from":"08:00","to":"09:15","date":"2026-11-29","start":"14:00","end":"16:00"}],"makeup":"2026-12-10"}
+Rules:
+- common: every course listed with its own exam date and time (common or department exams). course exactly as written, e.g. "ARA 102E". Times in 24-hour HH:MM. room if given.
+- slots: every row of a conversion table that maps a class's meeting days and class start-time range to an exam date and time. days = three-letter names of the class meeting pattern ("Monday-Wednesday" → ["Mon","Wed"], "Tuesday-Thursday" → ["Tue","Thu"]); from/to = the class time range; date/start/end = the exam. 24-hour times.
+- Leave a list empty if the file has no such table. makeup = the make-up exam date if given, else null.`;
+const toMin=v=>{if(typeof v==='number')return v;const m=String(v||'').match(/(\d{1,2}):(\d\d)/);return m?+m[1]*60+ +m[2]:null;};
+const dayIdx=v=>typeof v==='number'?v:FDAYS.findIndex(d=>d.startsWith(String(v||'').toLowerCase().slice(0,3)));
+function normFin(r){r=r||{};const common=(Array.isArray(r.common)?r.common:[]).map(x=>({course:String(x.course||'').trim().toUpperCase(),date:iso(pd(x.date)),start:toMin(x.start),end:toMin(x.end),room:String(x.room||'').slice(0,120)})).filter(x=>x.course&&x.date&&x.start!=null);
+  const slots=(Array.isArray(r.slots)?r.slots:[]).map(x=>({days:(x.days||[]).map(dayIdx).filter(d=>d>=0),from:toMin(x.from),to:toMin(x.to),date:iso(pd(x.date)),start:toMin(x.start),end:toMin(x.end)})).filter(x=>x.days.length&&x.from!=null&&x.date&&x.start!=null);
+  return{term:r.term||'',year:r.year||'',common,slots,makeup:r.makeup?iso(pd(r.makeup)):''};}
+const isLabSlot=x=>/lab|tutorial|recitation|practical/i.test((x.type||'')+' '+(x.section||''));
+function hasFinal(co){return co.comps.some(k=>(k.kind==='exam'&&/final/i.test(k.name))||/final\s*exam/i.test(k.name))||(co.sched||[]).some(it=>it.kind==='exam'&&/final/i.test(it.title));}
+const fmtRangeM=(a,b)=>{const h=TT().h24,f=m=>fmtClock(m,h);return h?`${f(a)}–${f(b)}`:`${f(a)}${ampm(a)===ampm(b)?'':' '+ampm(a)}–${f(b)} ${ampm(b)}`;};
+/* the user's own finals: their courses (Grades + timetable) matched against the uploaded schedules */
+function myFinals(){const F=S.finals;if(!F||!(F.common.length||F.slots.length))return null;const T=TT(),list=[],skip=[],seen=new Set();
+  const courses=[];for(const c of S.courses){if(c.isLab||linkedBy(c.id))continue;const n=normCode(c.code);if(!n||seen.has(n))continue;seen.add(n);courses.push({n,code:c.code,g:c});}
+  for(const c of ttCourses()){const n=normCode(c.code||c.ckey);if(!n||seen.has(n))continue;const sl=T.slots.filter(x=>x.ckey===c.ckey);if(sl.length&&sl.every(isLabSlot))continue;seen.add(n);courses.push({n,code:c.code||c.ckey,ckey:c.ckey,g:gradeFor(c.ckey,c.code)});}
+  for(const c of courses){if(c.g&&!hasFinal(c.g)){skip.push({code:c.code,why:'No final exam in its syllabus'});continue;}
+    let hit=F.common.filter(x=>normCode(x.course)===c.n),note='';
+    if(!hit.length){hit=F.common.filter(x=>normCode(x.course).startsWith(c.n)&&/^[A-Z]$/.test(normCode(x.course).slice(c.n.length)));if(hit.length>1)note='Sections '+hit.map(x=>x.course.slice(-1)).join('/')+' differ: check yours';}
+    if(hit.length){const x=hit[0];list.push({code:c.code,g:c.g,date:x.date,start:x.start,end:x.end,room:x.room,how:'common',note:[note,c.g?'':'No syllabus to check'].filter(Boolean).join(' · ')});continue;}
+    const sl=T.slots.filter(x=>(c.ckey?x.ckey===c.ckey:normCode(x.code||x.ckey)===c.n)&&!isLabSlot(x)&&!T.hidden[x.ckey]);
+    if(!sl.length){skip.push({code:c.code,why:F.slots.length?'No class times: add your timetable to match it':'Not in the common exams list'});continue;}
+    const start=Math.min(...sl.map(x=>x.start)),days=[...new Set(sl.filter(x=>x.start===start).map(x=>x.day))];
+    const rows=F.slots.filter(r=>r.days.some(d=>days.includes(d))),row=rows.find(r=>r.from===start)||rows.find(r=>start>=r.from&&start<r.to);
+    if(!row){skip.push({code:c.code,why:F.slots.length?`Its class time (${days.map(d=>DAYN[d].slice(0,3)).join('/')} ${fmtClock(start,T.h24)}) isn't in the schedule`:'Not in the common exams list'});continue;}
+    list.push({code:c.code,g:c.g,date:row.date,start:row.start,end:row.end,how:'regular',note:c.g?'':'No syllabus to check'});}
+  list.sort((a,b)=>(a.date+minHM(a.start)).localeCompare(b.date+minHM(b.start)));return{list,skip};}
+function finalTasks(){const r=myFinals();if(!r)return[];return r.list.map(f=>({key:'f:'+normCode(f.code),title:'Final exam',courseId:f.g?f.g.id:null,tag:f.code,date:f.date,time:minHM(f.start),kind:'exam',source:'finals',final:true,
+  note:[fmtRangeM(f.start,f.end),f.room,f.how==='common'?'Common exam':'',f.note].filter(Boolean).join(' · ')}));}
+
+/* ---- finals dialog ---- */
+function fillFin(){const F=S.finals,r=myFinals(),T0=today0();$('#fnclear').hidden=!F;$('#fnup').textContent=F?'Upload again':'Upload schedules';
+  const files=F?[F.files&&F.files.common&&`Common exams: ${F.files.common}`,F.files&&F.files.regular&&`Regular schedule: ${F.files.regular}`].filter(Boolean):[];
+  let h=files.length?`<p class="hint fnfiles">${files.map(esc).join('<br>')}</p>`:'';
+  if(r){h+=r.list.length?`<h4>Your finals</h4><ul class="fnlist">${r.list.map(f=>`<li style="--cc:${colorFor(f.code)}"><i class="cdot"></i><b>${esc(f.code)}</b><span>${esc(fmtD(pd(f.date)))} · ${esc(fmtRangeM(f.start,f.end))}${f.room?` · ${esc(f.room)}`:''}</span><small>${f.how==='common'?'Common exam':'Regular schedule'}${f.note?' · '+esc(f.note):''}${pd(f.date)<T0?' · Done':''}</small></li>`).join('')}</ul>`:'<p class="hint">None of your courses were found in these schedules yet.</p>';
+    if(r.skip.length)h+=`<h4>Not added</h4><ul class="fnlist skip">${r.skip.map(x=>`<li><b>${esc(x.code)}</b><small>${esc(x.why)}</small></li>`).join('')}</ul>`;
+    if(F.slots.length&&!TT().slots.length)h+='<p class="note warn">The regular schedule works from your class times. Upload your timetable (.ics) on the Timetable page and your other finals will show up here.</p>';
+    if(F.makeup)h+=`<p class="hint">Make-up exams: ${esc(fmtD(pd(F.makeup)))}.</p>`;}
+  else if(!S.courses.length&&!TT().slots.length)h+='<p class="note warn">Add your courses (Grades) or your timetable first, so your finals can be picked out of the schedule.</p>';
+  $('#fnres').innerHTML=h;}
+function openFin(){fillFin();$('#fnstatus').textContent='';$('#fnstatus').className='hint';$('#fnmodal').classList.add('on');}
+$('#kfin').onclick=openFin;$('#fnclose').onclick=()=>$('#fnmodal').classList.remove('on');
+$('#fnmodal').addEventListener('click',e=>{if(e.target===$('#fnmodal'))$('#fnmodal').classList.remove('on');});
+$('#fnup').onclick=()=>$('#finfile').click();
+$('#fnclear').onclick=async()=>{if(!await confirmBox('Remove your finals?','The exam schedules are removed and their final exam tasks disappear. Syllabus tasks come back.','Remove finals'))return;const snap=JSON.stringify(S);delete S.finals;save();renderPlanner();fillFin();toast('Finals removed',snap);};
+$('#finfile').onchange=async e=>{const files=[...e.target.files];e.target.value='';if(!files.length)return;const st=$('#fnstatus');st.className='hint';
+  const snap=JSON.stringify(S),F=S.finals?JSON.parse(JSON.stringify(S.finals)):{common:[],slots:[],files:{}};F.files=F.files||{};let basic=false,got=0;const errs=[];
+  for(const f of files){st.textContent=`Reading ${f.name}…`;
+    try{const input=await readFile(f);let res=await askCal(input,f.name,t=>st.textContent=`${t} (${f.name})`,'finals');
+      let r;if(res.finals){r=res.finals;basic=true;}else{r=normFin(res);if(!r.common.length&&!r.slots.length&&input.text.trim()){r=finFromText(input.text);basic=true;}}
+      if(!r.common.length&&!r.slots.length){errs.push(`${f.name}: no exam dates found`);continue;}
+      if(r.common.length){F.common=r.common;F.files.common=f.name;}if(r.slots.length){F.slots=r.slots;F.files.regular=f.name;}
+      if(r.makeup)F.makeup=r.makeup;if(r.term)F.term=r.term;if(r.year)F.year=r.year;got++;}
+    catch(err){errs.push(`${f.name}: ${(err&&err.message)||'couldn’t read it'}`);}}
+  if(got){F.at=Date.now();S.finals=F;save();renderPlanner();const r=myFinals();
+    st.textContent=`${r?r.list.length:0} final${r&&r.list.length===1?'':'s'} added${r&&r.skip.length?`, ${r.skip.length} course${r.skip.length===1?'':'s'} left out`:''}.${basic?' Read with the built-in reader, so check the dates.':''}${errs.length?' '+errs.join('. ')+'.':''}`;toast('Finals added',snap);}
+  else{st.className='hint err';st.textContent=errs.join('. ')||'No exam dates found.';}
+  fillFin();};
+
 /* ================= TASKS ================= */
 function TS(){S.tasks=S.tasks||[];S.cats=S.cats||[];S.tstate=S.tstate||{};return S;}
 const normT=t=>String(t||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').slice(0,40);
@@ -1544,11 +1657,14 @@ function allTasks(){TS();const out=[],ws=semWeeks();
     if(it.week){const w=ws.find(x=>x.teach===+it.week);if(w){const d=wd!=null?dateInWeek(w,wd):null;mk(base+':w'+it.week,it.title,co,iso(d||w.a),{kind:it.kind,approx:!d,weekNo:+it.week});}
       else mk(base+':w'+it.week,it.title,co,null,{kind:it.kind,weekNo:+it.week,note:SEM()?'':'Set your semester to place this'});continue;}
     mk(base,it.title,co,null,{kind:it.kind});}
+  const fins=finalTasks(),finCo=new Set(fins.map(f=>f.courseId).filter(Boolean));
+  if(finCo.size)for(let i=out.length-1;i>=0;i--){const t=out[i];if(finCo.has(t.courseId)&&/final/i.test(t.title)&&(t.kind==='exam'||/exam/i.test(t.title)))out.splice(i,1);}
+  out.push(...fins);
   for(const m of S.tasks)out.push({...m,key:'m:'+m.id,manual:true});
   return out.filter(t=>!(S.tstate[t.key]||{}).hidden).map(t=>({...t,done:t.manual?!!t.done:!!(S.tstate[t.key]||{}).done}));}
 const catOf=id=>(S.cats||[]).find(c=>c.id===id);
-const taskColor=t=>{if(t.courseId){const c=byId(t.courseId);if(c)return courseColor(c);}const k=catOf(t.catId);return k?k.color:'#8a8a8a';};
-const taskTag=t=>{if(t.courseId){const c=byId(t.courseId);return c?c.code||'Course':'';}const k=catOf(t.catId);return k?k.name:'';};
+const taskColor=t=>{if(t.courseId){const c=byId(t.courseId);if(c)return courseColor(c);}if(t.tag)return colorFor(t.tag);const k=catOf(t.catId);return k?k.color:'#8a8a8a';};
+const taskTag=t=>{if(t.courseId){const c=byId(t.courseId);return c?c.code||'Course':'';}if(t.tag)return t.tag;const k=catOf(t.catId);return k?k.name:'';};
 function taskWhen(t){if(!t.date)return t.weekNo?`Week ${t.weekNo}`:'No date';const d=pd(t.date);if(t.approx)return`During week ${t.weekNo}`;return relDay(d)+(t.time?' · '+fmtClock(+t.time.split(':')[0]*60+ +t.time.split(':')[1],TT().h24)+(TT().h24?'':' '+ampm(+t.time.split(':')[0]*60)):'');}
 function taskRow(t,compact){const d=pd(t.date),over=d&&!t.done&&d<today0();
   return`<li class="task${t.done?' done':''}${over?' over':''}" style="--tc:${taskColor(t)}"><label class="tchk"><input type="checkbox" data-task="${esc(t.key)}" ${t.done?'checked':''} aria-label="Done: ${esc(t.title)}"></label>
@@ -1654,6 +1770,12 @@ function pickColor(btn,cur,cb){closeColor();const pop=document.createElement('di
   setTimeout(()=>document.addEventListener('pointerdown',outsideColor,true),0);}
 
 /* ================= HOME ================= */
+/* days left until the last day of classes, and (once finals are uploaded) until your last final */
+function countdowns(){const s=SEM(),T0=today0(),out=[];if(!s)return out;
+  const ends=(s.cal||[]).filter(c=>c.type==='end').map(c=>c.end||c.start).sort(),last=ends.length?ends[ends.length-1]:s.end;
+  if(last){const n=dDiff(T0,pd(last));if(n>=0)out.push({n,label:'to the last day of classes',title:'Last day of classes: '+fmtD(pd(last))});}
+  const fs=allTasks().filter(t=>t.final&&t.date);if(fs.length){const lf=fs.map(t=>t.date).sort().pop(),n=dDiff(T0,pd(lf));if(n>=0)out.push({n,label:'to your last final',title:'Last final: '+fmtD(pd(lf))});}
+  return out;}
 function renderHome(){TS();const s=SEM(),wi=weekInfo(),T0=today0(),all=allTasks();
   const overdue=all.filter(t=>!t.done&&t.date&&pd(t.date)<T0),due=all.filter(t=>!t.done&&t.date&&pd(t.date)>=T0&&pd(t.date)<=addD(T0,7)).sort((a,b)=>a.date.localeCompare(b.date)),undated=all.filter(t=>!t.done&&!t.date);
   const cal=s?(s.cal||[]).filter(c=>!calDone(c)).slice(0,6):[];
@@ -1662,7 +1784,8 @@ function renderHome(){TS();const s=SEM(),wi=weekInfo(),T0=today0(),all=allTasks(
   let nextLbl='',nextCls=[];if(vis.length&&!todayCls.length){for(let k=1;k<=7;k++){const d=addD(T0,k),l=vis.filter(x=>x.day===d.getDay()).sort((a,b)=>a.start-b.start);if(l.length){nextLbl=k===1?'Tomorrow':DAYN[d.getDay()];nextCls=l;break;}}}
   const nowMin=new Date().getHours()*60+new Date().getMinutes();
   const clsRow=x=>{const n=nm(x),g=gradeFor(x.ckey,n.code),live=todayCls.includes(x)&&nowMin>=x.start&&nowMin<x.end;return`<li class="hcls${live?' now':''}${g?' linked':''}" ${g?`data-hopen="${g.id}" tabindex="0" role="link"`:''}><span class="hct">${esc(fmtClock(x.start,TT().h24))}<small>${esc(fmtClock(x.end,TT().h24))}</small></span><span class="tlb" style="background:${ttColor(x.ckey)}"></span><span class="hcb"><b>${esc(n.code||n.name)}</b><span>${esc([n.name&&n.code?n.name:'',x.room].filter(Boolean).join(' · '))}</span></span>${live?'<em>Now</em>':''}</li>`;};
-  $('#hhero').innerHTML=s?`<div><span class="hsem">${esc(semName())}</span><h2>${esc(weekLine())}</h2><span class="hint">${esc(fmtD(T0))}</span></div><button class="btn ghost" data-act="semopen">Semester</button>`
+  const cds=countdowns(),cdh=cds.length?`<div class="hcds">${cds.map(c=>`<a class="hcd" href="#tasks" title="${esc(c.title)}"><b>${c.n===0?'Today':c.n}</b><span>${c.n===0?'':c.n===1?'day<br>':'days<br>'}${esc(c.label)}</span></a>`).join('')}</div>`:'';
+  $('#hhero').innerHTML=s?`<div><span class="hsem">${esc(semName())}</span><h2>${esc(weekLine())}</h2><span class="hint">${esc(fmtD(T0))}</span></div>${cdh}<button class="btn ghost" data-act="semopen">Semester</button>`
     :`<div><span class="hsem">${esc(fmtD(T0))}</span><h2>Welcome</h2><span class="hint">Set your semester to see week numbers and place syllabus dates.</span></div><button class="btn" data-act="semopen">Set up semester</button>`;
   const card=(href,title,count,body)=>`<section class="hcard"><a class="htitle" href="${href}"><h3>${title}</h3>${count!=null?`<span class="hcount">${count}</span>`:''}<span class="harr" aria-hidden="true">→</span></a>${body}</section>`;
   $('#hgrid').innerHTML=
