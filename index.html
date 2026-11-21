@@ -313,7 +313,7 @@ function renderGPA(){
    <td><input data-co="${r.co.id}" data-f="credits" inputmode="decimal" value="${esc(r.co.credits??DEF_CREDITS)}" aria-label="Credit hours for ${esc(r.co.code)}"></td>
    <td data-gl="${r.co.id}"></td><td data-gpt="${r.co.id}"></td><td data-gq="${r.co.id}"></td>
    <td><input type="checkbox" data-co="${r.co.id}" data-f="inGpa" ${r.co.noGpa?'':'checked'} aria-label="Count ${esc(r.co.code)} in GPA"></td></tr>`).join('')}</tbody></table></div>
-  <p class="hint">Grade points come from each syllabus where it lists them, otherwise the standard 4.0 scale (A 4.0, A− 3.7, B+ 3.3 …). Labs that count inside a course aren’t listed separately; labs graded on their own are. Uncheck a course to leave it out.</p>`;
+  <p class="hint">Grade points come from each syllabus where it lists them, otherwise the standard 4.0 scale (A 4.0, A− 3.7, B+ 3.3 …). Labs that count inside a course aren’t listed separately; labs graded on their own are. Courses with 0 credits (like a (1-0-0) seminar) don’t affect GPA. Uncheck a course to leave it out.</p>`;
   gpaNumbers();
 }
 function gpaNumbers(){
@@ -426,7 +426,7 @@ Rules:
 - drop: how many lowest scores are dropped, if stated; otherwise 0.
 - boundaries: letter-grade cutoffs as the minimum percent, highest first, including +/- grades if listed. For a range like "B 80-89.9" use 80. If no scale is given, return [].
 - isLab: true if this syllabus is for a laboratory course or lab section (code ending in L, title containing Lab/Laboratory, or the document is a lab manual/schedule). For a lab syllabus, components describe how the lab grade itself is made up, and count is the number of labs/experiments/reports.
-- credits: the course's credit hours / units if stated (e.g. "3 credit hours", "4 units", "(3-0-3)" where the last number is credits); otherwise null.
+- credits: the course's credit hours. Many syllabi (e.g. American University of Sharjah) write it after the course code as (lecture hours-lab hours-credit hours): the LAST number is the credits. Examples: "PHY 101 General Physics I (3-0-3)" = 3 credits, "PHY 101L General Physics Laboratory I (0-3-1)" = 1 credit, "AUS 100 (1-0-0)" = 0 credits. Otherwise use a stated value like "3 credit hours" or "4 units". If not stated, null.
 - points: the GPA grade points for that letter if the syllabus lists them (e.g. "A = 4.0"); otherwise null. Never invent them.
 - code: course code like "PHYS 201L" if present, else a short name. title: course title.
 - If the document holds several separate course syllabi, return one entry for each.`;
@@ -532,10 +532,12 @@ function basicRead(text,fname){
     return{name:x.name,kind,weight:x.w,count:count||null,drop};});
   const head=lines.slice(0,25).join('\n');const cm=head.match(/\b([A-Z]{2,5})[ -]?(\d{3,4}[A-Z]?)\b/)||text.match(/\b([A-Z]{2,5})[ -]?(\d{3,4}[A-Z]?)\b/);
   const code=cm?cm[1]+' '+cm[2]:String(fname||'Course').replace(/\.[a-z0-9]+$/i,'');
-  let title='';if(cm){const ln=lines.find(l=>l.includes(cm[0]))||'';title=ln.replace(cm[0],'').replace(/syllabus|course outline/ig,'').replace(/\b(fall|spring|summer|winter)\s+\d{4}\b/ig,'').replace(/section\s+\S+/ig,'').replace(/[(,;\-–—]?\s*\(?\d{1,2}(?:\.\d)?\s*(?:-\s*)?(?:credit(?:s| hours?)?|cr\.?\s*hrs?\.?|semester hours|units?)\)?/ig,'').replace(/^[\s:\-–—|,]+|[\s:\-–—|,]+$/g,'').slice(0,70);
+  let title='';if(cm){const ln=lines.find(l=>l.includes(cm[0]))||'';title=ln.replace(cm[0],'').replace(/syllabus|course outline/ig,'').replace(/\b(fall|spring|summer|winter)\s+\d{4}\b/ig,'').replace(/section\s+\S+/ig,'').replace(/\(\s*\d{1,2}\s*-\s*\d{1,2}\s*-\s*\d{1,2}\s*\)/g,'').replace(/[(,;\-–—]?\s*\(?\d{1,2}(?:\.\d)?\s*(?:-\s*)?(?:credit(?:s| hours?)?|cr\.?\s*hrs?\.?|semester hours|units?)\)?/ig,'').replace(/^[\s:\-–—|,]+|[\s:\-–—|,]+$/g,'').slice(0,70);
     if(title.length<4){const i=lines.indexOf(ln);title=(lines[i+1]||'').slice(0,70);}}
   const isLab=/\d+L\b/.test(code)||/\blab(oratory)?\b/i.test(title)||/\blab\b/i.test(fname||'')||/\blab(oratory)?\b(?!.*\d+\s*%)/i.test(lines.slice(0,2).join(' '));
-  const crm=text.match(/\b(\d{1,2}(?:\.\d)?)\s*(?:-\s*)?(?:credit(?:s| hours?)?|cr\.?\s*hrs?\.?|semester hours|units?)\b/i)||text.match(/\b(?:credit(?:s| hours?)|units?)\s*[:=]?\s*(\d{1,2}(?:\.\d)?)\b/i);
+  const head40=lines.slice(0,40).join('\n');
+  const aus=(cm&&(head40.match(new RegExp(cm[0].replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'[^\\n]{0,120}?\\(\\s*(\\d{1,2})\\s*-\\s*(\\d{1,2})\\s*-\\s*(\\d{1,2})\\s*\\)'))))||head40.match(/\(\s*(\d{1,2})\s*-\s*(\d{1,2})\s*-\s*(\d{1,2})\s*\)/)||head40.match(/\bcredits?(?: hours?)?\s*[:=]?\s*(\d{1,2})\s*-\s*(\d{1,2})\s*-\s*(\d{1,2})\b/i);
+  const crm=aus?[aus[0],aus[3]]:text.match(/\b(\d{1,2}(?:\.\d)?)\s*(?:-\s*)?(?:credit(?:s| hours?)?|cr\.?\s*hrs?\.?|semester hours|units?)\b/i)||text.match(/\b(?:credit(?:s| hours?)|units?)\s*[:=]?\s*(\d{1,2}(?:\.\d)?)\b/i);
   return{courses:[{code,title,isLab,components,credits:crm?+crm[1]:null,boundaries:basicBounds(text)}],basic:true};
 }
 function toCourse(r,basic){
@@ -544,7 +546,7 @@ function toCourse(r,basic){
   let bounds=(Array.isArray(r.boundaries)?r.boundaries:[]).filter(b=>b&&b.grade!=null&&!isNaN(parseFloat(b.min))).map(b=>{const p=parseFloat(b.points);return{g:String(b.grade),min:parseFloat(b.min),gp:!isNaN(p)&&p>=0&&p<=5?p:null};}).sort((a,b)=>b.min-a.min);
   const guessed=!bounds.length;if(guessed)bounds=B(STD);
   if(bounds.length&&bounds[bounds.length-1].min>0)bounds.push({g:'F',min:0,gp:bounds.some(b=>b.gp!=null)?0:null});
-  const cr=parseFloat(r.credits),hasCr=!isNaN(cr)&&cr>0&&cr<=12;
+  const cr=parseFloat(r.credits),hasCr=!isNaN(cr)&&cr>=0&&cr<=12&&r.credits!==null&&r.credits!=='';
   return{id:rid(),code:String(r.code||r.title||'Course'),title:String(r.title||''),isLab:!!r.isLab,bounds,boundsGuessed:guessed,comps,basic:!!basic,
     credits:hasCr?cr:(r.isLab?1:DEF_CREDITS),creditsGuessed:!hasCr,gpGuessed:!bounds.some(b=>b.gp!=null)};
 }
