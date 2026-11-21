@@ -88,6 +88,10 @@ aside h2{font-size:12px;color:var(--mute);margin:0 0 6px;font-weight:600}
 .mfs{border:0;padding:0;margin:4px 0;display:grid;gap:8px}.mfs legend{font-size:12px;color:var(--mute);margin-bottom:4px;padding:0}
 .mopt{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600}.mopt input{width:18px;height:18px;margin:0;accent-color:var(--red)}
 #mcopy{margin-left:26px}.mavg{display:grid;gap:4px;margin-left:26px}.mavg .chk{min-height:30px;font-size:14px}
+.cacts{display:flex;gap:6px;flex-wrap:wrap}
+.btn.danger{background:var(--red);border-color:var(--red);color:#fff}
+.btn.danger-ghost{background:transparent;color:var(--red);border-color:var(--red);margin-top:2px}
+.cnf{max-width:440px}.cnf p{margin:8px 0 14px;font-size:14px;color:var(--mute);line-height:1.5}
 .empty{padding:32px 0;color:var(--mute)}.empty h2{color:var(--ink);margin:0 0 6px}
 
 /* course head + notes */
@@ -106,6 +110,9 @@ aside h2{font-size:12px;color:var(--mute);margin:0 0 6px;font-weight:600}
 .pct small{font-size:.38em;font-weight:800}
 .pct.none{font-size:22px;font-weight:700;font-stretch:105%;letter-spacing:0;line-height:1.2;color:var(--mute)}
 .letter{font-size:clamp(28px,3vw,40px);font-weight:900;color:var(--red);border:3px solid var(--red);border-radius:50%;width:1.9em;height:1.9em;display:grid;place-items:center;transform:rotate(-8deg);line-height:1;flex:none}
+.earned{display:grid;padding-left:16px;border-left:2px solid var(--line);line-height:1.15}
+.earned b{font-size:clamp(24px,2.6vw,34px);font-weight:900;font-stretch:115%;font-variant-numeric:tabular-nums}
+.earned span{font-size:12px;color:var(--ink);font-weight:600}.earned .esub{color:var(--mute);font-weight:500}
 .sub-r{color:var(--mute);margin:6px 0 0;font-size:13px}
 .lcap{margin:0 0 4px 8px;font-size:12px;color:var(--mute)}
 .ladder{columns:2 165px;column-gap:16px}
@@ -213,6 +220,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
  #res{grid-template-columns:1fr;gap:10px}
  .pct{font-size:clamp(46px,15vw,64px)}
  .letter{font-size:28px}
+ .earned{flex-basis:100%;display:flex;flex-wrap:wrap;align-items:baseline;gap:0 6px;border-left:0;padding:0}.earned b{font-size:20px}.earned .esub::before{content:'· '}
  .lr{grid-template-columns:2.4em 4em minmax(0,1fr);font-size:12.5px;padding:3px 6px}
  .boxes{grid-template-columns:repeat(auto-fill,minmax(58px,1fr));gap:5px}
  .ladder{columns:1}.ladder:not(.open) .lr.far{display:none}.lmore{display:inline-block}
@@ -237,7 +245,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 <div class="wrap">
   <aside><button class="gpacard" id="gpacard" data-sel="gpa" hidden></button><h2>Your courses</h2><div class="clist" id="side"></div><div class="side-note" id="snote"></div></aside>
   <main id="panel"></main>
-  <section class="backup"><div class="sync" id="sync">Saved in this browser</div><div class="bk"><button class="btn ghost sm" id="exp">Export backup</button><button class="btn ghost sm" id="imp">Import backup</button><input type="file" id="impf" accept=".json,application/json" hidden></div><p class="side-note">Scores are kept in this browser. Export a backup to move them to another device.</p></section>
+  <section class="backup"><div class="sync" id="sync">Saved in this browser</div><div class="bk"><button class="btn ghost sm" id="exp">Export backup</button><button class="btn ghost sm" id="imp">Import backup</button><input type="file" id="impf" accept=".json,application/json" hidden></div><button class="btn sm danger-ghost" id="resetall">Reset everything</button><p class="side-note">Scores are kept in this browser. Export a backup to move them to another device.</p></section>
 </div>
 </div>
 <div id="modal" class="modal"><div class="card"><h3 style="margin:0">Paste a syllabus</h3><p class="hint">Paste the whole thing, or just the grading section and grade scale.</p><textarea id="ptext" aria-label="Syllabus text"></textarea><div class="mact"><button class="btn ghost" id="pcancel">Cancel</button><button class="btn" id="pgo">Read it</button></div></div></div>
@@ -258,6 +266,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 <label id="smodl">Model (leave blank for the default)<input id="smod" spellcheck="false"></label></div>
 <p class="hint" id="snotep"></p>
 <div class="mact"><button class="btn ghost" id="scancel">Cancel</button><button class="btn" id="ssave">Save</button></div></div></div>
+<div id="cmodal" class="modal" role="alertdialog" aria-modal="true" aria-labelledby="ctitle" aria-describedby="cmsg"><div class="card cnf"><h3 id="ctitle"></h3><p id="cmsg"></p><div class="mact"><button class="btn ghost" id="cno">Cancel</button><button class="btn danger" id="cyes"></button></div></div></div>
 <div id="toast"><span id="tmsg"></span><button id="tundo" hidden>Undo</button></div>
 <script>
 /* ======== SETUP: paste your Cloudflare Worker address between the quotes, e.g. 'https://syllabus-reader.yourname.workers.dev' ======== */
@@ -374,7 +383,7 @@ function resHTML(co){
   const bl=sortedB(co).filter(b=>+b.min>0),ci=bl.findIndex(b=>b.g===cur),anchor=ci<0?(p==null?0:bl.length-1):ci;
   const far=i=>bl.length>5&&Math.abs(i-anchor)>2;
   const rows=bl.map((b,i)=>{const n=need(co,+b.min);return`<div class="lr ${b.g===cur?'cur':''} ${far(i)?'far':''}"><b>${esc(b.g)}</b><span>≥ ${fmt(+b.min)}%</span><i class="${n.c}">${n.t}</i></div>`}).join('');
-  return`<div><div class="big">${p==null?'<div class="pct none">No scores yet</div>':`<div class="pct">${fmt(p)}<small>%</small></div><div class="letter">${esc(L)}</div>`}</div><p class="sub-r">${p==null?'Enter a score below and your grade appears here.':`Current grade from ${g} of ${t} graded items, dropped scores applied.`}${p!=null&&!(co.isLab&&linkedBy(co.id))&&gpFor(co,L)!=null?` Worth <b>${fmt2(gpFor(co,L))}</b> grade points × ${fmt(creditsOf(co))} credits toward your GPA.`:''}</p></div><div><p class="lcap">${tally(co).g<tally(co).t?'Average you need on the remaining work':'Final result'}</p><div class="ladder${ladderOpen?' open':''}">${rows||'<p class="hint">No grade boundaries yet.</p>'}${bl.length>5?`<button class="lmore" data-act="ladder">${ladderOpen?'Show fewer':'Show all grades'}</button>`:''}</div></div>`;
+  return`<div><div class="big">${p==null?'<div class="pct none">No scores yet</div>':`<div class="pct">${fmt(p)}<small>%</small></div><div class="letter">${esc(L)}</div>${g<t?(()=>{const e=coursePct(co,0);return`<div class="earned" title="Your course grade if everything you haven’t done yet scored zero"><b>${fmt(e)}%</b><span>earned so far</span><span class="esub">${esc(letter(co,e))} if the rest were 0</span></div>`;})():''}`}</div><p class="sub-r">${p==null?'Enter a score below and your grade appears here.':`Current grade from ${g} of ${t} graded items, dropped scores applied.`}${p!=null&&!(co.isLab&&linkedBy(co.id))&&gpFor(co,L)!=null?` Worth <b>${fmt2(gpFor(co,L))}</b> grade points × ${fmt(creditsOf(co))} credits toward your GPA.`:''}</p></div><div><p class="lcap">${tally(co).g<tally(co).t?'Average you need on the remaining work':'Final result'}</p><div class="ladder${ladderOpen?' open':''}">${rows||'<p class="hint">No grade boundaries yet.</p>'}${bl.length>5?`<button class="lmore" data-act="ladder">${ladderOpen?'Show fewer':'Show all grades'}</button>`:''}</div></div>`;
 }
 function editHTML(co){
   const a=`data-co="${co.id}"`;
@@ -392,7 +401,7 @@ function renderPanel(){
   if(S.sel==='gpa'){renderGPA();return;}
   const co=byId(S.sel);
   if(!co){$('#panel').innerHTML='<div class="empty"><h2>No courses yet</h2><p>Upload a syllabus above, or add a course by hand.</p></div>';return;}
-  $('#panel').innerHTML=`<div class="chead"><div><h2>${esc(co.code||'Untitled course')}</h2><div class="csub">${[co.title?esc(co.title):'',profHTML(co),co.isLab?'Lab':'',`${fmt(creditsOf(co))} credit${creditsOf(co)===1?'':'s'}`,co.noGpa?'not in GPA':''].filter(Boolean).map(x=>`<span class="cs">${x}</span>`).join('')}</div></div><button class="btn ${edit?'':'ghost'} sm" data-act="edit">${edit?'Done editing':'Edit structure'}</button></div>${(()=>{const n=notes(co);return n?`<div class="notes">${n}</div>`:'';})()}<div id="res"></div>${co.comps.length?`<div class="comps">${co.comps.map(k=>compHTML(co,k,true)).join('')}</div>`:'<p class="hint">No graded parts yet. Use Edit structure to add some.</p>'}${edit?editHTML(co):''}`;
+  $('#panel').innerHTML=`<div class="chead"><div><h2>${esc(co.code||'Untitled course')}</h2><div class="csub">${[co.title?esc(co.title):'',profHTML(co),co.isLab?'Lab':'',`${fmt(creditsOf(co))} credit${creditsOf(co)===1?'':'s'}`,co.noGpa?'not in GPA':''].filter(Boolean).map(x=>`<span class="cs">${x}</span>`).join('')}</div></div><div class="cacts"><button class="btn ghost sm" data-act="cleargrades" data-co="${co.id}" ${courseHasData(co)?'':'hidden'}>Clear grades</button><button class="btn ${edit?'':'ghost'} sm" data-act="edit">${edit?'Done editing':'Edit structure'}</button></div></div>${(()=>{const n=notes(co);return n?`<div class="notes">${n}</div>`:'';})()}<div id="res"></div>${co.comps.length?`<div class="comps">${co.comps.map(k=>compHTML(co,k,true)).join('')}</div>`:'<p class="hint">No graded parts yet. Use Edit structure to add some.</p>'}${edit?editHTML(co):''}`;
   numbers();
 }
 function renderGPA(){
@@ -418,6 +427,7 @@ function numbers(){
   if(S.sel==='gpa'){gpaNumbers();return;}
   const co=byId(S.sel);if(!co)return;
   $('#res').innerHTML=resHTML(co);
+  const cgb=document.querySelector('[data-act=cleargrades]');if(cgb)cgb.hidden=!courseHasData(co);
   for(const c of S.courses)for(const k of c.comps){const el=document.querySelector(`[data-avg="${k.id}"]`);if(!el)continue;const p=compPct(c,k,null);el.textContent=p==null?'no scores':fmt(p)+'%';el.classList.toggle('nil',p==null);
     const ds=droppedSet(c,k);document.querySelectorAll(`input[data-cid="${k.id}"][data-f=score]`).forEach(inp=>inp.classList.toggle('dropped',ds.has(+inp.dataset.i)));
     document.querySelectorAll(`[data-mu^="${k.id}:"]`).forEach(el=>{const i=+el.dataset.mu.split(':')[1],v=itemVal(c,k,i,null);el.textContent=v==null?'waiting':fmt(v)+'%';el.classList.toggle('dropped',ds.has(i));});}
@@ -475,6 +485,7 @@ document.addEventListener('click',e=>{if(!e.target.closest('.profw'))document.qu
   if(b.dataset.sel){S.sel=b.dataset.sel;edit=false;render();save();return;}
   const act=b.dataset.act,{co,k}=target(b);
   if(act==='settings'){openSettings();return;}
+  if(act==='cleargrades'){const c=byId(b.dataset.co);if(c)clearGrades(c);return;}
   if(act==='ladder'){ladderOpen=!ladderOpen;numbers();return;}
   if(act==='edit'){const c0=byId(S.sel);if(edit&&c0&&c0.basic){c0.basic=false;save();}edit=!edit;renderPanel();}
   else if(act==='open'){S.sel=b.dataset.id;edit=false;render();save();window.scrollTo({top:$('.wrap').offsetTop-8});}
@@ -720,6 +731,27 @@ $('#imp').onclick=()=>$('#impf').click();
 $('#impf').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;try{const v=JSON.parse(await f.text());if(!v||!Array.isArray(v.courses))throw 0;const snap=JSON.stringify(S);S={courses:v.courses,sel:v.sel,at:Date.now()};fix();render();save();toast(`Imported ${S.courses.length} course${S.courses.length===1?'':'s'}`,snap);}catch{toast('That file isn’t a grade calculator backup');}};
 
 new MutationObserver(()=>{for(const c of document.querySelectorAll('.stack td:not([data-l])')){let i=0,p=c;while(p=p.previousElementSibling)i++;c.dataset.l=c.closest('table').rows[0].cells[i]?.textContent||'';}}).observe(document.getElementById('panel'),{childList:true,subtree:true});
+
+/* ---------- confirm dialog ---------- */
+function confirmBox(title,msg,ok){return new Promise(res=>{const m=$('#cmodal');$('#ctitle').textContent=title;$('#cmsg').textContent=msg;$('#cyes').textContent=ok;m.classList.add('on');
+  const done=v=>{m.classList.remove('on');$('#cyes').onclick=$('#cno').onclick=m.onclick=null;document.removeEventListener('keydown',key,true);res(v);};
+  const key=e=>{if(e.key==='Escape'){e.stopPropagation();done(false);}};document.addEventListener('keydown',key,true);
+  $('#cyes').onclick=()=>done(true);$('#cno').onclick=()=>done(false);m.onclick=e=>{if(e.target===m)done(false);};setTimeout(()=>$('#cno').focus(),0);});}
+const hasVal=v=>String(v??'').trim()!=='';
+function courseScope(co){return[co,...co.comps.map(k=>labOf(co,k)).filter(Boolean)];}
+function courseHasData(co){return courseScope(co).some(c=>c.comps.some(k=>k.scores.some(hasVal)||(k.miss&&Object.keys(k.miss).length)));}
+async function clearGrades(co){
+  const scope=courseScope(co),n=scope.reduce((a,c)=>a+c.comps.reduce((b,k)=>b+k.scores.filter(hasVal).length,0),0),labs=scope.slice(1).map(c=>c.code);
+  const ok=await confirmBox(`Clear grades for ${co.code||'this course'}?`,`This removes ${n} score${n===1?'':'s'} from ${co.code||'this course'}${labs.length?` and its linked lab ${labs.join(', ')}`:''}, plus any missed-exam make-ups. The course setup, weights and boxes stay.`,'Clear grades');
+  if(!ok)return;const snap=JSON.stringify(S);
+  for(const c of scope)for(const k of c.comps){k.scores=k.scores.map(()=>'');delete k.miss;}
+  render();save();toast(`Grades cleared for ${co.code||'course'}`,snap);
+}
+$('#resetall').onclick=async()=>{
+  if(!S.courses.length){toast('There’s nothing to reset');return;}
+  const ok=await confirmBox('Reset everything?',`This deletes all ${S.courses.length} course${S.courses.length===1?'':'s'} and every grade you’ve entered from this browser. Export a backup first if you might want them later.`,'Reset everything');
+  if(!ok)return;const snap=JSON.stringify(S);S={courses:[],sel:null,at:Date.now()};edit=false;render();save();toast('Everything was reset',snap);
+};
 
 /* ---------- missed exam dialog ---------- */
 let MX=null;const mm=$('#mmodal');
