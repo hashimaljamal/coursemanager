@@ -132,16 +132,13 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 <div id="modal"><div class="card"><h3 style="margin:0">Paste a syllabus</h3><p class="hint">Paste the whole thing, or just the grading section and grade scale.</p><textarea id="ptext" aria-label="Syllabus text"></textarea><div style="display:flex;gap:10px;justify-content:flex-end"><button class="btn ghost" id="pcancel">Cancel</button><button class="btn" id="pgo">Read it</button></div></div></div>
 <div id="smodal" class="modal"><div class="card"><h3 style="margin:0">Reading settings</h3>
 <p class="hint">How uploaded syllabi are read. Your key is stored only in this browser and sent only to the provider you pick.</p>
-<div class="grid2" style="grid-template-columns:1fr"><label>Reader<select id="sprov"><option value="site" id="optsite">Site’s AI reader: no key needed</option><option value="basic">Built-in reader: free, offline, no key (best with clear grading tables)</option><option value="gemini">Google Gemini: free API key from aistudio.google.com</option><option value="anthropic">Anthropic Claude: paid API key from console.anthropic.com</option></select></label>
+<div class="grid2" style="grid-template-columns:1fr"><label>Reader<select id="sprov"><option value="auto">Automatic: Claude inside claude.ai, otherwise built-in</option><option value="basic">Built-in reader: free, offline, no key (best with clear grading tables)</option><option value="gemini">Google Gemini: free API key from aistudio.google.com</option><option value="anthropic">Anthropic Claude: paid API key from console.anthropic.com</option></select></label>
 <label id="skeyl">API key<input id="skey" type="password" autocomplete="off" spellcheck="false"></label>
 <label id="smodl">Model (leave blank for the default)<input id="smod" spellcheck="false"></label></div>
 <p class="hint" id="snotep"></p>
 <div style="display:flex;gap:10px;justify-content:flex-end"><button class="btn ghost" id="scancel">Cancel</button><button class="btn" id="ssave">Save</button></div></div></div>
 <div id="toast"><span id="tmsg"></span><button id="tundo" hidden>Undo</button></div>
 <script>
-/* ======== SETUP: paste your Cloudflare Worker address between the quotes, e.g. 'https://syllabus-reader.yourname.workers.dev' ======== */
-const RELAY_URL = '';
-/* =============================================================================================================================== */
 {
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -151,7 +148,8 @@ const KINDS=['lab','quiz','exam','assignment','project','participation','other']
 const PRE={lab:'Lab',quiz:'Quiz',exam:'Exam',assignment:'HW',project:'Proj',participation:'Part',other:'Item'};
 const STD=[['A',90],['B',80],['C',70],['D',60],['F',0]];
 const fmt=n=>n==null||isNaN(n)?'—':(Math.round(n*10)/10).toString();
-let S={courses:[],sel:null,at:0},edit=false;
+const use=n=>{try{return window.claude&&claude.use?claude.use(n):Promise.resolve(null)}catch{return Promise.resolve(null)}};
+let S={courses:[],sel:null,at:0},edit=false,SM=null,db=null,uidv=null;
 
 const C=(name,kind,weight,count,drop,scores)=>({id:rid(),name,kind,weight,count,drop:drop||0,outOf:100,scores:scores||[]});
 const B=a=>a.map(([g,min])=>({g,min}));
@@ -247,7 +245,10 @@ function numbers(){
 }
 
 /* ---------- persistence ---------- */
-function save(){S.at=Date.now();try{localStorage.setItem(KEY,JSON.stringify(S))}catch{$('#sync').textContent='Couldn’t save: browser storage is off or full';}}
+let saveT,writing=false,dirty=false;
+const sync=t=>$('#sync').textContent=t;
+function save(){S.at=Date.now();try{localStorage.setItem(KEY,JSON.stringify(S))}catch{}clearTimeout(saveT);saveT=setTimeout(push,900);}
+async function push(){if(!db||!uidv)return;if(writing){dirty=true;return;}writing=true;try{await db.doc(`data/users/${uidv}/state`).set({json:JSON.stringify(S),at:S.at});sync('Saved to your account');}catch(e){sync(e&&e.code==='quota_exceeded'?'Account storage full, saved in this browser':'Saved in this browser only');}writing=false;if(dirty){dirty=false;push();}}
 
 /* ---------- toast ---------- */
 let tT,undoSnap=null;
@@ -335,31 +336,16 @@ Rules:
 - isLab: true if this syllabus is for a laboratory course or lab section (code ending in L, title containing Lab/Laboratory, or the document is a lab manual/schedule). For a lab syllabus, components describe how the lab grade itself is made up, and count is the number of labs/experiments/reports.
 - code: course code like "PHYS 201L" if present, else a short name. title: course title.
 - If the document holds several separate course syllabi, return one entry for each.`;
-/* ---------- readers: built-in rules, or Gemini / Anthropic with a key ---------- */
+/* ---------- readers: Claude (inside claude.ai), Gemini / Anthropic (your key), or built-in rules ---------- */
 const SKEY='sgc-settings-v1';
-let CFG={provider:'site',key:'',model:''};try{Object.assign(CFG,JSON.parse(localStorage.getItem(SKEY)||'{}'));}catch{}if(!['site','basic','gemini','anthropic'].includes(CFG.provider))CFG.provider='site';
+let CFG={provider:'auto',key:'',model:''};try{Object.assign(CFG,JSON.parse(localStorage.getItem(SKEY)||'{}'));}catch{}
 const DEF_MODEL={gemini:'gemini-flash-latest',anthropic:'claude-haiku-5-5'};
-const RELAY=String(RELAY_URL||'').trim().replace(/\/$/,'');
-function provider(){const p=CFG.provider;if((p==='gemini'||p==='anthropic')&&CFG.key)return p;if((p==='site'||!CFG.key)&&RELAY&&p!=='basic')return'relay';return'basic';}
+function provider(){const p=CFG.provider;if(p==='auto')return SM?'claude':'basic';if((p==='gemini'||p==='anthropic')&&!CFG.key)return SM?'claude':'basic';if(p==='claude'&&!SM)return'basic';return p;}
 const b64=blob=>new Promise((ok,no)=>{const r=new FileReader();r.onload=()=>ok(String(r.result).split(',')[1]);r.onerror=no;r.readAsDataURL(blob);});
-async function toJpeg(blob,max=1600,q=.75){try{const bm=await createImageBitmap(blob);const k=Math.min(1,max/Math.max(bm.width,bm.height));const cv=document.createElement('canvas');cv.width=Math.round(bm.width*k);cv.height=Math.round(bm.height*k);cv.getContext('2d').drawImage(bm,0,0,cv.width,cv.height);bm.close&&bm.close();const out=await new Promise(r=>cv.toBlob(r,'image/jpeg',q));return out||blob;}catch{return blob;}}
 function parseJSON(t){try{return JSON.parse(t);}catch{}const m=String(t).match(/\{[\s\S]*\}/);if(!m)throw new Error('Couldn’t find a grading scheme in that file.');return JSON.parse(m[0]);}
 async function ask(input,name){
   const pv=provider();
   if(pv==='basic'){if(!input.text.trim())throw new Error('Photos and scanned PDFs need an AI reader. Add a free Gemini key in Reading settings, or paste the text.');return basicRead(input.text,name);}
-  if(pv==='relay'){
-    let why='';
-    try{
-      const imgs=[];for(const im of input.images.slice(0,4)){const j=await toJpeg(im);if(/^image\/(jpeg|png|webp)$/.test(j.type))imgs.push({mime:j.type,data:await b64(j)});}
-      if(!input.text.trim()&&!imgs.length)throw new Error('This image format can’t be read. Try a JPG or PNG, or a PDF.');
-      const r=await fetch(RELAY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,text:input.text.slice(0,80000),images:imgs})});
-      const j=await r.json().catch(()=>({}));
-      if(r.ok&&Array.isArray(j.courses))return{courses:j.courses};
-      why=j.error||('error '+r.status);
-    }catch(e){why=(e&&e.message)||'couldn’t reach it';if(/Failed to fetch|NetworkError|Load failed/i.test(why))why='couldn’t reach it';}
-    if(!input.text.trim())throw new Error('The AI reader is unavailable ('+why+'), and photos or scans need it. Try again later.');
-    const b=basicRead(input.text,name);b.fallback='AI reader unavailable ('+why+'), so the built-in reader was used';return b;
-  }
   const msg=INSTR+`\n\nFile name: ${name}\nSyllabus${input.images.length?' (page images attached)':''}:\n<<<\n${input.text.slice(0,80000)}\n>>>`;
   if(pv==='gemini'){
     const parts=[{text:msg}];for(const im of input.images)parts.push({inline_data:{mime_type:im.type||'image/png',data:await b64(im)}});
@@ -373,7 +359,9 @@ async function ask(input,name){
     const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error('Claude API: '+(j.error?.message||('error '+r.status)));
     return parseJSON((j.content||[]).map(c=>c.text||'').join(''));
   }
-  throw new Error('No reader selected.');
+  const opts={modelTier:'default'};if(input.images.length){const lim=await SM.limits?.().catch(()=>null);if(lim&&lim.images)opts.images=input.images;else if(!input.text.trim())throw new Error('This view can’t read images. Try a PDF with selectable text, or paste the text.');}
+  if(typeof SM.json==='function'){try{return await SM.json(msg,opts);}catch(e){if(e&&(e.code==='not_granted'||e.code==='rate_limited'))throw e;}}
+  const r=await SM(msg,opts);return parseJSON(r.text);
 }
 
 /* built-in rule-based reader: free, offline, no key */
@@ -448,21 +436,20 @@ async function runJob(name,getInput){
     S.courses.push(...add);autoLink();
     const show=add.find(c=>!(c.isLab&&linkedBy(c.id)));S.sel=(show||linkedBy(add[0].id)?.co||add[0]).id;edit=false;
     render();save();
-    st.textContent=(out&&out.fallback?out.fallback+'. ':'')+'Added '+add.map(c=>c.code+(c.isLab?(linkedBy(c.id)?' → linked to '+linkedBy(c.id).co.code:' (own course)'):'')).join(', ');
-  }catch(e){st.className='err';st.textContent=(e&&e.message)||'Something went wrong reading this file.';}
+    st.textContent='Added '+add.map(c=>c.code+(c.isLab?(linkedBy(c.id)?' → linked to '+linkedBy(c.id).co.code:' (own course)'):'')).join(', ');
+  }catch(e){st.className='err';st.textContent=e&&e.code==='rate_limited'?'Too many at once. Wait a minute and try again.':e&&e.code==='not_granted'?'Reading syllabi needs permission to ask Claude.':(e&&e.message)||'Something went wrong reading this file.';}
 }
 
 
 /* ---------- settings + backup ---------- */
-const NAMES={relay:'the site’s AI reader',basic:'the built-in reader',gemini:'Google Gemini',anthropic:'Anthropic Claude'};
-function readerLabel(){const p=provider();$('#reader').textContent='Syllabi are read with '+NAMES[p]+'.'+(p==='basic'?(RELAY?' Switch to the site’s AI reader in Reading settings for photos, scans and messy layouts.':' For photos, scans and messy layouts, add a free Gemini key in Reading settings.'):p==='relay'?' If it’s unavailable, the built-in reader takes over.':'');}
-if(!RELAY){const o=document.getElementById('optsite');if(o)o.remove();}
+const NAMES={claude:'Claude (inside claude.ai)',basic:'the built-in reader',gemini:'Google Gemini',anthropic:'Anthropic Claude'};
+function readerLabel(){$('#reader').textContent='Syllabi are read with '+NAMES[provider()]+'.'+(provider()==='basic'?' For photos, scans and messy layouts, add a free Gemini key in Reading settings.':'');}
 const sm=$('#smodal');
 function sUI(){const p=$('#sprov').value,k=p==='gemini'||p==='anthropic';$('#skeyl').hidden=$('#smodl').hidden=!k;$('#smod').placeholder=DEF_MODEL[p]||'';
-  $('#snotep').textContent=p==='site'?'Uses this site’s own AI reader. Nothing to set up. If it’s busy or down, the built-in reader is used instead.':p==='gemini'?'Free tier: create a key at aistudio.google.com → Get API key. On the free tier Google may use what you send to improve its products.':p==='anthropic'?'Paid per use. Create a key at console.anthropic.com. Reading one syllabus usually costs well under a cent with the default model.':p==='basic'?'Looks for percentage lines (e.g. “Quizzes 10%”), point totals, item counts, “lowest … dropped” and a letter-grade scale. Always check what it found.':'';}
-const openSettings=()=>{$('#sprov').value=(CFG.provider==='site'&&!RELAY)?'basic':CFG.provider;$('#skey').value=CFG.key;$('#smod').value=CFG.model;sUI();sm.classList.add('on');};
+  $('#snotep').textContent=p==='gemini'?'Free tier: create a key at aistudio.google.com → Get API key. On the free tier Google may use what you send to improve its products.':p==='anthropic'?'Paid per use. Create a key at console.anthropic.com. Reading one syllabus usually costs well under a cent with the default model.':p==='basic'?'Looks for percentage lines (e.g. “Quizzes 10%”), point totals, item counts, “lowest … dropped” and a letter-grade scale. Always check what it found.':'';}
+const openSettings=()=>{$('#sprov').value=CFG.provider;$('#skey').value=CFG.key;$('#smod').value=CFG.model;sUI();sm.classList.add('on');};
 $('#setbtn').onclick=openSettings;$('#sprov').onchange=sUI;$('#scancel').onclick=()=>sm.classList.remove('on');
-$('#ssave').onclick=()=>{CFG={provider:$('#sprov').value,key:$('#skey').value.trim(),model:$('#smod').value.trim()};try{localStorage.setItem(SKEY,JSON.stringify(CFG));}catch{}sm.classList.remove('on');readerLabel();toast((CFG.provider==='gemini'||CFG.provider==='anthropic')&&!CFG.key?'No key entered, so '+NAMES[provider()]+' stays on':'Reading settings saved');};
+$('#ssave').onclick=()=>{CFG={provider:$('#sprov').value,key:$('#skey').value.trim(),model:$('#smod').value.trim()};try{localStorage.setItem(SKEY,JSON.stringify(CFG));}catch{}sm.classList.remove('on');readerLabel();toast((CFG.provider==='gemini'||CFG.provider==='anthropic')&&!CFG.key?'No key entered, so the built-in reader stays on':'Reading settings saved');};
 $('#exp').onclick=()=>{try{const blob=new Blob([JSON.stringify({app:'syllabus-grade-calculator',v:1,...S},null,1)],{type:'application/json'});const u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download='grade-calculators-'+new Date().toISOString().slice(0,10)+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),2000);toast('Backup downloaded');}catch{toast('Your browser blocked the download');}};
 $('#imp').onclick=()=>$('#impf').click();
 $('#impf').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;try{const v=JSON.parse(await f.text());if(!v||!Array.isArray(v.courses))throw 0;const snap=JSON.stringify(S);S={courses:v.courses,sel:v.sel,at:Date.now()};fix();render();save();toast(`Imported ${S.courses.length} course${S.courses.length===1?'':'s'}`,snap);}catch{toast('That file isn’t a grade calculator backup');}};
@@ -470,7 +457,16 @@ $('#impf').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!f)
 /* ---------- start ---------- */
 try{const v=JSON.parse(localStorage.getItem(KEY)||'null');if(v&&Array.isArray(v.courses))S=v;}catch{}
 fix();render();
-readerLabel();
+use('sample').then(s=>{SM=s;readerLabel();});readerLabel();
+Promise.all([use('db'),use('user')]).then(async([d,u])=>{
+  if(!d||!u)return;let id=null;try{id=await u.id();}catch{}if(!id)return;db=d;uidv=id;
+  const tm=setTimeout(()=>sync('Couldn’t reach your account yet, saved in this browser'),10000);
+  try{const snap=await db.doc(`data/users/${uidv}/state`).get();clearTimeout(tm);
+    if(snap.exists){const v=JSON.parse(snap.data().json||'null');if(v&&Array.isArray(v.courses)&&(v.at||0)>=(S.at||0)){S=v;fix();render();try{localStorage.setItem(KEY,JSON.stringify(S))}catch{}}else if(S.at)push();}
+    else if(S.at)push();
+    sync('Saved to your account');
+  }catch(e){clearTimeout(tm);sync('Saved in this browser only');}
+});
 }
 </script>
 </body></html>
