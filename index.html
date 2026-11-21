@@ -274,6 +274,10 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 .hsem{font-size:13px;font-weight:700;color:var(--red);text-transform:none}
 .hgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;padding:14px 0 24px}
 .hcard{border:1px solid var(--line);border-radius:14px;padding:4px 14px 14px;min-width:0;display:flex;flex-direction:column;gap:6px}
+.hhead{display:flex;align-items:stretch;gap:4px;border-bottom:2px solid var(--ink);margin-bottom:2px}.hhead .htitle{flex:1;border-bottom:0;margin-bottom:0;min-width:0}
+.hfold{border:0;background:none;color:var(--ink);width:32px;margin-left:-8px;display:grid;place-items:center;cursor:pointer;border-radius:8px;flex:none}.hfold:hover{background:var(--soft)}
+.hfold svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .15s}.hcard.shut .hfold svg{transform:rotate(-90deg)}
+.hcard.shut{padding-bottom:4px;align-self:start}.hcard.shut .hhead{border-bottom-color:transparent}.hbody{display:flex;flex-direction:column;gap:6px;min-width:0}.hbody[hidden]{display:none}
 .htitle{display:flex;align-items:center;gap:8px;color:var(--ink);text-decoration:none;padding:10px 0 6px;border-bottom:2px solid var(--ink);margin-bottom:2px}
 .htitle h3{margin:0;font-size:17px;font-weight:800}.harr{margin-left:auto;font-size:18px;transition:transform .15s}.htitle:hover .harr{transform:translateX(3px)}
 .hcount{background:var(--red);color:#fff;font-size:12px;font-weight:800;border-radius:10px;padding:1px 8px}
@@ -505,13 +509,13 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 <div class="dopts" id="topts"></div>
 <div class="mact"><button class="btn ghost" id="tcancel">Cancel</button><button class="btn" id="tdo">Use this semester</button></div></div></div>
 <div id="dmodal" class="modal"><div class="card cnf dcard"><h3>Export data</h3><p class="hint">Saves a backup file you can import later, on this device or another one.</p>
-<div class="dopts"><label class="dopt" id="doptpage"><input type="radio" name="dscope" value="page"><span><b id="dpage">This page</b><small id="dpagesub"></small></span></label>
-<label class="dopt"><input type="radio" name="dscope" value="all"><span><b>Whole site</b><small>Every semester: grades, timetable, tasks, calendar and finals</small></span></label></div>
-<div class="mact"><button class="btn ghost" id="dcancel">Cancel</button><button class="btn" id="ddo">Export</button></div>
-</div></div>
+<div class="dopts" id="dopts"></div>
+<div class="mact"><button class="btn ghost" id="dcancel">Cancel</button><button class="btn" id="ddo">Export</button></div></div></div>
+<div id="imodal" class="modal"><div class="card cnf dcard"><h3>Import data</h3><p class="hint">Pick what to bring in from a Course Manager backup file. Only that part is replaced; you can undo right after.</p>
+<div class="dopts" id="iopts"></div>
+<div class="mact"><button class="btn ghost" id="icancel">Cancel</button><button class="btn" id="ido">Choose file…</button></div></div></div>
 <div id="zmodal" class="modal"><div class="card cnf dcard"><h3>Reset data</h3><p class="hint">Deletes data from this browser. You can undo right after, but export a backup first if you might want it later.</p>
-<div class="dopts"><label class="dopt" id="zoptpage"><input type="radio" name="zscope" value="page"><span><b id="zpage">This page</b><small id="zpagesub"></small></span></label>
-<label class="dopt"><input type="radio" name="zscope" value="all"><span><b>Whole site</b><small id="zallsub"></small></span></label></div>
+<div class="dopts" id="zopts"></div>
 <div class="mact"><button class="btn ghost" id="zcancel">Cancel</button><button class="btn danger" id="zdo">Reset…</button></div></div></div>
 <div id="toast"><span id="tmsg"></span><button id="tundo" hidden>Undo</button></div>
 <script>
@@ -990,28 +994,62 @@ $('#ssave').onclick=()=>{CFG={provider:$('#sprov').value,key:$('#skey').value.tr
 /* ---------- backup: export this page or the whole site; import detects what a file holds ---------- */
 const SCOPES={grades:{name:'Grades',sub:'Courses, weights, scores, professors and missed-exam make-ups',get:()=>({courses:S.courses,sel:S.sel}),set:d=>{S.courses=Array.isArray(d.courses)?d.courses:[];S.sel=d.sel;}},
   timetable:{name:'Timetable',sub:'Your class schedule, colours, names and display options',get:()=>({tt:S.tt||{}}),set:d=>{S.tt=d.tt||{};}},
-  tasks:{name:'Tasks',sub:'Your tasks, categories, semester, weeks off, academic calendar and finals',get:()=>({tasks:S.tasks||[],cats:S.cats||[],tstate:S.tstate||{},sem:S.sem||null,finals:S.finals||null}),set:d=>{S.tasks=d.tasks||[];S.cats=d.cats||[];S.tstate=d.tstate||{};S.sem=d.sem||null;if(d.finals)S.finals=d.finals;else delete S.finals;}}};
+  tasks:{name:'Tasks',sub:'Your tasks, categories, semester, weeks off, academic calendar and finals',get:()=>({tasks:S.tasks||[],cats:S.cats||[],tstate:S.tstate||{},sem:S.sem||null,finals:S.finals||null}),set:d=>{S.tasks=d.tasks||[];mergeCats(d.cats);S.tstate=d.tstate||{};S.sem=d.sem||null;if(d.finals)S.finals=d.finals;else delete S.finals;}}};
 const viewScope=()=>({grades:'grades',tt:'timetable',tasks:'tasks'})[document.body.dataset.view]||null;
-function openData(){const sc=viewScope(),m=$('#dmodal'),pg=$('#doptpage');
-  if(sc){pg.classList.remove('dis');pg.querySelector('input').disabled=false;$('#dpage').textContent='This page: '+SCOPES[sc].name;$('#dpagesub').textContent=SCOPES[sc].sub;}
-  else{pg.classList.add('dis');pg.querySelector('input').disabled=true;$('#dpage').textContent='This page';$('#dpagesub').textContent='Home shows data from every section, so export the whole site.';}
-  document.querySelector(`input[name=dscope][value=${sc?'page':'all'}]`).checked=true;m.classList.add('on');setTimeout(()=>$('#ddo').focus(),0);}
+/* three levels everywhere: this page · this semester · all semesters */
+const curSemName=()=>S.sem&&(S.sem.term||S.sem.year)?termNm(S):'this semester';
+function scopeOpts(box,name,verb,info){const sc=viewScope(),n=allTerms().length,o=(v,t,sub,dis)=>`<label class="dopt${dis?' dis':''}"><input type="radio" name="${name}" value="${v}" ${dis?'disabled':''}><span><b>${esc(t)}</b><small>${esc(sub)}</small></span></label>`;
+  $(box).innerHTML=(sc?o('page','This page: '+SCOPES[sc].name,(info&&info.page)||SCOPES[sc].sub+` (${curSemName()})`):o('page','This page',`Home shows every section, so ${verb} this semester or all semesters.`,true))
+    +o('sem','This semester: '+curSemName(),(info&&info.sem)||'Grades, timetable, tasks, calendar and finals for this semester')
+    +o('all',`All semesters${n>1?` (${n})`:''}`,(info&&info.all)||(n>1?'Every semester and everything in it':'Everything, including semesters you add later'));
+  document.querySelector(`input[name=${name}][value=${sc?'page':'sem'}]`).checked=true;}
+const pickedScope=name=>{const v=document.querySelector(`input[name=${name}]:checked`).value;return v==='page'?viewScope():v;};
+const semData=()=>({...JSON.parse(JSON.stringify(curData())),cats:S.cats||[]});
+const fileSlug=t=>String(t).toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+function openData(){scopeOpts('#dopts','dscope','export');$('#dmodal').classList.add('on');setTimeout(()=>$('#ddo').focus(),0);}
 $('#expbtn').onclick=openData;$('#dcancel').onclick=()=>$('#dmodal').classList.remove('on');
 $('#dmodal').addEventListener('click',e=>{if(e.target===$('#dmodal'))$('#dmodal').classList.remove('on');});
-$('#ddo').onclick=()=>{const page=document.querySelector('input[name=dscope]:checked').value==='page',sc=page?viewScope():'all';
-  const data=sc==='all'?JSON.parse(JSON.stringify(S)):SCOPES[sc].get();
-  try{const blob=new Blob([JSON.stringify({app:'course-manager',v:2,scope:sc,exported:new Date().toISOString(),data},null,1)],{type:'application/json'}),u=URL.createObjectURL(blob),a=document.createElement('a');
-    a.href=u;a.download=`course-manager-${sc==='all'?'all':sc}-${iso(new Date())}.json`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),2000);
-    $('#dmodal').classList.remove('on');toast(sc==='all'?'Whole-site backup downloaded':SCOPES[sc].name+' backup downloaded');}catch{toast('Your browser blocked the download');}};
-$('#impbtn').onclick=()=>$('#impf').click();
-$('#impf').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;let v;try{v=JSON.parse(await f.text());}catch{toast('That file isn’t a Course Manager backup');return;}
-  let sc='all',data=v;if(v&&v.app==='course-manager'&&v.data){sc=SCOPES[v.scope]?v.scope:'all';data=v.data;}else if(!(v&&Array.isArray(v.courses))){toast('That file isn’t a Course Manager backup');return;}
-  else if(!('tt' in v||'tasks' in v||'sem' in v))sc='grades';
-  if(sc==='all'&&!Array.isArray(data.courses)){toast('That backup looks damaged');return;}
-  const ok=await confirmBox(sc==='all'?'Replace everything with this backup?':`Replace your ${SCOPES[sc].name} with this backup?`,sc==='all'?'All courses, grades, timetable, tasks, semester and calendar in this browser are replaced by the file.':`Only ${SCOPES[sc].name} is replaced. Everything else stays as it is.`,'Import');if(!ok)return;
-  const snap=JSON.stringify(S);if(sc==='all'){S={...data,at:Date.now()};delete S.app;delete S.v;}else SCOPES[sc].set(data);
-  fix();save();const target={grades:'#grades',timetable:'#timetable',tasks:'#tasks'}[sc];if(target&&location.hash!==target)location.hash=target;else route();
-  toast(sc==='all'?'Backup imported':SCOPES[sc].name+' imported',snap);};
+$('#ddo').onclick=()=>{const sc=pickedScope('dscope'),scope=sc==='sem'?'semester':sc;
+  const data=sc==='all'?JSON.parse(JSON.stringify(S)):sc==='sem'?semData():JSON.parse(JSON.stringify(SCOPES[sc].get()));
+  const label=sc==='all'?'all-semesters':sc==='sem'?fileSlug(curSemName()):fileSlug(curSemName())+'-'+sc;
+  try{const blob=new Blob([JSON.stringify({app:'course-manager',v:3,scope,semester:curSemName(),exported:new Date().toISOString(),data},null,1)],{type:'application/json'}),u=URL.createObjectURL(blob),a=document.createElement('a');
+    a.href=u;a.download=`course-manager-${label}-${iso(new Date())}.json`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),2000);
+    $('#dmodal').classList.remove('on');toast(sc==='all'?'Backup of all semesters downloaded':sc==='sem'?curSemName()+' backup downloaded':SCOPES[sc].name+' backup downloaded');}catch{toast('Your browser blocked the download');}};
+/* import: choose the level first, then the file */
+let impTarget=null;
+function openImport(){scopeOpts('#iopts','iscope','import',{page:viewScope()?`Replace ${SCOPES[viewScope()].name.toLowerCase()} in ${curSemName()} with the one in the file`:'',sem:`Replace ${curSemName()} with a semester from the file, or add it as a new semester`,all:'Replace every semester with the ones in the file'});$('#imodal').classList.add('on');setTimeout(()=>$('#ido').focus(),0);}
+$('#impbtn').onclick=openImport;$('#icancel').onclick=()=>$('#imodal').classList.remove('on');
+$('#imodal').addEventListener('click',e=>{if(e.target===$('#imodal'))$('#imodal').classList.remove('on');});
+$('#ido').onclick=()=>{impTarget=pickedScope('iscope');$('#imodal').classList.remove('on');$('#impf').click();};
+/* what a file holds, as {kind:'page'|'semester'|'all', page?, sem (one semester's data), all?} */
+function readBackup(v){if(!v||typeof v!=='object')return null;let scope,data=v;
+  if(v.app==='course-manager'&&v.data){scope=v.scope;data=v.data;}else if(Array.isArray(v.courses))scope=('tt' in v||'tasks' in v||'sem' in v)?'all':'grades';else return null;
+  if(SCOPES[scope])return{kind:'page',page:scope,sem:data,name:v.semester};
+  if(scope==='semester')return{kind:'semester',sem:data,name:termNm(data)};
+  if(!data||!Array.isArray(data.courses))return null;const cur={};for(const k of SEMKEYS)if(data[k]!==undefined)cur[k]=data[k];cur.id=data.termId;cur.cats=data.cats;
+  return{kind:'all',all:data,sem:cur,name:termNm(cur),n:1+(data.archive||[]).length};}
+const has={grades:d=>Array.isArray(d.courses),timetable:d=>d.tt&&typeof d.tt==='object',tasks:d=>Array.isArray(d.tasks)||!!d.sem||!!d.finals};
+function mergeCats(c){if(!Array.isArray(c))return;S.cats=S.cats||[];for(const k of c)if(!S.cats.some(x=>x.id===k.id))S.cats.push(k);}
+$('#impf').onchange=async e=>{const f=e.target.files[0];e.target.value='';const tgt=impTarget||'all';impTarget=null;if(!f)return;let v;try{v=JSON.parse(await f.text());}catch{toast('That file isn’t a Course Manager backup');return;}
+  const B=readBackup(v);if(!B){toast('That file isn’t a Course Manager backup');return;}const snap=JSON.stringify(S);let msg,done;
+  if(SCOPES[tgt]){const d=B.sem||{};if(!has[tgt](d)){toast(`That file has no ${SCOPES[tgt].name.toLowerCase()} in it`);return;}
+    if(!await confirmBox(`Replace your ${SCOPES[tgt].name.toLowerCase()}?`,`${SCOPES[tgt].name} in ${curSemName()} is replaced by the one in the file${B.name?` (${B.name})`:''}. Everything else stays as it is.`,'Import'))return;
+    const keep=tgt==='tasks'&&S.sem?{term:S.sem.term,year:S.sem.year}:null;SCOPES[tgt].set(d);if(tgt==='tasks'){mergeCats(d.cats);if(keep&&(!S.sem||!S.sem.term))S.sem={...(S.sem||{}),...keep};}
+    done=SCOPES[tgt].name+' imported';}
+  else if(tgt==='sem'){if(B.kind==='page'){toast(`That file only has ${SCOPES[B.page].name.toLowerCase()}. Choose “This page” on that page to import it.`);return;}
+    const d=JSON.parse(JSON.stringify(B.sem)),nm=termNm(d),same=nm!=='Untitled semester'&&allTerms().find(x=>termNm(x)===nm);
+    const toCur=!same||same.cur||!(d.sem&&(d.sem.term||d.sem.year));
+    if(!await confirmBox(same&&!same.cur?`Replace ${nm}?`:same&&same.cur||!(d.sem&&(d.sem.term||d.sem.year))?`Replace ${curSemName()}?`:`Add ${nm}?`,
+      same&&!same.cur?`Your saved ${nm} is replaced by the one in the file, and you switch to it.`:same&&same.cur||!(d.sem&&(d.sem.term||d.sem.year))?`${curSemName()} is replaced by the semester in the file. Your other semesters stay as they are.`:`${nm} is added as a new semester and you switch to it. ${curSemName()} stays in the semester menu.`,'Import'))return;
+    mergeCats(d.cats);delete d.cats;
+    if(same&&!same.cur){S.archive=S.archive.filter(x=>x.id!==same.id);S.archive.push(curData());loadTerm({...d,id:same.id});}
+    else if(same&&same.cur||!(d.sem&&(d.sem.term||d.sem.year))){loadTerm({...d,id:S.termId||rid()});}
+    else{S.archive=[...(S.archive||[]),curData()];loadTerm({...d,id:rid()});}
+    done=termNm(S)+' imported';}
+  else{if(B.kind!=='all'){toast('That file has one '+(B.kind==='semester'?'semester':'page')+'. Choose “This semester”'+(B.kind==='page'?' or “This page”':'')+' to import it.');return;}
+    if(!await confirmBox('Replace all semesters?',`Everything in this browser is replaced by the file (${B.n} semester${B.n===1?'':'s'}).`,'Import'))return;
+    S={...B.all,at:Date.now()};done='Backup imported';}
+  edit=false;fix();save();const target={grades:'#grades',timetable:'#timetable',tasks:'#tasks'}[tgt];if(target&&location.hash!==target)location.hash=target;else route();toast(done,snap);};
 
 new MutationObserver(()=>{for(const c of document.querySelectorAll('.stack td:not([data-l])')){let i=0,p=c;while(p=p.previousElementSibling)i++;c.dataset.l=c.closest('table').rows[0].cells[i]?.textContent||'';}}).observe(document.getElementById('panel'),{childList:true,subtree:true});
 
@@ -1032,25 +1070,24 @@ async function clearGrades(co){
 }
 const ZC={grades:()=>{const n=S.courses.length,g=S.courses.reduce((a,c)=>a+c.comps.reduce((b,k)=>b+k.scores.filter(hasVal).length,0),0);return n?`${n} course${n===1?'':'s'} and ${g} score${g===1?'':'s'}`:'';},
   timetable:()=>{const n=(S.tt&&S.tt.slots||[]).length;return n?`${n} timetable class${n===1?'':'es'}`:'';},
-  tasks:()=>{const n=(S.tasks||[]).length,c=(S.cats||[]).length,st=S.tstate&&Object.keys(S.tstate).length,sem=S.sem&&(S.sem.start||(S.sem.cal||[]).length);return[n&&`${n} task${n===1?'':'s'} you added`,c&&`${c} categor${c===1?'y':'ies'}`,st&&'task ticks and edits',sem&&'the semester and calendar',S.finals&&'your final exam schedules'].filter(Boolean).join(', ');}};
-const ZSUB={grades:'Courses, weights, scores, professors and make-ups',timetable:'Your class schedule, colours, names and display options',tasks:'Tasks you added, categories, ticks, semester, academic calendar and final exam schedules. Tasks from syllabi stay while their courses do.'};
-const zClear={grades:()=>{S.courses=[];S.sel=null;edit=false;},timetable:()=>{S.tt={};},tasks:()=>{S.tasks=[];S.cats=[];S.tstate={};S.sem=null;delete S.finals;}};
-function zLine(sc){const v=ZC[sc]();return v?'Deletes '+v+'.':'Nothing here yet.';}
-function openReset(){const sc=viewScope(),pg=$('#zoptpage'),inp=pg.querySelector('input');
-  if(sc){pg.classList.remove('dis');inp.disabled=false;$('#zpage').textContent='This page: '+SCOPES[sc].name;$('#zpagesub').textContent=ZSUB[sc]+' '+zLine(sc);}
-  else{pg.classList.add('dis');inp.disabled=true;$('#zpage').textContent='This page';$('#zpagesub').textContent='Home shows data from every section, so reset the whole site.';}
-  $('#zallsub').textContent='Every semester: grades, timetable, tasks, calendar and finals. Your light/dark setting stays.';
-  document.querySelector(`input[name=zscope][value=${sc?'page':'all'}]`).checked=true;$('#zmodal').classList.add('on');setTimeout(()=>$('#zcancel').focus(),0);}
+  tasks:()=>{const n=(S.tasks||[]).length,c=(S.cats||[]).length,st=S.tstate&&Object.keys(S.tstate).length,sem=S.sem&&(S.sem.start||(S.sem.cal||[]).length);return[n&&`${n} task${n===1?'':'s'} you added`,st&&'task ticks and edits',sem&&'the semester and calendar',S.finals&&'your final exam schedules'].filter(Boolean).join(', ');}};
+const ZSUB={grades:'Courses, weights, scores, professors and make-ups',timetable:'Your class schedule, colours, names and display options',tasks:'Tasks you added, ticks, semester dates, academic calendar and final exam schedules. Tasks from syllabi stay while their courses do.'};
+const ttPrefs=()=>{const o=S.tt||{},t={};for(const k of ['opts','order','view','h24','exp','colors'])if(o[k]!==undefined)t[k]=o[k];return t;};
+const zClear={grades:()=>{S.courses=[];S.sel=null;edit=false;},timetable:()=>{S.tt={};},tasks:()=>{S.tasks=[];S.tstate={};S.sem=S.sem&&(S.sem.term||S.sem.year)?{term:S.sem.term,year:S.sem.year,start:'',end:'',ov:{},cal:[]}:null;delete S.finals;},
+  sem:()=>{const t=ttPrefs();zClear.grades();zClear.tasks();S.tt=t;}};
+const zWhat=sc=>sc==='sem'?['grades','timetable','tasks'].map(k=>ZC[k]()).filter(Boolean).join('; '):sc==='all'?(()=>{const n=allTerms().length,cur=zWhat('sem');return n>1?`all ${n} semesters${cur?` (${curSemName()}: ${cur})`:''}`:cur;})():ZC[sc]();
+function openReset(){const sc=viewScope();scopeOpts('#zopts','zscope','reset',{page:sc?ZSUB[sc]+'. '+(ZC[sc]()?'Deletes '+ZC[sc]()+'.':'Nothing here yet.'):'',
+  sem:`Empties ${curSemName()}: grades, timetable, tasks, calendar and finals. It stays in the semester menu.`,all:`Deletes every semester${allTerms().length>1?` (${allTerms().length})`:''}. Your light/dark setting stays.`});
+  $('#zmodal').classList.add('on');setTimeout(()=>$('#zcancel').focus(),0);}
 $('#rstbtn').onclick=openReset;$('#zcancel').onclick=()=>$('#zmodal').classList.remove('on');
 $('#zmodal').addEventListener('click',e=>{if(e.target===$('#zmodal'))$('#zmodal').classList.remove('on');});
-$('#zdo').onclick=async()=>{const sc=document.querySelector('input[name=zscope]:checked').value==='page'?viewScope():'all';$('#zmodal').classList.remove('on');
-  const na=(S.archive||[]).length,what=sc==='all'?[...['grades','timetable','tasks'].map(k=>ZC[k]()),na&&`${na} other semester${na===1?'':'s'}`].filter(Boolean).join('; '):ZC[sc]();
+$('#zdo').onclick=async()=>{const sc=pickedScope('zscope');$('#zmodal').classList.remove('on');const what=zWhat(sc);
   if(!what){toast('There’s nothing to reset');return;}
-  const name=sc==='all'?'everything':SCOPES[sc].name.toLowerCase();
-  const ok=await confirmBox(`Reset ${name}?`,`This deletes ${what} from this browser.${sc==='all'?'':' Everything else stays as it is.'}`,sc==='all'?'Reset everything':'Reset '+name);
+  const title=sc==='all'?'Reset all semesters?':sc==='sem'?`Reset ${curSemName()}?`:`Reset ${SCOPES[sc].name.toLowerCase()}?`;
+  const ok=await confirmBox(title,`This deletes ${what} from this browser.${sc==='all'?'':sc==='sem'?' Your other semesters stay as they are.':' Everything else stays as it is.'}`,sc==='all'?'Reset everything':sc==='sem'?'Reset semester':'Reset '+SCOPES[sc].name.toLowerCase());
   if(!ok)return;const snap=JSON.stringify(S);
   if(sc==='all'){S={courses:[],sel:null,at:Date.now()};edit=false;}else zClear[sc]();
-  fix();save();route();toast(sc==='all'?'Everything was reset':SCOPES[sc].name+' reset',snap);};
+  fix();save();route();toast(sc==='all'?'Everything was reset':sc==='sem'?curSemName()+' reset':SCOPES[sc].name+' reset',snap);};
 
 /* ---------- missed exam dialog ---------- */
 let MX=null;const mm=$('#mmodal');
@@ -1425,18 +1462,19 @@ const TERMS=['Fall','Spring','Summer','Winter','Other'];
 const SEM=()=>S.sem&&S.sem.start?S.sem:null;
 function semObj(){S.sem=S.sem||{term:'',year:'',start:'',end:'',ov:{},cal:[]};S.sem.ov=S.sem.ov||{};S.sem.cal=S.sem.cal||[];return S.sem;}
 const isBreak=c=>(c.type==='break'||c.type==='holiday')&&dDiff(pd(c.start),pd(c.end||c.start))+1>=7;
-function semWeeks(){const s=SEM();if(!s)return[];const st=pd(s.start),en=pd(s.end);
+function lastClassDay(s=SEM()){if(!s)return null;const ends=(s.cal||[]).filter(c=>c.type==='end').map(c=>c.end||c.start).sort();return pd(ends.length?ends[ends.length-1]:s.end);}
+function semWeeks(){const s=SEM();if(!s)return[];const st=pd(s.start),lc=lastClassDay(s),en0=pd(s.end),en=en0&&lc?(en0>lc?en0:lc):(en0||lc);
   const n=en&&en>=st?Math.min(40,Math.ceil((dDiff(st,en)+1)/7)):16,brs=(s.cal||[]).filter(isBreak);let teach=0;
   return Array.from({length:n},(_,i)=>{const a=addD(st,7*i),b=addD(a,6);let auto='';
     for(const br of brs){const bs=pd(br.start),be=pd(br.end||br.start);let k=0;for(let j=0;j<7;j++){const d=addD(a,j);if(d>=bs&&d<=be)k++;}if(k>=4){auto=br.title;break;}}
     const o=(s.ov||{})[i],off=o===true||(o!==false&&!!auto);if(!off)teach++;
     return{i,a,b,off,auto,manual:o!=null,reason:off?(auto&&o!==true?auto:(auto||'Week off')):'',teach:off?null:teach};});}
-function weekInfo(d=today0()){const s=SEM();if(!s)return null;const ws=semWeeks(),st=pd(s.start),total=ws.filter(w=>!w.off).length;
-  if(d<st)return{status:'before',days:dDiff(d,st),total};const i=Math.floor(dDiff(st,d)/7);if(i>=ws.length)return{status:'after',total};
+function weekInfo(d=today0()){const s=SEM();if(!s)return null;const ws=semWeeks(),st=pd(s.start),lc=lastClassDay(s),lw=lc&&lc>=st?ws[Math.floor(dDiff(st,lc)/7)]:null,total=lw&&lw.teach?lw.teach:ws.filter(w=>!w.off).length;
+  if(d<st)return{status:'before',days:dDiff(d,st),total};const i=Math.floor(dDiff(st,d)/7);if(i>=ws.length||(lc&&d>lc&&(!lw||i>lw.i)))return{status:'after',total};
   const w=ws[i];return{status:w.off?'break':'during',w,total};}
 const semName=()=>{const s=SEM();return s?[s.term&&s.term!=='Other'?s.term:'',s.year].filter(Boolean).join(' ')||'Semester':'';};
 function weekLine(){const wi=weekInfo();if(!wi)return'';
-  if(wi.status==='before')return`Starts in ${wi.days} day${wi.days===1?'':'s'}`;if(wi.status==='after')return'Semester over';
+  if(wi.status==='before')return`Starts in ${wi.days} day${wi.days===1?'':'s'}`;if(wi.status==='after'){const d=today0(),s=SEM(),ex=(s.cal||[]).some(c=>c.type==='exam'&&iso(d)>=c.start&&iso(d)<=(c.end||c.start)),fl=allTasks().filter(t=>t.final&&t.date).map(t=>t.date).sort().pop();return ex||(fl&&iso(d)<=fl)?'Finals period':'Classes over';}
   if(wi.status==='break')return wi.w.reason||'Week off';return`Week ${wi.w.teach} of ${wi.total}`;}
 const dateInWeek=(w,wd)=>{for(let k=0;k<7;k++){const d=addD(w.a,k);if(d.getDay()===wd)return d;}return null;};
 function weekOfDate(d){const s=SEM();if(!s||!d)return null;const i=Math.floor(dDiff(pd(s.start),d)/7);const ws=semWeeks();return i>=0&&i<ws.length?ws[i]:null;}
@@ -1817,6 +1855,7 @@ function countdowns(){const s=SEM(),T0=today0(),out=[];if(!s)return out;
   if(last){const n=dDiff(T0,pd(last));if(n>=0)out.push({n,label:'to the last day of classes',title:'Last day of classes: '+fmtD(pd(last))});}
   const fs=allTasks().filter(t=>t.final&&t.date);if(fs.length){const lf=fs.map(t=>t.date).sort().pop(),n=dDiff(T0,pd(lf));if(n>=0)out.push({n,label:'to your last final',title:'Last final: '+fmtD(pd(lf))});}
   return out;}
+let hShut={};try{hShut=JSON.parse(localStorage.getItem('cm-home-fold')||'{}')||{};}catch{}
 function renderHome(){TS();const s=SEM(),wi=weekInfo(),T0=today0(),all=allTasks();
   const overdue=all.filter(t=>!t.done&&t.date&&pd(t.date)<T0),due=all.filter(t=>!t.done&&t.date&&pd(t.date)>=T0&&pd(t.date)<=addD(T0,7)).sort((a,b)=>a.date.localeCompare(b.date)),undated=all.filter(t=>!t.done&&!t.date);
   const cal=s?(s.cal||[]).filter(c=>!calDone(c)).slice(0,6):[];
@@ -1831,13 +1870,15 @@ function renderHome(){TS();const s=SEM(),wi=weekInfo(),T0=today0(),all=allTasks(
   if(cc&&!clockTick)clockTick=setInterval(tickClocks,1000);
   $('#hhero').innerHTML=s?`<div><span class="hsem">${esc(semName())}</span><h2>${esc(weekLine())}</h2><span class="hint">${esc(fmtD(T0))}</span></div>${cdh}<button class="btn ghost" data-act="semopen">Semester</button>`
     :`<div><span class="hsem">${esc(fmtD(T0))}</span><h2>Welcome</h2><span class="hint">Set your semester to see week numbers and place syllabus dates.</span></div><button class="btn" data-act="semopen">Set up semester</button>`;
-  const card=(href,title,count,body)=>`<section class="hcard"><a class="htitle" href="${href}"><h3>${title}</h3>${count!=null?`<span class="hcount">${count}</span>`:''}<span class="harr" aria-hidden="true">→</span></a>${body}</section>`;
+  const card=(href,title,count,body,id)=>{const shut=!!hShut[id];return`<section class="hcard${shut?' shut':''}" data-hc="${id}"><div class="hhead"><button class="hfold" data-fold="${id}" aria-expanded="${!shut}" aria-label="${shut?'Expand':'Collapse'} ${esc(title)}"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg></button><a class="htitle" href="${href}"><h3>${title}</h3>${count!=null?`<span class="hcount">${count}</span>`:''}<span class="harr" aria-hidden="true">→</span></a></div><div class="hbody"${shut?' hidden':''}>${body}</div></section>`;};
   $('#hgrid').innerHTML=
-    card('#tasks','Tasks',due.length||null,`${overdue.length?`<a class="hover" href="#tasks"><b>${overdue.length} overdue</b><span>Review →</span></a>`:''}${due.length?`<ul class="tasks">${due.slice(0,6).map(t=>taskRow(t,true)).join('')}</ul>${due.length>6?`<a class="hmore" href="#tasks">${due.length-6} more due this week</a>`:''}`:`<p class="hint hempty">Nothing due in the next 7 days.${undated.length?` ${undated.length} task${undated.length>1?'s have':' has'} no date.`:''}</p><button class="btn ghost sm" data-act="tadd">Add a task</button>`}`)+
-    card('#tasks','Coming up',null,cal.length?`<ul class="tasks">${cal.map(calRow).join('')}</ul>`:`<p class="hint hempty">${s?'Upload your academic calendar to see breaks, holidays, deadlines and make-up days here.':'Set up your semester, then add your academic calendar to see notable dates here.'}</p><button class="btn ghost sm" data-act="semopen">${s?'Add academic calendar':'Set up semester'}</button>`)+
-    card('#grades','Courses',null,gc.length?`<div class="hgpa"><span>Semester GPA</span><b class="${sm.gpa==null?'nil':''}">${sm.gpa==null?'No grades yet':fmt2(sm.gpa)}</b></div><ul class="hcourses reord">${gc.map(c=>{const p=coursePct(c);return`<li data-hopen="${c.id}" data-rid="${c.id}" tabindex="0" role="link" style="--cc:${courseColor(c)}"><i class="cdot"></i><span class="hcb"><b>${esc(c.code||'Course')}</b><span>${esc(c.title||'')}</span></span><span class="hg">${p==null?'<span class="nil">–</span>':`${fmt(p)}%<em>${esc(letter(c,p))}</em>`}</span></li>`;}).join('')}</ul>`:`<p class="hint hempty">Upload a syllabus to start tracking grades.</p><a class="btn ghost sm" href="#grades">Go to Grades</a>`)+
-    card('#timetable',todayCls.length?'Today’s classes':nextLbl?`Next classes · ${nextLbl}`:'Schedule',null,vis.length?`<ul class="hclasses">${(todayCls.length?todayCls:nextCls).map(clsRow).join('')}</ul>${todayCls.length?'':'<p class="hint">No classes today.</p>'}`:`<p class="hint hempty">Upload your .ics schedule to see today’s classes here.</p><a class="btn ghost sm" href="#timetable">Go to Timetable</a>`);}
-$('#v-home').addEventListener('click',e=>{const o=e.target.closest('[data-hopen]');if(o){openGrades(o.dataset.hopen);return;}const b=e.target.closest('[data-act]');if(!b)return;if(b.dataset.act==='semopen')openSem();if(b.dataset.act==='tadd')openTask(null);});
+    card('#tasks','Tasks',due.length||null,`${overdue.length?`<a class="hover" href="#tasks"><b>${overdue.length} overdue</b><span>Review →</span></a>`:''}${due.length?`<ul class="tasks">${due.slice(0,6).map(t=>taskRow(t,true)).join('')}</ul>${due.length>6?`<a class="hmore" href="#tasks">${due.length-6} more due this week</a>`:''}`:`<p class="hint hempty">Nothing due in the next 7 days.${undated.length?` ${undated.length} task${undated.length>1?'s have':' has'} no date.`:''}</p><button class="btn ghost sm" data-act="tadd">Add a task</button>`}`,'tasks')+
+    card('#tasks','Coming up',null,cal.length?`<ul class="tasks">${cal.map(calRow).join('')}</ul>`:`<p class="hint hempty">${s?'Upload your academic calendar to see breaks, holidays, deadlines and make-up days here.':'Set up your semester, then add your academic calendar to see notable dates here.'}</p><button class="btn ghost sm" data-act="semopen">${s?'Add academic calendar':'Set up semester'}</button>`,'dates')+
+    card('#grades','Courses',null,gc.length?`<div class="hgpa"><span>Semester GPA</span><b class="${sm.gpa==null?'nil':''}">${sm.gpa==null?'No grades yet':fmt2(sm.gpa)}</b></div><ul class="hcourses reord">${gc.map(c=>{const p=coursePct(c);return`<li data-hopen="${c.id}" data-rid="${c.id}" tabindex="0" role="link" style="--cc:${courseColor(c)}"><i class="cdot"></i><span class="hcb"><b>${esc(c.code||'Course')}</b><span>${esc(c.title||'')}</span></span><span class="hg">${p==null?'<span class="nil">–</span>':`${fmt(p)}%<em>${esc(letter(c,p))}</em>`}</span></li>`;}).join('')}</ul>`:`<p class="hint hempty">Upload a syllabus to start tracking grades.</p><a class="btn ghost sm" href="#grades">Go to Grades</a>`,'courses')+
+    card('#timetable',todayCls.length?'Today’s classes':nextLbl?`Next classes · ${nextLbl}`:'Schedule',null,vis.length?`<ul class="hclasses">${(todayCls.length?todayCls:nextCls).map(clsRow).join('')}</ul>${todayCls.length?'':'<p class="hint">No classes today.</p>'}`:`<p class="hint hempty">Upload your .ics schedule to see today’s classes here.</p><a class="btn ghost sm" href="#timetable">Go to Timetable</a>`,'classes');}
+$('#v-home').addEventListener('click',e=>{const fb=e.target.closest('[data-fold]');if(fb){const id=fb.dataset.fold,c=fb.closest('.hcard'),shut=!c.classList.contains('shut');hShut[id]=shut;if(!shut)delete hShut[id];try{localStorage.setItem('cm-home-fold',JSON.stringify(hShut));}catch{}
+  c.classList.toggle('shut',shut);c.querySelector('.hbody').hidden=shut;fb.setAttribute('aria-expanded',String(!shut));fb.setAttribute('aria-label',(shut?'Expand ':'Collapse ')+c.querySelector('h3').textContent);return;}
+  const o=e.target.closest('[data-hopen]');if(o){openGrades(o.dataset.hopen);return;}const b=e.target.closest('[data-act]');if(!b)return;if(b.dataset.act==='semopen')openSem();if(b.dataset.act==='tadd')openTask(null);});
 $('#v-home').addEventListener('keydown',e=>{const o=e.target.closest('[data-hopen]');if(o&&(e.key==='Enter'||e.key===' ')){e.preventDefault();openGrades(o.dataset.hopen);}});
 
 /* ---------- reorder courses: drag with a mouse, press and hold on touch, or Alt+arrow keys ---------- */
