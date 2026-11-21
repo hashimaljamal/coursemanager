@@ -7,182 +7,223 @@
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
 <style>
 /* VOICE: a precise working tool, calm, no decoration.
-   IDEA: the teacher's gradebook ledger, marked with a red pen.
-   PICTURE: the live course grade, huge, beside its boundary ladder.
-   COLOUR and TYPE: white / black / signal red; Archivo wide for numerals, Archivo for text.
-   LAYOUT: course rail on the left, ledger on the right; stacks to chips + ledger on phones. */
-:root{color-scheme:light;--bg:#fff;--ink:#111;--mute:#646464;--soft:#f2f2f2;--line:#d9d9d9;--red:#e4002b}
-@media(prefers-color-scheme:dark){:root:not([data-theme=light]){color-scheme:dark;--bg:#0e0e0e;--ink:#f1f1f1;--mute:#a0a0a0;--soft:#1b1b1b;--line:#343434;--red:#ff4d5e}}
-:root[data-theme=dark]{color-scheme:dark;--bg:#0e0e0e;--ink:#f1f1f1;--mute:#a0a0a0;--soft:#1b1b1b;--line:#343434;--red:#ff4d5e}
+   IDEA: a teacher's gradebook ledger, marked in red pen.
+   PICTURE: the live course grade, large, beside its boundary ladder.
+   COLOUR and TYPE: white / near-black / signal red; Archivo, wide for numerals.
+   LAYOUT: one compact toolbar; course rail left, ledger right in columns; stacks on phones. */
+:root{color-scheme:light;--bg:#fff;--ink:#111;--mute:#686868;--soft:#f3f3f3;--line:#dcdcdc;--red:#d70029;--rad:10px}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){color-scheme:dark;--bg:#0f0f10;--ink:#f1f1f1;--mute:#a3a3a3;--soft:#1c1c1e;--line:#333336;--red:#ff4d5e}}
+:root[data-theme=dark]{color-scheme:dark;--bg:#0f0f10;--ink:#f1f1f1;--mute:#a3a3a3;--soft:#1c1c1e;--line:#333336;--red:#ff4d5e}
 html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 *{box-sizing:border-box;min-width:0}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 Archivo,system-ui,sans-serif;overflow-x:clip;border-top:8px solid var(--red);transition:background-color .2s,color .2s;-webkit-tap-highlight-color:transparent}
-.shell{max-width:1440px;margin:0 auto}
+[hidden]{display:none!important}
+.wrap.nocourses aside{display:none}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 Archivo,system-ui,-apple-system,Segoe UI,sans-serif;overflow-x:clip;transition:background-color .2s,color .2s;-webkit-tap-highlight-color:transparent}
 button,input,select,textarea{font:inherit;color:inherit}
 button{cursor:pointer}
-input[type=checkbox]{accent-color:var(--red)}
+input[type=checkbox]{accent-color:var(--red);width:20px;height:20px;margin:0}
 :focus-visible{outline:2px solid var(--red);outline-offset:2px}
-.band{padding:clamp(18px,3vw,36px) max(4vw,16px,env(safe-area-inset-left))}
-.top{display:grid;gap:18px;padding-bottom:20px}
-.tb{display:flex;align-items:center;justify-content:space-between;gap:16px}
-h1{font-size:clamp(28px,4.4vw,48px);line-height:1.05;margin:0;font-stretch:112%;font-weight:800;text-wrap:balance}
-.theme{flex:none;width:44px;height:44px;border-radius:50%;border:2px solid var(--ink);background:transparent;display:grid;place-items:center;padding:0}
-.theme svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}
+.shell{max-width:1480px;margin:0 auto;padding:0 max(20px,env(safe-area-inset-left)) 0 max(20px,env(safe-area-inset-right))}
+.nil{color:var(--mute);font-weight:500}
+
+/* toolbar */
+.top{display:flex;align-items:center;gap:10px 14px;flex-wrap:wrap;padding:16px 0 12px}
+h1{font-size:clamp(22px,2.4vw,30px);line-height:1.1;margin:0 auto 0 0;font-stretch:112%;font-weight:800;letter-spacing:-.01em}
+.acts{display:flex;gap:8px;flex-wrap:wrap}
+.btn{min-height:40px;padding:0 14px;border:1.5px solid var(--ink);border-radius:var(--rad);background:var(--ink);color:var(--bg);font-weight:700;font-size:14px;white-space:nowrap}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn.sm{min-height:34px;padding:0 11px;font-size:13px}
+.theme{flex:none;width:40px;height:40px;border-radius:50%;border:1.5px solid var(--ink);background:transparent;display:grid;place-items:center;padding:0}
+.theme svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}
 .theme .sun{display:none}
 :root[data-theme=dark] .theme .sun{display:block}:root[data-theme=dark] .theme .moon{display:none}
 @media(prefers-color-scheme:dark){:root:not([data-theme=light]) .theme .sun{display:block}:root:not([data-theme=light]) .theme .moon{display:none}}
-.drop{border:2px dashed var(--line);padding:16px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;transition:border-color .15s,background .15s}
-.drop.on{border-color:var(--red);background:var(--soft)}
-.drop span{flex:1 1 220px;color:var(--mute);font-size:15px}
-.btn{min-height:44px;padding:0 16px;border:2px solid var(--ink);background:var(--ink);color:var(--bg);font-weight:700}
-.btn.ghost{background:transparent;color:var(--ink)}
-.btn.sm{min-height:36px;padding:0 12px;font-size:14px}
-.btn:disabled{opacity:.4;cursor:default}
-.reader{font-size:13px;color:var(--mute);margin:8px 0 0}
-.link{border:0;background:none;padding:4px 0;font-size:13px;font-weight:600;text-decoration:underline;color:var(--ink)}
-.bk{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
-#jobs{list-style:none;margin:10px 0 0;padding:0;font-size:14px}
-#jobs li{display:flex;gap:8px;padding:4px 0;border-bottom:1px solid var(--line)}
-#jobs li b{flex:0 0 220px;font-weight:600;overflow-wrap:anywhere}#jobs li span{flex:1}
+.status{display:flex;flex-wrap:wrap;gap:4px 14px;align-items:baseline;font-size:13px;color:var(--mute);padding-bottom:10px;border-bottom:2px solid var(--ink)}
+.link{border:0;background:none;padding:2px 0;font-size:13px;font-weight:600;text-decoration:underline;color:var(--ink)}
+#jobs{list-style:none;margin:0;padding:0;flex-basis:100%;display:grid;gap:2px}
+#jobs:empty{display:none}
+#jobs li{display:grid;grid-template-columns:minmax(0,200px) minmax(0,1fr) auto;gap:2px 10px;align-items:baseline;padding:5px 10px;background:var(--soft);border-radius:8px;font-size:13px;color:var(--ink);transition:opacity .4s}
+#jobs li b{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#jobs li span{overflow-wrap:anywhere}
+#jobs li .x[hidden]{display:none}
+#jobs li .x{min-width:28px;min-height:28px;font-size:16px;border:0;background:none}
 #jobs .err{color:var(--red)}
-.wrap{display:grid;grid-template-columns:260px minmax(0,1fr);grid-template-rows:auto 1fr;grid-template-areas:"side main" "bk main";border-top:3px solid var(--ink)}
-aside{grid-area:side;padding:16px max(2vw,12px) 8px max(4vw,16px)}
-main{grid-area:main;border-left:1px solid var(--line)}
-.backup{grid-area:bk;padding:8px max(2vw,12px) 24px max(4vw,16px)}
-aside h2{font-size:13px;color:var(--mute);margin:0 0 8px;font-weight:600}
+#jobs li.fade{opacity:0}
+.dropover{position:fixed;inset:0;z-index:20;display:none;place-items:center;background:color-mix(in srgb,var(--bg) 82%,transparent);border:3px dashed var(--red);font-size:22px;font-weight:800}
+.dropover.on{display:grid}
+
+/* layout */
+.wrap{display:grid;grid-template-columns:230px minmax(0,1fr);grid-template-areas:"side main" "bk main";grid-template-rows:auto 1fr}
+aside{grid-area:side;padding:16px 18px 8px 0}
+main{grid-area:main;border-left:1px solid var(--line);padding:16px 0 40px 24px}
+.backup{grid-area:bk;padding:8px 18px 24px 0;font-size:12px;color:var(--mute)}
+.bk{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}
+aside h2{font-size:12px;color:var(--mute);margin:0 0 6px;font-weight:600}
+.gpacard{display:grid;width:100%;text-align:left;border:1.5px solid var(--ink);border-radius:var(--rad);background:transparent;padding:10px 12px;margin-bottom:14px}
+.gpacard span{font-size:12px;color:var(--mute)}.gpacard b{font-size:30px;font-weight:900;font-stretch:118%;line-height:1.1;font-variant-numeric:tabular-nums}.gpacard b.nil{font-size:15px;font-weight:600;line-height:1.6}.gpacard small{font-size:12px;color:var(--mute)}
+.gpacard.sel{border-color:var(--red);box-shadow:inset 3px 0 0 var(--red)}
 .clist{display:flex;flex-direction:column;gap:2px}
-.ci{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px;text-align:left;border:0;background:transparent;padding:10px;border-left:4px solid transparent;min-height:44px}
-@media(hover:hover){.ci:hover{background:var(--soft)}.plus:hover{border-color:var(--red);color:var(--red)}.btn.ghost:hover{background:var(--soft)}}
-.ci.sel{border-left-color:var(--red);background:var(--soft)}
-.ci b{font-stretch:105%}.ci small{color:var(--mute);font-size:13px;grid-column:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.ci em{font-style:normal;font-weight:800;grid-row:1/3;grid-column:2;align-self:center;font-stretch:112%;font-size:20px}
-.gpacard{display:grid;width:100%;text-align:left;border:2px solid var(--ink);background:transparent;padding:12px 14px;margin-bottom:16px;gap:0}
-.gpacard span{font-size:13px;color:var(--mute)}.gpacard b{font-size:34px;font-weight:900;font-stretch:118%;line-height:1.1;font-variant-numeric:tabular-nums}.gpacard small{font-size:13px;color:var(--mute)}
-.gpacard.sel{border-color:var(--red);box-shadow:inset 4px 0 0 var(--red)}
-.gpat{width:100%;border-collapse:collapse;margin:8px 0 16px;font-variant-numeric:tabular-nums}
-.gpat th{text-align:left;font-size:13px;color:var(--mute);font-weight:600;border-bottom:2px solid var(--ink);padding:8px 10px 8px 0}
-.gpat td{border-bottom:1px solid var(--line);padding:10px 10px 10px 0;vertical-align:middle}
-.gpat td small{display:block;color:var(--mute);font-size:13px}
-.gpat input:not([type]){width:72px}.gpat input[type=checkbox]{width:22px;height:22px}
-.gpat .lnkbtn{font-size:16px;font-weight:700;text-decoration:none}
-.brow .gp{width:64px}
-.scroll{overflow-x:auto}
-.side-note{font-size:13px;color:var(--mute);margin-top:16px}
-.side-note button{border:0;background:none;padding:0;text-decoration:underline;color:var(--ink);font-size:13px}
-.sync{font-size:13px;color:var(--mute);margin-top:12px}
-main{padding:20px max(4vw,16px) 64px max(2vw,16px)}
-.chead{display:flex;flex-wrap:wrap;gap:12px;align-items:start;justify-content:space-between}
-.chead h2{margin:0;font-size:32px;line-height:1.05;font-stretch:112%;font-weight:800}
-.chead p{margin:4px 0 0;color:var(--mute)}
-.note{margin:12px 0 0;padding:10px 12px;background:var(--soft);font-size:15px;border-left:4px solid var(--ink)}
+.ci{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:0 10px;text-align:left;border:0;border-radius:8px;background:transparent;padding:8px 10px;min-height:44px;align-items:center}
+.ci.sel{background:var(--soft);box-shadow:inset 3px 0 0 var(--red)}
+.ci b{font-stretch:105%;font-size:14px}.ci small{color:var(--mute);font-size:12px;grid-column:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ci em{font-style:normal;font-weight:800;grid-row:1/3;grid-column:2;font-stretch:112%;font-size:18px}
+.side-note{font-size:12px;color:var(--mute);margin:8px 0 0}
+.side-note button{border:0;background:none;padding:0;text-decoration:underline;color:var(--ink);font-size:12px}
+.empty{padding:32px 0;color:var(--mute)}.empty h2{color:var(--ink);margin:0 0 6px}
+
+/* course head + notes */
+.chead{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;justify-content:space-between}
+.chead h2{margin:0;font-size:26px;line-height:1.1;font-stretch:112%;font-weight:800}
+.chead p{margin:2px 0 0;color:var(--mute);font-size:14px}
+.notes{display:grid;gap:4px;margin-top:10px}
+.note{margin:0;padding:7px 10px;background:var(--soft);font-size:13px;border-left:3px solid var(--ink);border-radius:0 8px 8px 0}
 .note.warn{border-left-color:var(--red)}
-.note button{border:0;background:none;padding:0;text-decoration:underline;font-weight:600}
-#res{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:24px;margin:20px 0 28px;padding:20px 0;border-top:3px solid var(--ink);border-bottom:1px solid var(--line)}
-.big{display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap}
-.pct{font-size:clamp(64px,10vw,120px);line-height:.9;font-weight:900;font-stretch:118%;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
-.pct small{font-size:.4em}
-.letter{font-size:clamp(34px,4.6vw,52px);font-weight:900;color:var(--red);border:4px solid var(--red);border-radius:50%;width:1.9em;height:1.9em;display:grid;place-items:center;transform:rotate(-8deg);line-height:1}
-.sub-r{color:var(--mute);margin:10px 0 0;font-size:15px}
-.ladder{display:flex;flex-direction:column}
-.lr{display:grid;grid-template-columns:3.2em 4.2em minmax(0,1fr);gap:8px;padding:7px 0;border-bottom:1px solid var(--line);align-items:baseline;font-size:15px}
-.lr b{font-weight:800;font-size:17px}.lr span{color:var(--mute);font-variant-numeric:tabular-nums;white-space:nowrap}
+.note button{border:0;background:none;padding:0;text-decoration:underline;font-weight:600;font-size:13px}
+
+/* result */
+#res{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:12px 28px;margin:12px 0 6px;padding:12px 0;border-top:2px solid var(--ink);border-bottom:1px solid var(--line);align-items:center}
+.big{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.pct{font-size:clamp(52px,6vw,84px);line-height:.95;font-weight:900;font-stretch:118%;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.pct small{font-size:.38em;font-weight:800}
+.pct.none{font-size:22px;font-weight:700;font-stretch:105%;letter-spacing:0;line-height:1.2;color:var(--mute)}
+.letter{font-size:clamp(28px,3vw,40px);font-weight:900;color:var(--red);border:3px solid var(--red);border-radius:50%;width:1.9em;height:1.9em;display:grid;place-items:center;transform:rotate(-8deg);line-height:1;flex:none}
+.sub-r{color:var(--mute);margin:6px 0 0;font-size:13px}
+.lcap{margin:0 0 4px 8px;font-size:12px;color:var(--mute)}
+.ladder{columns:2 165px;column-gap:16px}
+.ladder .lr{break-inside:avoid}
+.lmore{display:none;border:0;background:none;padding:4px 8px;font-size:12px;font-weight:600;text-decoration:underline;color:var(--ink)}
+.lr{display:grid;grid-template-columns:2.6em 4.2em minmax(0,1fr);gap:8px;padding:4px 8px;border-bottom:1px solid var(--line);align-items:baseline;font-size:13px;border-radius:6px}
+.lr:last-child{border-bottom:0}
+.lr b{font-weight:800;font-size:15px}.lr span{color:var(--mute);font-variant-numeric:tabular-nums;white-space:nowrap}
 .lr i{font-style:normal}.lr .ok{font-weight:700}.lr .no{color:var(--mute);text-decoration:line-through}
-.lr.cur{background:var(--soft);box-shadow:-8px 0 0 var(--soft),8px 0 0 var(--soft)}
-.lr.cur b{color:var(--red)}
-.comp{border-top:2px solid var(--ink);padding:14px 0 18px}
-.comp header{display:flex;gap:12px;align-items:baseline;flex-wrap:wrap}
-.comp h3{margin:0;font-size:20px;font-weight:700;flex:1 1 auto}
-.wt{color:var(--mute);font-variant-numeric:tabular-nums;white-space:nowrap}
-.avg{font-stretch:112%;font-weight:800;font-size:22px;font-variant-numeric:tabular-nums;margin-left:auto;white-space:nowrap}
-.ctl{display:flex;flex-wrap:wrap;gap:8px 18px;margin:10px 0;font-size:14px;color:var(--mute)}
+.lr.cur{background:var(--soft);border-bottom-color:transparent}.lr.cur b{color:var(--red)}
+
+/* graded parts */
+.comps{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,330px),1fr));gap:0 28px;align-items:start}
+.comp{border-top:2px solid var(--ink);padding:10px 0 14px}
+.comp.wide{grid-column:1/-1}
+.comp header{display:flex;gap:4px 10px;align-items:baseline;flex-wrap:wrap}
+.comp h3{margin:0;font-size:16px;font-weight:700}
+.wt{color:var(--mute);font-size:13px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.avg{font-stretch:112%;font-weight:800;font-size:18px;font-variant-numeric:tabular-nums;margin-left:auto;white-space:nowrap}
+.avg.nil{font-size:12px;font-weight:500;font-stretch:100%}
+.ctl{display:flex;flex-wrap:wrap;gap:6px 14px;margin:6px 0 8px;font-size:12px;color:var(--mute)}
+.ctl:empty{display:none}
 .ctl label{display:flex;align-items:center;gap:6px}
-.ctl input{width:64px}
-input[type=text],input:not([type]),select,textarea{border:1px solid var(--line);background:var(--bg);min-height:40px;padding:6px 8px;font-size:16px;border-radius:0}
+.ctl input{width:52px;min-height:32px!important;padding:3px 6px!important;font-size:16px}
+input:not([type]),input[type=text],input[type=password],select,textarea{border:1px solid var(--line);border-radius:8px;background:var(--bg);min-height:38px;padding:6px 8px;font-size:16px}
 input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box-shadow:0 0 0 1px var(--ink)}
-.cb.one{display:flex;flex-wrap:wrap;align-items:flex-end;gap:10px 18px}.cb.one .ctl{margin:0 0 2px}.cb.one .boxes{width:150px;grid-template-columns:repeat(2,minmax(0,1fr))}.cb.one .box{grid-column:1/-1}.cb.one .plus{grid-column:1/-1}
-.cb.one:has(.plus) .box{grid-column:auto}
-.boxes{display:grid;grid-template-columns:repeat(auto-fill,minmax(76px,1fr));gap:8px}
-.box{display:flex;flex-direction:column;gap:2px;font-size:12px;color:var(--mute)}
-.box input{width:100%;text-align:right;font-variant-numeric:tabular-nums;min-height:44px}
-.plus{align-self:end;min-height:44px;border:2px dashed var(--line);background:transparent;font-size:24px;font-weight:700;line-height:1;color:var(--mute)}
+.boxes{display:grid;grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:6px}
+.box{position:relative;display:flex;flex-direction:column;gap:1px;font-size:11px;color:var(--mute)}
+.box span{padding-left:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:18px}
+.box input{width:100%;text-align:right;font-variant-numeric:tabular-nums;min-height:38px;padding:4px 7px}
 .box input.dropped{text-decoration:line-through;color:var(--mute);border-style:dashed}
-.lnk{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:14px;color:var(--mute);margin:10px 0}
-.lnk select{max-width:100%}
-.sub{border-left:4px solid var(--red);padding-left:14px;margin-top:8px}
+.rm{position:absolute;top:-2px;right:0;width:20px;height:18px;border:0;background:none;color:var(--mute);font-size:15px;line-height:1;padding:0;border-radius:4px}
+.box:has(input:not(:placeholder-shown)) .rm{display:none}
+.plus{align-self:end;min-height:38px;border:1.5px dashed var(--line);border-radius:8px;background:transparent;font-size:20px;font-weight:600;line-height:1;color:var(--mute)}
+.none-yet{grid-column:span 2;align-self:end;font-size:12px;color:var(--mute);padding:0 0 10px 2px}
+.lnk{display:flex;flex-wrap:wrap;gap:6px 8px;align-items:center;font-size:12px;color:var(--mute);margin:6px 0}
+.lnk select{max-width:100%;min-height:34px;padding:3px 8px}
+.sub{border-left:3px solid var(--red);padding-left:14px;margin-top:6px}
+.sub .comps{grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr))}
 .sub .comp{border-top-width:1px}
-.sub .comp h3{font-size:17px}
-.hint{font-size:14px;color:var(--mute);margin:6px 0}
-.lnkbtn{border:0;background:none;padding:0;text-decoration:underline;color:var(--ink);font-size:14px}
-.erow{display:flex;flex-wrap:wrap;gap:8px;flex:1 1 100%;align-items:center}
-.erow input[data-f=name]{flex:1 1 180px}
-.erow .wt input{width:70px}
-.x{min-width:44px;min-height:40px;border:1px solid var(--line);background:transparent;font-size:20px;line-height:1}
-.edit{border-top:3px solid var(--ink);margin-top:24px;padding-top:14px}
-.edit h3{margin:0 0 10px;font-size:18px}
-.grid2{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:16px}
-.grid2 label{display:flex;flex-direction:column;font-size:13px;color:var(--mute);gap:4px}
-.brow{display:flex;gap:8px;margin-bottom:6px;align-items:center}
-.brow input{width:80px}
-.chk{flex-direction:row!important;align-items:center;gap:8px!important;font-size:15px!important;color:var(--ink)!important}
-.chk input{width:20px;height:20px}
-.empty{padding:40px 0;color:var(--mute)}
-#modal,.modal{position:fixed;inset:0;background:rgb(0 0 0/.45);display:none;place-items:center;padding:16px;z-index:9}
-#modal.on,.modal.on{display:grid}
-#modal .card,.modal .card{background:var(--bg);width:min(680px,100%);max-height:calc(100dvh - 32px);overflow:auto;padding:20px;border-top:8px solid var(--ink)}
-.mact{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
-#modal textarea{width:100%;min-height:min(260px,40dvh);margin:10px 0;resize:vertical}
-#toast{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom));transform:translate(-50%,120px);background:var(--ink);color:var(--bg);padding:10px 14px;display:flex;gap:14px;align-items:center;transition:transform .25s;z-index:10;max-width:92vw}
+.sub .comp h3{font-size:15px}
+.hint{font-size:12px;color:var(--mute);margin:4px 0}
+.lnkbtn{border:0;background:none;padding:0;text-decoration:underline;color:var(--ink);font-size:12px}
+.erow{display:flex;flex-wrap:wrap;gap:6px;flex:1 1 100%;align-items:center}
+.erow input[data-f=name]{flex:1 1 150px}
+.erow select{min-height:34px;padding:3px 6px}
+.erow .wt input{width:62px;min-height:34px;padding:3px 6px}
+.x{min-width:36px;min-height:34px;border:1px solid var(--line);border-radius:8px;background:transparent;font-size:18px;line-height:1}
+.edit{border-top:2px solid var(--ink);margin-top:14px;padding-top:10px}
+.edit h3{margin:0 0 8px;font-size:16px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px 12px;margin-bottom:12px}
+.grid2 label{display:flex;flex-direction:column;font-size:12px;color:var(--mute);gap:3px}
+.chk{flex-direction:row!important;align-items:center;gap:8px!important;font-size:14px!important;color:var(--ink)!important;align-self:end;min-height:38px}
+.bgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:6px 18px;margin-bottom:8px}
+.brow{display:flex;gap:6px;align-items:center;font-size:12px;color:var(--mute)}
+.brow input{width:62px;min-height:34px;padding:3px 6px}.brow .gp{width:56px}
+
+/* GPA page */
+.gpat{width:100%;border-collapse:collapse;margin:4px 0 10px;font-variant-numeric:tabular-nums;font-size:14px}
+.gpat th{text-align:left;font-size:12px;color:var(--mute);font-weight:600;border-bottom:2px solid var(--ink);padding:6px 10px 6px 0}
+.gpat td{border-bottom:1px solid var(--line);padding:7px 10px 7px 0;vertical-align:middle}
+.gpat td small{display:block;color:var(--mute);font-size:12px}
+.gpat input:not([type]){width:64px;min-height:34px;padding:3px 6px}
+.gpat .lnkbtn{font-size:15px;font-weight:700;text-decoration:none}
+.scroll{overflow-x:auto}
+
+/* dialogs + toast */
+.modal{position:fixed;inset:0;background:rgb(0 0 0/.45);display:none;place-items:center;padding:16px;z-index:30}
+.modal.on{display:grid}
+.modal .card{background:var(--bg);width:min(620px,100%);max-height:calc(100dvh - 32px);overflow:auto;padding:18px;border-radius:14px;box-shadow:0 20px 60px rgb(0 0 0/.3)}
+.modal h3{margin:0;font-size:18px}
+.modal textarea{width:100%;min-height:min(240px,40dvh);margin:8px 0;resize:vertical}
+.mact{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+#toast{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom));transform:translate(-50%,120px);background:var(--ink);color:var(--bg);padding:8px 14px;border-radius:10px;display:flex;gap:14px;align-items:center;transition:transform .25s;z-index:40;max-width:92vw;font-size:14px}
 #toast:not(.on){visibility:hidden;transition:transform .25s,visibility 0s .25s}
 #toast.on{transform:translate(-50%,0)}
-#toast button{border:0;background:none;color:var(--bg);font-weight:800;text-decoration:underline;min-height:36px}
-@media(prefers-reduced-motion:reduce){#toast,.drop,body{transition:none}}
-@media(max-width:860px){.wrap{grid-template-columns:1fr;grid-template-rows:auto;grid-template-areas:"side" "main" "bk"}main{border-left:0}.backup{border-top:3px solid var(--ink);padding:16px 16px calc(24px + env(safe-area-inset-bottom))}aside{border-bottom:1px solid var(--line);padding:12px 16px}.clist{flex-direction:row;overflow-x:auto;gap:6px;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;padding-bottom:4px}.ci{flex:none;scroll-snap-align:start;border-left:0;border-bottom:4px solid transparent;min-width:150px;max-width:240px}.ci.sel{border-bottom-color:var(--red)}main{padding:16px 16px 32px}}
-@media(max-width:860px){.gpacard{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:12px}.gpacard b{font-size:28px;order:-1}}
+#toast button{border:0;background:none;color:var(--bg);font-weight:800;text-decoration:underline;min-height:32px}
+@media(hover:hover){.ci:hover{background:var(--soft)}.plus:hover{border-color:var(--red);color:var(--red)}.btn.ghost:hover{background:var(--soft)}.rm:hover{color:var(--red);background:var(--soft)}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* tablet */
+@media(max-width:900px){
+ .wrap{grid-template-columns:1fr;grid-template-areas:"side" "main" "bk";grid-template-rows:auto}
+ aside{padding:12px 0 10px;border-bottom:1px solid var(--line);display:flex;gap:8px;align-items:stretch;overflow-x:auto;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+ aside::-webkit-scrollbar{display:none}
+ aside h2{display:none}
+ .gpacard{flex:none;width:auto;margin:0;min-width:120px;padding:6px 12px}.gpacard b{font-size:22px}.gpacard small{display:none}
+ .clist{flex-direction:row;gap:6px}
+ .ci{flex:none;scroll-snap-align:start;min-width:130px;max-width:220px;border:1px solid var(--line)}
+ .ci.sel{box-shadow:inset 0 -3px 0 var(--red);border-color:var(--soft)}
+ #snote{display:none}
+ main{border-left:0;padding:14px 0 24px}
+ .backup{border-top:1px solid var(--line);padding:12px 0 calc(20px + env(safe-area-inset-bottom))}
+}
+/* phone */
 @media(max-width:600px){
- .stack thead{display:none}.stack tr{display:grid;padding-block:10px;border-bottom:1px solid var(--line)}.stack td{display:flex;align-items:center;gap:10px;border:0;padding:4px 0}.stack td::before{content:attr(data-l);flex:0 0 7.5em;font-size:13px;color:var(--mute)}.stack td:first-child::before{content:none}.stack td:first-child{display:block}
- .brow{flex-wrap:wrap}
- .drop{padding:12px;display:grid;grid-template-columns:1fr 1fr}
- .drop span{grid-column:1/-1}
- .drop .btn{width:100%;padding:0 10px}
- #pick{grid-column:1/-1}
- #jobs li b{flex-basis:100%}
- #jobs li{flex-wrap:wrap;gap:2px 8px}#jobs li b{flex-basis:100%}
- #res{grid-template-columns:1fr;gap:18px;margin:16px 0 20px}
- .pct{font-size:clamp(56px,17vw,96px)}
- .chead h2{font-size:26px}
- .lr{font-size:14px;grid-template-columns:2.6em 3.9em minmax(0,1fr)}
- .comp h3{font-size:18px}.avg{font-size:20px}
- .ctl{gap:8px 12px}
- .boxes{grid-template-columns:repeat(auto-fill,minmax(68px,1fr));gap:6px}
- .erow input[data-f=name]{flex-basis:100%}
- .grid2{grid-template-columns:1fr}
- .bk .btn{flex:1}
+ .shell{padding:0 max(14px,env(safe-area-inset-left)) 0 max(14px,env(safe-area-inset-right))}
+ .top{padding:12px 0 10px;gap:10px}
+ h1{font-size:21px}
+ .theme{order:2}
+ .acts{order:3;flex-basis:100%;display:grid;grid-template-columns:1.3fr 1fr 1fr}
+ .acts .btn{padding:0 8px}
+ .long{display:none}
+ #jobs li{grid-template-columns:minmax(0,1fr) auto}#jobs li span{grid-column:1/-1;grid-row:2}
+ .chead h2{font-size:22px}
+ #res{grid-template-columns:1fr;gap:10px}
+ .pct{font-size:clamp(46px,15vw,64px)}
+ .letter{font-size:28px}
+ .lr{grid-template-columns:2.4em 4em minmax(0,1fr);font-size:12.5px;padding:3px 6px}
+ .boxes{grid-template-columns:repeat(auto-fill,minmax(58px,1fr));gap:5px}
+ .ladder{columns:1}.ladder:not(.open) .lr.far{display:none}.lmore{display:inline-block}
+ .stack thead{display:none}.stack tr{display:grid;grid-template-columns:1fr 1fr;gap:2px 12px;padding:8px 0;border-bottom:1px solid var(--line)}.stack td{display:flex;align-items:center;gap:8px;border:0;padding:2px 0;font-size:13px}.stack td::before{content:attr(data-l);font-size:12px;color:var(--mute)}.stack td:first-child{grid-column:1/-1;display:block}.stack td:first-child::before{content:none}
  .mact .btn{flex:1}
 }
+@media(min-width:601px){.short{display:none}}
+@media(hover:none),(pointer:coarse){.dragtip{display:none}}
 </style></head><body>
 <div class="shell">
-<header class="band top">
-  <div class="tb"><h1>Syllabus Grade Calculator</h1>
-    <button class="theme" id="theme" aria-label="Switch to dark mode" title="Light / dark mode"><svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 1.5v2.5M12 20v2.5M4.6 4.6l1.8 1.8M17.6 17.6l1.8 1.8M1.5 12H4M20 12h2.5M4.6 19.4l1.8-1.8M17.6 6.4l1.8-1.8"/></svg></button>
+<header class="top">
+  <h1>Syllabus Grade Calculator</h1>
+  <div class="acts">
+    <button class="btn" id="pick"><span class="long">Upload syllabi</span><span class="short">Upload</span></button>
+    <button class="btn ghost" id="pastebtn"><span class="long">Paste text</span><span class="short">Paste</span></button>
+    <button class="btn ghost" id="manual"><span class="long">Add by hand</span><span class="short">Add</span></button>
   </div>
-  <div>
-    <div class="drop" id="drop">
-      <span id="dropmsg">Drop syllabus files here, or choose them: PDF, Word, photos or text. Several at once is fine.</span>
-      <button class="btn" id="pick">Choose files</button>
-      <button class="btn ghost" id="pastebtn">Paste text</button>
-      <button class="btn ghost" id="manual">Add by hand</button>
-      <input type="file" id="file" multiple hidden accept=".pdf,.docx,.txt,.md,.rtf,.html,.htm,image/*">
-    </div>
-    <p class="reader"><span id="reader"></span> <button class="link" id="setbtn">Reading settings</button></p><ul id="jobs"></ul>
-  </div>
+  <button class="theme" id="theme" aria-label="Switch to dark mode" title="Light / dark mode"><svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 1.5v2.5M12 20v2.5M4.6 4.6l1.8 1.8M17.6 17.6l1.8 1.8M1.5 12H4M20 12h2.5M4.6 19.4l1.8-1.8M17.6 6.4l1.8-1.8"/></svg></button>
+  <input type="file" id="file" multiple hidden accept=".pdf,.docx,.txt,.md,.rtf,.html,.htm,image/*">
 </header>
+<div class="status"><span>PDF, Word, photos or text.<span class="dragtip"> Drop files anywhere on the page.</span></span><span><span id="reader"></span> <button class="link" id="setbtn">Reading settings</button></span><ul id="jobs"></ul></div>
+<div class="dropover" id="dropover">Drop syllabi to add them</div>
 <div class="wrap">
   <aside><button class="gpacard" id="gpacard" data-sel="gpa" hidden></button><h2>Your courses</h2><div class="clist" id="side"></div><div class="side-note" id="snote"></div></aside>
   <main id="panel"></main>
   <section class="backup"><div class="sync" id="sync">Saved in this browser</div><div class="bk"><button class="btn ghost sm" id="exp">Export backup</button><button class="btn ghost sm" id="imp">Import backup</button><input type="file" id="impf" accept=".json,application/json" hidden></div><p class="side-note">Scores are kept in this browser. Export a backup to move them to another device.</p></section>
 </div>
 </div>
-<div id="modal"><div class="card"><h3 style="margin:0">Paste a syllabus</h3><p class="hint">Paste the whole thing, or just the grading section and grade scale.</p><textarea id="ptext" aria-label="Syllabus text"></textarea><div class="mact"><button class="btn ghost" id="pcancel">Cancel</button><button class="btn" id="pgo">Read it</button></div></div></div>
+<div id="modal" class="modal"><div class="card"><h3 style="margin:0">Paste a syllabus</h3><p class="hint">Paste the whole thing, or just the grading section and grade scale.</p><textarea id="ptext" aria-label="Syllabus text"></textarea><div class="mact"><button class="btn ghost" id="pcancel">Cancel</button><button class="btn" id="pgo">Read it</button></div></div></div>
 <div id="smodal" class="modal"><div class="card"><h3 style="margin:0">Reading settings</h3>
 <p class="hint">How uploaded syllabi are read. Your key is stored only in this browser and sent only to the provider you pick.</p>
 <div class="grid2" style="grid-template-columns:1fr"><label>Reader<select id="sprov"><option value="site" id="optsite">Site’s AI reader: no key needed</option><option value="basic">Built-in reader: free, offline, no key (best with clear grading tables)</option><option value="gemini">Google Gemini: free API key from aistudio.google.com</option><option value="anthropic">Anthropic Claude: paid API key from console.anthropic.com</option></select></label>
@@ -205,9 +246,9 @@ const PRE={lab:'Lab',quiz:'Quiz',exam:'Exam',assignment:'HW',project:'Proj',part
 const STD=[['A',90],['B',80],['C',70],['D',60],['F',0]];
 const STDGP={'A+':4,'A':4,'A-':3.7,'B+':3.3,'B':3,'B-':2.7,'C+':2.3,'C':2,'C-':1.7,'D+':1.3,'D':1,'D-':.7,'F':0};
 const DEF_CREDITS=3;
-const fmt2=n=>n==null||isNaN(n)?'—':(Math.round(n*100)/100).toFixed(2);
-const fmt=n=>n==null||isNaN(n)?'—':(Math.round(n*10)/10).toString();
-let S={courses:[],sel:null,at:0},edit=false;
+const fmt2=n=>n==null||isNaN(n)?'–':(Math.round(n*100)/100).toFixed(2);
+const fmt=n=>n==null||isNaN(n)?'–':(Math.round(n*10)/10).toString();
+let S={courses:[],sel:null,at:0},edit=false,ladderOpen=false;
 
 const C=(name,kind,weight,count,drop,scores)=>({id:rid(),name,kind,weight,count,drop:drop||0,outOf:100,scores:scores||[]});
 const B=a=>a.map(([g,min])=>({g,min}));
@@ -219,7 +260,7 @@ function seed(){
   const plab={id:rid(),sample:1,code:'PHYS 201L',title:'Mechanics Laboratory',isLab:true,bounds:B(STD),comps:[C('Lab reports','lab',80,8,1,['88','91','76']),C('Lab practical','exam',20,1,0,[])]};
   S={courses:[chem,lab,phys,plab],sel:chem.id,at:0};
 }
-function fix(){S.courses=(S.courses||[]).filter(c=>!c.sample);for(const c of S.courses){c.comps=c.comps||[];c.bounds=c.bounds||B(STD);for(const k of c.comps){k.scores=k.scores||[];k.outOf=+k.outOf||100;k.drop=k.drop|0;k.count=k.count|0;}}if(S.sel!=='gpa'&&!byId(S.sel))S.sel=S.courses[0]?.id||null;}
+function fix(){S.courses=(S.courses||[]).filter(c=>!c.sample);for(const c of S.courses){c.comps=c.comps||[];c.bounds=c.bounds||B(STD);for(const k of c.comps){k.scores=k.scores||[];k.outOf=+k.outOf||100;k.drop=k.drop|0;k.count=k.count|0;const last=k.scores.reduce((m,v,i)=>String(v??'').trim()?i+1:m,0);if(k.count<last)k.count=last;if(k.count===0&&!k.zeroOk&&!['quiz','assignment','lab'].includes(k.kind))k.count=1;}}if(S.sel!=='gpa'&&!byId(S.sel))S.sel=S.courses[0]?.id||null;}
 const byId=id=>S.courses.find(c=>c.id===id);
 function linkedBy(labId){for(const co of S.courses){if(co.isLab)continue;for(const k of co.comps)if(k.kind==='lab'&&k.link===labId)return{co,k};}return null;}
 
@@ -232,11 +273,11 @@ function autoLink(){for(const co of S.courses){if(co.isLab)continue;for(const k 
 
 /* ---------- maths ---------- */
 function parseScore(s,outOf){if(s==null)return null;s=String(s).trim();if(!s)return null;const m=s.match(/^(-?\d*\.?\d+)\s*\/\s*(\d*\.?\d+)$/);if(m)return +m[2]?m[1]/m[2]*100:null;const v=parseFloat(s.replace('%',''));return isNaN(v)?null:v/(outOf||100)*100;}
-const nItems=k=>Math.max(1,k.count|0);
+const nItems=k=>Math.max(0,k.count|0);
 const labOf=(co,k)=>!co.isLab&&k.kind==='lab'&&k.link?byId(k.link):null;
-function compPct(co,k,fill,d=0){const L=labOf(co,k);if(L&&d<2)return coursePct(L,fill,d+1);let v=[];for(let i=0;i<nItems(k);i++){const p=parseScore(k.scores[i],k.outOf);if(p!=null)v.push(p);else if(fill!=null)v.push(fill);}if(!v.length)return null;v.sort((a,b)=>a-b);v=v.slice(Math.max(0,Math.min(k.drop|0,v.length-1)));return v.reduce((a,b)=>a+b,0)/v.length;}
+function compPct(co,k,fill,d=0){const L=labOf(co,k);if(L&&d<2)return coursePct(L,fill,d+1);if(nItems(k)===0)return fill;let v=[];for(let i=0;i<nItems(k);i++){const p=parseScore(k.scores[i],k.outOf);if(p!=null)v.push(p);else if(fill!=null)v.push(fill);}if(!v.length)return null;v.sort((a,b)=>a-b);v=v.slice(Math.max(0,Math.min(k.drop|0,v.length-1)));return v.reduce((a,b)=>a+b,0)/v.length;}
 function coursePct(co,fill=null,d=0){let s=0,w=0;for(const k of co.comps){const wt=+k.weight||0;if(wt<=0)continue;const p=compPct(co,k,fill,d);if(p==null)continue;s+=p*wt;w+=wt;}return w?s/w:null;}
-function tally(co,d=0){let g=0,t=0;for(const k of co.comps){if(!(+k.weight>0))continue;const L=labOf(co,k);if(L&&d<2){const r=tally(L,d+1);g+=r.g;t+=r.t;continue;}for(let i=0;i<nItems(k);i++){t++;if(parseScore(k.scores[i],k.outOf)!=null)g++;}}return{g,t};}
+function tally(co,d=0){let g=0,t=0;for(const k of co.comps){if(!(+k.weight>0))continue;const L=labOf(co,k);if(L&&d<2){const r=tally(L,d+1);g+=r.g;t+=r.t;continue;}if(nItems(k)===0){t++;continue;}for(let i=0;i<nItems(k);i++){t++;if(parseScore(k.scores[i],k.outOf)!=null)g++;}}return{g,t};}
 function droppedSet(k){const e=[];for(let i=0;i<nItems(k);i++){const p=parseScore(k.scores[i],k.outOf);if(p!=null)e.push([p,i]);}e.sort((a,b)=>a[0]-b[0]);return new Set(e.slice(0,Math.max(0,Math.min(k.drop|0,e.length-1))).map(x=>x[1]));}
 function gpFor(co,g){const b=co.bounds.find(x=>x.g===g);if(b&&b.gp!==''&&b.gp!=null&&!isNaN(+b.gp))return +b.gp;const k=String(g||'').toUpperCase().trim();return k in STDGP?STDGP[k]:null;}
 const creditsOf=co=>co.credits!=null&&co.credits!==''&&!isNaN(+co.credits)?+co.credits:DEF_CREDITS;
@@ -245,8 +286,8 @@ function semester(){let q=0,cr=0,n=0;const rows=gpaCourses().map(co=>{const p=co
 const sortedB=co=>[...co.bounds].filter(b=>b.g!==''&&!isNaN(+b.min)).sort((a,b)=>b.min-a.min);
 function letter(co,p){if(p==null)return'—';const bs=sortedB(co);for(const b of bs)if(p>=+b.min-1e-9)return b.g;return bs.length?bs[bs.length-1].g:'—';}
 function need(co,m){const{g,t}=tally(co);if(g>=t){const p=coursePct(co);return p!=null&&p>=m?{t:'Reached',c:'ok'}:{t:'Missed',c:'no'};}
-  const f=x=>coursePct(co,x);if(f(0)>=m-1e-9)return{t:'Locked in, even with zeros',c:'ok'};if(f(100)<m)return{t:'Out of reach without extra credit',c:'no'};
-  let lo=0,hi=100;for(let i=0;i<32;i++){const mid=(lo+hi)/2;if(f(mid)>=m)hi=mid;else lo=mid;}return{t:`Need ${fmt(hi)}% average on what’s left`,c:''};}
+  const f=x=>coursePct(co,x);if(f(0)>=m-1e-9)return{t:'Locked in',c:'ok'};if(f(100)<m)return{t:'Out of reach',c:'no'};
+  let lo=0,hi=100;for(let i=0;i<32;i++){const mid=(lo+hi)/2;if(f(mid)>=m)hi=mid;else lo=mid;}return{t:`Need ${fmt(hi)}%`,c:''};}
 const wsum=co=>co.comps.reduce((a,k)=>a+(+k.weight||0),0);
 
 /* ---------- rendering ---------- */
@@ -254,46 +295,51 @@ function render(){renderSide();renderPanel();}
 function renderSide(){
   const list=S.courses.filter(c=>!(c.isLab&&linkedBy(c.id)));
   const sm=semester();
-  $('#gpacard').innerHTML=`<span>Semester GPA</span><b>${fmt2(sm.gpa)}</b><small>${sm.n?`${sm.n} course${sm.n===1?'':'s'} · ${fmt(sm.cr)} credits`:'Enter scores to see it'}</small>`;
+  $('#gpacard').innerHTML=`<span>Semester GPA</span>${sm.gpa==null?'<b class="nil">No grades yet</b>':`<b>${fmt2(sm.gpa)}</b>`}<small>${sm.n?`${sm.n} course${sm.n===1?'':'s'} · ${fmt(sm.cr)} credits`:'Enter scores to see it'}</small>`;
   $('#gpacard').classList.toggle('sel',S.sel==='gpa');$('#gpacard').hidden=!list.length;
-  $('#side').innerHTML=list.map(c=>{const p=coursePct(c),inc=c.comps.map(k=>labOf(c,k)).filter(Boolean);return`<button class="ci ${(S.sel===c.id||inc.some(l=>l.id===S.sel))?'sel':''}" data-sel="${c.id}"><b>${esc(c.code||'Untitled')}</b><em>${p==null?'—':esc(letter(c,p))}</em><small>${p==null?'No grades yet':fmt(p)+'%'}${inc.length?' · incl. '+inc.map(l=>esc(l.code)).join(', '):''}</small></button>`}).join('')||'<p class="hint">No courses yet.</p>';
+  document.querySelector('.wrap').classList.toggle('nocourses',!list.length);
+  $('#side').innerHTML=list.map(c=>{const p=coursePct(c),inc=c.comps.map(k=>labOf(c,k)).filter(Boolean);return`<button class="ci ${(S.sel===c.id||inc.some(l=>l.id===S.sel))?'sel':''}" data-sel="${c.id}"><b>${esc(c.code||'Untitled')}</b><em>${p==null?'':esc(letter(c,p))}</em><small>${p==null?'No grades yet':fmt(p)+'%'}${inc.length?' · incl. '+inc.map(l=>esc(l.code)).join(', '):''}</small></button>`}).join('')||'<p class="hint">No courses yet.</p>';
   $('#snote').innerHTML=S.courses.some(c=>c.sample)?'These are sample courses. They’re replaced as soon as your first syllabus is read. <button data-act="clearsamples">Clear them now</button>':'';
 }
 function compHTML(co,k,top){
   const a=`data-co="${co.id}" data-cid="${k.id}"`,L=labOf(co,k),ed=edit&&top;
-  let h=ed?`<div class="erow"><input ${a} data-f="name" value="${esc(k.name)}" aria-label="Component name"><select ${a} data-f="kind" aria-label="Type">${KINDS.map(x=>`<option ${x===k.kind?'selected':''}>${x}</option>`).join('')}</select><label class="wt"><input ${a} data-f="weight" inputmode="decimal" value="${esc(k.weight)}" aria-label="Weight"> %</label><button class="x" data-act="delcomp" ${a} aria-label="Remove ${esc(k.name)}">×</button></div>`
-    :`<h3>${esc(k.name)}</h3><span class="wt">${fmt(+k.weight)}% of grade</span>`;
-  let o=`<section class="comp"><header>${h}<b class="avg" data-avg="${k.id}"></b></header>`;
+  const h=ed?`<div class="erow"><input ${a} data-f="name" value="${esc(k.name)}" aria-label="Section name"><select ${a} data-f="kind" aria-label="Type">${KINDS.map(x=>`<option ${x===k.kind?'selected':''}>${x}</option>`).join('')}</select><label class="wt"><input ${a} data-f="weight" inputmode="decimal" value="${esc(k.weight)}" aria-label="Weight"> %</label><button class="x" data-act="delcomp" ${a} aria-label="Remove ${esc(k.name)}">×</button></div>`
+    :`<h3>${esc(k.name)}</h3><span class="wt">${fmt(+k.weight)}%</span>`;
+  let o=`<section class="comp${L||(k.kind==='lab'&&!co.isLab)?' wide':''}"><header>${h}<b class="avg" data-avg="${k.id}"></b></header>`;
   if(k.kind==='lab'&&!co.isLab){const labs=S.courses.filter(x=>x.isLab&&(!linkedBy(x.id)||x.id===k.link));
-    o+=`<label class="lnk">Lab syllabus <select ${a} data-f="link"><option value="">None, enter lab grades here</option>${labs.map(l=>`<option value="${l.id}" ${l.id===k.link?'selected':''}>${esc(l.code||l.title)}</option>`).join('')}</select></label>`;}
-  if(L){o+=`<p class="hint">Built from ${esc(L.code||L.title)}’s syllabus. <button class="lnkbtn" data-act="open" data-id="${L.id}">Edit lab structure</button></p><div class="sub">${L.comps.map(s=>compHTML(L,s,false)).join('')||'<p class="hint">That lab syllabus has no graded parts yet.</p>'}</div>`;return o+'</section>';}
-  const isLQ=k.kind==='lab'||k.kind==='quiz',n=nItems(k);
+    o+=`<label class="lnk">Lab syllabus <select ${a} data-f="link"><option value="">None, enter lab grades here</option>${labs.map(l=>`<option value="${l.id}" ${l.id===k.link?'selected':''}>${esc(l.code||l.title)}</option>`).join('')}</select>${L?`<button class="lnkbtn" data-act="open" data-id="${L.id}">Edit lab structure</button>`:''}</label>`;}
+  if(L){o+=`<div class="sub"><div class="comps">${L.comps.map(x=>compHTML(L,x,false)).join('')||'<p class="hint">That lab syllabus has no graded parts yet.</p>'}</div></div>`;return o+'</section>';}
+  const n=nItems(k),pre=PRE[k.kind]||'Item';
   const dl=k.kind==='lab'?'Labs dropped':k.kind==='quiz'?'Quizzes dropped':'Drop lowest';
-  o+=`<div class="cb${n===1?' one':''}"><div class="ctl"><label>Items <input ${a} data-f="count" inputmode="numeric" value="${n}"></label>${(isLQ||k.drop||edit)?`<label>${dl} <input ${a} data-f="drop" inputmode="numeric" value="${k.drop|0}"></label>`:''}<label>Out of <input ${a} data-f="outOf" inputmode="decimal" value="${k.outOf}"></label></div>`;
-  o+=`<div class="boxes">${Array.from({length:n},(_,i)=>`<label class="box"><span>${PRE[k.kind]||'Item'} ${i+1}</span><input ${a} data-f="score" data-i="${i}" inputmode="decimal" value="${esc(k.scores[i]??'')}" placeholder="–"></label>`).join('')}${(k.kind==='quiz'||k.kind==='assignment'||n>1)&&n<60?`<button class="plus" data-act="inc" ${a} aria-label="Add one more ${PRE[k.kind]}">+</button>`:''}</div></div>`;
+  const showDrop=k.kind==='lab'||k.kind==='quiz'||k.drop>0||edit,showOut=+k.outOf!==100||edit;
+  o+=`<div class="ctl">${edit?`<label>Items <input ${a} data-f="count" inputmode="numeric" value="${n}"></label>`:''}${showDrop?`<label>${dl} <input ${a} data-f="drop" inputmode="numeric" value="${k.drop|0}"></label>`:''}${showOut?`<label>Out of <input ${a} data-f="outOf" inputmode="decimal" value="${k.outOf}"></label>`:''}</div>`;
+  o+=`<div class="boxes">${Array.from({length:n},(_,i)=>`<div class="box"><span>${pre} ${i+1}</span><input ${a} data-f="score" data-i="${i}" inputmode="decimal" value="${esc(k.scores[i]??'')}" placeholder=" " aria-label="${esc(k.name)} ${pre} ${i+1} score"><button class="rm" data-act="rmitem" data-i="${i}" ${a} aria-label="Remove ${pre} ${i+1}" title="Remove this box">−</button></div>`).join('')}${n<60?`<button class="plus" data-act="inc" ${a} aria-label="Add a ${pre}" title="Add a ${pre.toLowerCase()}">+</button>`:''}${n===0?`<span class="none-yet">None yet. Use + to add one.</span>`:''}</div>`;
   return o+'</section>';
 }
 function notes(co){
-  let o='';const lb=co.isLab&&linkedBy(co.id);
+  let o='';const lb=co.isLab&&linkedBy(co.id),warn=[];
   if(lb)o+=`<p class="note">Counts as the ${esc(lb.k.name)} part (${fmt(+lb.k.weight)}%) of ${esc(lb.co.code)}. <button data-act="open" data-id="${lb.co.id}">Back to ${esc(lb.co.code)}</button></p>`;
   else if(co.isLab){const m=matchCourse(co);o+=`<p class="note">${m?(m.comps.some(k=>k.kind==='lab')?`Graded as its own course. To count it inside ${esc(m.code)}, pick it under that course’s lab grade.`:`Matches ${esc(m.code)}, whose syllabus has no lab grade, so this lab is graded as its own course.`):'Graded as its own course.'}</p>`;}
-  if(co.basic)o+=`<p class="note warn">Read with the built-in reader. Check the weights, item counts and boundaries against your syllabus, or <button data-act="settings">turn on an AI reader</button> for better accuracy.</p>`;
-  const lbn=co.isLab&&linkedBy(co.id);
-  if(!lbn&&(co.creditsGuessed||co.gpGuessed))o+=`<p class="note warn">${co.creditsGuessed?`Credit hours weren’t found in the syllabus, so ${fmt(creditsOf(co))} is assumed. `:''}${co.gpGuessed?'GPA points per letter weren’t listed, so the standard 4.0 scale is used. ':''}<button data-act="edit">Check in Edit structure</button></p>`;
-  if(co.boundsGuessed)o+=`<p class="note warn">No grade boundaries were found in this syllabus, so a standard scale is in use. <button data-act="edit">Edit the boundaries</button></p>`;
-  const w=wsum(co);if(co.comps.length&&Math.abs(w-100)>.5)o+=`<p class="note warn">Weights add up to ${fmt(w)}%, not 100%. Grades are scaled to that total until you fix them.</p>`;
+  const w=wsum(co);if(co.comps.length&&Math.abs(w-100)>.5)warn.push(`Weights add up to ${fmt(w)}%, not 100%, so grades are scaled to that total.`);
+  if(co.basic)warn.push('Read with the built-in reader, so check the weights and boundaries.');
+  if(co.boundsGuessed)warn.push('No grade boundaries were found, so a standard scale is used.');
+  if(!lb&&co.creditsGuessed)warn.push(`Credit hours weren’t found, so ${fmt(creditsOf(co))} is assumed.`);
+  if(!lb&&co.gpGuessed)warn.push('GPA points use the standard 4.0 scale.');
+  if(warn.length)o+=`<p class="note warn">${warn.join(' ')} <button data-act="edit">Check in Edit structure</button>${co.basic?` · <button data-act="settings">Reader settings</button>`:''}</p>`;
   return o;
 }
 function resHTML(co){
   const p=coursePct(co),L=letter(co,p),{g,t}=tally(co),cur=L;
-  const rows=sortedB(co).filter(b=>+b.min>0).map(b=>{const n=need(co,+b.min);return`<div class="lr ${b.g===cur?'cur':''}"><b>${esc(b.g)}</b><span>≥ ${fmt(+b.min)}%</span><i class="${n.c}">${n.t}</i></div>`}).join('');
-  return`<div><div class="big"><div class="pct">${p==null?'—':fmt(p)}<small>%</small></div><div class="letter">${esc(L)}</div></div><p class="sub-r">${p==null?'Enter a score to see where you stand.':`Current grade from ${g} of ${t} graded items, dropped scores applied.`}${p!=null&&!(co.isLab&&linkedBy(co.id))&&gpFor(co,L)!=null?` Worth <b>${fmt2(gpFor(co,L))}</b> grade points × ${fmt(creditsOf(co))} credits toward your GPA.`:''}</p></div><div class="ladder">${rows||'<p class="hint">No grade boundaries yet.</p>'}</div>`;
+  const bl=sortedB(co).filter(b=>+b.min>0),ci=bl.findIndex(b=>b.g===cur),anchor=ci<0?(p==null?0:bl.length-1):ci;
+  const far=i=>bl.length>5&&Math.abs(i-anchor)>2;
+  const rows=bl.map((b,i)=>{const n=need(co,+b.min);return`<div class="lr ${b.g===cur?'cur':''} ${far(i)?'far':''}"><b>${esc(b.g)}</b><span>≥ ${fmt(+b.min)}%</span><i class="${n.c}">${n.t}</i></div>`}).join('');
+  return`<div><div class="big">${p==null?'<div class="pct none">No scores yet</div>':`<div class="pct">${fmt(p)}<small>%</small></div><div class="letter">${esc(L)}</div>`}</div><p class="sub-r">${p==null?'Enter a score below and your grade appears here.':`Current grade from ${g} of ${t} graded items, dropped scores applied.`}${p!=null&&!(co.isLab&&linkedBy(co.id))&&gpFor(co,L)!=null?` Worth <b>${fmt2(gpFor(co,L))}</b> grade points × ${fmt(creditsOf(co))} credits toward your GPA.`:''}</p></div><div><p class="lcap">${tally(co).g<tally(co).t?'Average you need on the remaining work':'Final result'}</p><div class="ladder${ladderOpen?' open':''}">${rows||'<p class="hint">No grade boundaries yet.</p>'}${bl.length>5?`<button class="lmore" data-act="ladder">${ladderOpen?'Show fewer':'Show all grades'}</button>`:''}</div></div>`;
 }
 function editHTML(co){
   const a=`data-co="${co.id}"`;
   return`<div class="edit"><button class="btn ghost sm" data-act="addcomp" ${a}>+ Add graded part</button></div>
   <div class="edit"><h3>Course</h3><div class="grid2"><label>Code<input ${a} data-f="code" value="${esc(co.code)}"></label><label>Title<input ${a} data-f="title" value="${esc(co.title)}"></label><label>Credit hours<input ${a} data-f="credits" inputmode="decimal" value="${esc(co.credits??DEF_CREDITS)}"></label><label class="chk"><input type="checkbox" ${a} data-f="isLab" ${co.isLab?'checked':''}> This is a lab syllabus</label><label class="chk"><input type="checkbox" ${a} data-f="inGpa" ${co.noGpa?'':'checked'}> Count in semester GPA</label></div>
-  <h3>Grade boundaries</h3><p class="hint">Grade letter, minimum percent, and GPA points. Leave points blank to use the standard 4.0 scale.</p>${co.bounds.map((b,i)=>`<div class="brow"><input ${a} data-f="bg" data-bi="${i}" value="${esc(b.g)}" aria-label="Grade"><span>from</span><input ${a} data-f="bm" data-bi="${i}" inputmode="decimal" value="${esc(b.min)}" aria-label="Minimum percent"><span>%</span><input ${a} data-f="bp" data-bi="${i}" inputmode="decimal" class="gp" value="${esc(b.gp??'')}" placeholder="${esc(STDGP[String(b.g).toUpperCase()]??'')}" aria-label="Grade points for ${esc(b.g)}"><span>pts</span><button class="x" data-act="delb" data-bi="${i}" ${a} aria-label="Remove boundary">×</button></div>`).join('')}
+  <h3>Grade boundaries</h3><p class="hint">Letter, minimum percent and GPA points. Leave points blank to use the standard 4.0 scale.</p><div class="bgrid">${co.bounds.map((b,i)=>`<div class="brow"><input ${a} data-f="bg" data-bi="${i}" value="${esc(b.g)}" aria-label="Grade"><span>from</span><input ${a} data-f="bm" data-bi="${i}" inputmode="decimal" value="${esc(b.min)}" aria-label="Minimum percent"><span>%</span><input ${a} data-f="bp" data-bi="${i}" inputmode="decimal" class="gp" value="${esc(b.gp??'')}" placeholder="${esc(STDGP[String(b.g).toUpperCase()]??'')}" aria-label="Grade points for ${esc(b.g)}"><span>pts</span><button class="x" data-act="delb" data-bi="${i}" ${a} aria-label="Remove boundary">×</button></div>`).join('')}</div>
   <button class="btn ghost sm" data-act="addb" ${a}>+ Add boundary</button>
   <p style="margin-top:20px"><button class="btn ghost sm" data-act="delcourse" ${a}>Delete this course</button></p></div>`;
 }
@@ -301,7 +347,7 @@ function renderPanel(){
   if(S.sel==='gpa'){renderGPA();return;}
   const co=byId(S.sel);
   if(!co){$('#panel').innerHTML='<div class="empty"><h2>No courses yet</h2><p>Upload a syllabus above, or add a course by hand.</p></div>';return;}
-  $('#panel').innerHTML=`<div class="chead"><div><h2>${esc(co.code||'Untitled course')}</h2><p>${esc(co.title)}${co.title?' · ':''}${co.isLab?'Lab · ':''}${fmt(creditsOf(co))} credit${creditsOf(co)===1?'':'s'}${co.noGpa?' · not in GPA':''}</p></div><button class="btn ${edit?'':'ghost'} sm" data-act="edit">${edit?'Done editing':'Edit structure'}</button></div>${notes(co)}<div id="res"></div>${co.comps.map(k=>compHTML(co,k,true)).join('')||'<p class="hint">No graded parts yet. Use Edit structure to add some.</p>'}${edit?editHTML(co):''}`;
+  $('#panel').innerHTML=`<div class="chead"><div><h2>${esc(co.code||'Untitled course')}</h2><p>${esc(co.title)}${co.title?' · ':''}${co.isLab?'Lab · ':''}${fmt(creditsOf(co))} credit${creditsOf(co)===1?'':'s'}${co.noGpa?' · not in GPA':''}</p></div><button class="btn ${edit?'':'ghost'} sm" data-act="edit">${edit?'Done editing':'Edit structure'}</button></div>${(()=>{const n=notes(co);return n?`<div class="notes">${n}</div>`:'';})()}<div id="res"></div>${co.comps.length?`<div class="comps">${co.comps.map(k=>compHTML(co,k,true)).join('')}</div>`:'<p class="hint">No graded parts yet. Use Edit structure to add some.</p>'}${edit?editHTML(co):''}`;
   numbers();
 }
 function renderGPA(){
@@ -318,16 +364,16 @@ function renderGPA(){
 }
 function gpaNumbers(){
   const sm=semester();
-  $('#gparesult').innerHTML=`<div class="big"><div class="pct">${fmt2(sm.gpa)}</div></div><p class="sub-r">${sm.n?`${sm.n} course${sm.n===1?'':'s'}, ${fmt(sm.cr)} credit hours, ${fmt2(sm.q)} quality points. It changes as you enter scores.`:'Enter scores in your courses to see your semester GPA.'}</p>`;
+  $('#gparesult').innerHTML=`<div class="big">${sm.gpa==null?'<div class="pct none">No grades yet</div>':`<div class="pct">${fmt2(sm.gpa)}</div>`}</div><p class="sub-r">${sm.n?`${sm.n} course${sm.n===1?'':'s'}, ${fmt(sm.cr)} credit hours, ${fmt2(sm.q)} quality points. It changes as you enter scores.`:'Enter scores in your courses to see your semester GPA.'}</p>`;
   for(const r of sm.rows){const q=s=>document.querySelector(s);const gl=q(`[data-gl="${r.co.id}"]`);if(!gl)continue;
-    gl.textContent=r.L==null?'No grades yet':`${r.L} (${fmt(r.p)}%)`;q(`[data-gpt="${r.co.id}"]`).textContent=r.gp==null?'—':fmt2(r.gp);q(`[data-gq="${r.co.id}"]`).textContent=r.inc?fmt2(r.gp*r.c):'—';}
+    gl.textContent=r.L==null?'–':`${r.L} (${fmt(r.p)}%)`;q(`[data-gpt="${r.co.id}"]`).textContent=r.gp==null?'–':fmt2(r.gp);q(`[data-gq="${r.co.id}"]`).textContent=r.inc?fmt2(r.gp*r.c):'–';}
   renderSide();
 }
 function numbers(){
   if(S.sel==='gpa'){gpaNumbers();return;}
   const co=byId(S.sel);if(!co)return;
   $('#res').innerHTML=resHTML(co);
-  for(const c of S.courses)for(const k of c.comps){const el=document.querySelector(`[data-avg="${k.id}"]`);if(!el)continue;const p=compPct(c,k,null);el.textContent=p==null?'—':fmt(p)+'%';
+  for(const c of S.courses)for(const k of c.comps){const el=document.querySelector(`[data-avg="${k.id}"]`);if(!el)continue;const p=compPct(c,k,null);el.textContent=p==null?'no scores':fmt(p)+'%';el.classList.toggle('nil',p==null);
     const ds=droppedSet(k);document.querySelectorAll(`input[data-cid="${k.id}"][data-f=score]`).forEach(inp=>inp.classList.toggle('dropped',ds.has(+inp.dataset.i)));}
   renderSide();
 }
@@ -354,7 +400,7 @@ P.addEventListener('input',e=>{const t=e.target,f=t.dataset.f;if(!f)return;const
   else return;
   numbers();save();});
 P.addEventListener('change',e=>{const t=e.target,f=t.dataset.f;if(!f)return;const{co,k}=target(t);if(!co)return;
-  if(k&&f==='count'){k.count=Math.max(1,Math.min(60,parseInt(t.value)||1));}
+  if(k&&f==='count'){k.count=Math.max(0,Math.min(60,parseInt(t.value)||0));k.zeroOk=true;}
   else if(k&&f==='kind'){k.kind=t.value;if(k.kind==='lab')k.link=undefined,autoLink();}
   else if(k&&f==='link'){k.link=t.value||null;}
   else if(f==='isLab'){co.isLab=t.checked;autoLink();}
@@ -363,15 +409,31 @@ P.addEventListener('change',e=>{const t=e.target,f=t.dataset.f;if(!f)return;cons
   else if(f==='bm'){co.bounds.sort((a,b)=>b.min-a.min);}
   else if(f==='code'||f==='title'){autoLink();}
   else return;
-  render();save();});
+  save();laterRender();});
+/* Re-draw after a field changes without swallowing the click or tab that caused the change,
+   and put the cursor back where it was. */
+let pendingRender=false,pDown=false;
+document.addEventListener('pointerdown',()=>{pDown=true;},true);
+document.addEventListener('pointerup',()=>setTimeout(()=>{pDown=false;flushRender();},0),true);
+document.addEventListener('pointercancel',()=>{pDown=false;flushRender();},true);
+function laterRender(){pendingRender=true;setTimeout(()=>{if(!pDown)flushRender();},0);}
+function flushRender(){
+  if(!pendingRender)return;pendingRender=false;
+  const a=document.activeElement,d=a&&a.dataset&&a.dataset.f?{...a.dataset}:null;let ss=null;try{ss=a.selectionStart;}catch{}
+  render();
+  if(d){let sel=`[data-f="${d.f}"]`;for(const k of ['co','cid','i','bi'])if(d[k]!=null)sel+=`[data-${k}="${d[k]}"]`;
+    const el=document.querySelector(sel);if(el){el.focus({preventScroll:true});try{if(ss!=null)el.setSelectionRange(ss,ss);}catch{}}}
+}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-act],[data-sel]');if(!b)return;
   if(b.dataset.sel){S.sel=b.dataset.sel;edit=false;render();save();return;}
   const act=b.dataset.act,{co,k}=target(b);
   if(act==='settings'){openSettings();return;}
+  if(act==='ladder'){ladderOpen=!ladderOpen;numbers();return;}
   if(act==='edit'){const c0=byId(S.sel);if(edit&&c0&&c0.basic){c0.basic=false;save();}edit=!edit;renderPanel();}
   else if(act==='open'){S.sel=b.dataset.id;edit=false;render();save();window.scrollTo({top:$('.wrap').offsetTop-8});}
   else if(act==='delcomp'&&co){const snap=JSON.stringify(S);co.comps=co.comps.filter(x=>x!==k);render();save();toast(`Removed ${k.name||'part'}`,snap);}
-  else if(act==='inc'&&k){k.count=Math.min(60,nItems(k)+1);render();save();const ins=document.querySelectorAll(`input[data-cid="${k.id}"][data-f=score]`);ins[ins.length-1]?.focus();}
+  else if(act==='rmitem'&&k){const i=+b.dataset.i;if(String(k.scores[i]??'').trim())return;k.scores.splice(i,1);k.count=Math.max(0,nItems(k)-1);k.zeroOk=true;render();save();return;}
+  else if(act==='inc'&&k){k.count=Math.min(60,nItems(k)+1);k.zeroOk=true;render();save();const ins=document.querySelectorAll(`input[data-cid="${k.id}"][data-f=score]`);ins[ins.length-1]?.focus();}
   else if(act==='addcomp'&&co){co.comps.push(C('New part','assignment',0,1,0));render();save();}
   else if(act==='addb'&&co){co.bounds.push({g:'?',min:0});render();save();}
   else if(act==='delb'&&co){co.bounds.splice(+b.dataset.bi,1);render();save();}
@@ -389,10 +451,11 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelect
 $('#pgo').onclick=()=>{const t=$('#ptext').value.trim();if(!t)return;modal.classList.remove('on');$('#ptext').value='';runJob('Pasted syllabus',async()=>({text:t,images:[]}));};
 $('#pick').onclick=()=>$('#file').click();
 $('#file').onchange=e=>{handle([...e.target.files]);e.target.value='';};
-const dz=$('#drop');
-['dragenter','dragover'].forEach(ev=>dz.addEventListener(ev,e=>{e.preventDefault();dz.classList.add('on');}));
-['dragleave','drop'].forEach(ev=>dz.addEventListener(ev,e=>{e.preventDefault();dz.classList.remove('on');}));
-dz.addEventListener('drop',e=>handle([...e.dataTransfer.files]));
+let dragN=0;const hasFiles=e=>[...(e.dataTransfer?.types||[])].includes('Files');
+document.addEventListener('dragenter',e=>{if(!hasFiles(e))return;e.preventDefault();dragN++;$('#dropover').classList.add('on');});
+document.addEventListener('dragover',e=>{if(hasFiles(e))e.preventDefault();});
+document.addEventListener('dragleave',e=>{if(!hasFiles(e))return;if(--dragN<=0){dragN=0;$('#dropover').classList.remove('on');}});
+document.addEventListener('drop',e=>{if(!hasFiles(e)&&!e.dataTransfer?.files?.length)return;e.preventDefault();dragN=0;$('#dropover').classList.remove('on');const f=[...(e.dataTransfer.files||[])];if(f.length)handle(f);});
 
 const loaded={};
 const loadScript=src=>loaded[src]||(loaded[src]=new Promise((ok,no)=>{const s=document.createElement('script');s.src=src;s.onload=ok;s.onerror=()=>{delete loaded[src];no(new Error('Could not load the file reader.'))};document.head.appendChild(s);}));
@@ -541,7 +604,7 @@ function basicRead(text,fname){
   return{courses:[{code,title,isLab,components,credits:crm?+crm[1]:null,boundaries:basicBounds(text)}],basic:true};
 }
 function toCourse(r,basic){
-  const comps=(Array.isArray(r.components)?r.components:[]).map(x=>{const k=C(String(x.name||'Part'),KINDS.includes(x.kind)?x.kind:'other',+x.weight||0,Math.max(0,Math.min(60,parseInt(x.count)||0)),Math.max(0,parseInt(x.drop)||0));return k;});
+  const comps=(Array.isArray(r.components)?r.components:[]).map(x=>{const kind=KINDS.includes(x.kind)?x.kind:'other',n=parseInt(x.count);const k=C(String(x.name||'Part'),kind,+x.weight||0,n>0?Math.min(60,n):(['quiz','assignment','lab'].includes(kind)?0:1),Math.max(0,parseInt(x.drop)||0));k.zeroOk=true;return k;});
   if(comps.length&&!comps.some(k=>k.weight>0))comps.forEach(k=>k.weight=Math.round(100/comps.length*10)/10);
   let bounds=(Array.isArray(r.boundaries)?r.boundaries:[]).filter(b=>b&&b.grade!=null&&!isNaN(parseFloat(b.min))).map(b=>{const p=parseFloat(b.points);return{g:String(b.grade),min:parseFloat(b.min),gp:!isNaN(p)&&p>=0&&p<=5?p:null};}).sort((a,b)=>b.min-a.min);
   const guessed=!bounds.length;if(guessed)bounds=B(STD);
@@ -552,7 +615,7 @@ function toCourse(r,basic){
 }
 const queue=[];let busyQ=false;
 function runJob(name,getInput){
-  const li=document.createElement('li');li.innerHTML=`<b>${esc(name)}</b><span>${busyQ||queue.length?'Waiting in line…':'Reading…'}</span>`;$('#jobs').prepend(li);while($('#jobs').children.length>4)$('#jobs').lastElementChild.remove();
+  const li=document.createElement('li');li.innerHTML=`<b title="${esc(name)}">${esc(name)}</b><span>${busyQ||queue.length?'Waiting in line…':'Reading…'}</span><button class="x" aria-label="Dismiss" hidden>×</button>`;li.querySelector('.x').onclick=()=>li.remove();$('#jobs').prepend(li);while($('#jobs').children.length>4)$('#jobs').lastElementChild.remove();
   queue.push({name,getInput,st:li.querySelector('span')});pump();
 }
 async function pump(){
@@ -572,14 +635,15 @@ async function doJob(name,getInput,st){
     S.courses.push(...add);autoLink();
     const show=add.find(c=>!(c.isLab&&linkedBy(c.id)));S.sel=(show||linkedBy(add[0].id)?.co||add[0]).id;edit=false;
     render();save();
+    const li=st.parentElement;li.querySelector('.x').hidden=false;setTimeout(()=>{li.classList.add('fade');setTimeout(()=>li.remove(),450);},out&&out.fallback?20000:8000);
     st.textContent=(out&&out.fallback?out.fallback+'. ':'')+'Added '+add.map(c=>c.code+(c.isLab?(linkedBy(c.id)?' → linked to '+linkedBy(c.id).co.code:' (own course)'):'')).join(', ');
-  }catch(e){st.className='err';st.textContent=(e&&e.message)||'Something went wrong reading this file.';}
+  }catch(e){st.className='err';st.parentElement.querySelector('.x').hidden=false;st.textContent=(e&&e.message)||'Something went wrong reading this file.';}
 }
 
 
 /* ---------- settings + backup ---------- */
 const NAMES={relay:'the site’s AI reader',basic:'the built-in reader',gemini:'Google Gemini',anthropic:'Anthropic Claude'};
-function readerLabel(){const p=provider();$('#reader').textContent='Syllabi are read with '+NAMES[p]+'.'+(p==='basic'?(RELAY?' Switch to the site’s AI reader in Reading settings for photos, scans and messy layouts.':' For photos, scans and messy layouts, add a free Gemini key in Reading settings.'):p==='relay'?' If it’s unavailable, the built-in reader takes over.':'');}
+function readerLabel(){const p=provider();$('#reader').textContent='Read with '+NAMES[p]+'.';}
 if(!RELAY){const o=document.getElementById('optsite');if(o)o.remove();}
 const sm=$('#smodal');
 function sUI(){const p=$('#sprov').value,k=p==='gemini'||p==='anthropic';$('#skeyl').hidden=$('#smodl').hidden=!k;$('#smod').placeholder=DEF_MODEL[p]||'';
