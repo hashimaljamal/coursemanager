@@ -448,13 +448,18 @@ async function ask(input,name,onStatus){
       const imgs=[];for(const im of input.images.slice(0,4)){const j=await toJpeg(im);if(/^image\/(jpeg|png|webp)$/.test(j.type))imgs.push({mime:j.type,data:await b64(j)});}
       if(!input.text.trim()&&!imgs.length)throw new Error('This image format can’t be read. Try a JPG or PNG, or a PDF.');
       const payload=JSON.stringify({name,text:input.text.slice(0,80000),images:imgs});
-      const waits=[4000,10000,20000];
+      const waits=[4000,10000];
       for(let a=0;;a++){
-        const r=await fetch(RELAY,{method:'POST',headers:{'Content-Type':'application/json'},body:payload});
-        const j=await r.json().catch(()=>({}));
+        const ac=new AbortController(),t0=Date.now();
+        const kill=setTimeout(()=>ac.abort(),75000);
+        const tick=setInterval(()=>onStatus&&onStatus(`Finding the grading scheme… ${Math.round((Date.now()-t0)/1000)}s`),1000);
+        let r,j;
+        try{r=await fetch(RELAY,{method:'POST',headers:{'Content-Type':'application/json'},body:payload,signal:ac.signal});j=await r.json().catch(()=>({}));}
+        catch(e){if(e&&e.name==='AbortError'){r={ok:false,status:504};j={error:'the AI took too long'};}else throw e;}
+        finally{clearTimeout(kill);clearInterval(tick);}
         if(r.ok&&Array.isArray(j.courses))return{courses:j.courses};
         why=j.error||('error '+r.status);
-        const busy=(r.status===429||r.status===503||r.status===502)&&!/daily limit/i.test(why);
+        const busy=(r.status===429||r.status===503||r.status===502||r.status===504)&&!/daily limit/i.test(why);
         if(!busy||a>=waits.length)break;
         for(let t=waits[a]/1000;t>0;t--){onStatus&&onStatus(`AI is busy, retrying in ${t}s…`);await new Promise(res=>setTimeout(res,1000));}
         onStatus&&onStatus('Finding the grading scheme…');
