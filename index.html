@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Syllabus Grade Calculator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
+<style>
+/* VOICE: a precise working tool, calm, no decoration.
+   IDEA: the teacher's gradebook ledger, marked with a red pen.
+   PICTURE: the live course grade, huge, beside its boundary ladder.
+   COLOUR and TYPE: white / black / signal red; Archivo wide for numerals, Archivo for text.
+   LAYOUT: course rail on the left, ledger on the right; stacks to chips + ledger on phones. */
+:root{color-scheme:light dark;--bg:light-dark(#fff,#0e0e0e);--ink:light-dark(#111,#f1f1f1);--mute:light-dark(#646464,#9c9c9c);--soft:light-dark(#f2f2f2,#1b1b1b);--line:light-dark(#d9d9d9,#333);--red:light-dark(#e4002b,#ff4d5e);--ok:light-dark(#111,#f1f1f1)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 Archivo,system-ui,sans-serif;overflow-x:clip}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+.band{padding:clamp(20px,3vw,40px) max(4vw,16px)}
+.top{border-top:10px solid var(--ink);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:24px;align-items:end;padding-bottom:20px}
+h1{font-size:clamp(32px,4.4vw,48px);line-height:1.05;margin:0;font-stretch:112%;font-weight:800;text-wrap:balance}
+.top p{margin:8px 0 0;color:var(--mute);max-width:60ch}
+.drop{border:2px dashed var(--line);padding:16px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;transition:border-color .15s,background .15s}
+.drop.on{border-color:var(--red);background:var(--soft)}
+.drop span{flex:1 1 220px;color:var(--mute);font-size:15px}
+.btn{min-height:44px;padding:0 16px;border:2px solid var(--ink);background:var(--ink);color:var(--bg);font-weight:700}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn.sm{min-height:36px;padding:0 12px;font-size:14px}
+.btn:disabled{opacity:.4;cursor:default}
+.reader{font-size:13px;color:var(--mute);margin:8px 0 0}
+.bk{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+#jobs{list-style:none;margin:10px 0 0;padding:0;font-size:14px}
+#jobs li{display:flex;gap:8px;padding:4px 0;border-bottom:1px solid var(--line)}
+#jobs li b{flex:1;font-weight:600;overflow-wrap:anywhere}
+#jobs .err{color:var(--red)}
+.wrap{display:grid;grid-template-columns:260px minmax(0,1fr);border-top:3px solid var(--ink)}
+aside{border-right:1px solid var(--line);padding:16px max(2vw,12px) 24px max(4vw,16px)}
+aside h2{font-size:13px;color:var(--mute);margin:0 0 8px;font-weight:600}
+.clist{display:flex;flex-direction:column;gap:2px}
+.ci{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px;text-align:left;border:0;background:transparent;padding:10px;border-left:4px solid transparent;min-height:44px}
+.ci:hover{background:var(--soft)}
+.ci.sel{border-left-color:var(--red);background:var(--soft)}
+.ci b{font-stretch:105%}.ci small{color:var(--mute);font-size:13px;grid-column:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ci em{font-style:normal;font-weight:800;grid-row:1/3;grid-column:2;align-self:center;font-stretch:112%;font-size:20px}
+.side-note{font-size:13px;color:var(--mute);margin-top:16px}
+.side-note button{border:0;background:none;padding:0;text-decoration:underline;color:var(--ink);font-size:13px}
+.sync{font-size:13px;color:var(--mute);margin-top:12px}
+main{padding:20px max(4vw,16px) 64px max(2vw,16px)}
+.chead{display:flex;flex-wrap:wrap;gap:12px;align-items:start;justify-content:space-between}
+.chead h2{margin:0;font-size:32px;line-height:1.05;font-stretch:112%;font-weight:800}
+.chead p{margin:4px 0 0;color:var(--mute)}
+.note{margin:12px 0 0;padding:10px 12px;background:var(--soft);font-size:15px;border-left:4px solid var(--ink)}
+.note.warn{border-left-color:var(--red)}
+.note button{border:0;background:none;padding:0;text-decoration:underline;font-weight:600}
+#res{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:24px;margin:20px 0 28px;padding:20px 0;border-top:3px solid var(--ink);border-bottom:1px solid var(--line)}
+.big{display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap}
+.pct{font-size:clamp(64px,10vw,120px);line-height:.9;font-weight:900;font-stretch:118%;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.pct small{font-size:.4em}
+.letter{font-size:clamp(34px,4.6vw,52px);font-weight:900;color:var(--red);border:4px solid var(--red);border-radius:50%;width:1.9em;height:1.9em;display:grid;place-items:center;transform:rotate(-8deg);line-height:1}
+.sub-r{color:var(--mute);margin:10px 0 0;font-size:15px}
+.ladder{display:flex;flex-direction:column}
+.lr{display:grid;grid-template-columns:3.2em 4.2em minmax(0,1fr);gap:8px;padding:7px 0;border-bottom:1px solid var(--line);align-items:baseline;font-size:15px}
+.lr b{font-weight:800;font-size:17px}.lr span{color:var(--mute);font-variant-numeric:tabular-nums;white-space:nowrap}
+.lr i{font-style:normal}.lr .ok{font-weight:700}.lr .no{color:var(--mute);text-decoration:line-through}
+.lr.cur{background:var(--soft);box-shadow:-8px 0 0 var(--soft),8px 0 0 var(--soft)}
+.lr.cur b{color:var(--red)}
+.comp{border-top:2px solid var(--ink);padding:14px 0 18px}
+.comp header{display:flex;gap:12px;align-items:baseline;flex-wrap:wrap}
+.comp h3{margin:0;font-size:20px;font-weight:700;flex:1 1 auto}
+.wt{color:var(--mute);font-variant-numeric:tabular-nums;white-space:nowrap}
+.avg{font-stretch:112%;font-weight:800;font-size:22px;font-variant-numeric:tabular-nums;margin-left:auto;white-space:nowrap}
+.ctl{display:flex;flex-wrap:wrap;gap:8px 18px;margin:10px 0;font-size:14px;color:var(--mute)}
+.ctl label{display:flex;align-items:center;gap:6px}
+.ctl input{width:64px}
+input[type=text],input:not([type]),select,textarea{border:1px solid var(--line);background:var(--bg);min-height:40px;padding:6px 8px;font-size:16px;border-radius:0}
+input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box-shadow:0 0 0 1px var(--ink)}
+.boxes{display:grid;grid-template-columns:repeat(auto-fill,minmax(76px,1fr));gap:8px}
+.box{display:flex;flex-direction:column;gap:2px;font-size:12px;color:var(--mute)}
+.box input{width:100%;text-align:right;font-variant-numeric:tabular-nums;min-height:44px}
+.plus{align-self:end;min-height:44px;border:2px dashed var(--line);background:transparent;font-size:24px;font-weight:700;line-height:1;color:var(--mute)}
+.plus:hover{border-color:var(--red);color:var(--red)}
+.box input.dropped{text-decoration:line-through;color:var(--mute);border-style:dashed}
+.lnk{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:14px;color:var(--mute);margin:10px 0}
+.lnk select{max-width:100%}
+.sub{border-left:4px solid var(--red);padding-left:14px;margin-top:8px}
+.sub .comp{border-top-width:1px}
+.sub .comp h3{font-size:17px}
+.hint{font-size:14px;color:var(--mute);margin:6px 0}
+.lnkbtn{border:0;background:none;padding:0;text-decoration:underline;color:var(--ink);font-size:14px}
+.erow{display:flex;flex-wrap:wrap;gap:8px;flex:1 1 100%;align-items:center}
+.erow input[data-f=name]{flex:1 1 180px}
+.erow .wt input{width:70px}
+.x{min-width:44px;min-height:40px;border:1px solid var(--line);background:transparent;font-size:20px;line-height:1}
+.edit{border-top:3px solid var(--ink);margin-top:24px;padding-top:14px}
+.edit h3{margin:0 0 10px;font-size:18px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:16px}
+.grid2 label{display:flex;flex-direction:column;font-size:13px;color:var(--mute);gap:4px}
+.brow{display:flex;gap:8px;margin-bottom:6px;align-items:center}
+.brow input{width:80px}
+.chk{flex-direction:row!important;align-items:center;gap:8px!important;font-size:15px!important;color:var(--ink)!important}
+.chk input{width:20px;height:20px}
+.empty{padding:40px 0;color:var(--mute)}
+#modal,.modal{position:fixed;inset:0;background:rgb(0 0 0/.45);display:none;place-items:center;padding:16px;z-index:9}
+#modal.on,.modal.on{display:grid}
+#modal .card,.modal .card{background:var(--bg);width:min(680px,100%);padding:20px;border-top:8px solid var(--ink)}
+#modal textarea{width:100%;min-height:260px;margin:10px 0}
+#toast{position:fixed;left:50%;bottom:20px;transform:translate(-50%,120px);background:var(--ink);color:var(--bg);padding:10px 14px;display:flex;gap:14px;align-items:center;transition:transform .25s;z-index:10;max-width:92vw}
+#toast.on{transform:translate(-50%,0)}
+#toast button{border:0;background:none;color:var(--bg);font-weight:800;text-decoration:underline;min-height:36px}
+@media(prefers-reduced-motion:reduce){#toast,.drop{transition:none}}
+@media(max-width:860px){.top{grid-template-columns:1fr}.wrap{grid-template-columns:1fr}aside{border-right:0;border-bottom:1px solid var(--line);padding:12px 16px}.clist{flex-direction:row;overflow-x:auto;gap:6px}.ci{flex:none;border-left:0;border-bottom:4px solid transparent;min-width:150px}.ci.sel{border-bottom-color:var(--red)}main{padding:16px}}
+@media(max-width:600px){#res{grid-template-columns:1fr}.chead h2{font-size:28px}.lr{font-size:14px}}
+</style></head><body>
+<header class="band top">
+  <div><h1>Syllabus grade calculator</h1><p>Drop in your syllabi. Each one becomes a calculator built on its own weights and grade boundaries. Lab syllabi plug into their course’s lab grade, or stand alone when the course has none.</p></div>
+  <div>
+    <div class="drop" id="drop">
+      <span id="dropmsg">Drop syllabus files here: PDF, Word (.docx), photos or text. Several at once is fine.</span>
+      <button class="btn" id="pick">Choose files</button>
+      <button class="btn ghost" id="pastebtn">Paste text</button>
+      <button class="btn ghost" id="manual">Add by hand</button>
+      <button class="btn ghost" id="setbtn">Reading settings</button>
+      <input type="file" id="file" multiple hidden accept=".pdf,.docx,.txt,.md,.rtf,.html,.htm,image/*">
+    </div>
+    <p class="reader" id="reader"></p><ul id="jobs"></ul>
+  </div>
+</header>
+<div class="wrap">
+  <aside><h2>Your courses</h2><div class="clist" id="side"></div><div class="side-note" id="snote"></div><div class="sync" id="sync">Saved in this browser</div><div class="bk"><button class="btn ghost sm" id="exp">Export backup</button><button class="btn ghost sm" id="imp">Import backup</button><input type="file" id="impf" accept=".json,application/json" hidden></div><p class="side-note">Scores are kept in this browser. Export a backup to move them to another device.</p></aside>
+  <main id="panel"></main>
+</div>
+<div id="modal"><div class="card"><h3 style="margin:0">Paste a syllabus</h3><p class="hint">Paste the whole thing, or just the grading section and grade scale.</p><textarea id="ptext" aria-label="Syllabus text"></textarea><div style="display:flex;gap:10px;justify-content:flex-end"><button class="btn ghost" id="pcancel">Cancel</button><button class="btn" id="pgo">Read it</button></div></div></div>
+<div id="smodal" class="modal"><div class="card"><h3 style="margin:0">Reading settings</h3>
+<p class="hint">How uploaded syllabi are read. Your key is stored only in this browser and sent only to the provider you pick.</p>
+<div class="grid2" style="grid-template-columns:1fr"><label>Reader<select id="sprov"><option value="site" id="optsite">Site’s AI reader: no key needed</option><option value="basic">Built-in reader: free, offline, no key (best with clear grading tables)</option><option value="gemini">Google Gemini: free API key from aistudio.google.com</option><option value="anthropic">Anthropic Claude: paid API key from console.anthropic.com</option></select></label>
+<label id="skeyl">API key<input id="skey" type="password" autocomplete="off" spellcheck="false"></label>
+<label id="smodl">Model (leave blank for the default)<input id="smod" spellcheck="false"></label></div>
+<p class="hint" id="snotep"></p>
+<div style="display:flex;gap:10px;justify-content:flex-end"><button class="btn ghost" id="scancel">Cancel</button><button class="btn" id="ssave">Save</button></div></div></div>
+<div id="toast"><span id="tmsg"></span><button id="tundo" hidden>Undo</button></div>
+<script>
+/* ======== SETUP: paste your Cloudflare Worker address between the quotes, e.g. 'https://syllabus-reader.yourname.workers.dev' ======== */
+const RELAY_URL = '';
+/* =============================================================================================================================== */
+{
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const rid=()=>Math.random().toString(36).slice(2,10);
+const KEY='sgc-state-v1';
+const KINDS=['lab','quiz','exam','assignment','project','participation','other'];
+const PRE={lab:'Lab',quiz:'Quiz',exam:'Exam',assignment:'HW',project:'Proj',participation:'Part',other:'Item'};
+const STD=[['A',90],['B',80],['C',70],['D',60],['F',0]];
+const fmt=n=>n==null||isNaN(n)?'—':(Math.round(n*10)/10).toString();
+let S={courses:[],sel:null,at:0},edit=false;
+
+const C=(name,kind,weight,count,drop,scores)=>({id:rid(),name,kind,weight,count,drop:drop||0,outOf:100,scores:scores||[]});
+const B=a=>a.map(([g,min])=>({g,min}));
+function seed(){
+  const lab={id:rid(),sample:1,code:'CHEM 101L',title:'General Chemistry I Laboratory',isLab:true,bounds:B(STD),comps:[C('Lab reports','lab',70,10,1,['92','88','95','61']),C('Pre-lab quizzes','quiz',20,10,1,['8/10','10/10','9/10','6/10']),C('Lab notebook & safety','other',10,1,0,[])]};
+  const chem={id:rid(),sample:1,code:'CHEM 101',title:'General Chemistry I',isLab:false,bounds:B([['A',90],['B+',87],['B',80],['C+',77],['C',70],['D',60],['F',0]]),comps:[C('Midterm exams','exam',30,2,0,['81']),C('Final exam','exam',25,1,0,[]),C('Quizzes','quiz',10,10,2,['7/10','9/10','10/10','5/10','8/10']),C('Homework','assignment',10,12,0,['100','95','90','100']),C('Laboratory','lab',25,0,0,[])]};
+  chem.comps[4].link=lab.id;
+  const phys={id:rid(),sample:1,code:'PHYS 201',title:'Mechanics',isLab:false,bounds:B([['A',93],['A-',90],['B+',87],['B',83],['B-',80],['C+',77],['C',73],['C-',70],['D',60],['F',0]]),comps:[C('Midterm','exam',25,1,0,['78']),C('Final exam','exam',35,1,0,[]),C('Problem sets','assignment',20,10,0,['90','84','100']),C('Quizzes','quiz',20,8,1,['70','85','92'])]};
+  const plab={id:rid(),sample:1,code:'PHYS 201L',title:'Mechanics Laboratory',isLab:true,bounds:B(STD),comps:[C('Lab reports','lab',80,8,1,['88','91','76']),C('Lab practical','exam',20,1,0,[])]};
+  S={courses:[chem,lab,phys,plab],sel:chem.id,at:0};
+}
+function fix(){S.courses=(S.courses||[]).filter(c=>!c.sample);for(const c of S.courses){c.comps=c.comps||[];c.bounds=c.bounds||B(STD);for(const k of c.comps){k.scores=k.scores||[];k.outOf=+k.outOf||100;k.drop=k.drop|0;k.count=k.count|0;}}if(!byId(S.sel))S.sel=S.courses[0]?.id||null;}
+const byId=id=>S.courses.find(c=>c.id===id);
+function linkedBy(labId){for(const co of S.courses){if(co.isLab)continue;for(const k of co.comps)if(k.kind==='lab'&&k.link===labId)return{co,k};}return null;}
+
+/* ---------- matching labs to courses ---------- */
+const baseCode=s=>String(s||'').toUpperCase().replace(/LAB(ORATORY)?\b/g,'').replace(/[^A-Z0-9]/g,'').replace(/(\d)L$/,'$1');
+const baseTitle=s=>String(s||'').toLowerCase().replace(/\(.*?\)/g,'').replace(/\blab(oratory)?s?\b/g,'').replace(/[^a-z0-9]+/g,' ').trim();
+function matches(lab,co){const a=baseCode(lab.code),b=baseCode(co.code);if(a&&b&&a===b)return true;const t=baseTitle(lab.title),u=baseTitle(co.title);return t.length>3&&t===u;}
+const matchCourse=lab=>S.courses.find(co=>!co.isLab&&matches(lab,co));
+function autoLink(){for(const co of S.courses){if(co.isLab)continue;for(const k of co.comps){if(k.kind!=='lab'||k.link!==undefined)continue;const lab=S.courses.find(l=>l.isLab&&!linkedBy(l.id)&&matches(l,co));if(lab)k.link=lab.id;}}}
+
+/* ---------- maths ---------- */
+function parseScore(s,outOf){if(s==null)return null;s=String(s).trim();if(!s)return null;const m=s.match(/^(-?\d*\.?\d+)\s*\/\s*(\d*\.?\d+)$/);if(m)return +m[2]?m[1]/m[2]*100:null;const v=parseFloat(s.replace('%',''));return isNaN(v)?null:v/(outOf||100)*100;}
+const nItems=k=>Math.max(1,k.count|0);
+const labOf=(co,k)=>!co.isLab&&k.kind==='lab'&&k.link?byId(k.link):null;
+function compPct(co,k,fill,d=0){const L=labOf(co,k);if(L&&d<2)return coursePct(L,fill,d+1);let v=[];for(let i=0;i<nItems(k);i++){const p=parseScore(k.scores[i],k.outOf);if(p!=null)v.push(p);else if(fill!=null)v.push(fill);}if(!v.length)return null;v.sort((a,b)=>a-b);v=v.slice(Math.max(0,Math.min(k.drop|0,v.length-1)));return v.reduce((a,b)=>a+b,0)/v.length;}
+function coursePct(co,fill=null,d=0){let s=0,w=0;for(const k of co.comps){const wt=+k.weight||0;if(wt<=0)continue;const p=compPct(co,k,fill,d);if(p==null)continue;s+=p*wt;w+=wt;}return w?s/w:null;}
+function tally(co,d=0){let g=0,t=0;for(const k of co.comps){if(!(+k.weight>0))continue;const L=labOf(co,k);if(L&&d<2){const r=tally(L,d+1);g+=r.g;t+=r.t;continue;}for(let i=0;i<nItems(k);i++){t++;if(parseScore(k.scores[i],k.outOf)!=null)g++;}}return{g,t};}
+function droppedSet(k){const e=[];for(let i=0;i<nItems(k);i++){const p=parseScore(k.scores[i],k.outOf);if(p!=null)e.push([p,i]);}e.sort((a,b)=>a[0]-b[0]);return new Set(e.slice(0,Math.max(0,Math.min(k.drop|0,e.length-1))).map(x=>x[1]));}
+const sortedB=co=>[...co.bounds].filter(b=>b.g!==''&&!isNaN(+b.min)).sort((a,b)=>b.min-a.min);
+function letter(co,p){if(p==null)return'—';const bs=sortedB(co);for(const b of bs)if(p>=+b.min-1e-9)return b.g;return bs.length?bs[bs.length-1].g:'—';}
+function need(co,m){const{g,t}=tally(co);if(g>=t){const p=coursePct(co);return p!=null&&p>=m?{t:'Reached',c:'ok'}:{t:'Missed',c:'no'};}
+  const f=x=>coursePct(co,x);if(f(0)>=m-1e-9)return{t:'Locked in, even with zeros',c:'ok'};if(f(100)<m)return{t:'Out of reach without extra credit',c:'no'};
+  let lo=0,hi=100;for(let i=0;i<32;i++){const mid=(lo+hi)/2;if(f(mid)>=m)hi=mid;else lo=mid;}return{t:`Need ${fmt(hi)}% average on what’s left`,c:''};}
+const wsum=co=>co.comps.reduce((a,k)=>a+(+k.weight||0),0);
+
+/* ---------- rendering ---------- */
+function render(){renderSide();renderPanel();}
+function renderSide(){
+  const list=S.courses.filter(c=>!(c.isLab&&linkedBy(c.id)));
+  $('#side').innerHTML=list.map(c=>{const p=coursePct(c),inc=c.comps.map(k=>labOf(c,k)).filter(Boolean);return`<button class="ci ${(S.sel===c.id||inc.some(l=>l.id===S.sel))?'sel':''}" data-sel="${c.id}"><b>${esc(c.code||'Untitled')}</b><em>${p==null?'—':esc(letter(c,p))}</em><small>${p==null?'No grades yet':fmt(p)+'%'}${inc.length?' · incl. '+inc.map(l=>esc(l.code)).join(', '):''}</small></button>`}).join('')||'<p class="hint">No courses yet.</p>';
+  $('#snote').innerHTML=S.courses.some(c=>c.sample)?'These are sample courses. They’re replaced as soon as your first syllabus is read. <button data-act="clearsamples">Clear them now</button>':'';
+}
+function compHTML(co,k,top){
+  const a=`data-co="${co.id}" data-cid="${k.id}"`,L=labOf(co,k),ed=edit&&top;
+  let h=ed?`<div class="erow"><input ${a} data-f="name" value="${esc(k.name)}" aria-label="Component name"><select ${a} data-f="kind" aria-label="Type">${KINDS.map(x=>`<option ${x===k.kind?'selected':''}>${x}</option>`).join('')}</select><label class="wt"><input ${a} data-f="weight" inputmode="decimal" value="${esc(k.weight)}" aria-label="Weight"> %</label><button class="x" data-act="delcomp" ${a} aria-label="Remove ${esc(k.name)}">×</button></div>`
+    :`<h3>${esc(k.name)}</h3><span class="wt">${fmt(+k.weight)}% of grade</span>`;
+  let o=`<section class="comp"><header>${h}<b class="avg" data-avg="${k.id}"></b></header>`;
+  if(k.kind==='lab'&&!co.isLab){const labs=S.courses.filter(x=>x.isLab&&(!linkedBy(x.id)||x.id===k.link));
+    o+=`<label class="lnk">Lab syllabus <select ${a} data-f="link"><option value="">None, enter lab grades here</option>${labs.map(l=>`<option value="${l.id}" ${l.id===k.link?'selected':''}>${esc(l.code||l.title)}</option>`).join('')}</select></label>`;}
+  if(L){o+=`<p class="hint">Built from ${esc(L.code||L.title)}’s syllabus. <button class="lnkbtn" data-act="open" data-id="${L.id}">Edit lab structure</button></p><div class="sub">${L.comps.map(s=>compHTML(L,s,false)).join('')||'<p class="hint">That lab syllabus has no graded parts yet.</p>'}</div>`;return o+'</section>';}
+  const isLQ=k.kind==='lab'||k.kind==='quiz',n=nItems(k);
+  const dl=k.kind==='lab'?'Labs dropped':k.kind==='quiz'?'Quizzes dropped':'Drop lowest';
+  o+=`<div class="ctl"><label>Items <input ${a} data-f="count" inputmode="numeric" value="${n}"></label>${(isLQ||k.drop||edit)?`<label>${dl} <input ${a} data-f="drop" inputmode="numeric" value="${k.drop|0}"></label>`:''}<label>Out of <input ${a} data-f="outOf" inputmode="decimal" value="${k.outOf}"></label></div>`;
+  o+=`<div class="boxes">${Array.from({length:n},(_,i)=>`<label class="box"><span>${PRE[k.kind]||'Item'} ${i+1}</span><input ${a} data-f="score" data-i="${i}" inputmode="decimal" value="${esc(k.scores[i]??'')}" placeholder="–"></label>`).join('')}${(k.kind==='quiz'||k.kind==='assignment'||n>1)&&n<60?`<button class="plus" data-act="inc" ${a} aria-label="Add one more ${PRE[k.kind]}">+</button>`:''}</div>`;
+  return o+'</section>';
+}
+function notes(co){
+  let o='';const lb=co.isLab&&linkedBy(co.id);
+  if(lb)o+=`<p class="note">Counts as the ${esc(lb.k.name)} part (${fmt(+lb.k.weight)}%) of ${esc(lb.co.code)}. <button data-act="open" data-id="${lb.co.id}">Back to ${esc(lb.co.code)}</button></p>`;
+  else if(co.isLab){const m=matchCourse(co);o+=`<p class="note">${m?(m.comps.some(k=>k.kind==='lab')?`Graded as its own course. To count it inside ${esc(m.code)}, pick it under that course’s lab grade.`:`Matches ${esc(m.code)}, whose syllabus has no lab grade, so this lab is graded as its own course.`):'Graded as its own course.'}</p>`;}
+  if(co.basic)o+=`<p class="note warn">Read with the built-in reader. Check the weights, item counts and boundaries against your syllabus, or <button data-act="settings">turn on an AI reader</button> for better accuracy.</p>`;
+  if(co.boundsGuessed)o+=`<p class="note warn">No grade boundaries were found in this syllabus, so a standard scale is in use. <button data-act="edit">Edit the boundaries</button></p>`;
+  const w=wsum(co);if(co.comps.length&&Math.abs(w-100)>.5)o+=`<p class="note warn">Weights add up to ${fmt(w)}%, not 100%. Grades are scaled to that total until you fix them.</p>`;
+  return o;
+}
+function resHTML(co){
+  const p=coursePct(co),L=letter(co,p),{g,t}=tally(co),cur=L;
+  const rows=sortedB(co).filter(b=>+b.min>0).map(b=>{const n=need(co,+b.min);return`<div class="lr ${b.g===cur?'cur':''}"><b>${esc(b.g)}</b><span>≥ ${fmt(+b.min)}%</span><i class="${n.c}">${n.t}</i></div>`}).join('');
+  return`<div><div class="big"><div class="pct">${p==null?'—':fmt(p)}<small>%</small></div><div class="letter">${esc(L)}</div></div><p class="sub-r">${p==null?'Enter a score to see where you stand.':`Current grade from ${g} of ${t} graded items, dropped scores applied.`}</p></div><div class="ladder">${rows||'<p class="hint">No grade boundaries yet.</p>'}</div>`;
+}
+function editHTML(co){
+  const a=`data-co="${co.id}"`;
+  return`<div class="edit"><button class="btn ghost sm" data-act="addcomp" ${a}>+ Add graded part</button></div>
+  <div class="edit"><h3>Course</h3><div class="grid2"><label>Code<input ${a} data-f="code" value="${esc(co.code)}"></label><label>Title<input ${a} data-f="title" value="${esc(co.title)}"></label><label class="chk"><input type="checkbox" ${a} data-f="isLab" ${co.isLab?'checked':''}> This is a lab syllabus</label></div>
+  <h3>Grade boundaries</h3>${co.bounds.map((b,i)=>`<div class="brow"><input ${a} data-f="bg" data-bi="${i}" value="${esc(b.g)}" aria-label="Grade"><span>from</span><input ${a} data-f="bm" data-bi="${i}" inputmode="decimal" value="${esc(b.min)}" aria-label="Minimum percent"><span>%</span><button class="x" data-act="delb" data-bi="${i}" ${a} aria-label="Remove boundary">×</button></div>`).join('')}
+  <button class="btn ghost sm" data-act="addb" ${a}>+ Add boundary</button>
+  <p style="margin-top:20px"><button class="btn ghost sm" data-act="delcourse" ${a}>Delete this course</button></p></div>`;
+}
+function renderPanel(){
+  const co=byId(S.sel);
+  if(!co){$('#panel').innerHTML='<div class="empty"><h2>No courses yet</h2><p>Upload a syllabus above, or add a course by hand.</p></div>';return;}
+  $('#panel').innerHTML=`<div class="chead"><div><h2>${esc(co.code||'Untitled course')}</h2><p>${esc(co.title)}${co.isLab?' · lab':''}</p></div><button class="btn ${edit?'':'ghost'} sm" data-act="edit">${edit?'Done editing':'Edit structure'}</button></div>${notes(co)}<div id="res"></div>${co.comps.map(k=>compHTML(co,k,true)).join('')||'<p class="hint">No graded parts yet. Use Edit structure to add some.</p>'}${edit?editHTML(co):''}`;
+  numbers();
+}
+function numbers(){
+  const co=byId(S.sel);if(!co)return;
+  $('#res').innerHTML=resHTML(co);
+  for(const c of S.courses)for(const k of c.comps){const el=document.querySelector(`[data-avg="${k.id}"]`);if(!el)continue;const p=compPct(c,k,null);el.textContent=p==null?'—':fmt(p)+'%';
+    const ds=droppedSet(k);document.querySelectorAll(`input[data-cid="${k.id}"][data-f=score]`).forEach(inp=>inp.classList.toggle('dropped',ds.has(+inp.dataset.i)));}
+  renderSide();
+}
+
+/* ---------- persistence ---------- */
+function save(){S.at=Date.now();try{localStorage.setItem(KEY,JSON.stringify(S))}catch{$('#sync').textContent='Couldn’t save: browser storage is off or full';}}
+
+/* ---------- toast ---------- */
+let tT,undoSnap=null;
+function toast(msg,snap){$('#tmsg').textContent=msg;undoSnap=snap||null;$('#tundo').hidden=!snap;$('#toast').classList.add('on');clearTimeout(tT);tT=setTimeout(()=>$('#toast').classList.remove('on'),6000);}
+$('#tundo').onclick=()=>{if(undoSnap){S=JSON.parse(undoSnap);fix();render();save();}$('#toast').classList.remove('on');};
+
+/* ---------- events ---------- */
+const P=$('#panel');
+function target(t){const co=byId(t.dataset.co);return{co,k:co?.comps.find(k=>k.id===t.dataset.cid)};}
+P.addEventListener('input',e=>{const t=e.target,f=t.dataset.f;if(!f)return;const{co,k}=target(t);if(!co)return;
+  if(k&&f==='score'){k.scores[+t.dataset.i]=t.value;}
+  else if(k&&(f==='weight'||f==='drop'||f==='outOf')){const v=parseFloat(t.value);k[f]=isNaN(v)?0:(f==='drop'?Math.max(0,v|0):v);if(f==='outOf'&&!(k.outOf>0))k.outOf=100;}
+  else if(k&&f==='name')k.name=t.value;
+  else if(f==='code'||f==='title'){co[f]=t.value;}
+  else if(f==='bg'||f==='bm'){const b=co.bounds[+t.dataset.bi];if(b){b[f==='bg'?'g':'min']=f==='bm'?parseFloat(t.value):t.value;co.boundsGuessed=false;}}
+  else return;
+  numbers();save();});
+P.addEventListener('change',e=>{const t=e.target,f=t.dataset.f;if(!f)return;const{co,k}=target(t);if(!co)return;
+  if(k&&f==='count'){k.count=Math.max(1,Math.min(60,parseInt(t.value)||1));}
+  else if(k&&f==='kind'){k.kind=t.value;if(k.kind==='lab')k.link=undefined,autoLink();}
+  else if(k&&f==='link'){k.link=t.value||null;}
+  else if(f==='isLab'){co.isLab=t.checked;autoLink();}
+  else if(f==='bm'){co.bounds.sort((a,b)=>b.min-a.min);}
+  else if(f==='code'||f==='title'){autoLink();}
+  else return;
+  render();save();});
+document.addEventListener('click',e=>{const b=e.target.closest('[data-act],[data-sel]');if(!b)return;
+  if(b.dataset.sel){S.sel=b.dataset.sel;edit=false;render();save();return;}
+  const act=b.dataset.act,{co,k}=target(b);
+  if(act==='settings'){openSettings();return;}
+  if(act==='edit'){const c0=byId(S.sel);if(edit&&c0&&c0.basic){c0.basic=false;save();}edit=!edit;renderPanel();}
+  else if(act==='open'){S.sel=b.dataset.id;edit=false;render();save();window.scrollTo({top:$('.wrap').offsetTop-8});}
+  else if(act==='delcomp'&&co){const snap=JSON.stringify(S);co.comps=co.comps.filter(x=>x!==k);render();save();toast(`Removed ${k.name||'part'}`,snap);}
+  else if(act==='inc'&&k){k.count=Math.min(60,nItems(k)+1);render();save();const ins=document.querySelectorAll(`input[data-cid="${k.id}"][data-f=score]`);ins[ins.length-1]?.focus();}
+  else if(act==='addcomp'&&co){co.comps.push(C('New part','assignment',0,1,0));render();save();}
+  else if(act==='addb'&&co){co.bounds.push({g:'?',min:0});render();save();}
+  else if(act==='delb'&&co){co.bounds.splice(+b.dataset.bi,1);render();save();}
+  else if(act==='delcourse'&&co){const snap=JSON.stringify(S);S.courses=S.courses.filter(c=>c!==co);for(const c of S.courses)for(const x of c.comps)if(x.link===co.id)x.link=null;S.sel=S.courses[0]?.id||null;edit=false;render();save();toast(`Deleted ${co.code||'course'}`,snap);}
+  else if(act==='clearsamples'){const snap=JSON.stringify(S);S.courses=S.courses.filter(c=>!c.sample);S.sel=S.courses[0]?.id||null;render();save();toast('Samples cleared',snap);}
+});
+
+/* ---------- adding courses ---------- */
+$('#manual').onclick=()=>{const c={id:rid(),code:'NEW 100',title:'',isLab:false,bounds:B(STD),boundsGuessed:true,comps:[C('Exams','exam',100,2,0)]};S.courses.push(c);S.sel=c.id;edit=true;render();save();};
+const modal=$('#modal');
+$('#pastebtn').onclick=()=>{modal.classList.add('on');$('#ptext').focus();};
+$('#pcancel').onclick=()=>modal.classList.remove('on');
+$('#pgo').onclick=()=>{const t=$('#ptext').value.trim();if(!t)return;modal.classList.remove('on');$('#ptext').value='';runJob('Pasted syllabus',async()=>({text:t,images:[]}));};
+$('#pick').onclick=()=>$('#file').click();
+$('#file').onchange=e=>{handle([...e.target.files]);e.target.value='';};
+const dz=$('#drop');
+['dragenter','dragover'].forEach(ev=>dz.addEventListener(ev,e=>{e.preventDefault();dz.classList.add('on');}));
+['dragleave','drop'].forEach(ev=>dz.addEventListener(ev,e=>{e.preventDefault();dz.classList.remove('on');}));
+dz.addEventListener('drop',e=>handle([...e.dataTransfer.files]));
+
+const loaded={};
+const loadScript=src=>loaded[src]||(loaded[src]=new Promise((ok,no)=>{const s=document.createElement('script');s.src=src;s.onload=ok;s.onerror=()=>{delete loaded[src];no(new Error('Could not load the file reader.'))};document.head.appendChild(s);}));
+const PDFJS='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/';
+async function readPdf(f){
+  await loadScript(PDFJS+'pdf.worker.min.js');await loadScript(PDFJS+'pdf.min.js');
+  const pdf=await pdfjsLib.getDocument({data:new Uint8Array(await f.arrayBuffer()),isEvalSupported:false}).promise;let text='';const images=[];
+  for(let p=1;p<=Math.min(pdf.numPages,40);p++){const pg=await pdf.getPage(p);const tc=await pg.getTextContent();text+=tc.items.map(i=>i.str+(i.hasEOL?'\n':' ')).join('')+'\n\n';}
+  if(text.replace(/\s/g,'').length<300){for(let p=1;p<=Math.min(pdf.numPages,6);p++){const pg=await pdf.getPage(p),vp=pg.getViewport({scale:1.6}),cv=document.createElement('canvas');cv.width=vp.width;cv.height=vp.height;await pg.render({canvasContext:cv.getContext('2d'),viewport:vp}).promise;images.push(await new Promise(r=>cv.toBlob(r,'image/png')));}}
+  return{text,images};
+}
+async function readFile(f){
+  const n=f.name.toLowerCase();
+  if(f.type.startsWith('image/'))return{text:'',images:[f]};
+  if(n.endsWith('.pdf'))return readPdf(f);
+  if(n.endsWith('.docx')){await loadScript('https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js');const r=await mammoth.extractRawText({arrayBuffer:await f.arrayBuffer()});return{text:r.value,images:[]};}
+  if(n.endsWith('.doc'))throw new Error('Old .doc files can’t be read. Save it as PDF or .docx.');
+  let t=await f.text();if(/\.html?$/.test(n))t=new DOMParser().parseFromString(t,'text/html').body.textContent;return{text:t,images:[]};
+}
+function handle(files){for(const f of files)runJob(f.name,()=>readFile(f));}
+
+const INSTR=`You read university course syllabi and extract their grading scheme. Reply with ONLY a JSON object, no prose:
+{"courses":[{"code":"CHEM 101","title":"General Chemistry I","isLab":false,
+ "components":[{"name":"Quizzes","kind":"quiz","weight":10,"count":10,"drop":2}],
+ "boundaries":[{"grade":"A","min":90},{"grade":"B+","min":87}]}]}
+Rules:
+- components: every graded category. weight = percent of the final grade (numbers, should total ~100). If the syllabus gives points, convert to percent of total points. List exams separately when weighted separately (e.g. Midterm 1, Midterm 2, Final), or as one component with count when they share one weight.
+- kind: "lab" for laboratory grade / lab reports / experiments; "quiz" for quizzes; "exam" for midterms, tests, finals, practicals; "assignment" for homework, problem sets, worksheets; "project"; "participation" for attendance/participation/clickers; else "other".
+- count: number of individual graded items in that category if stated or clearly inferable (e.g. "10 weekly quizzes", a lab schedule listing 9 experiments); otherwise null.
+- drop: how many lowest scores are dropped, if stated; otherwise 0.
+- boundaries: letter-grade cutoffs as the minimum percent, highest first, including +/- grades if listed. For a range like "B 80-89.9" use 80. If no scale is given, return [].
+- isLab: true if this syllabus is for a laboratory course or lab section (code ending in L, title containing Lab/Laboratory, or the document is a lab manual/schedule). For a lab syllabus, components describe how the lab grade itself is made up, and count is the number of labs/experiments/reports.
+- code: course code like "PHYS 201L" if present, else a short name. title: course title.
+- If the document holds several separate course syllabi, return one entry for each.`;
+/* ---------- readers: built-in rules, or Gemini / Anthropic with a key ---------- */
+const SKEY='sgc-settings-v1';
+let CFG={provider:'site',key:'',model:''};try{Object.assign(CFG,JSON.parse(localStorage.getItem(SKEY)||'{}'));}catch{}if(!['site','basic','gemini','anthropic'].includes(CFG.provider))CFG.provider='site';
+const DEF_MODEL={gemini:'gemini-flash-latest',anthropic:'claude-haiku-5-5'};
+const RELAY=String(RELAY_URL||'').trim().replace(/\/$/,'');
+function provider(){const p=CFG.provider;if((p==='gemini'||p==='anthropic')&&CFG.key)return p;if((p==='site'||!CFG.key)&&RELAY&&p!=='basic')return'relay';return'basic';}
+const b64=blob=>new Promise((ok,no)=>{const r=new FileReader();r.onload=()=>ok(String(r.result).split(',')[1]);r.onerror=no;r.readAsDataURL(blob);});
+async function toJpeg(blob,max=1600,q=.75){try{const bm=await createImageBitmap(blob);const k=Math.min(1,max/Math.max(bm.width,bm.height));const cv=document.createElement('canvas');cv.width=Math.round(bm.width*k);cv.height=Math.round(bm.height*k);cv.getContext('2d').drawImage(bm,0,0,cv.width,cv.height);bm.close&&bm.close();const out=await new Promise(r=>cv.toBlob(r,'image/jpeg',q));return out||blob;}catch{return blob;}}
+function parseJSON(t){try{return JSON.parse(t);}catch{}const m=String(t).match(/\{[\s\S]*\}/);if(!m)throw new Error('Couldn’t find a grading scheme in that file.');return JSON.parse(m[0]);}
+async function ask(input,name){
+  const pv=provider();
+  if(pv==='basic'){if(!input.text.trim())throw new Error('Photos and scanned PDFs need an AI reader. Add a free Gemini key in Reading settings, or paste the text.');return basicRead(input.text,name);}
+  if(pv==='relay'){
+    let why='';
+    try{
+      const imgs=[];for(const im of input.images.slice(0,4)){const j=await toJpeg(im);if(/^image\/(jpeg|png|webp)$/.test(j.type))imgs.push({mime:j.type,data:await b64(j)});}
+      if(!input.text.trim()&&!imgs.length)throw new Error('This image format can’t be read. Try a JPG or PNG, or a PDF.');
+      const r=await fetch(RELAY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name,text:input.text.slice(0,80000),images:imgs})});
+      const j=await r.json().catch(()=>({}));
+      if(r.ok&&Array.isArray(j.courses))return{courses:j.courses};
+      why=j.error||('error '+r.status);
+    }catch(e){why=(e&&e.message)||'couldn’t reach it';if(/Failed to fetch|NetworkError|Load failed/i.test(why))why='couldn’t reach it';}
+    if(!input.text.trim())throw new Error('The AI reader is unavailable ('+why+'), and photos or scans need it. Try again later.');
+    const b=basicRead(input.text,name);b.fallback='AI reader unavailable ('+why+'), so the built-in reader was used';return b;
+  }
+  const msg=INSTR+`\n\nFile name: ${name}\nSyllabus${input.images.length?' (page images attached)':''}:\n<<<\n${input.text.slice(0,80000)}\n>>>`;
+  if(pv==='gemini'){
+    const parts=[{text:msg}];for(const im of input.images)parts.push({inline_data:{mime_type:im.type||'image/png',data:await b64(im)}});
+    const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(CFG.model||DEF_MODEL.gemini)}:generateContent?key=${encodeURIComponent(CFG.key)}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{role:'user',parts}],generationConfig:{responseMimeType:'application/json'}})});
+    const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error('Gemini: '+(j.error?.message||('error '+r.status)));
+    return parseJSON((j.candidates?.[0]?.content?.parts||[]).map(p=>p.text||'').join(''));
+  }
+  if(pv==='anthropic'){
+    const content=[];for(const im of input.images)content.push({type:'image',source:{type:'base64',media_type:im.type||'image/png',data:await b64(im)}});content.push({type:'text',text:msg});
+    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'content-type':'application/json','x-api-key':CFG.key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:CFG.model||DEF_MODEL.anthropic,max_tokens:4000,messages:[{role:'user',content}]})});
+    const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error('Claude API: '+(j.error?.message||('error '+r.status)));
+    return parseJSON((j.content||[]).map(c=>c.text||'').join(''));
+  }
+  throw new Error('No reader selected.');
+}
+
+/* built-in rule-based reader: free, offline, no key */
+const NUMW={one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10,eleven:11,twelve:12,thirteen:13,fourteen:14,fifteen:15,sixteen:16,eighteen:18,twenty:20};
+const toNum=w=>{w=String(w||'').toLowerCase();return /^\d+$/.test(w)?+w:(NUMW[w]||null);};
+const NW='(\\d{1,2}|'+Object.keys(NUMW).join('|')+')';
+const kindOf=n=>/quiz/i.test(n)?'quiz':/lab|laborator|experiment/i.test(n)?'lab':/exam|midterm|final|test\b|tests\b|practical/i.test(n)?'exam':/home ?work|\bhw\b|assignment|problem set|worksheet|essay|paper|exercise|report/i.test(n)?'assignment':/project|presentation/i.test(n)?'project':/particip|attendance|clicker|engagement/i.test(n)?'participation':'other';
+const NOUN={lab:'(?:labs?|lab reports?|experiments?|laborator(?:y|ies)(?: sessions| reports)?)',quiz:'(?:quiz(?:zes)?)',assignment:'(?:homework(?: assignments| sets)?|assignments?|problem sets?|worksheets?)',exam:'(?:exams?|midterms?|tests?)',project:'(?:projects?)',participation:'(?:x)',other:'(?:x)'};
+const RANK=['A+','A','A-','B+','B','B-','C+','C','C-','D+','D','D-','F'];
+function basicBounds(text){
+  const t=text.replace(/[−–—]/g,'-').replace(/≥/g,'>=').replace(/\s+/g,' ');
+  const N='(\\d{1,3}(?:\\.\\d+)?)',L='([A-DF][+-]?)(?![A-Za-z+])',hits=[];
+  const fam=[[],[]];
+  const add=(f,g,a,b,pos)=>{g=g.toUpperCase();let m=b!=null?Math.min(+a,+b):+a;const up=b!=null?Math.max(+a,+b):null;if(g==='F')m=0;if(m>100||(g!=='F'&&m<40))return;fam[f].push({g,m,up,pos});};
+  for(const x of t.matchAll(new RegExp('(?<![A-Za-z])'+L+'\\s*(?:[:=(]|-(?=\\s))?\\s*(?:>=|above|at least|over)?\\s*'+N+'\\s*%?(?:\\s*(?:-|to)\\s*'+N+'\\s*%?)?','g')))add(0,x[1],x[2],x[3],x.index);
+  for(const x of t.matchAll(new RegExp(N+'\\s*%?\\s*(?:-|to)\\s*'+N+'\\s*%?\\s*[:=]?\\s*(?:=\\s*)?'+L,'g')))add(1,x[3],x[1],x[2],x.index);
+  for(const x of t.matchAll(new RegExp('(?:>=\\s*)'+N+'\\s*%?\\s*[:=]?\\s*'+L,'g')))add(1,x[2],x[1],null,x.index);
+  for(const x of t.matchAll(new RegExp(N+'\\s*%?\\s*(?:and above|or above|or higher|or more|\\+)\\s*[:=]?\\s*'+L,'g')))add(1,x[2],x[1],null,x.index);
+  let best=[],bestScore=0;
+  for(const hits of fam){hits.sort((a,b)=>a.pos-b.pos);
+    for(let i=0;i<hits.length;i++){const win=hits.filter(h=>h.pos>=hits[i].pos&&h.pos<hits[i].pos+700);const by={};for(const h of win)if(!(h.g in by))by[h.g]=h;
+      let prev=101;const ok=RANK.filter(g=>g in by).filter(g=>{if(by[g].m<prev){prev=by[g].m;return true;}return false;});
+      if(!ok.length)continue;const top=by[ok[0]],sc=ok.length+(/^A/.test(ok[0])&&(top.up==null||top.up>=99.9)?10:0);
+      if(sc>bestScore){bestScore=sc;best=ok.map(g=>({grade:g,min:by[g].m}));}}}
+  return best.length>=3?best:[];
+}
+function basicRead(text,fname){
+  const lines=text.split(/\r?\n/).map(s=>s.replace(/\s+/g,' ').trim()).filter(Boolean);
+  const isBound=ln=>/(^|[^A-Za-z])[A-DF][+-]?\s*[:=]?\s*\d{2,3}(\.\d+)?\s*%?\s*(-|–|to)\s*\d{2,3}/.test(ln)||/\d{2,3}\s*%?\s*(-|–|to)\s*\d{2,3}(\.\d+)?\s*%?\s*[:=]?\s*[A-DF][+-]?(?![A-Za-z])/.test(ln);
+  const clean=s=>{s=s.replace(/\(\s*\d{1,2}\s*\)/g,' ').replace(/\b\d{1,2}\s*[x×@]\s*/g,' ').replace(/^[\s•·*\-–—\d.)]+(?=[A-Za-z])/,'').replace(/\b(of|towards?) (the )?(final|course|total|overall) (course )?grade\b/ig,'').replace(/\b(worth|weight(ed)?|counts? for)\b/ig,'').replace(/[\s:=\-–—.,|()]+$/,'').replace(/^[\s:=\-–—.,|()]+/,'').replace(/\s+/g,' ').trim();if(s.includes(':'))s=s.split(':')[0].trim();return s;};
+  const pick=(re,unit)=>{const c=[];lines.forEach((ln,i)=>{if(isBound(ln))return;const m=[...ln.matchAll(re)];if(!m.length)return;let w=+m[m.length-1][1];let name=clean(ln.replace(re,' '));
+      if(!/[a-z]{3}/i.test(name)&&i>0)name=clean(lines[i-1]);
+      if(!name||name.length>60||/\btotal\b|grade scale|grading scale/i.test(name)||!(w>0)||(unit==='%'&&w>100))return;
+      const each=/\beach\b|@/i.test(ln),cn=ln.match(new RegExp('(?:\\((\\d{1,2})\\)|(\\d{1,2})\\s*[x×@]|[x×]\\s*(\\d{1,2})|\\b'+NW+'\\s+(?:[a-z-]+\\s+)?'+NOUN[kindOf(name)]+')','i'));
+      const n=cn?toNum(cn[1]||cn[2]||cn[3]||cn[4]):null;if(each&&n)w*=n;
+      c.push({i,name,w,n});});return c;};
+  const groups=c=>{const g=[];for(const x of c){const last=g[g.length-1];if(last&&x.i-last[last.length-1].i<=4)last.push(x);else g.push([x]);}return g;};
+  let comps=null;const pc=pick(/(\d{1,3}(?:\.\d+)?)\s*%/g,'%');
+  for(let a=0;a<pc.length&&!comps;a++){let s=0;for(let b=a;b<pc.length;b++){if(b>a&&pc[b].i-pc[b-1].i>4)break;s+=pc[b].w;if(Math.abs(s-100)<=1&&b>a){comps=pc.slice(a,b+1);break;}if(s>101)break;}}
+  if(!comps){const ptc=groups(pick(/(\d{1,4}(?:\.\d+)?)\s*(?:pts|points)\b/ig,'pt')).sort((a,b)=>b.length-a.length)[0];if(ptc&&ptc.length>1){const tot=ptc.reduce((a,x)=>a+x.w,0);comps=ptc.map(x=>({...x,w:Math.round(x.w/tot*1000)/10}));}}
+  if(!comps){const g=groups(pc).sort((a,b)=>b.length-a.length)[0];if(g&&g.length>1)comps=g;}
+  comps=comps||[];const seen=new Set();comps=comps.filter(x=>{const k=x.name.toLowerCase();if(seen.has(k))return false;seen.add(k);return true;});
+  const flat=text.replace(/\s+/g,' ');
+  const components=comps.map(x=>{const kind=kindOf(x.name);let count=x.n;
+    if(!count&&NOUN[kind]!=='(?:x)'){const m=flat.match(new RegExp('\\b'+NW+'\\s+(?:[a-z-]+\\s+){0,2}?'+NOUN[kind]+'\\b','i'));const v=m&&toNum(m[1]);if(v&&v>1&&v<=30)count=v;}
+    let drop=0;if(kind==='lab'||kind==='quiz'||kind==='assignment'){for(const sen of flat.split(/(?<=[.!?;])\s/)){if(!/drop|lowest/i.test(sen)||!new RegExp(NOUN[kind],'i').test(sen))continue;const m=sen.match(new RegExp('(?:lowest|drop(?:ped|s)?(?: the)?(?: lowest)?)\\s+'+NW+'\\b','i'))||sen.match(new RegExp('\\b'+NW+'\\s+lowest','i'));drop=m?toNum(m[1])||1:1;break;}}
+    return{name:x.name,kind,weight:x.w,count:count||null,drop};});
+  const head=lines.slice(0,25).join('\n');const cm=head.match(/\b([A-Z]{2,5})[ -]?(\d{3,4}[A-Z]?)\b/)||text.match(/\b([A-Z]{2,5})[ -]?(\d{3,4}[A-Z]?)\b/);
+  const code=cm?cm[1]+' '+cm[2]:String(fname||'Course').replace(/\.[a-z0-9]+$/i,'');
+  let title='';if(cm){const ln=lines.find(l=>l.includes(cm[0]))||'';title=ln.replace(cm[0],'').replace(/syllabus|course outline/ig,'').replace(/\b(fall|spring|summer|winter)\s+\d{4}\b/ig,'').replace(/section\s+\S+/ig,'').replace(/^[\s:\-–—|,]+|[\s:\-–—|,]+$/g,'').slice(0,70);
+    if(title.length<4){const i=lines.indexOf(ln);title=(lines[i+1]||'').slice(0,70);}}
+  const isLab=/\d+L\b/.test(code)||/\blab(oratory)?\b/i.test(title)||/\blab\b/i.test(fname||'')||/\blab(oratory)?\b(?!.*\d+\s*%)/i.test(lines.slice(0,2).join(' '));
+  return{courses:[{code,title,isLab,components,boundaries:basicBounds(text)}],basic:true};
+}
+function toCourse(r,basic){
+  const comps=(Array.isArray(r.components)?r.components:[]).map(x=>{const k=C(String(x.name||'Part'),KINDS.includes(x.kind)?x.kind:'other',+x.weight||0,Math.max(0,Math.min(60,parseInt(x.count)||0)),Math.max(0,parseInt(x.drop)||0));return k;});
+  if(comps.length&&!comps.some(k=>k.weight>0))comps.forEach(k=>k.weight=Math.round(100/comps.length*10)/10);
+  let bounds=(Array.isArray(r.boundaries)?r.boundaries:[]).filter(b=>b&&b.grade!=null&&!isNaN(parseFloat(b.min))).map(b=>({g:String(b.grade),min:parseFloat(b.min)})).sort((a,b)=>b.min-a.min);
+  const guessed=!bounds.length;if(guessed)bounds=B(STD);
+  if(bounds.length&&bounds[bounds.length-1].min>0)bounds.push({g:'F',min:0});
+  return{id:rid(),code:String(r.code||r.title||'Course'),title:String(r.title||''),isLab:!!r.isLab,bounds,boundsGuessed:guessed,comps,basic:!!basic};
+}
+async function runJob(name,getInput){
+  const li=document.createElement('li');li.innerHTML=`<b>${esc(name)}</b><span>Reading…</span>`;$('#jobs').prepend(li);const st=li.querySelector('span');
+  try{
+    const input=await getInput();if(!input.text.trim()&&!input.images.length)throw new Error('No text found in that file.');
+    st.textContent='Finding the grading scheme…';
+    const out=await ask(input,name);const list=Array.isArray(out)?out:Array.isArray(out?.courses)?out.courses:[out];
+    const add=list.filter(x=>x&&typeof x==='object').map(x=>toCourse(x,out&&out.basic)).filter(c=>c.comps.length);
+    if(!add.length)throw new Error(provider()==='basic'?'The built-in reader couldn’t find the grading breakdown. Add a free Gemini key in Reading settings, paste just the grading section, or add it by hand.':'No grading breakdown found. Try pasting just the grading section.');
+    if(S.courses.some(c=>c.sample))S.courses=S.courses.filter(c=>!c.sample);
+    S.courses.push(...add);autoLink();
+    const show=add.find(c=>!(c.isLab&&linkedBy(c.id)));S.sel=(show||linkedBy(add[0].id)?.co||add[0]).id;edit=false;
+    render();save();
+    st.textContent=(out&&out.fallback?out.fallback+'. ':'')+'Added '+add.map(c=>c.code+(c.isLab?(linkedBy(c.id)?' → linked to '+linkedBy(c.id).co.code:' (own course)'):'')).join(', ');
+  }catch(e){st.className='err';st.textContent=(e&&e.message)||'Something went wrong reading this file.';}
+}
+
+
+/* ---------- settings + backup ---------- */
+const NAMES={relay:'the site’s AI reader',basic:'the built-in reader',gemini:'Google Gemini',anthropic:'Anthropic Claude'};
+function readerLabel(){const p=provider();$('#reader').textContent='Syllabi are read with '+NAMES[p]+'.'+(p==='basic'?(RELAY?' Switch to the site’s AI reader in Reading settings for photos, scans and messy layouts.':' For photos, scans and messy layouts, add a free Gemini key in Reading settings.'):p==='relay'?' If it’s unavailable, the built-in reader takes over.':'');}
+if(!RELAY){const o=document.getElementById('optsite');if(o)o.remove();}
+const sm=$('#smodal');
+function sUI(){const p=$('#sprov').value,k=p==='gemini'||p==='anthropic';$('#skeyl').hidden=$('#smodl').hidden=!k;$('#smod').placeholder=DEF_MODEL[p]||'';
+  $('#snotep').textContent=p==='site'?'Uses this site’s own AI reader. Nothing to set up. If it’s busy or down, the built-in reader is used instead.':p==='gemini'?'Free tier: create a key at aistudio.google.com → Get API key. On the free tier Google may use what you send to improve its products.':p==='anthropic'?'Paid per use. Create a key at console.anthropic.com. Reading one syllabus usually costs well under a cent with the default model.':p==='basic'?'Looks for percentage lines (e.g. “Quizzes 10%”), point totals, item counts, “lowest … dropped” and a letter-grade scale. Always check what it found.':'';}
+const openSettings=()=>{$('#sprov').value=(CFG.provider==='site'&&!RELAY)?'basic':CFG.provider;$('#skey').value=CFG.key;$('#smod').value=CFG.model;sUI();sm.classList.add('on');};
+$('#setbtn').onclick=openSettings;$('#sprov').onchange=sUI;$('#scancel').onclick=()=>sm.classList.remove('on');
+$('#ssave').onclick=()=>{CFG={provider:$('#sprov').value,key:$('#skey').value.trim(),model:$('#smod').value.trim()};try{localStorage.setItem(SKEY,JSON.stringify(CFG));}catch{}sm.classList.remove('on');readerLabel();toast((CFG.provider==='gemini'||CFG.provider==='anthropic')&&!CFG.key?'No key entered, so '+NAMES[provider()]+' stays on':'Reading settings saved');};
+$('#exp').onclick=()=>{try{const blob=new Blob([JSON.stringify({app:'syllabus-grade-calculator',v:1,...S},null,1)],{type:'application/json'});const u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download='grade-calculators-'+new Date().toISOString().slice(0,10)+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),2000);toast('Backup downloaded');}catch{toast('Your browser blocked the download');}};
+$('#imp').onclick=()=>$('#impf').click();
+$('#impf').onchange=async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;try{const v=JSON.parse(await f.text());if(!v||!Array.isArray(v.courses))throw 0;const snap=JSON.stringify(S);S={courses:v.courses,sel:v.sel,at:Date.now()};fix();render();save();toast(`Imported ${S.courses.length} course${S.courses.length===1?'':'s'}`,snap);}catch{toast('That file isn’t a grade calculator backup');}};
+
+/* ---------- start ---------- */
+try{const v=JSON.parse(localStorage.getItem(KEY)||'null');if(v&&Array.isArray(v.courses))S=v;}catch{}
+fix();render();
+readerLabel();
+}
+</script>
+</body></html>
