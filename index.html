@@ -102,6 +102,8 @@ aside h2{font-size:12px;color:var(--mute);margin:0 0 6px;font-weight:600}
 .profpop:not([hidden]){display:grid;gap:8px}.pr{display:grid}.pl{font-size:11px;color:var(--mute)}.pv{font-size:14px;color:var(--ink);overflow-wrap:anywhere}
 .profpop a{color:var(--ink);font-weight:600}
 .box.mu{grid-column:span 2}.box.mu span{color:var(--red);padding-right:0}
+.mdist{display:grid;gap:4px;margin:2px 0 4px 26px}.mdist .hint{margin:0 0 2px}.mdrow{display:grid;grid-template-columns:minmax(0,1fr) auto 96px;gap:8px;align-items:center;font-size:14px}.mdrow small{color:var(--mute)}
+.mdin{display:inline-flex;align-items:center;gap:4px}.mdin input{width:64px;text-align:right}.mdadd{font-size:12px;color:var(--mute);font-weight:600}.mdfoot{display:flex;justify-content:space-between;font-size:12.5px;color:var(--mute);margin-top:2px}.mdfoot .err{color:var(--red)}
 .hmiss{font-size:12px;color:var(--mute)}
 .madeup{min-height:38px;border:1px dashed var(--red);border-radius:8px;background:var(--soft);font-size:15px;font-weight:600;text-align:right;padding:4px 7px;font-variant-numeric:tabular-nums;font-style:italic}
 .madeup.dropped{text-decoration:line-through;color:var(--mute)}
@@ -486,7 +488,9 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 <label class="mopt"><input type="radio" name="mmode" value="copy" checked> <span>The score from another exam</span></label>
 <select id="mcopy" aria-label="Exam whose score is used"></select>
 <label class="mopt"><input type="radio" name="mmode" value="avg"> <span>The average of these exams</span></label>
-<div id="mavg" class="mavg"></div></fieldset>
+<div id="mavg" class="mavg"></div>
+<label class="mopt"><input type="radio" name="mmode" value="dist"> <span>Spread its weight over other exams</span></label>
+<div id="mdist" class="mdist"></div></fieldset>
 <p class="hint" id="mmsg"></p>
 <div class="mact"><button class="btn ghost" id="mclear">I took it (remove)</button><span style="flex:1"></span><button class="btn ghost" id="mcancel">Cancel</button><button class="btn" id="msave">Save</button></div></div></div>
 <div id="smodal" class="modal"><div class="card"><h3 style="margin:0">Reading settings</h3>
@@ -602,6 +606,7 @@ const labOf=(co,k)=>!co.isLab&&k.kind==='lab'&&k.link?byId(k.link):null;
 function itemVal(co,k,i,fill,d=0){
   const m=k.miss&&k.miss[i];if(!m||d>3)return parseScore(k.scores[i],k.outOf);
   const vals=(m.src||[]).map(r=>{const[c,j]=String(r).split(':'),sk=co.comps.find(x=>x.id===c);if(!sk||+j>=nItems(sk))return null;const v=itemVal(co,sk,+j,fill,d+1);return v!=null?v:fill;}).filter(v=>v!=null);
+  if(m.mode==='dist'){let num=0,den=0;(m.src||[]).forEach(r=>{const[c,j]=String(r).split(':'),sk=co.comps.find(x=>x.id===c);if(!sk||+j>=nItems(sk))return;let v=itemVal(co,sk,+j,fill,d+1);if(v==null)v=fill;if(v==null)return;const w=+((m.share||{})[r])||0;num+=w*v;den+=w;});return den>0?num/den:null;}
   if(!vals.length)return null;return m.mode==='copy'?vals[0]:vals.reduce((a,b)=>a+b,0)/vals.length;
 }
 const isMissed=(k,i)=>!!(k.miss&&k.miss[i]);
@@ -609,7 +614,7 @@ const examItems=co=>co.comps.filter(k=>k.kind==='exam').flatMap(k=>Array.from({l
 const refLabel=(co,r)=>{const x=examItems(co).find(e=>e.ref===r);return x?x.label:'a removed exam';};
 function removeItem(co,k,i){k.scores.splice(i,1);k.count=Math.max(0,nItems(k)-1);k.zeroOk=true;
   if(k.miss){const m={};for(const[key,v]of Object.entries(k.miss)){const n=+key;if(n<i)m[n]=v;else if(n>i)m[n-1]=v;}k.miss=m;}
-  for(const x of co.comps)if(x.miss)for(const key of Object.keys(x.miss)){const r=x.miss[key];r.src=(r.src||[]).map(s=>{const[c,j]=s.split(':');if(c!==k.id)return s;return +j===i?null:+j>i?`${c}:${+j-1}`:s;}).filter(Boolean);if(!r.src.length)delete x.miss[key];}}
+  for(const x of co.comps)if(x.miss)for(const key of Object.keys(x.miss)){const r=x.miss[key],mv=s=>{const[c,j]=s.split(':');if(c!==k.id)return s;return +j===i?null:+j>i?`${c}:${+j-1}`:s;};if(r.share){const ns={};for(const[q,v]of Object.entries(r.share)){const n=mv(q);if(n)ns[n]=v;}r.share=ns;}r.src=(r.src||[]).map(mv).filter(Boolean);if(!r.src.length)delete x.miss[key];}}
 function compPct(co,k,fill,d=0){const L=labOf(co,k);if(L&&d<2)return coursePct(L,fill,d+1);if(nItems(k)===0)return fill;let v=[];for(let i=0;i<nItems(k);i++){const p=itemVal(co,k,i,fill);if(p!=null)v.push(p);else if(fill!=null)v.push(fill);}if(!v.length)return null;v.sort((a,b)=>a-b);v=v.slice(Math.max(0,Math.min(k.drop|0,v.length-1)));return v.reduce((a,b)=>a+b,0)/v.length;}
 function coursePct(co,fill=null,d=0){let s=0,w=0;for(const k of co.comps){const wt=+k.weight||0;if(wt<=0)continue;const p=compPct(co,k,fill,d);if(p==null)continue;s+=p*wt;w+=wt;}return w?s/w:null;}
 function tally(co,d=0){let g=0,t=0;for(const k of co.comps){if(!(+k.weight>0))continue;const L=labOf(co,k);if(L&&d<2){const r=tally(L,d+1);g+=r.g;t+=r.t;continue;}if(nItems(k)===0){t++;continue;}for(let i=0;i<nItems(k);i++){t++;if(itemVal(co,k,i,null)!=null)g++;}}return{g,t};}
@@ -650,7 +655,7 @@ function compHTML(co,k,top){
   o+=`<div class="ctl">${edit?`<label>Items <input ${a} data-f="count" inputmode="numeric" value="${n}"></label>`:''}${showDrop?`<label>${dl} <input ${a} data-f="drop" inputmode="numeric" value="${k.drop|0}"></label>`:''}${showOut?`<label>Out of <input ${a} data-f="outOf" inputmode="decimal" value="${k.outOf}"></label>`:''}</div>`;
   const ds=droppedSet(co,k);
   o+=`<div class="boxes">${Array.from({length:n},(_,i)=>isMissed(k,i)?(()=>{const m=k.miss[i],v=itemVal(co,k,i,null),src=(m.src||[]).map(r=>refLabel(co,r));
-      return`<div class="box mu"><span>${n>1?pre+' '+(i+1)+' · ':''}made up</span><button class="madeup${ds.has(i)?' dropped':''}" data-act="missed" data-i="${i}" ${a} data-mu="${k.id}:${i}" title="${esc(m.mode==='copy'?'Uses '+src[0]:'Average of '+src.join(', '))}. Click to change.">${v==null?'waiting':fmt(v)+'%'}</button></div>`;})():`<div class="box"><span>${pre} ${i+1}</span><input ${a} data-f="score" data-i="${i}" inputmode="decimal" value="${esc(k.scores[i]??'')}" placeholder=" " aria-label="${esc(k.name)} ${pre} ${i+1} score"><button class="rm" data-act="rmitem" data-i="${i}" ${a} aria-label="Remove ${pre} ${i+1}" title="Remove this box">−</button></div>`).join('')}${n<60?`<button class="plus" data-act="inc" ${a} aria-label="Add a ${pre}" title="Add a ${pre.toLowerCase()}">+</button>`:''}${n===0?`<span class="none-yet">None yet. Use + to add one.</span>`:''}</div>`;
+      return`<div class="box mu"><span>${n>1?pre+' '+(i+1)+' · ':''}made up</span><button class="madeup${ds.has(i)?' dropped':''}" data-act="missed" data-i="${i}" ${a} data-mu="${k.id}:${i}" title="${esc(m.mode==='copy'?'Uses '+src[0]:m.mode==='dist'?'Weight spread over '+(m.src||[]).map(r=>refLabel(co,r)+' '+fmt((m.share||{})[r])+'%').join(', '):'Average of '+src.join(', '))}. Click to change.">${v==null?'waiting':fmt(v)+'%'}</button></div>`;})():`<div class="box"><span>${pre} ${i+1}</span><input ${a} data-f="score" data-i="${i}" inputmode="decimal" value="${esc(k.scores[i]??'')}" placeholder=" " aria-label="${esc(k.name)} ${pre} ${i+1} score"><button class="rm" data-act="rmitem" data-i="${i}" ${a} aria-label="Remove ${pre} ${i+1}" title="Remove this box">−</button></div>`).join('')}${n<60?`<button class="plus" data-act="inc" ${a} aria-label="Add a ${pre}" title="Add a ${pre.toLowerCase()}">+</button>`:''}${n===0?`<span class="none-yet">None yet. Use + to add one.</span>`:''}</div>`;
   return o+'</section>';
 }
 function notes(co){
@@ -683,7 +688,7 @@ function editHTML(co){
 }
 function profHTML(co){const p=co.prof||{};if(!p.name&&!p.email&&!p.hours&&!p.office)return'';
   const row=(l,v,h)=>`<span class="pr"><span class="pl">${l}</span><span class="pv">${v?h||esc(v):'<span class="nil">Not listed</span>'}</span></span>`;
-  return`<span class="profw"><button class="prof" data-act="prof" aria-expanded="false" aria-haspopup="true">${esc(p.name||'Professor')}<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5"/></svg></button><span class="profpop" hidden role="dialog" aria-label="Professor details">${row('Email',p.email,p.email?`<a href="mailto:${esc(p.email)}">${esc(p.email)}</a>`:'')}${row('Office hours',p.hours)}${row('Office',p.office)}</span></span>`;}
+  return`<span class="profw"><button class="prof" data-act="prof" aria-expanded="false" aria-haspopup="true">${esc(p.name||'Professor')}<svg viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5"/></svg></button><span class="profpop" hidden role="dialog" aria-label="Professor details">${row('Email',p.email,p.email?`<a href="mailto:${esc(p.email)}">${esc(p.email)}</a>`:'')}${row('Office hours',p.hours)}${row('Office',p.office?shortRoom(p.office):'')}</span></span>`;}
 function renderPanel(){
   if(S.sel==='gpa'){renderGPA();return;}
   const co=byId(S.sel);
@@ -1139,19 +1144,32 @@ function fillMissed(){
   $('#mcopy').innerHTML=opts.map(e=>`<option value="${e.ref}" ${cur&&cur.mode==='copy'&&cur.src[0]===e.ref?'selected':''}>${esc(e.label)}</option>`).join('');
   if(!cur){const fin=opts.find(e=>/final/i.test(e.label));if(fin)$('#mcopy').value=fin.ref;}
   $('#mavg').innerHTML=opts.map(e=>`<label class="chk"><input type="checkbox" value="${e.ref}" ${cur&&cur.mode==='avg'?(cur.src.includes(e.ref)?'checked':''):(e.k.kind==='exam'?'checked':'')}> ${esc(e.label)}</label>`).join('');
+  const iw=e=>(+e.k.weight||0)/Math.max(1,nItems(e.k)),tot=opts.reduce((a,e)=>a+iw(e),0)||1,myW=(+k.weight||0)/Math.max(1,nItems(k));
+  MX.myW=myW;MX.prop=Object.fromEntries(opts.map(e=>[e.ref,Math.round(iw(e)/tot*1000)/10]));
+  const sh=cur&&cur.mode==='dist'?cur.share||{}:MX.prop;
+  $('#mdist').innerHTML=`<p class="hint">How much of ${esc(nItems(k)>1?k.name+' '+(i+1):k.name)}’s ${fmt(myW)}% goes to each exam. It starts in proportion to their weights.</p>`+opts.map(e=>`<label class="mdrow"><span>${esc(e.label)} <small>(${fmt(iw(e))}%)</small></span><span class="mdin"><input type="number" min="0" max="100" step="1" inputmode="decimal" data-ref="${e.ref}" value="${sh[e.ref]!=null?sh[e.ref]:0}" aria-label="Share for ${esc(e.label)}"> %</span><b class="mdadd" data-add="${e.ref}"></b></label>`).join('')+`<div class="mdfoot"><span id="mdtot"></span><button class="lnkbtn" id="mdprop" type="button">Split by weight</button></div>`;
+  distPreview();
   document.querySelector(`input[name=mmode][value=${cur?cur.mode:'copy'}]`).checked=true;
   const had=String(k.scores[i]??'').trim();
   $('#mclear').hidden=!cur;$('#mmsg').textContent=!opts.length?'There’s no other exam to make it up with yet. Add one first.':had?`This exam has a score (${had}). Saving replaces it with the make-up.`:'';$('#msave').disabled=!opts.length;
 }
 $('#mwhich').onchange=fillMissed;
+function distShares(){const o={};for(const x of $('#mdist').querySelectorAll('input[data-ref]'))o[x.dataset.ref]=Math.max(0,+x.value||0);return o;}
+function distPreview(){const sh=distShares(),t=Object.values(sh).reduce((a,b)=>a+b,0);
+  for(const b of $('#mdist').querySelectorAll('[data-add]')){const v=sh[b.dataset.add]||0;b.textContent=t>0&&v>0?'+'+fmt(MX.myW*v/t)+'% weight':'';}
+  const el=$('#mdtot');if(el){el.textContent=`Total ${fmt(t)}%`+(Math.abs(t-100)>.05&&t>0?' · scaled to 100% when saved':'');el.className=t>0?'':'err';}}
+$('#mdist').addEventListener('input',()=>{document.querySelector('input[name=mmode][value=dist]').checked=true;distPreview();});
+$('#mdist').addEventListener('click',e=>{if(e.target.id==='mdprop'){for(const x of $('#mdist').querySelectorAll('input[data-ref]'))x.value=MX.prop[x.dataset.ref]??0;document.querySelector('input[name=mmode][value=dist]').checked=true;distPreview();}});
 $('#mcopy').onfocus=()=>{document.querySelector('input[name=mmode][value=copy]').checked=true;};
 $('#mavg').addEventListener('change',()=>{document.querySelector('input[name=mmode][value=avg]').checked=true;});
 $('#mcancel').onclick=()=>mm.classList.remove('on');
 $('#mclear').onclick=()=>{const{k}=MX,i=+$('#mwhich').value;if(k.miss)delete k.miss[i];mm.classList.remove('on');render();save();toast('Make-up removed');};
 $('#msave').onclick=()=>{const{k}=MX,i=+$('#mwhich').value,mode=document.querySelector('input[name=mmode]:checked').value;
-  const src=mode==='copy'?[$('#mcopy').value]:[...$('#mavg').querySelectorAll('input:checked')].map(x=>x.value);
+  let share=null,src;if(mode==='dist'){const sh=distShares(),t=Object.values(sh).reduce((a,b)=>a+b,0);if(!(t>0)){$('#mmsg').textContent='Give at least one exam a share.';return;}
+    src=Object.keys(sh).filter(r=>sh[r]>0);share=Object.fromEntries(src.map(r=>[r,Math.round(sh[r]/t*1000)/10]));}
+  else src=mode==='copy'?[$('#mcopy').value]:[...$('#mavg').querySelectorAll('input:checked')].map(x=>x.value);
   if(!src.length||!src[0]){$('#mmsg').textContent='Pick at least one exam.';return;}
-  k.miss=k.miss||{};k.miss[i]={mode,src};k.scores[i]='';mm.classList.remove('on');render();save();};
+  k.miss=k.miss||{};k.miss[i]=share?{mode,src,share}:{mode,src};k.scores[i]='';mm.classList.remove('on');render();save();};
 mm.addEventListener('click',e=>{if(e.target===mm)mm.classList.remove('on');});
 
 /* ---------- light / dark ---------- */
@@ -1166,7 +1184,7 @@ const DAYN=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturda
 const PAL=['#2563eb','#d97706','#059669','#db2777','#7c3aed','#0891b2','#dc2626','#65a30d','#ea580c','#4f46e5','#0d9488','#a21caf','#475569','#b45309'];
 const TTF=[['code','Course number'],['name','Course name'],['time','Timing'],['room','Room'],['type','Class type'],['section','Section'],['instructor','Instructor']];
 function TT(){if(!S.tt||typeof S.tt!=='object')S.tt={};const t=S.tt;
-  t.slots=t.slots||[];{const keys=TTF.map(x=>x[0]);t.order=(Array.isArray(t.order)?t.order:[]).filter(k=>keys.includes(k));for(const k of keys)if(!t.order.includes(k))t.order.push(k);}t.opts=Object.assign({code:true,name:true,time:true,room:true,type:true,section:false,instructor:false},t.opts||{});
+  t.slots=t.slots||[];if(t.v!==2){for(const x of t.slots){x.room=shortRoom(x.room);if(!x.section||x.section===splitSection(x.name)?.section){const sp=splitSection(x.name);if(sp){x.name=sp.name;x.section=x.section||sp.section;}}}t.v=2;}{const keys=TTF.map(x=>x[0]);t.order=(Array.isArray(t.order)?t.order:[]).filter(k=>keys.includes(k));for(const k of keys)if(!t.order.includes(k))t.order.push(k);}t.opts=Object.assign({code:true,name:true,time:true,room:true,type:true,section:false,instructor:false},t.opts||{});
   t.colors=t.colors||{};t.hidden=t.hidden||{};t.names=t.names||{};t.view=t.view||'auto';return t;}
 
 /* ---- .ics reading ---- */
@@ -1189,17 +1207,38 @@ function icsTime(p){
 }
 const durMin=v=>{const m=String(v||'').match(/P(?:(\d+)D)?T?(?:(\d+)H)?(?:(\d+)M)?/);return m?(+m[1]||0)*1440+(+m[2]||0)*60+(+m[3]||0):60;};
 const capWord=w=>w.charAt(0).toUpperCase()+w.slice(1).toLowerCase();
+/* AUS-style short room names: "Engineering and Sciences Building 1034" / "ESB 1034" / "esb1034" → "ESB-1034" */
+const BLDG=[[/\b(?:new\s+)?engineering\s*(?:and|&)?\s*sciences?\s*(?:building|bldg\.?|complex)?/i,'ESB'],[/\bnew\s+engineering\s+building/i,'ESB'],
+  [/\bengineering\s*(?:building|bldg\.?)?\s*(?:1|i|one)\b|\bengineering\s+left(?:\s+building)?/i,'EB1'],[/\bengineering\s*(?:building|bldg\.?)?\s*(?:2|ii|two)\b|\bengineering\s+right(?:\s+building)?/i,'EB2'],
+  [/\bschool\s+of\s+business(?:\s+administration)?(?:\s+building)?|\bbusiness\s+administration(?:\s+building)?/i,'SBA'],[/\bnew\s+academic\s+building/i,'NAB'],[/\blibrary(?:\s+building)?/i,'LIB'],
+  [/\bperforming\s+arts\s+building/i,'PAB'],[/\barts?(?:\s+(?:and|&)\s+sciences?)?\s+building/i,'ARTS'],[/\bphysics\s+building/i,'PHY'],[/\bchemistry\s+building/i,'CHM'],[/\blanguage\s+building/i,'LAN'],
+  [/\b(?:college\s+of\s+)?architecture,?\s*art\s*(?:and|&)\s*design(?:\s+building)?/i,'CAAD'],[/\bmain\s+building/i,'MB'],[/\bstudent\s+cent(?:er|re)/i,'SC'],[/\btesting\s+cent(?:er|re)/i,'TC'],[/\bsports\s+complex/i,'SPC']];
+const ROOMNO=/^[A-Za-z]{0,2}\s*-?\s*\d+[A-Za-z]?$|^[A-Za-z]{2,4}$/;
+function shortRoom(raw){const t0=String(raw||'').replace(/\s+/g,' ').trim();if(!t0||/\b(online|tba|tbd|to be announced|virtual|zoom|teams|remote)\b/i.test(t0))return t0;
+  {const r=t0.match(/^(?:room|rm)?\.?\s*#?\s*([A-Za-z]?\d+[A-Za-z]?)\s*[,\-–]?\s*([A-Za-z]{2,5}\d?)$/i);if(r&&/[A-Za-z]{2}/.test(r[2]))return r[2].toUpperCase()+'-'+r[1].toUpperCase();}
+  {const r=t0.match(/^([A-Za-z]{3,5})(\d{2,4}[A-Za-z]?)$/);if(r)return r[1].toUpperCase()+'-'+r[2].toUpperCase();}
+  if(/[,;/]/.test(t0)&&!/building|bldg/i.test(t0))return t0.split(/\s*([,;/])\s*/).map((p,i)=>i%2?(p===','?', ':p):/[A-Za-z]/.test(p)?shortRoom(p):p).join('').replace(/ ,/g,',');
+  let t=t0,code='';for(const[re,c]of BLDG)if(re.test(t)){code=c;t=t.replace(re,' ');break;}
+  t=t.replace(/\b(?:room|rm|class\s*room|no)\b\.?\s*#?|#/gi,' ').replace(/[(),:]/g,' ').replace(/\s+/g,' ').trim();
+  const fmtNo=r=>r.replace(/[\s-]+/g,'').toUpperCase();
+  if(code){const m=t.match(/[A-Za-z]{0,2}\s*-?\s*\d+[A-Za-z]?|\b[A-Z]{2,4}\b/);return m?code+'-'+fmtNo(m[0]):code;}
+  const m=t.match(/^([A-Za-z]{2,5}\d?)(\s*[-–]\s*|\s+|)(.+)$/);
+  if(m&&ROOMNO.test(m[3].trim())&&(m[2]||m[1].replace(/\d/g,'').length>=3))return m[1].toUpperCase()+'-'+fmtNo(m[3]);
+  return t0;}
+/* the section number: "MTH 103 04", "MTH 103-04", "Calculus I - 04", "Calculus I 04" */
+function splitSection(name){const m=String(name||'').match(/^(.*?[A-Za-z)\]])\s*(?:[-–.]\s*|\(\s*|\s+)(?:sec(?:tion)?\.?\s*)?(\d{2})\)?\s*$/i);return m?{name:m[1].trim(),section:m[2]}:null;}
 function parseSummary(sum,desc){
   const s=sum.replace(/\s+/g,' ').trim(),all=s+'\n'+desc;
-  const cm=s.match(/\b([A-Z]{2,5})\s?-?\s?(\d{3,4}[A-Z]?)\b(?:\s*[-./]\s*(?:sec(?:tion)?\.?\s*)?(\d{1,3}[A-Z]?)\b)?/)||desc.match(/\b([A-Z]{2,5})\s?(\d{3,4}[A-Z]?)\b/);
-  const code=cm?cm[1]+' '+cm[2]:'';let section=cm&&cm[3]?cm[3]:'';
+  const cm=s.match(/\b([A-Z]{2,5})\s?-?\s?(\d{3,4}[A-Z]?)\b(?:\s*[-./]\s*(?:sec(?:tion)?\.?\s*)?(\d{1,3}[A-Z]?)\b|\s+(?:sec(?:tion)?\.?\s*)?(\d{2})\b(?![:.]\d))?/)||desc.match(/\b([A-Z]{2,5})\s?(\d{3,4}[A-Z]?)\b/);
+  const code=cm?cm[1]+' '+cm[2]:'';let section=cm&&(cm[3]||cm[4])?cm[3]||cm[4]:'';
   let rest=cm&&s.includes(cm[0])?s.replace(cm[0],' '):s;
   const sm=rest.match(/\b(?:sec(?:tion)?\.?|section)\s*[:#]?\s*(\w{1,4})\b/i)||all.match(/\bsection\s*[:#]?\s*(\w{1,4})\b/i);
   if(!section&&sm)section=sm[1];if(sm)rest=rest.replace(sm[0],' ');
   const tm=all.match(/\b(lecture|laboratory|lab|recitation|tutorial|seminar|studio|discussion|workshop|practical)\b/i);
   let type=tm?capWord(tm[1]==='lab'||/^lab$/i.test(tm[1])?'Lab':tm[1]):'';if(/^laboratory$/i.test(type))type='Lab';
   rest=rest.replace(/\((?:lecture|lab|laboratory|recitation|tutorial|seminar|studio|discussion|workshop|practical)\)/ig,' ').replace(/\b(?:lecture|recitation|tutorial|discussion)\b/ig,' ');
-  const name=rest.replace(/\s+/g,' ').replace(/^[\s:\-–—|,.]+|[\s:\-–—|,.]+$/g,'').trim();
+  let name=rest.replace(/\s+/g,' ').replace(/^[\s:\-–—|,.]+|[\s:\-–—|,.]+$/g,'').trim();
+  {const sp=splitSection(name);if(sp&&(!section||section===sp.section)){name=sp.name;section=section||sp.section;}}
   const im=desc.match(/\b(?:instructors?|professors?|faculty|lecturer|taught by)\s*[:\-–]\s*([^\n;|]+)/i);
   return{code,section,type:type||(/\d+L\b/.test(code)?'Lab':''),name:name||(code?'':s),instructor:im?im[1].replace(/\s*\(.*?\)\s*/g,' ').trim().slice(0,60):''};
 }
@@ -1209,7 +1248,7 @@ function buildSlots(evs){
     const st=icsTime(e.DTSTART);if(!st||st.allDay)continue;
     const en=icsTime(e.DTEND);let end=en&&!en.allDay?en.min:st.min+(e.DURATION?durMin(e.DURATION.val):60);
     if(en&&!en.allDay&&en.date>st.date)end=1440;if(end<=st.min)end=Math.min(1440,st.min+50);
-    const sum=unesc(e.SUMMARY&&e.SUMMARY.val),desc=unesc(e.DESCRIPTION&&e.DESCRIPTION.val),room=unesc(e.LOCATION&&e.LOCATION.val).replace(/\s+/g,' ');
+    const sum=unesc(e.SUMMARY&&e.SUMMARY.val),desc=unesc(e.DESCRIPTION&&e.DESCRIPTION.val),room=shortRoom(unesc(e.LOCATION&&e.LOCATION.val).replace(/\s+/g,' '));
     if(/^(cancel+ed|transparent)$/i.test((e.STATUS||{}).val||''))continue;
     const info=parseSummary(sum,desc);let days=[st.day],rec=false,last=+st.date;
     if(e.RRULE){const r={};for(const kv of e.RRULE.val.split(';')){const[a,b]=kv.split('=');r[a.toUpperCase()]=b;}
@@ -1249,7 +1288,7 @@ const ttOrder=()=>TT().order.map(k=>TTF.find(x=>x[0]===k));
 function gradeFor(ck,code){const o=TT().names[ck]||{};if(o.link==='none')return null;if(o.link){const g=byId(o.link);if(g)return g;}const n=normCode(code||ck);if(!n)return null;return S.courses.find(c=>normCode(c.code)===n)||null;}
 function colorKeyOf(ck){const o=TT().names[ck]||{};if(o.link&&o.link!=='none'){const g=byId(o.link);if(g)return g.code||g.id;}return ck;}
 const EDF=['code','name','room','type','section','instructor'];
-function nm(s){const o=TT().names[s.ckey]||{},r={};for(const f of EDF)r[f]=(o[f]!=null&&o[f]!=='')?o[f]:(s[f]||'');return r;}
+function nm(s){const o=TT().names[s.ckey]||{},r={};for(const f of EDF)r[f]=(o[f]!=null&&o[f]!=='')?o[f]:(s[f]||'');if(r.room)r.room=shortRoom(r.room);return r;}
 function fmtClock(m,h24){const h=Math.floor(m/60)%24,mi=m%60;if(h24)return`${String(h).padStart(2,'0')}:${String(mi).padStart(2,'0')}`;return`${(h%12)||12}:${String(mi).padStart(2,'0')}`;}
 const ampm=m=>Math.floor(m/60)%24<12?'am':'pm';
 function fmtRange(a,b,h24){if(h24)return`${fmtClock(a,1)}–${fmtClock(b,1)}`;return ampm(a)===ampm(b)?`${fmtClock(a)}–${fmtClock(b)} ${ampm(b)}`:`${fmtClock(a)} ${ampm(a)}–${fmtClock(b)} ${ampm(b)}`;}
@@ -1693,7 +1732,7 @@ Rules:
 - Leave a list empty if the file has no such table. makeup = the make-up exam date if given, else null.`;
 const toMin=v=>{if(typeof v==='number')return v;const m=String(v||'').match(/(\d{1,2}):(\d\d)/);return m?+m[1]*60+ +m[2]:null;};
 const dayIdx=v=>typeof v==='number'?v:FDAYS.findIndex(d=>d.startsWith(String(v||'').toLowerCase().slice(0,3)));
-function normFin(r){r=r||{};const common=(Array.isArray(r.common)?r.common:[]).map(x=>({course:String(x.course||'').trim().toUpperCase(),date:iso(pd(x.date)),start:toMin(x.start),end:toMin(x.end),room:String(x.room||'').slice(0,120)})).filter(x=>x.course&&x.date&&x.start!=null);
+function normFin(r){r=r||{};const common=(Array.isArray(r.common)?r.common:[]).map(x=>({course:String(x.course||'').trim().toUpperCase(),date:iso(pd(x.date)),start:toMin(x.start),end:toMin(x.end),room:shortRoom(String(x.room||'').slice(0,120))})).filter(x=>x.course&&x.date&&x.start!=null);
   const slots=(Array.isArray(r.slots)?r.slots:[]).map(x=>({days:(x.days||[]).map(dayIdx).filter(d=>d>=0),from:toMin(x.from),to:toMin(x.to),date:iso(pd(x.date)),start:toMin(x.start),end:toMin(x.end)})).filter(x=>x.days.length&&x.from!=null&&x.date&&x.start!=null);
   return{term:r.term||'',year:r.year||'',common,slots,makeup:r.makeup?iso(pd(r.makeup)):''};}
 const isLabSlot=x=>/lab|tutorial|recitation|practical/i.test((x.type||'')+' '+(x.section||''));
