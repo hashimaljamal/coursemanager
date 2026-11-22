@@ -1189,7 +1189,7 @@ const DAYN=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturda
 const PAL=['#2563eb','#d97706','#059669','#db2777','#7c3aed','#0891b2','#dc2626','#65a30d','#ea580c','#4f46e5','#0d9488','#a21caf','#475569','#b45309'];
 const TTF=[['code','Course number'],['name','Course name'],['time','Timing'],['room','Room'],['type','Class type'],['section','Section'],['instructor','Instructor']];
 function TT(){if(!S.tt||typeof S.tt!=='object')S.tt={};const t=S.tt;
-  t.slots=t.slots||[];if(t.v!==3){for(const x of t.slots){x.room=shortRoom(x.room);if(!x.section||x.section===splitSection(x.name)?.section){const sp=splitSection(x.name);if(sp){x.name=sp.name;x.section=x.section||sp.section;}}}t.v=3;}{const keys=TTF.map(x=>x[0]);t.order=(Array.isArray(t.order)?t.order:[]).filter(k=>keys.includes(k));for(const k of keys)if(!t.order.includes(k))t.order.push(k);}t.opts=Object.assign({code:true,name:true,time:true,room:true,type:true,section:false,instructor:false},t.opts||{});
+  t.slots=t.slots||[];if(t.v!==4){for(const x of t.slots){x.room=shortRoom(x.room);if(!x.section||x.section===splitSection(x.name)?.section){const sp=splitSection(x.name);if(sp){x.name=sp.name;x.section=x.section||sp.section;}}}t.v=4;}{const keys=TTF.map(x=>x[0]);t.order=(Array.isArray(t.order)?t.order:[]).filter(k=>keys.includes(k));for(const k of keys)if(!t.order.includes(k))t.order.push(k);}t.opts=Object.assign({code:true,name:true,time:true,room:true,type:true,section:false,instructor:false},t.opts||{});
   t.colors=t.colors||{};t.hidden=t.hidden||{};t.names=t.names||{};t.view=t.view||'auto';return t;}
 
 /* ---- .ics reading ---- */
@@ -1227,9 +1227,11 @@ const BLDG=[
   ['SC',`student\\s+cent(?:er|re)`],['TC',`testing\\s+cent(?:er|re)`],['SPC',`sports\\s+complex`]].map(([c,r])=>[c,new RegExp('\\b(?:'+r+')','i')]);
 const BCODE=/\b(ESB|EB[12]|SBA|NAB|LIB|ARTS|PHY|CHM|LAN|CAAD|PAB|MB|SC|TC|HSB)\b/i,BLIST=['CAAD','ARTS','ESB','EB1','EB2','SBA','NAB','LIB','PHY','CHM','LAN','PAB','HSB','MB','SC','TC'];
 const RNO=/\b[A-Za-z]{0,2}\s?-?\d{1,5}[A-Za-z]?\b/g;
+/* room number: digits with an optional trailing letter; a single attached letter is kept (B17, B132), longer letter runs are dropped (NG1034 → 1034) except in the library and main building (LIB-B17, MB-MM44) */
+function roomNo(tok,code){const m=String(tok).replace(/^-+|-+$/g,'').toUpperCase().match(/^([A-Z]*)-?(\d{1,5}[A-Z]?)$/);if(!m)return'';const p=m[1];return((code==='LIB'||code==='MB')?p.slice(-2):p.length===1?p:'')+m[2];}
 function shortRoom(raw){const t0=String(raw||'').replace(/\s+/g,' ').trim();if(!t0||/\b(online|tba|tbd|to be announced|virtual|zoom|teams|remote|n\/a)\b/i.test(t0))return t0;
-  if(/^[A-Z]{2,5}\d?-[A-Z]?\d+[A-Z]?$/.test(t0))return t0;
-  {const u=t0.toUpperCase().replace(/\s+/g,'');for(const c of BLIST)if(u.startsWith(c)&&/^-?[A-Z]{0,2}\d{1,5}[A-Z]?$/.test(u.slice(c.length)))return c+'-'+u.slice(c.length).replace(/^-/,'');}
+  if(/^[A-Z]{2,5}\d?-[A-Z]?\d+[A-Z]?$/.test(t0)&&!/^(ESB|EB[12]|SBA|NAB|ARTS|PHY|CHM|LAN)-[A-Z]{2}/.test(t0))return t0;
+  {const u=t0.toUpperCase().replace(/\s+/g,'');for(const c of BLIST)if(u.startsWith(c)&&/^[\s\-\d]/.test(t0.slice(c.length))&&/^-?[A-Z]{0,3}-?\d{1,5}[A-Z]?$/.test(u.slice(c.length))){const n=roomNo(u.slice(c.length).replace(/^-/,''),c);if(n)return c+'-'+n;}}
   /* lists of rooms (exam schedules): "EB2-214, 216, TC MPH" */
   if(/,|;|\//.test(t0)&&!new RegExp(BW,'i').test(t0)&&!/room/i.test(t0)){const parts=t0.split(/\s*[,;/]\s*/);if(parts.length>1&&parts.every(p=>p.length<24))return parts.map(p=>/[A-Za-z]/.test(p)?shortRoom(p):p).join(', ');}
   let t=' '+t0.replace(/[()[\]{}|]/g,' ')+' ',code='';
@@ -1240,8 +1242,8 @@ function shortRoom(raw){const t0=String(raw||'').replace(/\s+/g,' ').trim();if(!
     return t0;}
   t=t.replace(/\b(?:room|rm|class\s*room|lecture\s+hall|lab(?:oratory)?|no|number|floor|level|campus|aus|sharjah)\b\.?\s*:?\s*#?/gi,' ');
   /* the room number is the number-like token after the building, else the last one */
-  const after=t.slice(t.indexOf('#')+1),nums=[...after.matchAll(RNO)].map(x=>x[0]),all=[...t.matchAll(RNO)].map(x=>x[0]);
-  const rn=(nums[0]||all[all.length-1]||'').replace(/[\s-]/g,'').toUpperCase();
+  const toks=x=>x.split(/[\s,;:#()]+|-(?=[A-Za-z]{2,})/).map(q=>roomNo(q,code)).filter(Boolean),after=t.slice(t.indexOf('#')+1),nums=toks(after),all=toks(t);
+  const rn=nums[0]||all[all.length-1]||'';
   if(!rn){const w=after.trim().match(/^[A-Za-z]{2,4}\b/);return w?code+'-'+w[0].toUpperCase():code;}
   return code+'-'+rn;}
 /* the section number: "MTH 103 04", "MTH 103-04", "Calculus I - 04", "Calculus I 04" */
