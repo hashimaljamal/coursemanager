@@ -17,7 +17,7 @@
 html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
 *{box-sizing:border-box;min-width:0}
 [hidden]{display:none!important}
-.wrap.nocourses aside{display:none}
+.wrap.nocourses aside{display:none}.wrap.nocourses{grid-template-columns:1fr;grid-template-areas:"main"}.wrap.nocourses main{border-left:0;padding-left:0}
 body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 Archivo,system-ui,-apple-system,Segoe UI,sans-serif;overflow-x:clip;transition:background-color .2s,color .2s;-webkit-tap-highlight-color:transparent}
 button,input,select,textarea{font:inherit;color:inherit}
 button{cursor:pointer}
@@ -280,6 +280,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 .hleft{display:flex;flex-direction:column;gap:14px;position:sticky;top:10px}
 .hnext{display:grid;gap:2px;border:1px solid var(--line);border-radius:14px;padding:14px 16px;color:inherit;text-decoration:none;border-top:4px solid var(--cc,var(--ink))}
 .hnext.live{border-color:var(--red);border-top-color:var(--red)}.hnext:hover{border-color:var(--ink)}.hnext.empty{border-top-width:1px}
+.hnext .btn{justify-self:start}.gempty{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
 .hnl{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--mute)}.hnext.live .hnl{color:var(--red)}
 .hncode{display:flex;align-items:center;gap:8px;font-size:22px;font-weight:900;font-stretch:112%}.hncode .cdot{background:var(--cc);width:10px;height:10px}
 .hntime{font-size:clamp(38px,4.2vw,50px);font-weight:900;line-height:1.05;font-variant-numeric:tabular-nums;letter-spacing:-.02em}.hnsub{font-size:13px;color:var(--mute)}
@@ -298,7 +299,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 .upbox:hover,.upbox:focus-visible,.upbox.drag{border-color:var(--ink);background:var(--soft);outline:0}.upbox.has{border-style:solid;border-color:var(--ink)}
 .upi{grid-row:1/4;width:30px;height:30px;border-radius:99px;background:var(--soft);display:grid;place-items:center;font-weight:800;font-size:14px}.upbox.has .upi{background:var(--ink);color:var(--bg)}
 .upbox b{font-size:15px}.upbox small{color:var(--mute);font-size:12.5px;line-height:1.35}.upf{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline;font-size:13px;margin-top:4px}
-.upnone{font-weight:600}.uphave{color:var(--mute);font-size:12px}.upchosen{font-weight:700;word-break:break-word}.upact{align-items:center}.upact .sp{flex:1}
+.upnone{font-weight:600}.uphave{color:var(--mute);font-size:12px}.upchosen{font-weight:700;word-break:break-word}.upact{align-items:center;flex-wrap:wrap}.upact .sp{flex:1}@media(max-width:600px){.upact #upsem{flex-basis:100%;text-align:left;margin-bottom:4px}.upact .sp{display:none}.upact .btn{flex:1}}
 .smenu .sset{border-top:0;margin-top:0;padding-top:7px;font-weight:600;color:var(--mute)}
 .hcard{border:1px solid var(--line);border-radius:14px;padding:4px 14px 14px;min-width:0;display:flex;flex-direction:column;gap:6px}
 .hhead{display:flex;align-items:stretch;gap:4px;border-bottom:2px solid var(--ink);margin-bottom:2px}.hhead .htitle{flex:1;border-bottom:0;margin-bottom:0;min-width:0}
@@ -352,7 +353,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 .fnlist{list-style:none;margin:0;padding:0}.fnlist li{display:grid;grid-template-columns:auto auto 1fr;gap:2px 8px;align-items:baseline;padding:7px 0;border-bottom:1px solid var(--line)}
 .fnlist li:last-child{border-bottom:0}.fnlist .cdot{background:var(--cc);align-self:center}.fnlist small{grid-column:2/-1;color:var(--mute);font-size:12.5px}.fnlist.skip li{grid-template-columns:auto 1fr}.fnlist.skip small{grid-column:auto}
 .fnfiles{margin:8px 0 0}#fnres{max-height:min(48dvh,420px);overflow:auto}
-.hhero>.hcds{display:flex;flex-wrap:wrap;gap:8px;margin-left:auto;align-items:stretch}.hcd{display:flex;align-items:center;gap:8px;padding:6px 12px 6px 10px;border:1px solid var(--line);border-radius:var(--rad);color:inherit;text-decoration:none;min-height:44px}
+.hhero>.btn{margin-left:auto}.hhero>.hcds{display:flex;flex-wrap:wrap;gap:8px;margin-left:auto;align-items:stretch}.hcd{display:flex;align-items:center;gap:8px;padding:6px 12px 6px 10px;border:1px solid var(--line);border-radius:var(--rad);color:inherit;text-decoration:none;min-height:42px}
 .hcd:hover{border-color:var(--ink)}.hcd b{font-size:22px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}.hcd span{font-size:11.5px;line-height:1.2;color:var(--mute)}
 #cmodal{z-index:60}#tmodal{z-index:55}
 .xfs{display:flex;align-items:center;gap:10px}.xfs input{flex:1;accent-color:var(--ink)}.xfs output{min-width:44px;font-weight:700;font-variant-numeric:tabular-nums}
@@ -587,7 +588,7 @@ function seed(){
   const plab={id:rid(),sample:1,code:'PHYS 201L',title:'Mechanics Laboratory',isLab:true,bounds:B(STD),comps:[C('Lab reports','lab',80,8,1,['88','91','76']),C('Lab practical','exam',20,1,0,[])]};
   S={courses:[chem,lab,phys,plab],sel:chem.id,at:0};
 }
-function fix(){S.courses=(S.courses||[]).filter(c=>!c.sample);for(const c of S.courses){c.comps=c.comps||[];c.bounds=c.bounds||B(STD);for(const k of c.comps){k.scores=k.scores||[];k.outOf=+k.outOf||100;k.drop=k.drop|0;k.count=k.count|0;const last=k.scores.reduce((m,v,i)=>String(v??'').trim()?i+1:m,0);if(k.count<last)k.count=last;if(k.count===0&&!k.zeroOk&&!['quiz','assignment','lab'].includes(k.kind))k.count=1;}}if(S.sel!=='gpa'&&!byId(S.sel))S.sel=S.courses[0]?.id||null;}
+function fix(){S.courses=(S.courses||[]).filter(c=>!c.sample);for(const c of S.courses){c.comps=c.comps||[];c.bounds=c.bounds&&c.bounds.length?c.bounds:B(STD);for(const k of c.comps){k.scores=k.scores||[];k.outOf=+k.outOf||100;k.drop=k.drop|0;k.count=k.count|0;const last=k.scores.reduce((m,v,i)=>String(v??'').trim()?i+1:m,0);if(k.count<last)k.count=last;if(k.count===0&&!k.zeroOk&&!['quiz','assignment','lab'].includes(k.kind))k.count=1;}}if(S.sel!=='gpa'&&!byId(S.sel))S.sel=S.courses[0]?.id||null;}
 const byId=id=>S.courses.find(c=>c.id===id);
 function linkedBy(labId){for(const co of S.courses){if(co.isLab)continue;for(const k of co.comps)if(k.kind==='lab'&&k.link===labId)return{co,k};}return null;}
 
@@ -692,7 +693,7 @@ function profHTML(co){const p=co.prof||{};if(!p.name&&!p.email&&!p.hours&&!p.off
 function renderPanel(){
   if(S.sel==='gpa'){renderGPA();return;}
   const co=byId(S.sel);
-  if(!co){$('#panel').innerHTML='<div class="empty"><h2>No courses yet</h2><p>Upload a syllabus above, or add a course by hand.</p></div>';return;}
+  if(!co){$('#panel').innerHTML='<div class="ttempty"><h2>Add your courses</h2><p>Upload your syllabi (PDF, Word, photos or text) and a grade calculator is built for each course, with its own weights and grade boundaries. You can also paste the text or set a course up by hand.</p><div class="gempty"><button class="btn" data-act="pickfiles">Upload syllabi</button><button class="btn ghost" data-act="addmanual">Add by hand</button></div></div>';return;}
   $('#panel').innerHTML=`<div class="chead"><div><h2><button class="sw hsw" data-act="color" data-ck="${esc(co.code||co.id)}" style="background:${courseColor(co)}" aria-label="Course colour" title="Change colour (also used in Timetable)"></button>${esc(co.code||'Untitled course')}</h2><div class="csub">${[co.title?esc(co.title):'',profHTML(co),co.isLab?'Lab':'',`${fmt(creditsOf(co))} credit${creditsOf(co)===1?'':'s'}`,co.noGpa?'not in GPA':''].filter(Boolean).map(x=>`<span class="cs">${x}</span>`).join('')}</div></div><div class="cacts"><button class="btn ghost sm" data-act="cleargrades" data-co="${co.id}" ${courseHasData(co)?'':'hidden'}>Clear grades</button><button class="btn ${edit?'':'ghost'} sm" data-act="edit">${edit?'Done editing':'Edit structure'}</button></div></div>${(()=>{const n=notes(co);return n?`<div class="notes">${n}</div>`:'';})()}<div id="res"></div>${co.comps.length?`<div class="comps">${co.comps.map(k=>compHTML(co,k,true)).join('')}</div>`:'<p class="hint">No graded parts yet. Use Edit structure to add some.</p>'}${edit?editHTML(co):''}`;
   numbers();
 }
@@ -792,6 +793,8 @@ document.addEventListener('click',e=>{if(!e.target.closest('.profw'))document.qu
   else if(act==='addb'&&co){co.bounds.push({g:'?',min:0});render();save();}
   else if(act==='delb'&&co){co.bounds.splice(+b.dataset.bi,1);render();save();}
   else if(act==='delcourse'&&co){const snap=JSON.stringify(S);S.courses=S.courses.filter(c=>c!==co);for(const c of S.courses)for(const x of c.comps)if(x.link===co.id)x.link=null;S.sel=S.courses[0]?.id||null;edit=false;render();save();toast(`Deleted ${co.code||'course'}`,snap);}
+  else if(act==='pickfiles'){$('#file').click();return;}
+  else if(act==='addmanual'){$('#manual').click();return;}
   else if(act==='clearsamples'){const snap=JSON.stringify(S);S.courses=S.courses.filter(c=>!c.sample);S.sel=S.courses[0]?.id||null;render();save();toast('Samples cleared',snap);}
 });
 
@@ -816,10 +819,11 @@ const loadScript=src=>loaded[src]||(loaded[src]=new Promise((ok,no)=>{const s=do
 const PDFJS='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/';
 async function readPdf(f){
   await loadScript(PDFJS+'pdf.worker.min.js');await loadScript(PDFJS+'pdf.min.js');
-  const pdf=await pdfjsLib.getDocument({data:new Uint8Array(await f.arrayBuffer()),isEvalSupported:false}).promise;let text='';const images=[];
-  for(let p=1;p<=Math.min(pdf.numPages,40);p++){const pg=await pdf.getPage(p);const tc=await pg.getTextContent();text+=tc.items.map(i=>i.str+(i.hasEOL?'\n':' ')).join('')+'\n\n';}
+  const pdf=await pdfjsLib.getDocument({data:new Uint8Array(await f.arrayBuffer()),isEvalSupported:false}).promise;let text='';const images=[],items=[];
+  for(let p=1;p<=Math.min(pdf.numPages,40);p++){const pg=await pdf.getPage(p);const tc=await pg.getTextContent(),vh=pg.getViewport({scale:1}).height;text+=tc.items.map(i=>i.str+(i.hasEOL?'\n':' ')).join('')+'\n\n';
+    for(const i of tc.items)if(i.str&&i.str.trim())items.push({s:i.str,x:i.transform[4],y:vh-i.transform[5],w:i.width,p});}
   if(text.replace(/\s/g,'').length<300){for(let p=1;p<=Math.min(pdf.numPages,6);p++){const pg=await pdf.getPage(p),vp=pg.getViewport({scale:1.6}),cv=document.createElement('canvas');cv.width=vp.width;cv.height=vp.height;await pg.render({canvasContext:cv.getContext('2d'),viewport:vp}).promise;images.push(await new Promise(r=>cv.toBlob(r,'image/png')));}}
-  return{text,images};
+  return{text,images,items};
 }
 async function readFile(f){
   const n=f.name.toLowerCase();
@@ -1724,6 +1728,34 @@ function finFromText(text){const t=finNorm(text),lines=t.split('\n').map(l=>l.tr
   if(mk){const mo=FMONS.indexOf(mk[1].toLowerCase());out.makeup=iso(new Date(yearFor(mo),mo,+mk[2]));}
   return out;}
 
+/* Read a common-exams table from the PDF's layout: dates and times in the left columns, a course code with its rooms underneath in each course column. */
+function finFromItems(items){if(!items||!items.length)return null;const out=[];
+  for(const pg of [...new Set(items.map(i=>i.p))]){const its=items.filter(i=>i.p===pg).sort((a,b)=>a.y-b.y||a.x-b.x);
+    /* glue pieces on the same line that touch ("28","-","Nov" → "28-Nov") */
+    const P=[];for(const it of its){const l=P.length?P[P.length-1]:null;const gap=l?it.x-l.x1:99;
+      if(l&&Math.abs(l.y-it.y)<1.5&&gap>-1&&gap<4){l.s+=(gap>1.2&&!/[-–]$/.test(l.s)&&!/^[-–,]/.test(it.s)?' ':'')+it.s;l.x1=it.x+it.w;}else P.push({s:it.s,x0:it.x,x1:it.x+it.w,y:it.y});}
+    for(const p of P){p.s=p.s.replace(/\s+/g,' ').trim();p.cx=(p.x0+p.x1)/2;}
+    const dRe=/^(\d{1,2})\s*[-\/ ]\s*([A-Za-z]{3})[a-z]*\.?\s*[-\/ ]\s*(\d{2,4})$/,tRe=/^(\d{1,2}(?::\d\d)?)\s*[-–]\s*(\d{1,2}(?::\d\d)?)\s*([ap]\.?\s*m\.?)$/i,cRe=/^([A-Z]{2,4})\s?(\d{3}[A-Z]?)$/;
+    const dates=P.filter(p=>dRe.test(p.s)),times=P.filter(p=>tRe.test(p.s)).sort((a,b)=>a.y-b.y);if(!dates.length||!times.length)continue;
+    const heads=P.filter(p=>/^(subject\s*\/\s*)?course(s)?$/i.test(p.s)||/^subject\s*\/\s*course$/i.test(p.s));
+    const codes=P.filter(p=>cRe.test(p.s)&&p.x0>Math.max(...times.map(t=>t.x1))-2);if(codes.length<2)continue;
+    let cols=heads.length?heads.map(h=>h.cx):[];if(!cols.length){for(const c of codes.map(c=>c.cx).sort((a,b)=>a-b))if(!cols.length||c-cols[cols.length-1]>40)cols.push(c);}
+    cols.sort((a,b)=>a-b);const colOf=x=>{let b=0;for(let i=1;i<cols.length;i++)if(Math.abs(x-cols[i])<Math.abs(x-cols[b]))b=i;return b;};
+    /* each time row belongs to one date: split the rows into date blocks whose middles line up with the dates */
+    const D=[...dates].sort((a,b)=>a.y-b.y),n=times.length,m=D.length;if(m>n)continue;
+    const cost=(a,b,j)=>{let s=0;for(let i=a;i<=b;i++)s+=times[i].y;const mean=s/(b-a+1);return(mean-D[j].y)**2;};
+    const best=Array.from({length:m+1},()=>Array(n+1).fill(Infinity)),from=Array.from({length:m+1},()=>Array(n+1).fill(-1));best[0][0]=0;
+    for(let j=1;j<=m;j++)for(let i=j;i<=n-(m-j);i++)for(let k=j-1;k<i;k++){if(best[j-1][k]===Infinity)continue;const v=best[j-1][k]+cost(k,i-1,j-1);if(v<best[j][i]){best[j][i]=v;from[j][i]=k;}}
+    if(best[m][n]===Infinity)continue;const dateOfRow=Array(n);for(let j=m,i=n;j>0;j--){const k=from[j][i];for(let r=k;r<i;r++)dateOfRow[r]=j-1;i=k;}
+    const dIso=p=>{const x=p.s.match(dRe),mo=FMONS.findIndex(q=>q.startsWith(x[2].toLowerCase()));let y=+x[3];if(y<100)y+=2000;return iso(new Date(y,mo,+x[1]));};
+    const rowOf=y=>{let b=-1,bd=1e9;for(let i=0;i<n;i++){const d=times[i].y-y;if(d>=-4&&d<bd){bd=d;b=i;}}if(b<0){for(let i=0;i<n;i++)if(Math.abs(times[i].y-y)<bd){bd=Math.abs(times[i].y-y);b=i;}}return b;};
+    const minX=Math.max(...times.map(t=>t.x1))-2,rooms=P.filter(p=>p.x0>=minX-40&&!cRe.test(p.s)&&!tRe.test(p.s)&&!dRe.test(p.s)&&p.y>Math.min(...codes.map(c=>c.y))-1&&!/^(subject|room|course|date|time)/i.test(p.s));
+    for(const c of codes){const r=rowOf(c.y);if(r<0)continue;const col=colOf(c.cx);
+      const nextY=Math.min(...codes.filter(o=>o!==c&&colOf(o.cx)===col&&o.y>c.y+1).map(o=>o.y),...times.filter(t=>t.y>times[r].y+1).map(t=>t.y-8),1e9);
+      const rm=rooms.filter(p=>p.y>c.y+1&&p.y<nextY&&colOf(p.cx)===col).sort((a,b)=>a.y-b.y||a.x0-b.x0).map(p=>p.s.replace(/,\s*$/,'')).join(', ');
+      const tm=times[r].s.match(tRe),rg=rangeMins(tm[1],tm[2],tm[3].replace(/[\s.]/g,''));if(!rg)continue;
+      out.push({course:c.s.replace(cRe,'$1 $2'),date:dIso(D[dateOfRow[r]]),start:rg.start,end:rg.end,room:shortRoom(rm.replace(/\s*,\s*,/g,','))});}}
+  return out.length>=2?out:null;}
 const FIN_INSTR=`You read a university final-exam schedule. Reply with ONLY a JSON object, no prose:
 {"term":"Fall","year":2026,"common":[{"course":"MTH 104","date":"2026-11-28","start":"17:00","end":"19:00","room":"EB2-214, 216"}],"slots":[{"days":["Mon","Wed"],"from":"08:00","to":"09:15","date":"2026-11-29","start":"14:00","end":"16:00"}],"makeup":"2026-12-10"}
 Rules:
@@ -1753,8 +1785,8 @@ function myFinals(){const F=S.finals;if(!F||!(F.common.length||F.slots.length))r
     if(!row){skip.push({code:c.code,why:F.slots.length?`Its class time (${days.map(d=>DAYN[d].slice(0,3)).join('/')} ${fmtClock(start,T.h24)}) isn't in the schedule`:'Not in the common exams list'});continue;}
     list.push({code:c.code,g:c.g,date:row.date,start:row.start,end:row.end,how:'regular',note:c.g?'':'No syllabus to check'});}
   list.sort((a,b)=>(a.date+minHM(a.start)).localeCompare(b.date+minHM(b.start)));return{list,skip};}
-function finalTasks(){const r=myFinals();if(!r)return[];return r.list.map(f=>({key:'f:'+normCode(f.code),title:'Final exam',courseId:f.g?f.g.id:null,tag:f.code,date:f.date,time:minHM(f.start),kind:'exam',source:'finals',final:true,
-  note:[fmtRangeM(f.start,f.end),f.room,f.how==='common'?'Common exam':'',f.note].filter(Boolean).join(' · ')}));}
+function finalTasks(){const r=myFinals();if(!r)return[];return r.list.map(f=>({key:'f:'+normCode(f.code),title:'Final exam',courseId:f.g?f.g.id:null,tag:f.code,date:f.date,time:minHM(f.start),end:minHM(f.end),kind:'exam',source:'finals',final:true,
+  note:[f.room,f.how==='common'?'Common exam':'',f.note].filter(Boolean).join(' · ')}));}
 
 /* ---- finals dialog ---- */
 function fillFin(){const F=S.finals,r=myFinals(),T0=today0();$('#fnclear').hidden=!F;$('#fnup').textContent=F?'Upload again':'Upload schedules';
@@ -1774,8 +1806,14 @@ $('#fnclear').onclick=async()=>{if(!await confirmBox('Remove your finals?','The 
 $('#finfile').onchange=async e=>{const files=[...e.target.files];e.target.value='';if(!files.length)return;const st=$('#fnstatus');st.className='hint';
   const snap=JSON.stringify(S),F=S.finals?JSON.parse(JSON.stringify(S.finals)):{common:[],slots:[],files:{}};F.files=F.files||{};let basic=false,got=0;const errs=[];
   for(const f of files){st.textContent=`Reading ${f.name}…`;
-    try{const input=await readFile(f);let res=await askCal(input,f.name,t=>st.textContent=`${t} (${f.name})`,'finals');
-      let r;if(res.finals){r=res.finals;basic=true;}else{r=normFin(res);if(!r.common.length&&!r.slots.length&&input.text.trim()){r=finFromText(input.text);basic=true;}}
+    try{const input=await readFile(f);let r;
+      /* the file's own layout is exact, so read that first; the AI only fills in what it can't */
+      const geo=finFromItems(input.items),txt=input.text.trim()?finFromText(input.text):null;
+      if(geo||(txt&&txt.slots.length>=3)){r=txt||{common:[],slots:[]};if(geo)r.common=geo;}
+      else{let res=await askCal(input,f.name,t=>st.textContent=`${t} (${f.name})`,'finals');
+        if(res.finals){r=res.finals;basic=true;}else{r=normFin(res);
+          if(txt){const ai=new Map(r.common.map(x=>[normCode(x.course),x]));for(const x of txt.common){const a=ai.get(normCode(x.course));if(a){a.date=x.date;a.start=x.start;a.end=x.end;}else r.common.push({...x,room:''});}
+            if(!r.slots.length)r.slots=txt.slots;if(!r.common.length&&!r.slots.length)basic=true;}}}
       if(!r.common.length&&!r.slots.length){errs.push(`${f.name}: no exam dates found`);continue;}
       if(r.common.length){F.common=r.common;F.files.common=f.name;}if(r.slots.length){F.slots=r.slots;F.files.regular=f.name;}
       if(r.makeup)F.makeup=r.makeup;if(r.term)F.term=r.term;if(r.year)F.year=r.year;got++;}
@@ -1804,7 +1842,7 @@ function allTasks(){TS();const out=[],ws=semWeeks();
 const catOf=id=>(S.cats||[]).find(c=>c.id===id);
 const taskColor=t=>{if(t.courseId){const c=byId(t.courseId);if(c)return courseColor(c);}if(t.tag)return colorFor(t.tag);const k=catOf(t.catId);return k?k.color:'#8a8a8a';};
 const taskTag=t=>{if(t.courseId){const c=byId(t.courseId);return c?c.code||'Course':'';}if(t.tag)return t.tag;const k=catOf(t.catId);return k?k.name:'';};
-function taskWhen(t){if(!t.date)return t.weekNo?`Week ${t.weekNo}`:'No date';const d=pd(t.date);if(t.approx)return`During week ${t.weekNo}`;return relDay(d)+(t.time?' · '+fmtClock(+t.time.split(':')[0]*60+ +t.time.split(':')[1],TT().h24)+(TT().h24?'':' '+ampm(+t.time.split(':')[0]*60)):'');}
+function taskWhen(t){if(!t.date)return t.weekNo?`Week ${t.weekNo}`:'No date';const d=pd(t.date);if(t.approx)return`During week ${t.weekNo}`;if(t.time&&t.end){const a=toMin(t.time),b=toMin(t.end);return relDay(d)+' · '+fmtRangeM(a,b);}return relDay(d)+(t.time?' · '+fmtClock(+t.time.split(':')[0]*60+ +t.time.split(':')[1],TT().h24)+(TT().h24?'':' '+ampm(+t.time.split(':')[0]*60)):'');}
 function taskRow(t,compact){const d=pd(t.date),over=d&&!t.done&&d<today0();
   return`<li class="task${t.done?' done':''}${over?' over':''}" style="--tc:${taskColor(t)}"><label class="tchk"><input type="checkbox" data-task="${esc(t.key)}" ${t.done?'checked':''} aria-label="Done: ${esc(t.title)}"></label>
     <span class="tbody"><span class="ttl">${esc(t.title)}</span><span class="tmeta"><i class="cdot"></i>${esc(taskTag(t)||'Task')}<span class="twhen">${esc(taskWhen(t))}</span>${t.note?`<span class="tnote">${esc(t.note)}</span>`:''}</span></span>
