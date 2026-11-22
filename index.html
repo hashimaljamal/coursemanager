@@ -272,7 +272,32 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 .hhero>div{display:flex;align-items:baseline;gap:4px 14px;flex-wrap:wrap}
 .hhero h2{margin:0;font-size:clamp(22px,2.6vw,30px);line-height:1.1;font-weight:900;font-stretch:115%}
 .hsem{font-size:13px;font-weight:700;color:var(--red);text-transform:none}
-.hgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;padding:14px 0 24px}
+.hwrap{display:grid;grid-template-columns:minmax(270px,330px) minmax(0,1fr);gap:14px;padding:14px 0 24px;align-items:start}
+.hgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;align-items:start}.hcol{display:flex;flex-direction:column;gap:14px;min-width:0}
+.hcard[data-hc=classes]{order:1}.hcard[data-hc=tasks]{order:2}.hcard[data-hc=dates]{order:3}.hcard[data-hc=courses]{order:4}
+.hleft{display:flex;flex-direction:column;gap:14px;position:sticky;top:10px}
+.hnext{display:grid;gap:2px;border:1px solid var(--line);border-radius:14px;padding:14px 16px;color:inherit;text-decoration:none;border-top:4px solid var(--cc,var(--ink))}
+.hnext.live{border-color:var(--red);border-top-color:var(--red)}.hnext:hover{border-color:var(--ink)}.hnext.empty{border-top-width:1px}
+.hnl{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--mute)}.hnext.live .hnl{color:var(--red)}
+.hncode{display:flex;align-items:center;gap:8px;font-size:22px;font-weight:900;font-stretch:112%}.hncode .cdot{background:var(--cc);width:10px;height:10px}
+.hntime{font-size:clamp(38px,4.2vw,50px);font-weight:900;line-height:1.05;font-variant-numeric:tabular-nums;letter-spacing:-.02em}.hnsub{font-size:13px;color:var(--mute)}
+.hmonth{border:1px solid var(--line);border-radius:14px;padding:10px 12px 12px}
+.hmonth header{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}.mtitle{border:0;background:none;font:inherit;font-weight:800;font-size:15px;color:var(--ink);cursor:pointer;padding:6px 8px;border-radius:8px}.mtitle:hover{background:var(--soft)}
+.mgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center}.mgrid>b{font-size:11px;color:var(--mute);font-weight:700;padding:2px 0 4px}
+.md{position:relative;border:0;background:none;color:var(--ink);font:inherit;font-size:13px;font-weight:600;height:38px;border-radius:9px;cursor:pointer;display:grid;place-items:center;padding:0}
+.md:hover{background:var(--soft)}.md.past{color:var(--mute);font-weight:500}.md.off{background:color-mix(in srgb,#16a34a 14%,transparent)}.md.ex{background:color-mix(in srgb,#7c3aed 13%,transparent)}
+.md.today span{background:var(--ink);color:var(--bg);border-radius:99px;width:26px;height:26px;display:grid;place-items:center}.md.sel{box-shadow:inset 0 0 0 2px var(--ink)}.md.fin span{text-decoration:underline;text-decoration-color:var(--red);text-decoration-thickness:2px;text-underline-offset:3px}
+.md i{position:absolute;bottom:3px;left:0;right:0;display:flex;justify-content:center;gap:2px}.md i em{width:5px;height:5px;border-radius:9px}
+.mday{border-top:1px solid var(--line);margin-top:8px;padding-top:8px}.mday h4{margin:0 0 4px;font-size:13px;font-weight:800}.mday ul{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.mi{display:grid;grid-template-columns:12px 1fr;gap:8px;align-items:start;font-size:13px}.mi b{display:block;font-weight:700;line-height:1.25}.mi small{color:var(--mute);font-size:12px}.mi .cdot{background:var(--tc);margin-top:5px}.mi.done b{text-decoration:line-through;color:var(--mute)}
+.mflag{width:9px;height:9px;border-radius:2px;transform:rotate(45deg);margin-top:5px;background:#8a8a8a}.mflag.ct-break,.mflag.ct-holiday{background:#16a34a}.mflag.ct-makeup{background:#d97706}.mflag.ct-deadline{background:var(--red)}.mflag.ct-exam{background:#7c3aed}.mflag.ct-start,.mflag.ct-end{background:var(--ink)}
+.upcard{max-width:640px}.upgrid{display:grid;gap:10px;margin:14px 0 6px}
+.upbox{display:grid;grid-template-columns:30px 1fr;gap:2px 12px;align-items:start;border:1.5px dashed var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;transition:border-color .15s,background .15s}
+.upbox:hover,.upbox:focus-visible,.upbox.drag{border-color:var(--ink);background:var(--soft);outline:0}.upbox.has{border-style:solid;border-color:var(--ink)}
+.upi{grid-row:1/4;width:30px;height:30px;border-radius:99px;background:var(--soft);display:grid;place-items:center;font-weight:800;font-size:14px}.upbox.has .upi{background:var(--ink);color:var(--bg)}
+.upbox b{font-size:15px}.upbox small{color:var(--mute);font-size:12.5px;line-height:1.35}.upf{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline;font-size:13px;margin-top:4px}
+.upnone{font-weight:600}.uphave{color:var(--mute);font-size:12px}.upchosen{font-weight:700;word-break:break-word}.upact{align-items:center}.upact .sp{flex:1}
+.smenu .sset{border-top:0;margin-top:0;padding-top:7px;font-weight:600;color:var(--mute)}
 .hcard{border:1px solid var(--line);border-radius:14px;padding:4px 14px 14px;min-width:0;display:flex;flex-direction:column;gap:6px}
 .hhead{display:flex;align-items:stretch;gap:4px;border-bottom:2px solid var(--ink);margin-bottom:2px}.hhead .htitle{flex:1;border-bottom:0;margin-bottom:0;min-width:0}
 .hfold{border:0;background:none;color:var(--ink);width:32px;margin-left:-8px;display:grid;place-items:center;cursor:pointer;border-radius:8px;flex:none}.hfold:hover{background:var(--soft)}
@@ -343,6 +368,10 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 .smenu .si:hover,.smenu .si:focus-visible{background:var(--soft)}.smenu .si b{font-size:14px}.smenu .si small{grid-column:2;color:var(--mute);font-size:12px}.smenu .si .ck{grid-row:1/3;color:var(--red);font-weight:900}
 .smenu .sadd2{width:100%;text-align:left;border:0;border-top:1px solid var(--line);background:none;color:inherit;font:inherit;font-weight:700;padding:11px 10px 7px;margin-top:4px;cursor:pointer;border-radius:0 0 8px 8px}.smenu .sadd2:hover{background:var(--soft)}
 @media(max-width:360px){.top .dbtn,.top .theme{width:34px!important;height:34px;min-height:34px!important}h1{font-size:16px!important}}
+@media(max-width:1180px){.hgrid{display:flex;flex-direction:column;align-items:stretch}.hcol{display:contents}}
+@media(max-width:760px){.hwrap{grid-template-columns:1fr}.hleft{position:static;display:grid;grid-template-columns:1fr}.md{height:40px}}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+@media(min-width:881px) and (max-width:1120px){.top .dbtn span{display:none}.top .dbtn{width:38px;min-height:38px!important;padding:0!important;justify-content:center}}
 .ttag{display:inline-block;margin-left:6px;padding:1px 7px;border-radius:99px;font-size:11px;font-weight:700;background:var(--soft);color:var(--mute);vertical-align:2px}.ttag.now{background:var(--red);color:#fff}.ttag.old{opacity:.8}
 .kcard{max-width:540px}.knew{display:grid;gap:8px;padding:10px;border-radius:10px;background:var(--soft)}.knew .cgrid button{width:26px;height:26px;border-radius:50%;border:0;padding:0}.knew .cgrid button.on{box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--ink)}
 .kcard textarea{width:100%;resize:vertical;min-height:64px!important;margin:0!important}
@@ -415,7 +444,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
   <input type="file" id="impf" accept=".json,application/json" hidden>
   <input type="file" id="calfile" hidden accept=".ics,text/calendar,.pdf,.docx,.txt,.md,.html,.htm,image/*">
 </header>
-<section id="v-home" hidden><div class="pbar hhero" id="hhero"></div><div class="hgrid" id="hgrid"></div></section>
+<section id="v-home" hidden><div class="pbar hhero" id="hhero"></div><div class="hwrap"><div class="hleft" id="hleft"></div><div class="hgrid" id="hgrid"></div></div></section>
 <section id="v-tasks" hidden><div class="pbar"><div class="pleft" id="khead"></div>
   <div class="acts">
     <button class="btn" id="ktaskadd">Add task</button>
@@ -505,6 +534,14 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 <div class="grid2 sgrid"><label>Semester<select id="nsterm"><option>Fall</option><option>Spring</option><option>Summer</option><option>Winter</option><option>Other</option></select></label><label>Year<input id="nsyear" inputmode="numeric" placeholder="2027"></label></div>
 <p class="hint" id="nsnote"></p>
 <div class="mact"><button class="btn ghost" id="nscancel">Cancel</button><button class="btn" id="nsdo">Add semester</button></div></div></div>
+<div id="upmodal" class="modal"><div class="card cnf upcard"><h3>Upload</h3><p class="hint">Add any of these. They’re all optional, and each one fills in a different part of the site.</p>
+<div class="upgrid">
+<div class="upbox" data-up="syl" tabindex="0" role="button"><span class="upi" aria-hidden="true">1</span><b>Syllabi</b><small>PDF, Word, photos or text. Builds your grade calculators and adds exam and assignment dates to Tasks.</small><span class="upf" id="upsyl"></span></div>
+<div class="upbox" data-up="ics" tabindex="0" role="button"><span class="upi" aria-hidden="true">2</span><b>Class schedule (.ics)</b><small>Exported from your student portal. Builds your timetable and the class countdown.</small><span class="upf" id="upics"></span></div>
+<div class="upbox" data-up="cal" tabindex="0" role="button"><span class="upi" aria-hidden="true">3</span><b>University academic calendar</b><small>PDF, Word, photo or .ics. Sets your semester dates, breaks, holidays and make-up days.</small><span class="upf" id="upcal"></span></div>
+</div>
+<input type="file" id="upsylf" multiple hidden accept=".pdf,.docx,.txt,.md,.rtf,.html,.htm,image/*"><input type="file" id="upicsf" hidden accept=".ics,text/calendar"><input type="file" id="upcalf" hidden accept=".ics,text/calendar,.pdf,.docx,.txt,.md,.html,.htm,image/*">
+<div class="mact upact"><button class="lnkbtn" id="upsem">Set semester dates by hand</button><span class="sp"></span><button class="btn ghost" id="upcancel">Cancel</button><button class="btn" id="updo" disabled>Upload</button></div></div></div>
 <div id="tmodal" class="modal"><div class="card cnf dcard"><h3>Which semester?</h3><p class="hint">This calendar covers more than one semester. Pick yours: its first and last day of classes fill in your semester, and its dates are added. Dates that have already passed come in marked as done.</p>
 <div class="dopts" id="topts"></div>
 <div class="mact"><button class="btn ghost" id="tcancel">Cancel</button><button class="btn" id="tdo">Use this semester</button></div></div></div>
@@ -1286,12 +1323,12 @@ function ttList(vis,t){const days=weekDays(vis);
       return`<button class="tli${a.g?' linked':''}" data-act="ttblock" data-key="${esc(s.key)}" title="${esc(a.title)}"><span class="tlt">${esc(fmtClock(s.start,t.h24))}<small>${esc(fmtClock(s.end,t.h24))}${t.h24?'':' '+ampm(s.end)}</small></span><span class="tlb" style="background:${a.bg}"></span><span class="tlc">${fl.map((x,i)=>`<span class="${i===0?'t1':''}">${esc(x.v)}</span>`).join('')}</span>${a.g?'<i class="go" aria-hidden="true">↗</i>':''}</button>`;}).join('')}</section>`;}).join('')}</div>`;}
 
 /* ---- interactions ---- */
-async function importICS(file){
+async function importICS(file,opt={}){
   let txt='';try{txt=await file.text();}catch{toast('Couldn’t read that file');return;}
   if(!/BEGIN:VCALENDAR/i.test(txt)){toast('That isn’t a calendar (.ics) file');return;}
   const slots=buildSlots(parseICS(txt));if(!slots.length){toast('No timed classes were found in that calendar');return;}
   const t=TT();if(t.slots.length&&!(await confirmBox('Replace your timetable?','Your current schedule will be replaced by this file. Colours you picked for the same courses are kept.','Replace')))return;
-  const snap=JSON.stringify(S);t.slots=slots;save();if(location.hash!=='#timetable')location.hash='#timetable';else renderTT();
+  const snap=JSON.stringify(S);t.slots=slots;save();if(opt.stay)renderPlanner();else if(location.hash!=='#timetable')location.hash='#timetable';else renderTT();
   const n=new Set(ttVisible().map(s=>s.ckey)).size;toast(`Timetable loaded: ${n} course${n===1?'':'s'}`,snap);
 }
 $('#icspick').onclick=()=>$('#icsfile').click();
@@ -1581,7 +1618,7 @@ async function importCalendar(file){const st=$('#calstatus');st.textContent='Rea
     st.textContent='';semObj().terms=terms.length>1?terms:null;
     const basic=res.basic||terms.basic;if(terms.length===1){applyTerm(terms[0],{basic,keep:true});return;}
     pickTerm(terms,{basic});}
-  catch(e){st.className='hint err';st.textContent=(e&&e.message)||'Couldn’t read that calendar.';}}
+  catch(e){st.className='hint err';st.textContent=(e&&e.message)||'Couldn’t read that calendar.';if(!$('#semmodal').classList.contains('on'))toast(st.textContent);}}
 const termLabel=t=>[t.term,t.year].filter(Boolean).join(' ')||'Semester';
 function termState(t){const T0=today0(),a=pd(t.start)||pd(t.dates[0].start),b=pd(t.end)||pd(t.dates[t.dates.length-1].end);if(b&&b<T0)return'done';if(a&&a<=T0)return'now';return'next';}
 /* default: the semester you're in, else the next one to start */
@@ -1855,30 +1892,79 @@ function countdowns(){const s=SEM(),T0=today0(),out=[];if(!s)return out;
   if(last){const n=dDiff(T0,pd(last));if(n>=0)out.push({n,label:'to the last day of classes',title:'Last day of classes: '+fmtD(pd(last))});}
   const fs=allTasks().filter(t=>t.final&&t.date);if(fs.length){const lf=fs.map(t=>t.date).sort().pop(),n=dDiff(T0,pd(lf));if(n>=0)out.push({n,label:'to your last final',title:'Last final: '+fmtD(pd(lf))});}
   return out;}
+/* ---- left column: class countdown + month calendar ---- */
+let hMon=null,hSel=null;
+const CTCOL={break:'#16a34a',holiday:'#16a34a',makeup:'#d97706',deadline:'var(--red)',exam:'#7c3aed',start:'var(--ink)',end:'var(--ink)',event:'#8a8a8a'};
+function renderLeft(cc=classClock(),all=allTasks()){const T0=today0(),s=SEM(),h24=TT().h24,tm=m=>fmtClock(m,h24)+(h24?'':' '+ampm(m));
+  let clock;if(cc){const n=nm(cc.s),dd=dDiff(T0,cc.day||T0);
+    clock=`<a class="hnext${cc.now?' live':''}" href="#timetable" style="--cc:${ttColor(cc.s.ckey)}" aria-label="${esc((cc.now?'Now: ':'Next: ')+(n.code||n.name))}"><span class="hnl">${cc.now?'Now':'Next class'}</span><b class="hncode"><i class="cdot"></i>${esc(n.code||n.name||'Class')}</b><span class="hntime" data-to="${+cc.at}">${fmtLeft(cc.at-Date.now())}</span><span class="hnsub">${cc.now?'left in class':dd===0?'until it starts':dd===1?'until tomorrow, '+esc(tm(cc.s.start)):'until '+esc(DAYN[cc.day.getDay()]+', '+tm(cc.s.start))}</span></a>`;}
+  else clock=`<div class="hnext empty"><span class="hnl">Next class</span><p class="hint">${TT().slots.length?'No more classes this semester.':'Upload your class schedule (.ics) to see a countdown to your next class.'}</p>${TT().slots.length?'':'<button class="btn ghost sm" data-act="upload">Upload</button>'}</div>`;
+  /* month calendar */
+  const mon=hMon||new Date(T0.getFullYear(),T0.getMonth(),1),y=mon.getFullYear(),m=mon.getMonth(),first=new Date(y,m,1),lead=(first.getDay()+6)%7,days=new Date(y,m+1,0).getDate();
+  const cal=s?s.cal||[]:[],tasks=all.filter(t=>t.date),byDay=k=>({t:tasks.filter(t=>t.date===k),c:cal.filter(c=>k>=c.start&&k<=(c.end||c.start))});
+  const sel=hSel||iso(T0);let cells='';for(let i=0;i<lead;i++)cells+='<span></span>';
+  for(let d=1;d<=days;d++){const dt=new Date(y,m,d),k=iso(dt),it=byDay(k),off=it.c.some(c=>c.type==='break'||c.type==='holiday'),ex=it.c.some(c=>c.type==='exam');
+    const dots=[...it.t.filter(t=>!t.done).map(t=>t.final?'var(--red)':taskColor(t)),...it.c.filter(c=>!['break','holiday','exam'].includes(c.type)||c.start===k).map(c=>CTCOL[c.type]||'#8a8a8a')].slice(0,4);
+    const fin=it.t.some(t=>t.final);
+    cells+=`<button class="md${k===iso(T0)?' today':''}${k===sel?' sel':''}${dt<T0?' past':''}${off?' off':''}${ex?' ex':''}${fin?' fin':''}" data-act="mday" data-d="${k}" aria-label="${esc(fmtD(dt))}${it.t.length+it.c.length?`, ${it.t.length+it.c.length} item${it.t.length+it.c.length===1?'':'s'}`:''}"><span>${d}</span>${dots.length?`<i>${dots.map(c=>`<em style="background:${c}"></em>`).join('')}</i>`:''}</button>`;}
+  const it=byDay(sel),sd=pd(sel);
+  const list=[...it.c.map(c=>`<li class="mi"><i class="mflag ct-${c.type}"></i><span><b>${esc(c.title)}</b><small>${esc(CTYPES[c.type]||'Event')}${c.start!==(c.end||c.start)?' · '+esc(fmtRangeD(pd(c.start),pd(c.end))):''}</small></span></li>`),
+    ...it.t.map(t=>`<li class="mi${t.done?' done':''}" style="--tc:${taskColor(t)}"><i class="cdot"></i><span><b>${esc(t.title)}</b><small>${esc(taskTag(t)||'Task')}${t.time?' · '+esc(tm(+t.time.slice(0,2)*60+ +t.time.slice(3,5))):''}</small></span></li>`)].join('');
+  $('#hleft').innerHTML=clock+`<section class="hmonth"><header><button class="ib" data-act="mprev" aria-label="Previous month"><svg viewBox="0 0 16 16"><path d="M10 3L5 8l5 5"/></svg></button><button class="mtitle" data-act="mtoday" title="Back to today">${['January','February','March','April','May','June','July','August','September','October','November','December'][m]} ${y}</button><button class="ib" data-act="mnext" aria-label="Next month"><svg viewBox="0 0 16 16"><path d="M6 3l5 5-5 5"/></svg></button></header>
+    <div class="mgrid"><b>Mo</b><b>Tu</b><b>We</b><b>Th</b><b>Fr</b><b>Sa</b><b>Su</b>${cells}</div>
+    <div class="mday"><h4>${esc(sd&&iso(sd)===iso(T0)?'Today':fmtD(sd))}</h4>${list?`<ul>${list}</ul>`:'<p class="hint">Nothing on this day.</p>'}</div></section>`;
+  if(cc&&!clockTick)clockTick=setInterval(tickClocks,1000);}
+
+/* ---- upload pop-up: syllabi, class schedule, academic calendar ---- */
+const UP={syl:[],ics:null,cal:null};
+function upShow(){const T=TT(),cs=S.courses.filter(c=>!c.isLab).length,cal=S.sem&&(S.sem.cal||[]).length;
+  const line=(files,have)=>files&&files.length?`<span class="upchosen">${files.map(f=>esc(f.name)).join(', ')}</span><button class="lnkbtn" data-upclear>Remove</button>`:`<span class="upnone">Click to choose${matchMedia('(hover:hover)').matches?' or drop files here':''}</span>${have?`<span class="uphave">${esc(have)}</span>`:''}`;
+  $('#upsyl').innerHTML=line(UP.syl,cs?`Already added: ${cs} course${cs===1?'':'s'}`:'');
+  $('#upics').innerHTML=line(UP.ics?[UP.ics]:null,T.slots.length?`Already added: ${new Set(T.slots.map(x=>x.ckey)).size} courses (a new file replaces it)`:'');
+  $('#upcal').innerHTML=line(UP.cal?[UP.cal]:null,cal?`Already added: ${cal} dates for ${semName()||'this semester'}`:'');
+  for(const b of document.querySelectorAll('.upbox'))b.classList.toggle('has',b.dataset.up==='syl'?UP.syl.length>0:!!UP[b.dataset.up]);
+  $('#updo').disabled=!(UP.syl.length||UP.ics||UP.cal);}
+function openUpload(){UP.syl=[];UP.ics=null;UP.cal=null;upShow();$('#upmodal').classList.add('on');}
+const upInput={syl:'#upsylf',ics:'#upicsf',cal:'#upcalf'};
+function upTake(kind,files){files=[...files];if(!files.length)return;if(kind==='syl'){const ics=files.filter(f=>/\.ics$/i.test(f.name));if(ics.length&&!UP.ics)UP.ics=ics[0];UP.syl.push(...files.filter(f=>!/\.ics$/i.test(f.name)));}else UP[kind]=files[0];upShow();}
+for(const b of document.querySelectorAll('.upbox')){const k=b.dataset.up;
+  b.addEventListener('click',e=>{if(e.target.closest('[data-upclear]')){if(k==='syl')UP.syl=[];else UP[k]=null;upShow();return;}$(upInput[k]).click();});
+  b.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();$(upInput[k]).click();}});
+  b.addEventListener('dragover',e=>{e.preventDefault();e.stopPropagation();b.classList.add('drag');});b.addEventListener('dragleave',()=>b.classList.remove('drag'));
+  b.addEventListener('drop',e=>{e.preventDefault();e.stopPropagation();b.classList.remove('drag');$('#dropover').classList.remove('on');upTake(k,e.dataTransfer.files||[]);});}
+for(const k in upInput)$(upInput[k]).addEventListener('change',e=>{upTake(k,e.target.files);e.target.value='';});
+$('#upcancel').onclick=()=>$('#upmodal').classList.remove('on');$('#upmodal').addEventListener('click',e=>{if(e.target===$('#upmodal'))$('#upmodal').classList.remove('on');});
+$('#upsem').onclick=()=>{$('#upmodal').classList.remove('on');openSem();};
+$('#updo').onclick=async()=>{const syl=UP.syl,ics=UP.ics,calf=UP.cal;$('#upmodal').classList.remove('on');UP.syl=[];UP.ics=null;UP.cal=null;
+  if(ics)await importICS(ics,{stay:true});
+  if(calf)await importCalendar(calf);
+  if(syl.length){for(const f of syl)runJob(f.name,()=>readFile(f));location.hash='#grades';toast(`Reading ${syl.length} syllab${syl.length===1?'us':'i'}…`);}
+  else renderPlanner();};
+
 let hShut={};try{hShut=JSON.parse(localStorage.getItem('cm-home-fold')||'{}')||{};}catch{}
 function renderHome(){TS();const s=SEM(),wi=weekInfo(),T0=today0(),all=allTasks();
   const overdue=all.filter(t=>!t.done&&t.date&&pd(t.date)<T0),due=all.filter(t=>!t.done&&t.date&&pd(t.date)>=T0&&pd(t.date)<=addD(T0,7)).sort((a,b)=>a.date.localeCompare(b.date)),undated=all.filter(t=>!t.done&&!t.date);
   const cal=s?(s.cal||[]).filter(c=>!calDone(c)).slice(0,6):[];
   const sm=semester(),gc=S.courses.filter(c=>!(c.isLab&&linkedBy(c.id)));
-  const vis=TT().slots.length?ttVisible():[],todayCls=vis.filter(x=>x.day===T0.getDay()).sort((a,b)=>a.start-b.start);
-  let nextLbl='',nextCls=[];if(vis.length&&!todayCls.length){for(let k=1;k<=7;k++){const d=addD(T0,k),l=vis.filter(x=>x.day===d.getDay()).sort((a,b)=>a.start-b.start);if(l.length){nextLbl=k===1?'Tomorrow':DAYN[d.getDay()];nextCls=l;break;}}}
+  const vis=TT().slots.length?ttVisible():[],lcd=lastClassDay(),inSem=d=>!(s&&pd(s.start)&&d<pd(s.start))&&!(lcd&&d>lcd),todayCls=inSem(T0)?classOn(T0):[];
+  let nextLbl='',nextCls=[];if(vis.length&&!todayCls.length){for(let k=1;k<=21;k++){const d=addD(T0,k);if(lcd&&d>lcd)break;if(!inSem(d))continue;const l=classOn(d);if(l.length){nextLbl=k===1?'Tomorrow':k<7?DAYN[d.getDay()]:fmtD(d);nextCls=l;break;}}}
   const nowMin=new Date().getHours()*60+new Date().getMinutes();
   const clsRow=x=>{const n=nm(x),g=gradeFor(x.ckey,n.code),live=todayCls.includes(x)&&nowMin>=x.start&&nowMin<x.end;return`<li class="hcls${live?' now':''}${g?' linked':''}" ${g?`data-hopen="${g.id}" tabindex="0" role="link"`:''}><span class="hct">${esc(fmtClock(x.start,TT().h24))}<small>${esc(fmtClock(x.end,TT().h24))}</small></span><span class="tlb" style="background:${ttColor(x.ckey)}"></span><span class="hcb"><b>${esc(n.code||n.name)}</b><span>${esc([n.name&&n.code?n.name:'',x.room].filter(Boolean).join(' · '))}</span></span>${live?'<em>Now</em>':''}</li>`;};
   const cc=classClock(),ccn=cc&&nm(cc.s),ccDay=cc&&!cc.now?(dDiff(T0,cc.day)===0?'':dDiff(T0,cc.day)===1?'Tomorrow ':DAYS[cc.day.getDay()]+' '):'';
   const cch=cc?`<a class="hcd hclass${cc.now?' live':''}" href="#timetable" style="--cc:${ttColor(cc.s.ckey)}" title="${esc((cc.now?'Now: ':'Next: ')+[ccn.code,ccn.name].filter(Boolean).join(' '))}"><span class="hcl"><em>${cc.now?'Now':'Next'}</em> <i class="cdot"></i><strong>${esc(ccn.code||ccn.name||'Class')}</strong>${ccn.code&&ccn.name?`<small>${esc(ccn.name)}</small>`:''}</span><span class="hcr"><b data-to="${+cc.at}">${fmtLeft(cc.at-Date.now())}</b><small>${cc.now?'left · ends '+esc(fmtClock(cc.s.end,TT().h24)+(TT().h24?'':' '+ampm(cc.s.end))):'until '+esc(ccDay+fmtClock(cc.s.start,TT().h24)+(TT().h24?'':' '+ampm(cc.s.start)))}${!cc.now&&nm(cc.s).room?' · '+esc(nm(cc.s).room):''}${cc.now&&ccn.room?' · '+esc(ccn.room):''}</small></span></a>`:'';
-  const cds=countdowns(),cdh=cds.length||cc?`<div class="hcds">${cch}${cds.map(c=>`<a class="hcd" href="#tasks" title="${esc(c.title)}"><b>${c.n===0?'Today':c.n}</b><span>${c.n===0?'':c.n===1?'day<br>':'days<br>'}${esc(c.label)}</span></a>`).join('')}</div>`:'';
+  const cds=countdowns(),cdh=cds.length?`<div class="hcds">${cds.map(c=>`<a class="hcd" href="#tasks" title="${esc(c.title)}"><b>${c.n===0?'Today':c.n}</b><span>${c.n===0?'':c.n===1?'day<br>':'days<br>'}${esc(c.label)}</span></a>`).join('')}</div>`:'';
   if(cc&&!clockTick)clockTick=setInterval(tickClocks,1000);
-  $('#hhero').innerHTML=s?`<div><span class="hsem">${esc(semName())}</span><h2>${esc(weekLine())}</h2><span class="hint">${esc(fmtD(T0))}</span></div>${cdh}<button class="btn ghost" data-act="semopen">Semester</button>`
-    :`<div><span class="hsem">${esc(fmtD(T0))}</span><h2>Welcome</h2><span class="hint">Set your semester to see week numbers and place syllabus dates.</span></div><button class="btn" data-act="semopen">Set up semester</button>`;
+  renderLeft(cc,all);
+  $('#hhero').innerHTML=s?`<div><span class="hsem">${esc(semName())}</span><h2>${esc(weekLine())}</h2><span class="hint">${esc(fmtD(T0))}</span></div>${cdh}<button class="btn" data-act="upload">Upload</button>`
+    :`<div><span class="hsem">${esc(fmtD(T0))}</span><h2>Welcome</h2><span class="hint">Upload your syllabi, class schedule and academic calendar to get started.</span></div>${cdh}<button class="btn" data-act="upload">Upload</button>`;
   const card=(href,title,count,body,id)=>{const shut=!!hShut[id];return`<section class="hcard${shut?' shut':''}" data-hc="${id}"><div class="hhead"><button class="hfold" data-fold="${id}" aria-expanded="${!shut}" aria-label="${shut?'Expand':'Collapse'} ${esc(title)}"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg></button><a class="htitle" href="${href}"><h3>${title}</h3>${count!=null?`<span class="hcount">${count}</span>`:''}<span class="harr" aria-hidden="true">→</span></a></div><div class="hbody"${shut?' hidden':''}>${body}</div></section>`;};
-  $('#hgrid').innerHTML=
-    card('#tasks','Tasks',due.length||null,`${overdue.length?`<a class="hover" href="#tasks"><b>${overdue.length} overdue</b><span>Review →</span></a>`:''}${due.length?`<ul class="tasks">${due.slice(0,6).map(t=>taskRow(t,true)).join('')}</ul>${due.length>6?`<a class="hmore" href="#tasks">${due.length-6} more due this week</a>`:''}`:`<p class="hint hempty">Nothing due in the next 7 days.${undated.length?` ${undated.length} task${undated.length>1?'s have':' has'} no date.`:''}</p><button class="btn ghost sm" data-act="tadd">Add a task</button>`}`,'tasks')+
-    card('#tasks','Coming up',null,cal.length?`<ul class="tasks">${cal.map(calRow).join('')}</ul>`:`<p class="hint hempty">${s?'Upload your academic calendar to see breaks, holidays, deadlines and make-up days here.':'Set up your semester, then add your academic calendar to see notable dates here.'}</p><button class="btn ghost sm" data-act="semopen">${s?'Add academic calendar':'Set up semester'}</button>`,'dates')+
-    card('#grades','Courses',null,gc.length?`<div class="hgpa"><span>Semester GPA</span><b class="${sm.gpa==null?'nil':''}">${sm.gpa==null?'No grades yet':fmt2(sm.gpa)}</b></div><ul class="hcourses reord">${gc.map(c=>{const p=coursePct(c);return`<li data-hopen="${c.id}" data-rid="${c.id}" tabindex="0" role="link" style="--cc:${courseColor(c)}"><i class="cdot"></i><span class="hcb"><b>${esc(c.code||'Course')}</b><span>${esc(c.title||'')}</span></span><span class="hg">${p==null?'<span class="nil">–</span>':`${fmt(p)}%<em>${esc(letter(c,p))}</em>`}</span></li>`;}).join('')}</ul>`:`<p class="hint hempty">Upload a syllabus to start tracking grades.</p><a class="btn ghost sm" href="#grades">Go to Grades</a>`,'courses')+
-    card('#timetable',todayCls.length?'Today’s classes':nextLbl?`Next classes · ${nextLbl}`:'Schedule',null,vis.length?`<ul class="hclasses">${(todayCls.length?todayCls:nextCls).map(clsRow).join('')}</ul>${todayCls.length?'':'<p class="hint">No classes today.</p>'}`:`<p class="hint hempty">Upload your .ics schedule to see today’s classes here.</p><a class="btn ghost sm" href="#timetable">Go to Timetable</a>`,'classes');}
+  const C1=card('#timetable',todayCls.length?'Today’s classes':nextLbl?`Next classes · ${nextLbl}`:'Next classes',null,vis.length&&(todayCls.length||nextCls.length)?`<ul class="hclasses">${(todayCls.length?todayCls:nextCls).map(clsRow).join('')}</ul>${todayCls.length?'':'<p class="hint">No classes today.</p>'}`:`<p class="hint hempty">${vis.length?'No more classes this semester.':'Upload your .ics schedule to see your classes here.'}</p>${vis.length?'':'<button class="btn ghost sm" data-act="upload">Upload</button>'}`,'classes'),C2=card('#tasks','Tasks',due.length||null,`${overdue.length?`<a class="hover" href="#tasks"><b>${overdue.length} overdue</b><span>Review →</span></a>`:''}${due.length?`<ul class="tasks">${due.slice(0,6).map(t=>taskRow(t,true)).join('')}</ul>${due.length>6?`<a class="hmore" href="#tasks">${due.length-6} more due this week</a>`:''}`:`<p class="hint hempty">Nothing due in the next 7 days.${undated.length?` ${undated.length} task${undated.length>1?'s have':' has'} no date.`:''}</p><button class="btn ghost sm" data-act="tadd">Add a task</button>`}`,'tasks'),C3=card('#tasks','Coming up',null,cal.length?`<ul class="tasks">${cal.map(calRow).join('')}</ul>`:`<p class="hint hempty">${s?'Upload your academic calendar to see breaks, holidays, deadlines and make-up days here.':'Set up your semester, then add your academic calendar to see notable dates here.'}</p><button class="btn ghost sm" data-act="upload">Upload calendar</button>`,'dates'),C4=card('#grades','Courses',null,gc.length?`<div class="hgpa"><span>Semester GPA</span><b class="${sm.gpa==null?'nil':''}">${sm.gpa==null?'No grades yet':fmt2(sm.gpa)}</b></div><ul class="hcourses reord">${gc.map(c=>{const p=coursePct(c);return`<li data-hopen="${c.id}" data-rid="${c.id}" tabindex="0" role="link" style="--cc:${courseColor(c)}"><i class="cdot"></i><span class="hcb"><b>${esc(c.code||'Course')}</b><span>${esc(c.title||'')}</span></span><span class="hg">${p==null?'<span class="nil">–</span>':`${fmt(p)}%<em>${esc(letter(c,p))}</em>`}</span></li>`;}).join('')}</ul>`:`<p class="hint hempty">Upload a syllabus to start tracking grades.</p><button class="btn ghost sm" data-act="upload">Upload syllabi</button>`,'courses');
+  $('#hgrid').innerHTML=`<div class="hcol">${C1}${C3}</div><div class="hcol">${C2}${C4}</div>`;}
 $('#v-home').addEventListener('click',e=>{const fb=e.target.closest('[data-fold]');if(fb){const id=fb.dataset.fold,c=fb.closest('.hcard'),shut=!c.classList.contains('shut');hShut[id]=shut;if(!shut)delete hShut[id];try{localStorage.setItem('cm-home-fold',JSON.stringify(hShut));}catch{}
   c.classList.toggle('shut',shut);c.querySelector('.hbody').hidden=shut;fb.setAttribute('aria-expanded',String(!shut));fb.setAttribute('aria-label',(shut?'Expand ':'Collapse ')+c.querySelector('h3').textContent);return;}
-  const o=e.target.closest('[data-hopen]');if(o){openGrades(o.dataset.hopen);return;}const b=e.target.closest('[data-act]');if(!b)return;if(b.dataset.act==='semopen')openSem();if(b.dataset.act==='tadd')openTask(null);});
+  const o=e.target.closest('[data-hopen]');if(o){openGrades(o.dataset.hopen);return;}const b=e.target.closest('[data-act]');if(!b)return;const a=b.dataset.act;if(a==='semopen')openSem();if(a==='tadd')openTask(null);if(a==='upload')openUpload();
+  if(a==='mprev'||a==='mnext'){const bm=hMon||today0();hMon=new Date(bm.getFullYear(),bm.getMonth()+(a==='mprev'?-1:1),1);renderLeft();}if(a==='mtoday'){hMon=null;hSel=null;renderLeft();}
+  if(a==='mday'){hSel=b.dataset.d;renderLeft();}});
 $('#v-home').addEventListener('keydown',e=>{const o=e.target.closest('[data-hopen]');if(o&&(e.key==='Enter'||e.key===' ')){e.preventDefault();openGrades(o.dataset.hopen);}});
 
 /* ---------- reorder courses: drag with a mouse, press and hold on touch, or Alt+arrow keys ---------- */
@@ -1924,12 +2010,13 @@ function closeSemMenu(){document.querySelectorAll('.smenu').forEach(m=>m.remove(
 const semOutside=e=>{if(!e.target.closest('.smenu,#semsw'))closeSemMenu();};
 function openSemMenu(){if(document.querySelector('.smenu')){closeSemMenu();return;}const ts=allTerms(),m=document.createElement('div');m.className='smenu';m.setAttribute('role','menu');
   const meta=d=>{const cs=(d.courses||[]).filter(c=>!c.isLab).length,tk=(d.tasks||[]).length;return[cs?`${cs} course${cs===1?'':'s'}`:'No courses',(d.tt&&d.tt.slots||[]).length?'timetable':'',d.sem&&d.sem.start?fmtRangeD(pd(d.sem.start),pd(d.sem.end)||null):''].filter(Boolean).join(' · ');};
-  m.innerHTML=`<ul>${ts.map(d=>`<li><button class="si" role="menuitem" data-term="${esc(d.id)}"><span class="ck">${d.cur?'✓':''}</span><b>${esc(termNm(d))}</b><small>${esc(meta(d))}</small></button>${d.cur?'':`<button class="ib" data-termdel="${esc(d.id)}" title="Delete this semester" aria-label="Delete ${esc(termNm(d))}"><svg viewBox="0 0 16 16"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>`}</li>`).join('')}</ul><button class="sadd2" data-termadd role="menuitem">+ Add semester</button>`;
+  m.innerHTML=`<ul>${ts.map(d=>`<li><button class="si" role="menuitem" data-term="${esc(d.id)}"><span class="ck">${d.cur?'✓':''}</span><b>${esc(termNm(d))}</b><small>${esc(meta(d))}</small></button>${d.cur?'':`<button class="ib" data-termdel="${esc(d.id)}" title="Delete this semester" aria-label="Delete ${esc(termNm(d))}"><svg viewBox="0 0 16 16"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>`}</li>`).join('')}</ul><button class="sadd2" data-termadd role="menuitem">+ Add semester</button><button class="sadd2 sset" data-termset role="menuitem">Semester dates &amp; calendar…</button>`;
   document.body.appendChild(m);const r=$('#semsw').getBoundingClientRect();m.style.left=Math.max(8,Math.min(innerWidth-m.offsetWidth-8,r.left))+'px';m.style.top=(r.bottom+scrollY+6)+'px';
   $('#semsw').setAttribute('aria-expanded','true');setTimeout(()=>document.addEventListener('pointerdown',semOutside,true),0);(m.querySelector('.si:not([data-term="'+S.termId+'"])')||m.querySelector('.sadd2')).focus();
   m.addEventListener('click',async e=>{const a=e.target.closest('[data-term]'),dl=e.target.closest('[data-termdel]'),ad=e.target.closest('[data-termadd]');
     if(a){closeSemMenu();switchTerm(a.dataset.term);}
     else if(ad){closeSemMenu();openNewSem();}
+    else if(e.target.closest('[data-termset]')){closeSemMenu();openSem();}
     else if(dl){const d=(S.archive||[]).find(x=>x.id===dl.dataset.termdel);if(!d)return;closeSemMenu();
       if(!await confirmBox(`Delete ${termNm(d)}?`,'Its courses, grades, timetable, tasks and finals are deleted from this browser.','Delete semester'))return;const snap=JSON.stringify(S);S.archive=S.archive.filter(x=>x!==d);save();renderSemBtn();toast(termNm(d)+' deleted',snap);}});
   m.addEventListener('keydown',e=>{if(e.key==='Escape'){closeSemMenu();$('#semsw').focus();}const it=[...m.querySelectorAll('.si,.sadd2')],i=it.indexOf(document.activeElement);
