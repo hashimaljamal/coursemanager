@@ -353,7 +353,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 .fnlist{list-style:none;margin:0;padding:0}.fnlist li{display:grid;grid-template-columns:auto auto 1fr;gap:2px 8px;align-items:baseline;padding:7px 0;border-bottom:1px solid var(--line)}
 .fnlist li:last-child{border-bottom:0}.fnlist .cdot{background:var(--cc);align-self:center}.fnlist small{grid-column:2/-1;color:var(--mute);font-size:12.5px}.fnlist.skip li{grid-template-columns:auto 1fr}.fnlist.skip small{grid-column:auto}
 .fnfiles{margin:8px 0 0}#fnres{max-height:min(48dvh,420px);overflow:auto}
-.hhero>.btn{margin-left:auto}.hhero>.hcds{display:flex;flex-wrap:wrap;gap:8px;margin-left:auto;align-items:stretch}.hcd{display:flex;align-items:center;gap:8px;padding:6px 12px 6px 10px;border:1px solid var(--line);border-radius:var(--rad);color:inherit;text-decoration:none;min-height:42px}
+.hhero>.hup{order:1}.hhero>.hcds{order:2;display:flex;flex-wrap:wrap;gap:8px;margin-left:auto;align-items:stretch;justify-content:flex-end}.hcd{display:flex;align-items:center;gap:8px;padding:6px 12px 6px 10px;border:1px solid var(--line);border-radius:var(--rad);color:inherit;text-decoration:none;min-height:42px}
 .hcd:hover{border-color:var(--ink)}.hcd b{font-size:22px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}.hcd span{font-size:11.5px;line-height:1.2;color:var(--mute)}
 #cmodal{z-index:60}#tmodal{z-index:55}
 .xfs{display:flex;align-items:center;gap:10px}.xfs input{flex:1;accent-color:var(--ink)}.xfs output{min-width:44px;font-weight:700;font-variant-numeric:tabular-nums}
@@ -375,6 +375,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 @media(max-width:760px){.hwrap{grid-template-columns:1fr}.hleft{position:static;display:grid;grid-template-columns:1fr}.md{height:40px}}
 .btn:disabled{opacity:.4;cursor:not-allowed}
 @media(min-width:881px) and (max-width:1120px){.top .dbtn span{display:none}.top .dbtn{width:38px;min-height:38px!important;padding:0!important;justify-content:center}}
+@media(max-width:880px){.hhero>div:first-child{flex:1 1 100%}}
 .ttag{display:inline-block;margin-left:6px;padding:1px 7px;border-radius:99px;font-size:11px;font-weight:700;background:var(--soft);color:var(--mute);vertical-align:2px}.ttag.now{background:var(--red);color:#fff}.ttag.old{opacity:.8}
 .kcard{max-width:540px}.knew{display:grid;gap:8px;padding:10px;border-radius:10px;background:var(--soft)}.knew .cgrid button{width:26px;height:26px;border-radius:50%;border:0;padding:0}.knew .cgrid button.on{box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--ink)}
 .kcard textarea{width:100%;resize:vertical;min-height:64px!important;margin:0!important}
@@ -408,7 +409,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
  .top{grid-template-columns:minmax(0,1fr) auto auto;grid-template-areas:"title data theme" "tabs tabs tabs";padding:10px 0;gap:8px}
  .dbtn span{display:none}.dbtn{width:38px;min-height:38px!important;padding:0!important;justify-content:center}
  .theme{width:38px;height:38px}
- .hhero>div:first-child{flex:1 1 100%}.hhero .hclass{flex:1 1 100%!important;max-width:none}.hhero>.hcds{margin-left:0;flex:1 1 200px;min-width:0}.hhero .hcd{flex:1 1 0;min-width:0;padding:6px 8px}.hhero .hcd span{font-size:11px}
+ .hhero>div:first-child{flex:1 1 100%}.hhero .hclass{flex:1 1 100%!important;max-width:none}.hhero>.hcds{margin-left:auto;flex:1 1 200px;min-width:0}.hhero .hcd{flex:1 1 0;min-width:0;padding:6px 8px}.hhero .hcd span{font-size:11px}
  .pbar{min-height:0;padding:8px 0}#v-grades .pbar .pleft{order:2}.pbar .acts{flex:1 1 100%;display:grid;grid-auto-columns:1fr;grid-auto-flow:column}
  .pleft{flex-basis:100%}
  h1{font-size:min(21px,5.3vw);white-space:nowrap}.brand{flex-direction:column;align-items:flex-start;gap:3px}.semsw{min-height:24px;padding:1px 6px 1px 9px;font-size:12px}
@@ -1188,7 +1189,7 @@ const DAYN=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturda
 const PAL=['#2563eb','#d97706','#059669','#db2777','#7c3aed','#0891b2','#dc2626','#65a30d','#ea580c','#4f46e5','#0d9488','#a21caf','#475569','#b45309'];
 const TTF=[['code','Course number'],['name','Course name'],['time','Timing'],['room','Room'],['type','Class type'],['section','Section'],['instructor','Instructor']];
 function TT(){if(!S.tt||typeof S.tt!=='object')S.tt={};const t=S.tt;
-  t.slots=t.slots||[];if(t.v!==2){for(const x of t.slots){x.room=shortRoom(x.room);if(!x.section||x.section===splitSection(x.name)?.section){const sp=splitSection(x.name);if(sp){x.name=sp.name;x.section=x.section||sp.section;}}}t.v=2;}{const keys=TTF.map(x=>x[0]);t.order=(Array.isArray(t.order)?t.order:[]).filter(k=>keys.includes(k));for(const k of keys)if(!t.order.includes(k))t.order.push(k);}t.opts=Object.assign({code:true,name:true,time:true,room:true,type:true,section:false,instructor:false},t.opts||{});
+  t.slots=t.slots||[];if(t.v!==3){for(const x of t.slots){x.room=shortRoom(x.room);if(!x.section||x.section===splitSection(x.name)?.section){const sp=splitSection(x.name);if(sp){x.name=sp.name;x.section=x.section||sp.section;}}}t.v=3;}{const keys=TTF.map(x=>x[0]);t.order=(Array.isArray(t.order)?t.order:[]).filter(k=>keys.includes(k));for(const k of keys)if(!t.order.includes(k))t.order.push(k);}t.opts=Object.assign({code:true,name:true,time:true,room:true,type:true,section:false,instructor:false},t.opts||{});
   t.colors=t.colors||{};t.hidden=t.hidden||{};t.names=t.names||{};t.view=t.view||'auto';return t;}
 
 /* ---- .ics reading ---- */
@@ -1212,25 +1213,40 @@ function icsTime(p){
 const durMin=v=>{const m=String(v||'').match(/P(?:(\d+)D)?T?(?:(\d+)H)?(?:(\d+)M)?/);return m?(+m[1]||0)*1440+(+m[2]||0)*60+(+m[3]||0):60;};
 const capWord=w=>w.charAt(0).toUpperCase()+w.slice(1).toLowerCase();
 /* AUS-style short room names: "Engineering and Sciences Building 1034" / "ESB 1034" / "esb1034" → "ESB-1034" */
-const BLDG=[[/\b(?:new\s+)?engineering\s*(?:and|&)?\s*sciences?\s*(?:building|bldg\.?|complex)?/i,'ESB'],[/\bnew\s+engineering\s+building/i,'ESB'],
-  [/\bengineering\s*(?:building|bldg\.?)?\s*(?:1|i|one)\b|\bengineering\s+left(?:\s+building)?/i,'EB1'],[/\bengineering\s*(?:building|bldg\.?)?\s*(?:2|ii|two)\b|\bengineering\s+right(?:\s+building)?/i,'EB2'],
-  [/\bschool\s+of\s+business(?:\s+administration)?(?:\s+building)?|\bbusiness\s+administration(?:\s+building)?/i,'SBA'],[/\bnew\s+academic\s+building/i,'NAB'],[/\blibrary(?:\s+building)?/i,'LIB'],
-  [/\bperforming\s+arts\s+building/i,'PAB'],[/\barts?(?:\s+(?:and|&)\s+sciences?)?\s+building/i,'ARTS'],[/\bphysics\s+building/i,'PHY'],[/\bchemistry\s+building/i,'CHM'],[/\blanguage\s+building/i,'LAN'],
-  [/\b(?:college\s+of\s+)?architecture,?\s*art\s*(?:and|&)\s*design(?:\s+building)?/i,'CAAD'],[/\bmain\s+building/i,'MB'],[/\bstudent\s+cent(?:er|re)/i,'SC'],[/\btesting\s+cent(?:er|re)/i,'TC'],[/\bsports\s+complex/i,'SPC']];
-const ROOMNO=/^[A-Za-z]{0,2}\s*-?\s*\d+[A-Za-z]?$|^[A-Za-z]{2,4}$/;
-function shortRoom(raw){const t0=String(raw||'').replace(/\s+/g,' ').trim();if(!t0||/\b(online|tba|tbd|to be announced|virtual|zoom|teams|remote)\b/i.test(t0))return t0;
-  {const r=t0.match(/^(?:room|rm)?\.?\s*#?\s*([A-Za-z]?\d+[A-Za-z]?)\s*[,\-–]?\s*([A-Za-z]{2,5}\d?)$/i);if(r&&/[A-Za-z]{2}/.test(r[2]))return r[2].toUpperCase()+'-'+r[1].toUpperCase();}
-  {const r=t0.match(/^([A-Za-z]{3,5})(\d{2,4}[A-Za-z]?)$/);if(r)return r[1].toUpperCase()+'-'+r[2].toUpperCase();}
-  if(/[,;/]/.test(t0)&&!/building|bldg/i.test(t0))return t0.split(/\s*([,;/])\s*/).map((p,i)=>i%2?(p===','?', ':p):/[A-Za-z]/.test(p)?shortRoom(p):p).join('').replace(/ ,/g,',');
-  let t=t0,code='';for(const[re,c]of BLDG)if(re.test(t)){code=c;t=t.replace(re,' ');break;}
-  t=t.replace(/\b(?:room|rm|class\s*room|no)\b\.?\s*#?|#/gi,' ').replace(/[(),:]/g,' ').replace(/\s+/g,' ').trim();
-  const fmtNo=r=>r.replace(/[\s-]+/g,'').toUpperCase();
-  if(code){const m=t.match(/[A-Za-z]{0,2}\s*-?\s*\d+[A-Za-z]?|\b[A-Z]{2,4}\b/);return m?code+'-'+fmtNo(m[0]):code;}
-  const m=t.match(/^([A-Za-z]{2,5}\d?)(\s*[-–]\s*|\s+|)(.+)$/);
-  if(m&&ROOMNO.test(m[3].trim())&&(m[2]||m[1].replace(/\d/g,'').length>=3))return m[1].toUpperCase()+'-'+fmtNo(m[3]);
-  return t0;}
+/* AUS room codes: always "BUILDING-ROOM", e.g. ESB-1006, EB2-216, ARTS-218, SBA-1005 */
+const BW='(?:building|bldg\\.?|bld\\.?|build\\.?|blg\\.?|complex|hall)';
+const BLDG=[
+  ['ESB',`(?:new\\s+)?eng(?:ineering|g|r|in)?\\.?\\s*(?:and|&|\\+)?\\s*sci(?:ence|ences)?\\.?(?:\\s+${BW})?|new\\s+eng(?:ineering)?\\.?\\s+${BW}`],
+  ['EB1',`eng(?:ineering|g|r|in)?\\.?\\s*(?:${BW})?\\s*[-#]?\\s*(?:1|i|one)\\b|eng(?:ineering)?\\.?\\s+left(?:\\s+${BW})?`],
+  ['EB2',`eng(?:ineering|g|r|in)?\\.?\\s*(?:${BW})?\\s*[-#]?\\s*(?:2|ii|two)\\b|eng(?:ineering)?\\.?\\s+right(?:\\s+${BW})?`],
+  ['SBA',`school\\s+of\\s+business(?:\\s+admin(?:istration)?\\.?)?(?:\\s+${BW})?|business\\s+admin(?:istration)?\\.?(?:\\s+${BW})?|business\\s+${BW}`],
+  ['NAB',`new\\s+academic(?:\\s+${BW})?`],['LIB',`(?:main\\s+)?library(?:\\s+${BW})?`],['PAB',`performing\\s+arts(?:\\s+${BW})?`],
+  ['CAAD',`(?:college\\s+of\\s+)?architecture,?\\s*arts?\\s*(?:and|&)\\s*design(?:\\s+${BW})?|caad\\s+${BW}`],
+  ['ARTS',`(?:college\\s+of\\s+)?arts?\\s*(?:(?:and|&)\\s*sci(?:ences?)?\\.?)?\\s+${BW}|arts?\\s*(?:and|&)\\s*sciences?`],
+  ['PHY',`physics(?:\\s+${BW})?`],['CHM',`chemistry(?:\\s+${BW})?`],['LAN',`language(?:\\s+${BW})?`],['MB',`main\\s+${BW}`],
+  ['SC',`student\\s+cent(?:er|re)`],['TC',`testing\\s+cent(?:er|re)`],['SPC',`sports\\s+complex`]].map(([c,r])=>[c,new RegExp('\\b(?:'+r+')','i')]);
+const BCODE=/\b(ESB|EB[12]|SBA|NAB|LIB|ARTS|PHY|CHM|LAN|CAAD|PAB|MB|SC|TC|HSB)\b/i,BLIST=['CAAD','ARTS','ESB','EB1','EB2','SBA','NAB','LIB','PHY','CHM','LAN','PAB','HSB','MB','SC','TC'];
+const RNO=/\b[A-Za-z]{0,2}\s?-?\d{1,5}[A-Za-z]?\b/g;
+function shortRoom(raw){const t0=String(raw||'').replace(/\s+/g,' ').trim();if(!t0||/\b(online|tba|tbd|to be announced|virtual|zoom|teams|remote|n\/a)\b/i.test(t0))return t0;
+  if(/^[A-Z]{2,5}\d?-[A-Z]?\d+[A-Z]?$/.test(t0))return t0;
+  {const u=t0.toUpperCase().replace(/\s+/g,'');for(const c of BLIST)if(u.startsWith(c)&&/^-?[A-Z]{0,2}\d{1,5}[A-Z]?$/.test(u.slice(c.length)))return c+'-'+u.slice(c.length).replace(/^-/,'');}
+  /* lists of rooms (exam schedules): "EB2-214, 216, TC MPH" */
+  if(/,|;|\//.test(t0)&&!new RegExp(BW,'i').test(t0)&&!/room/i.test(t0)){const parts=t0.split(/\s*[,;/]\s*/);if(parts.length>1&&parts.every(p=>p.length<24))return parts.map(p=>/[A-Za-z]/.test(p)?shortRoom(p):p).join(', ');}
+  let t=' '+t0.replace(/[()[\]{}|]/g,' ')+' ',code='';
+  const bc=t.match(BCODE);if(bc){code=bc[1].toUpperCase();t=t.replace(bc[0],' # ');}
+  else for(const[c,re]of BLDG){const m=t.match(re);if(m){code=c;t=t.replace(m[0],' # ');break;}}
+  if(!code){const g=t0.match(/^([A-Za-z]{2,5}\d?)\s*-?\s*([A-Za-z]?-?\d{1,5}[A-Za-z]?)$/);if(g&&(/[\s-]/.test(t0)||g[1].replace(/\d/g,'').length>=3))return g[1].toUpperCase()+'-'+g[2].replace(/-/g,'').toUpperCase();
+    const r=t0.match(/^(?:room|rm)?\.?\s*#?\s*([A-Za-z]?\d+[A-Za-z]?)\s*[,\-–]?\s*([A-Za-z]{2,5}\d?)$/i);if(r)return r[2].toUpperCase()+'-'+r[1].toUpperCase();
+    return t0;}
+  t=t.replace(/\b(?:room|rm|class\s*room|lecture\s+hall|lab(?:oratory)?|no|number|floor|level|campus|aus|sharjah)\b\.?\s*:?\s*#?/gi,' ');
+  /* the room number is the number-like token after the building, else the last one */
+  const after=t.slice(t.indexOf('#')+1),nums=[...after.matchAll(RNO)].map(x=>x[0]),all=[...t.matchAll(RNO)].map(x=>x[0]);
+  const rn=(nums[0]||all[all.length-1]||'').replace(/[\s-]/g,'').toUpperCase();
+  if(!rn){const w=after.trim().match(/^[A-Za-z]{2,4}\b/);return w?code+'-'+w[0].toUpperCase():code;}
+  return code+'-'+rn;}
 /* the section number: "MTH 103 04", "MTH 103-04", "Calculus I - 04", "Calculus I 04" */
 function splitSection(name){const m=String(name||'').match(/^(.*?[A-Za-z)\]])\s*(?:[-–.]\s*|\(\s*|\s+)(?:sec(?:tion)?\.?\s*)?(\d{2})\)?\s*$/i);return m?{name:m[1].trim(),section:m[2]}:null;}
+function descRoom(d){d=String(d||'');const b=d.match(/building\s*[:\-]\s*([^\n;|]+)/i),r=d.match(/room\s*[:\-]\s*([^\n;|]+)/i),l=d.match(/location\s*[:\-]\s*([^\n;|]+)/i);return[b&&b[1],r&&r[1]].filter(Boolean).join(' ')||(l?l[1]:'');}
 function parseSummary(sum,desc){
   const s=sum.replace(/\s+/g,' ').trim(),all=s+'\n'+desc;
   const cm=s.match(/\b([A-Z]{2,5})\s?-?\s?(\d{3,4}[A-Z]?)\b(?:\s*[-./]\s*(?:sec(?:tion)?\.?\s*)?(\d{1,3}[A-Z]?)\b|\s+(?:sec(?:tion)?\.?\s*)?(\d{2})\b(?![:.]\d))?/)||desc.match(/\b([A-Z]{2,5})\s?(\d{3,4}[A-Z]?)\b/);
@@ -1252,7 +1268,7 @@ function buildSlots(evs){
     const st=icsTime(e.DTSTART);if(!st||st.allDay)continue;
     const en=icsTime(e.DTEND);let end=en&&!en.allDay?en.min:st.min+(e.DURATION?durMin(e.DURATION.val):60);
     if(en&&!en.allDay&&en.date>st.date)end=1440;if(end<=st.min)end=Math.min(1440,st.min+50);
-    const sum=unesc(e.SUMMARY&&e.SUMMARY.val),desc=unesc(e.DESCRIPTION&&e.DESCRIPTION.val),room=shortRoom(unesc(e.LOCATION&&e.LOCATION.val).replace(/\s+/g,' '));
+    const sum=unesc(e.SUMMARY&&e.SUMMARY.val),desc=unesc(e.DESCRIPTION&&e.DESCRIPTION.val),room=shortRoom(unesc(e.LOCATION&&e.LOCATION.val).replace(/\s+/g,' ')||descRoom(desc));
     if(/^(cancel+ed|transparent)$/i.test((e.STATUS||{}).val||''))continue;
     const info=parseSummary(sum,desc);let days=[st.day],rec=false,last=+st.date;
     if(e.RRULE){const r={};for(const kv of e.RRULE.val.split(';')){const[a,b]=kv.split('=');r[a.toUpperCase()]=b;}
@@ -2032,8 +2048,8 @@ function renderHome(){TS();const s=SEM(),wi=weekInfo(),T0=today0(),all=allTasks(
   const cds=countdowns(),cdh=cds.length?`<div class="hcds">${cds.map(c=>`<a class="hcd" href="#tasks" title="${esc(c.title)}"><b>${c.n===0?'Today':c.n}</b><span>${c.n===0?'':c.n===1?'day<br>':'days<br>'}${esc(c.label)}</span></a>`).join('')}</div>`:'';
   if(cc&&!clockTick)clockTick=setInterval(tickClocks,1000);
   renderLeft(cc,all);
-  $('#hhero').innerHTML=s?`<div><span class="hsem">${esc(semName())}</span><h2>${esc(weekLine())}</h2><span class="hint">${esc(fmtD(T0))}</span></div>${cdh}<button class="btn" data-act="upload">Upload</button>`
-    :`<div><span class="hsem">${esc(fmtD(T0))}</span><h2>Welcome</h2><span class="hint">Upload your syllabi, class schedule and academic calendar to get started.</span></div>${cdh}<button class="btn" data-act="upload">Upload</button>`;
+  $('#hhero').innerHTML=s?`<div><span class="hsem">${esc(semName())}</span><h2>${esc(weekLine())}</h2><span class="hint">${esc(fmtD(T0))}</span></div><button class="btn hup" data-act="upload">Upload</button>${cdh}`
+    :`<div><span class="hsem">${esc(fmtD(T0))}</span><h2>Welcome</h2><span class="hint">Upload your syllabi, class schedule and academic calendar to get started.</span></div><button class="btn hup" data-act="upload">Upload</button>${cdh}`;
   const card=(href,title,count,body,id)=>{const shut=!!hShut[id];return`<section class="hcard${shut?' shut':''}" data-hc="${id}"><div class="hhead"><button class="hfold" data-fold="${id}" aria-expanded="${!shut}" aria-label="${shut?'Expand':'Collapse'} ${esc(title)}"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg></button><a class="htitle" href="${href}"><h3>${title}</h3>${count!=null?`<span class="hcount">${count}</span>`:''}<span class="harr" aria-hidden="true">→</span></a></div><div class="hbody"${shut?' hidden':''}>${body}</div></section>`;};
   const C1=card('#timetable',todayCls.length?'Today’s classes':nextLbl?`Next classes · ${nextLbl}`:'Next classes',null,vis.length&&(todayCls.length||nextCls.length)?`<ul class="hclasses">${(todayCls.length?todayCls:nextCls).map(clsRow).join('')}</ul>${todayCls.length?'':'<p class="hint">No classes today.</p>'}`:`<p class="hint hempty">${vis.length?'No more classes this semester.':'Upload your .ics schedule to see your classes here.'}</p>${vis.length?'':'<button class="btn ghost sm" data-act="upload">Upload</button>'}`,'classes'),C2=card('#tasks','Tasks',due.length||null,`${overdue.length?`<a class="hover" href="#tasks"><b>${overdue.length} overdue</b><span>Review →</span></a>`:''}${due.length?`<ul class="tasks">${due.slice(0,6).map(t=>taskRow(t,true)).join('')}</ul>${due.length>6?`<a class="hmore" href="#tasks">${due.length-6} more due this week</a>`:''}`:`<p class="hint hempty">Nothing due in the next 7 days.${undated.length?` ${undated.length} task${undated.length>1?'s have':' has'} no date.`:''}</p><button class="btn ghost sm" data-act="tadd">Add a task</button>`}`,'tasks'),C3=card('#tasks','Coming up',null,cal.length?`<ul class="tasks">${cal.map(calRow).join('')}</ul>`:`<p class="hint hempty">${s?'Upload your academic calendar to see breaks, holidays, deadlines and make-up days here.':'Set up your semester, then add your academic calendar to see notable dates here.'}</p><button class="btn ghost sm" data-act="upload">Upload calendar</button>`,'dates'),C4=card('#grades','Courses',null,gc.length?`<div class="hgpa"><span>Semester GPA</span><b class="${sm.gpa==null?'nil':''}">${sm.gpa==null?'No grades yet':fmt2(sm.gpa)}</b></div><ul class="hcourses reord">${gc.map(c=>{const p=coursePct(c);return`<li data-hopen="${c.id}" data-rid="${c.id}" tabindex="0" role="link" style="--cc:${courseColor(c)}"><i class="cdot"></i><span class="hcb"><b>${esc(c.code||'Course')}</b><span>${esc(c.title||'')}</span></span><span class="hg">${p==null?'<span class="nil">–</span>':`${fmt(p)}%<em>${esc(letter(c,p))}</em>`}</span></li>`;}).join('')}</ul>`:`<p class="hint hempty">Upload a syllabus to start tracking grades.</p><button class="btn ghost sm" data-act="upload">Upload syllabi</button>`,'courses');
   $('#hgrid').innerHTML=`<div class="hcol">${C1}${C3}</div><div class="hcol">${C2}${C4}</div>`;}
