@@ -51,8 +51,6 @@ h1{font-size:clamp(22px,2.4vw,30px);line-height:1.1;margin:0;font-stretch:112%;f
 .sbar{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;padding:14px 0 12px;border-bottom:2px solid var(--ink);margin-bottom:14px}.sbar h2{margin:0;font-size:26px;font-weight:900;font-stretch:115%}.sbar p{margin:2px 0 0}.sbar a{color:inherit}.sbtns{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.sbtns .btn{text-decoration:none;display:inline-grid;place-items:center;line-height:1.2}
 .sframewrap{border:1.5px solid var(--ink);border-radius:16px;overflow:hidden;background:#fff;box-shadow:0 2px 10px rgb(0 0 0/.08);height:calc(100dvh - 230px);min-height:480px;position:relative}
 .sframe{width:100%;height:100%;border:0;display:block;background:#fff;transition:filter .2s}
-/* our header already names it, so their big title is cropped off the top (wide screens, where it sits on one line) */
-@media(min-width:820px){.sframe{height:calc(100% + 92px);margin-top:-92px}}
 /* AUS Scheduler shows its dark design on dark-mode devices; these colour maps fit it to our theme (and a plain flip for its light design under our dark theme) */
 /* fitted so its #1a1a1a page, #f9f9f9 card and #8a2be2 purple land on our background, surface and red (browsers only allow these built-in filters on another site's frame) */
 .sframewrap.fx-dark,.sframewrap.fx-dark .sframe{background:#0b0b0b}.sframewrap.fx-dark .sframe{filter:hue-rotate(76deg) saturate(.898) contrast(1.138) brightness(.951)}
