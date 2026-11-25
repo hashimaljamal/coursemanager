@@ -2137,7 +2137,7 @@ function ccUnits(ms){const t=Math.max(0,Math.floor(ms/1000));return[[Math.floor(
 function ccBig(ms){const u=ccUnits(ms),show=u[0][0]>0?u:u[1][0]>0?u.slice(1):u.slice(2);return show.map(([v,l],i)=>`<div><b>${i&&v<10?'0'+v:v}</b><span>${v===1&&l!=='min'&&l!=='sec'?l.slice(0,-1):l}</span></div>`).join('');}
 function openCC(){const cc=classClock();if(!cc)return;renderCC(cc);$('#ccmodal').classList.add('on');$('#ccmodal .cccard').scrollTop=0;setTimeout(()=>$('#ccclose').focus({preventScroll:true}),0);if(!clockTick)clockTick=setInterval(tickClocks,1000);}
 function renderCC(cc=classClock()){const m=$('#ccmodal');if(!cc){m.classList.remove('on');return;}const s=cc.s,n=nm(s),t=TT(),h24=t.h24,tm=x=>fmtClock(x,h24)+(h24?'':' '+ampm(x)),T0=today0();
-  const day=cc.now?T0:cc.day,dd=dDiff(T0,day),dur=s.end-s.start,raw=TT().names[s.ckey]?.room||s.room||'',g=gradeFor(s.ckey,n.code),p=g?coursePct(g):null;
+  const day=cc.now?T0:cc.day,dd=dDiff(T0,day),dur=s.end-s.start,raw=TT().names[s.ckey]?.room||s.room||'',g=gradeFor(s.ckey,n.code);
   const when=cc.now?`Ends at <b>${esc(tm(s.end))}</b>`:`Starts <b>${esc(dd===0?'today':dd===1?'tomorrow':DAYN[day.getDay()]+', '+fmtD(day))}</b> at <b>${esc(tm(s.start))}</b>`;
   const wo=weekDays(t.slots),meets=[...new Map(t.slots.filter(x=>x.ckey===s.ckey).map(x=>[x.day+'-'+x.start,x])).values()].sort((a,b)=>wo.indexOf(a.day)-wo.indexOf(b.day)||a.start-b.start);
   const sec=n.section?(/^\d/.test(n.section)?'Section '+n.section:n.section):'';
@@ -2153,7 +2153,6 @@ function renderCC(cc=classClock()){const m=$('#ccmodal');if(!cc){m.classList.rem
     <p class="ccwhen">${cc.now?'left in class · ':''}${when}</p>
     ${cc.now?`<div class="ccprog" data-pf="${+st}" data-pt="${+en}"><i style="width:${Math.min(100,Math.max(0,(Date.now()-st)/(en-st)*100))}%"></i></div><div class="ccpl"><span>${esc(tm(s.start))}</span><span data-pp>${Math.round(Math.min(100,Math.max(0,(Date.now()-st)/(en-st)*100)))}% done</span><span>${esc(tm(s.end))}</span></div>`:''}
     <section class="ccsec"><h4>Class info</h4><dl class="ccrows">${rows.map(([a,b])=>`<div><dt>${esc(a)}</dt><dd>${esc(b)}</dd></div>`).join('')}</dl></section>
-    ${g?`<section class="ccsec"><h4>Your grade</h4><div class="ccgrade"><b>${p==null?'–':fmt(p)+'%'}</b>${p!=null?`<em>${esc(letter(g,p))}</em>`:'<span class="hint">No scores yet</span>'}<span class="sp"></span><button class="btn ghost sm" data-ccg="${g.id}">Open grades</button></div></section>`:''}
     ${tasks.length?`<section class="ccsec"><h4>Coming up in ${esc(n.code||'this course')}</h4><ul class="cctasks">${tasks.map(x=>`<li><span>${esc(x.title)}</span><small>${esc(x.date===iso(T0)?'Today':fmtD(pd(x.date)))}</small></li>`).join('')}</ul></section>`:''}
     ${after?`<section class="ccsec"><h4>After this</h4><p class="hint" style="margin:0">${esc((nm(after.x).code||nm(after.x).name||'Class')+' · '+(dDiff(T0,after.d)===0?'today':dDiff(T0,after.d)===1?'tomorrow':DAYN[after.d.getDay()])+' at '+tm(after.x.start))}${nm(after.x).room?' · '+esc(nm(after.x).room):''}</p></section>`:''}`;}
 $('#ccclose').onclick=()=>$('#ccmodal').classList.remove('on');
