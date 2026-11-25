@@ -48,18 +48,20 @@ h1{font-size:clamp(22px,2.4vw,30px);line-height:1.1;margin:0;font-stretch:112%;f
 .theme{grid-area:theme}
 .tabs{grid-area:tabs;display:inline-flex;align-self:center;background:var(--soft);border-radius:11px;padding:3px;gap:2px;margin-left:16px}
 .tabs a{padding:7px 16px;border-radius:8px;font-weight:700;font-size:14px;color:var(--mute);text-decoration:none;min-height:36px;display:grid;place-items:center}
+.schonly{display:none!important}body[data-view=sched] .dacts .dbtn:not(.schonly){display:none!important}body[data-view=sched] .dacts .schonly:not([hidden]){display:inline-flex!important}a.dbtn{text-decoration:none}
+.dbtn[aria-pressed=false]{opacity:.6}
 .sbar{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;padding:14px 0 12px;border-bottom:2px solid var(--ink);margin-bottom:14px}.sbar h2{margin:0;font-size:26px;font-weight:900;font-stretch:115%}.sbar p{margin:2px 0 0}.sbar a{color:inherit}.sbtns{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.sbtns .btn{text-decoration:none;display:inline-grid;place-items:center;line-height:1.2}
-.sframewrap{border:1.5px solid var(--ink);border-radius:16px;overflow:hidden;background:#fff;box-shadow:0 2px 10px rgb(0 0 0/.08);height:calc(100dvh - 230px);min-height:480px;position:relative}
+.sframewrap{border:0;border-radius:0;overflow:hidden;background:var(--bg);height:calc(100dvh - 104px);min-height:480px;position:relative;margin-top:10px}
 .sframe{width:100%;height:100%;border:0;display:block;background:#fff;transition:filter .2s}
 /* AUS Scheduler shows its dark design on dark-mode devices; these colour maps fit it to our theme (and a plain flip for its light design under our dark theme) */
 /* fitted so its #1a1a1a page, #f9f9f9 card and #8a2be2 purple land on our background, surface and red (browsers only allow these built-in filters on another site's frame) */
-.sframewrap.fx-dark,.sframewrap.fx-dark .sframe{background:#0b0b0b}.sframewrap.fx-dark .sframe{filter:hue-rotate(76deg) saturate(.898) contrast(1.138) brightness(.951)}
+.sframewrap.fx-dark,.sframewrap.fx-dark .sframe{background:var(--bg)}.sframewrap.fx-dark .sframe{filter:hue-rotate(76.5deg) saturate(.922) contrast(1.103) brightness(.951)}
 /* light theme: flipped to a white page; its card becomes our dark surface (a filter can't flip the page without flipping the card) */
-.sframewrap.fx-light,.sframewrap.fx-light .sframe{background:#fff}.sframewrap.fx-light .sframe{filter:invert(1) hue-rotate(262deg) saturate(4.2) contrast(.887) brightness(1.167)}
+.sframewrap.fx-light,.sframewrap.fx-light .sframe{background:var(--bg)}.sframewrap.fx-light .sframe{filter:invert(1) hue-rotate(262deg) saturate(4.2) contrast(.887) brightness(1.167)}
 .sframewrap.fx-inv .sframe{filter:invert(.92) hue-rotate(180deg)}
 .sframewrap.msg{background:var(--bg);display:grid;place-items:center;text-align:center;padding:30px}.sframewrap.msg h3{margin:0 0 6px;font-size:20px}.sframewrap.msg .btn{text-decoration:none;display:inline-grid}
 #sinvwrap[hidden]{display:none}
-@media(max-width:600px){.sframewrap{height:calc(100dvh - 260px);border-radius:12px}}
+@media(max-width:600px){.sframewrap{height:calc(100dvh - 190px)}}
 .tabs a[aria-current=page]{background:var(--bg);color:var(--ink);box-shadow:0 1px 3px rgb(0 0 0/.14)}
 body:not([data-view=tt]) .tonly,body:not([data-view=grades]) .gonly,body:not([data-view=tasks]) .konly,body:not([data-view=home]) .honly{display:none!important}
 .rline{margin:0;font-size:12px;color:var(--mute)}
@@ -567,6 +569,9 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
   <div class="dacts">
     <button class="btn ghost sm dbtn" id="impbtn" title="Import a backup file"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2v8M4.5 6.5 8 10l3.5-3.5M2.5 11v2.5h11V11"/></svg><span>Import</span></button>
     <button class="btn ghost sm dbtn" id="expbtn" title="Export a backup file"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 10V2M4.5 5.5 8 2l3.5 3.5M2.5 11v2.5h11V11"/></svg><span>Export</span></button>
+    <button class="btn ghost sm dbtn schonly" id="sinvbtn" aria-pressed="true" title="Recolour AUS Scheduler to match Course Manager's theme" hidden><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="5.5"/><path d="M8 2.5v11A5.5 5.5 0 0 0 8 2.5z" fill="currentColor"/></svg><span>Match theme</span></button>
+    <button class="btn ghost sm dbtn schonly" id="sreload" title="Reload AUS Scheduler"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13.5 8a5.5 5.5 0 1 1-1.7-4M13.5 2v3h-3"/></svg><span>Reload</span></button>
+    <a class="btn ghost sm dbtn schonly" id="sopen" href="https://www.aus-scheduler.com/" target="_blank" rel="noopener" title="Open AUS Scheduler in a new tab"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M9 2.5h4.5V7M13.5 2.5 7 9M11.5 9.5v4h-9v-9h4"/></svg><span>Open in new tab</span></a>
     <button class="btn ghost sm dbtn dz" id="rstbtn" title="Reset data"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 8a5.5 5.5 0 1 0 1.7-4M2.5 2v3h3"/></svg><span>Reset</span></button>
   </div>
   <button class="theme" id="theme" aria-label="Switch to dark mode" title="Light / dark mode"><svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 1.5v2.5M12 20v2.5M4.6 4.6l1.8 1.8M17.6 17.6l1.8 1.8M1.5 12H4M20 12h2.5M4.6 19.4l1.8-1.8M17.6 6.4l1.8-1.8"/></svg></button>
@@ -576,9 +581,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
   <input type="file" id="calfile" hidden accept=".ics,text/calendar,.pdf,.docx,.txt,.md,.html,.htm,image/*">
 </header>
 <section id="v-home" hidden><div class="pbar hhero" id="hhero"></div><div class="hwrap"><div class="hleft" id="hleft"></div><div class="hgrid" id="hgrid"></div></div></section>
-<section id="v-sched" hidden><div class="sbar"><div><h2>Scheduler</h2><p class="hint">AUS Scheduler by <a href="https://github.com/yousefbilal" target="_blank" rel="noopener">yousefbilal</a> and ak, embedded from their site. It's online while registration is open.</p></div>
-<div class="sbtns"><label class="ptog" id="sinvwrap" hidden><input type="checkbox" id="sinv"> Match my theme</label><button class="btn ghost" id="sreload">Reload</button><a class="btn ghost" id="sopen" href="https://www.aus-scheduler.com/" target="_blank" rel="noopener">Open in new tab</a></div></div>
-<div class="sframewrap" id="sframewrap"></div></section>
+<section id="v-sched" hidden><div class="sframewrap" id="sframewrap"></div></section>
 <section id="v-plan" hidden><div class="pbar"><div class="pleft" id="phead"></div>
   <div class="acts">
     <button class="btn" data-pact="prog">Program</button>
@@ -2352,7 +2355,7 @@ let schedLoaded=false;
 const osDark=matchMedia('(prefers-color-scheme: dark)');
 function schedFx(){const t=document.documentElement.dataset.theme,ours=t==='dark'?'dark':t==='light'?'light':(osDark.matches?'dark':'light');
   return osDark.matches?(ours==='dark'?'fx-dark':'fx-light'):(ours==='dark'?'fx-inv':'');}
-function schedTheme(){const w=$('#sframewrap'),fx=schedFx();let on=true;try{on=localStorage.getItem('cm-sinv')!=='0';}catch{}$('#sinvwrap').hidden=!fx;$('#sinv').checked=on;
+function schedTheme(){const w=$('#sframewrap'),fx=schedFx();let on=true;try{on=localStorage.getItem('cm-sinv')!=='0';}catch{}const tb=$('#sinvbtn');tb.hidden=!fx;tb.setAttribute('aria-pressed',String(on));
   w.classList.remove('fx-dark','fx-light','fx-inv','inv');const use=fx&&on&&!w.classList.contains('msg');if(use)w.classList.add(fx);return use?fx:'';}
 osDark.addEventListener('change',schedTheme);new MutationObserver(schedTheme).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
 function renderSched(){const w=$('#sframewrap');
@@ -2362,7 +2365,7 @@ function renderSched(){const w=$('#sframewrap');
   if(!schedLoaded||!w.querySelector('iframe')){w.className='sframewrap';w.innerHTML=`<iframe class="sframe" src="${SCHED_URL}" title="AUS Scheduler" referrerpolicy="no-referrer" allow="clipboard-write"></iframe>`;schedLoaded=true;}schedTheme();}
 $('#sframewrap').addEventListener('click',e=>{if(e.target.id==='srecheck'){$('#sframewrap').innerHTML='<div><h3>Checking AUS Scheduler…</h3></div>';schedCheck(true);}});
 $('#sreload').onclick=()=>{schedLoaded=false;Promise.resolve(schedCheck(true)).then(()=>renderSched());};
-$('#sinv').onchange=e=>{try{localStorage.setItem('cm-sinv',e.target.checked?'1':'0');}catch{}schedTheme();};
+$('#sinvbtn').onclick=()=>{const on=$('#sinvbtn').getAttribute('aria-pressed')!=='true';try{localStorage.setItem('cm-sinv',on?'1':'0');}catch{}schedTheme();};
 schedCheck();document.addEventListener('visibilitychange',()=>{if(!document.hidden)schedCheck();});
 const VIEWS={home:['#home','Home'],grades:['#grades','Grades'],tt:['#timetable','Timetable'],tasks:['#tasks','Tasks'],plan:['#plan','Plan'],sched:['#scheduler','Scheduler']};
 function route(){const h=location.hash,v=h==='#grades'?'grades':h==='#timetable'?'tt':h==='#tasks'?'tasks':h==='#plan'||h==='#planner'?'plan':h==='#scheduler'?'sched':'home';const prevV=document.body.dataset.view;document.body.dataset.view=v;
