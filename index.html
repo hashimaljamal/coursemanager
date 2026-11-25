@@ -54,8 +54,8 @@ h1{font-size:clamp(22px,2.4vw,30px);line-height:1.1;margin:0;font-stretch:112%;f
 /* AUS Scheduler shows its dark design on dark-mode devices; these colour maps fit it to our theme (and a plain flip for its light design under our dark theme) */
 /* fitted so its #1a1a1a page, #f9f9f9 card and #8a2be2 purple land on our background, surface and red (browsers only allow these built-in filters on another site's frame) */
 .sframewrap.fx-dark,.sframewrap.fx-dark .sframe{background:#0b0b0b}.sframewrap.fx-dark .sframe{filter:hue-rotate(76deg) saturate(.898) contrast(1.138) brightness(.951)}
-/* in the light theme an inverted copy looks muddy, so its layout stays a dark panel in our light-theme colours (white card, signal red) */
-.sframewrap.fx-light,.sframewrap.fx-light .sframe{background:#0c0c0c}.sframewrap.fx-light .sframe{filter:hue-rotate(77deg) saturate(.858) contrast(1.133) brightness(.991)}
+/* light theme: flipped to a white page; its card becomes our dark surface (a filter can't flip the page without flipping the card) */
+.sframewrap.fx-light,.sframewrap.fx-light .sframe{background:#fff}.sframewrap.fx-light .sframe{filter:invert(1) hue-rotate(262deg) saturate(4.2) contrast(.887) brightness(1.167)}
 .sframewrap.fx-inv .sframe{filter:invert(.92) hue-rotate(180deg)}
 .sframewrap.msg{background:var(--bg);display:grid;place-items:center;text-align:center;padding:30px}.sframewrap.msg h3{margin:0 0 6px;font-size:20px}.sframewrap.msg .btn{text-decoration:none;display:inline-grid}
 #sinvwrap[hidden]{display:none}
