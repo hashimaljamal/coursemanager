@@ -431,6 +431,10 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 .padd{position:absolute;height:30px;border:1.5px dashed var(--line);background:none;border-radius:9px;color:var(--mute);font:inherit;font-size:12.5px;font-weight:700;cursor:pointer}.padd:hover{border-color:var(--ink);color:var(--ink)}
 .plines{position:absolute;left:0;top:0;pointer-events:none;overflow:visible}.plines.off{display:none}
 .pe{fill:none;stroke:color-mix(in srgb,var(--ink) 55%,transparent);stroke-width:1.6;marker-end:url(#parr);transition:opacity .15s,stroke .15s}.pe.c{stroke-dasharray:2.5 3}.pah{fill:color-mix(in srgb,var(--ink) 55%,transparent)}.pah.hi{fill:var(--red)}
+.pe.stub{display:none}.pe.dn{opacity:.3}.plines.focus .pe.dn.hi{opacity:1}
+.pstubs{position:absolute;display:grid;justify-items:end;gap:1px;z-index:2}.pcanvas.nolines .pstubs{display:none}
+.pstub{border:0;background:var(--bg);font:inherit;font-size:9.5px;font-weight:800;line-height:12px;color:var(--mute);padding:0 2px;border-radius:3px;cursor:pointer;white-space:nowrap}.pstub.dn{opacity:.55}.pstub:hover,.pstub.hi{color:var(--red);opacity:1}
+.ptidy{margin-left:10px;font-size:13px}
 .plines.focus .pe{opacity:.12}.plines.focus .pe.hi{opacity:1;stroke:var(--red);stroke-width:2.2;marker-end:url(#parr2)}
 .pcanvas:has(.plines.focus) .pbox:not(.rel):not(:hover){opacity:.45}
 .pghost{position:fixed;z-index:80;pointer-events:none;box-shadow:0 12px 30px rgb(0 0 0/.25);transform:rotate(-2deg);opacity:.95}.pbox.pdrag{opacity:.25}
@@ -2478,6 +2482,18 @@ function replanRemaining(){const p=PL(),db=courseDB(),pr=curProg(),nk=ckey(nowTe
   /* drop empty extra years at the end */
   for(;;){const ys=Math.max(...p.terms.map(t=>t.y));if(ys<=4)break;const last=p.terms.filter(t=>t.y===ys);if(last.some(t=>t.items.length))break;p.terms=p.terms.filter(t=>t.y!==ys);}
   return{moved:pool.length};}
+/* reorder courses inside each semester so fewer prerequisite lines cross (a few barycentre sweeps; kept only if it helps) */
+function tidyRows(){const M=planModel(),cols=M.cols.filter(t=>!isX(t)),pos=new Map(),preds={},succs={};
+  M.cols.forEach(t=>t.items.forEach((x,r)=>pos.set(x.id,r)));for(const e of M.edges){(preds[e.b.x.id]=preds[e.b.x.id]||[]).push(e.a.x.id);(succs[e.a.x.id]=succs[e.a.x.id]||[]).push(e.b.x.id);}
+  const col=new Map();M.cols.forEach((t,k)=>t.items.forEach(x=>col.set(x.id,k)));
+  const crossings=()=>{const E=M.edges.filter(e=>{const d=col.get(e.b.x.id)-col.get(e.a.x.id);return d>=1&&d<=2;}).map(e=>[col.get(e.a.x.id),pos.get(e.a.x.id),col.get(e.b.x.id),pos.get(e.b.x.id)]);let n=0;
+    for(let i=0;i<E.length;i++)for(let j=i+1;j<E.length;j++){const[a,b]=[E[i],E[j]];if(a[0]!==b[0]||a[2]!==b[2])continue;if((a[1]-b[1])*(a[3]-b[3])<0)n++;}return n;};
+  const before=crossings(),save0=cols.map(t=>t.items.slice());
+  for(let it=0;it<4;it++)for(const dir of[1,-1])for(const t of dir>0?cols:[...cols].reverse()){
+    const key=x=>{const nb=(dir>0?preds:succs)[x.id]||[],all=[...(preds[x.id]||[]),...(succs[x.id]||[])];if(!all.length)return 1e4+pos.get(x.id);const u=nb.length?nb:all;return u.reduce((s,id)=>s+pos.get(id),0)/u.length;};
+    const ks=new Map(t.items.map(x=>[x.id,key(x)]));/* a lab sits right after its lecture */for(const x of t.items){const c=codesOfX(x)[0]||'';if(/\dL$/.test(c)){const lec=t.items.find(y=>codesOfX(y)[0]===c.slice(0,-1));if(lec)ks.set(x.id,ks.get(lec.id)+.001);}}
+    t.items.sort((a,b)=>ks.get(a.id)-ks.get(b.id)||pos.get(a.id)-pos.get(b.id));t.items.forEach((x,r)=>pos.set(x.id,r));}
+  const after=crossings();if(after>before){cols.forEach((t,i)=>{t.items=save0[i];});return{before,after:before};}return{before,after};}
 function nextUp(M){const nk=ckey(nowTerm());const fut=M.cols.filter(t=>!isX(t)&&ckey(termCal(t))>nk&&t.items.length);if(!fut.length)return null;
   const reg=fut[0].items.some(x=>x.reg)?fut[0]:null,rec=fut.find(t=>t.items.some(x=>!x.reg&&!x.st));return{reg,rec};}
 
@@ -2575,7 +2591,7 @@ function applyTranscript(R,name,how){const snap=JSON.stringify(S),p=PL();let pic
       if(g&&k<=nk)st=/^(F|NP|U|NC|WF)$/.test(g)?'fail':/^(I|IP)$/.test(g)?'now':'done';
       list.push({c:o.c,t:o.t,cr:o.cr,g,st,cal:{s:t.s,y:t.y},imp:true});}}
   const n=placeHistory(list),terms=R.terms.length;
-  replanRemaining();p.tx={file:name,at:Date.now(),gpa:R.gpa,how};save();renderPlanner2();
+  replanRemaining();tidyRows();p.tx={file:name,at:Date.now(),gpa:R.gpa,how};save();renderPlanner2();
   const M=planModel(),gp=M.gpa.gpa,nu=nextUp(M);
   $('#ptstatus').className='hint';$('#ptstatus').textContent=`Imported ${terms} semester${terms===1?'':'s'}, ${n-R.transfer.length} course${n-R.transfer.length===1?'':'s'}${R.transfer.length?` and ${R.transfer.length} transfer credit${R.transfer.length===1?'':'s'}`:''} (${how} reader).${gp!=null?` CGPA ${g2(gp)}${R.gpa!=null&&Math.abs(R.gpa-+g2(gp))>.011?` (your transcript says ${R.gpa.toFixed(2)})`:''}.`:''}${picked?` Using the ${picked.year} catalog; switch it under Program and your semesters stay.`:''}`;
   toast(`Transcript imported${nu&&nu.rec?' · next up: '+termName(nu.rec):''}`,snap);}
@@ -2671,12 +2687,18 @@ function boxHTML(x,M,col){const db=M.db,code=x.pick||x.c,cs=String(code).split(/
 function drawChart(M){const cols=M.cols,{W,H,HEAD,TOP}=PB,STEP=6;const maxR=Math.max(4,...cols.map(c=>c.items.length+1));
   /* every line gets its own vertical lane in a gutter, so no two lines run on top of each other */
   const lanes={},need=(g,key,sort)=>{const L=lanes[g]=lanes[g]||[];let o=L.find(l=>l.key===key);if(!o){o={key,sort};L.push(o);}return o;};
-  const E=M.edges.map(e=>{const a=e.a,b=e.b,o={a,b,kind:e.kind};
+  /* 1. skip lines implied by others: if A leads to B and B leads to C, A→C isn't drawn */
+  const out={};for(const e of M.edges)(out[e.a.x.id]=out[e.a.x.id]||new Set()).add(e.b.x.id);
+  const reach=(s,t)=>{const st=[s],seen=new Set([s]);while(st.length){const u=st.pop();for(const v of out[u]||[]){if(v===t)return true;if(!seen.has(v)){seen.add(v);st.push(v);}}}return false;};
+  const RED=M.edges.filter(e=>e.kind!=='p'||!M.edges.some(f=>f!==e&&f.b.x.id===e.b.x.id&&f.a.x.id!==e.a.x.id&&reach(e.a.x.id,f.a.x.id)));
+  /* 2. a prerequisite from three or more columns back becomes a small label beside the course instead of a line across the chart */
+  const FAR=2,stubs=RED.filter(e=>e.b.k-e.a.k>FAR),stubIn={},chipW={};for(const e of stubs){(stubIn[e.b.x.id]=stubIn[e.b.x.id]||{b:e.b,a:[]}).a.push(e.a);chipW[e.b.k-1]=62;}
+  const E=RED.filter(e=>e.b.k-e.a.k<=FAR).map(e=>{const a=e.a,b=e.b,o={a,b,kind:e.kind,dn:['done','tr'].includes(b.x.st)};
     if(a.k===b.k){o.type='same';o.L1=need(a.k,'c'+a.x.id,[1,a.r]);}
     else{o.type=b.k===a.k+1?'adj':'long';o.L1=need(a.k,'o'+a.x.id,[0,-a.r]);if(o.type==='long')o.L2=need(b.k-1,'i'+b.x.id+'|'+a.x.id,[2,-b.r]);}return o;});
-  const gw=cols.map((_,g)=>{const L=lanes[g]||[];L.sort((p,q)=>p.sort[0]-q.sort[0]||p.sort[1]-q.sort[1]);L.forEach((l,i)=>l.i=i);return Math.max(44,26+L.length*STEP);});
+  const gw=cols.map((_,g)=>{const L=lanes[g]||[];L.sort((p,q)=>p.sort[0]-q.sort[0]||p.sort[1]-q.sort[1]);L.forEach((l,i)=>l.i=i);return Math.max(44,26+L.length*STEP)+(chipW[g]||0);});
   const xs=[];let acc=24;cols.forEach((_,k)=>{xs[k]=acc;acc+=W+gw[k];});const CW=acc;
-  const colX=k=>xs[k],laneX=(g,l)=>xs[g]+W+(gw[g]-((lanes[g]||[]).length-1)*STEP)/2+l.i*STEP;
+  const colX=k=>xs[k],laneX=(g,l)=>xs[g]+W+(gw[g]-(chipW[g]||0)-((lanes[g]||[]).length-1)*STEP)/2+l.i*STEP;
   /* lines that cross several terms run in the gap above their target's row, each on its own track; the gap grows to fit */
   const chan={};let maxT=0;for(const o of E)if(o.type==='long'){const l1=laneX(o.a.k,o.L1),l2=laneX(o.b.k-1,o.L2),lo=Math.min(l1,l2),hi=Math.max(l1,l2),C=chan[o.b.r]=chan[o.b.r]||[];let t=0;while(C.some(c=>c.t===t&&c.lo<hi+3&&lo<c.hi+3))t++;C.push({t,lo,hi});o.tk=t;maxT=Math.max(maxT,t);}
   const G=PB.G=Math.max(22,14+maxT*4),rowY=r=>TOP+HEAD+r*(H+G),toff=t=>(t%2?-1:1)*Math.ceil(t/2)*4;
@@ -2702,11 +2724,14 @@ function drawChart(M){const cols=M.cols,{W,H,HEAD,TOP}=PB,STEP=6;const maxR=Math
     else{const sy=exY(a.r),l1=laneX(a.k,o.L1);
       if(o.type==='adj')d=`M${sx} ${sy}H${l1}V${o.ey}H${tx-2}`;
       else{const l2=laneX(b.k-1,o.L2);d=`M${sx} ${sy}H${l1}V${o.cy}H${l2}V${o.ey}H${tx-2}`;}}
-    paths+=`<path d="${roundPath(d)}" class="pe ${o.kind}" data-a="${a.x.id}" data-b="${b.x.id}"/>`;}
+    paths+=`<path d="${roundPath(d)}" class="pe ${o.kind}${o.dn?' dn':''}" data-a="${a.x.id}" data-b="${b.x.id}"/>`;}
+  let chips='';for(const id in stubIn){const{b,a}=stubIn[id],cw=chipW[b.k-1],L=a.slice().sort((p,q)=>p.k-q.k||p.r-q.r),show=L.length>3?L.slice(0,2):L;
+    for(const s of L)paths+=`<path class="pe stub" data-a="${s.x.id}" data-b="${b.x.id}"/>`;
+    chips+=`<div class="pstubs" style="left:${colX(b.k)-cw}px;top:${rowY(b.r)+3}px;width:${cw-4}px">${show.map(s=>`<button class="pstub${['done','tr'].includes(b.x.st)?' dn':''}" data-pact="goto" data-pid="${s.x.id}" data-a="${s.x.id}" data-b="${b.x.id}" title="${esc((s.x.pick||s.x.c)+' is a prerequisite for '+(b.x.pick||b.x.c)+' ('+termName(cols[s.k])+')')}">${esc(s.x.pick||s.x.c)} ›</button>`).join('')}${L.length>show.length?`<button class="pstub" data-pact="goto" data-pid="${b.x.id}">+${L.length-show.length} more</button>`:''}</div>`;}
   const svg=`<svg class="plines${pLines?'':' off'}" width="${CW}" height="${CH}" viewBox="0 0 ${CW} ${CH}"><defs><marker id="parr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L8 4L0 8z" class="pah"/></marker><marker id="parr2" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L8 4L0 8z" class="pah hi"/></marker></defs>${paths}</svg>`;
   const wrap=$('#pmain');const avail=wrap.clientWidth||900,z=pZoom==null?Math.max(.8,Math.min(1,avail/CW)):pZoom;
-  wrap.innerHTML=`<div class="pzoom"><button class="ib" data-pact="zout" aria-label="Zoom out">−</button><button class="lnkbtn" data-pact="zfit">${Math.round(z*100)}%</button><button class="ib" data-pact="zin" aria-label="Zoom in">+</button><label class="ptog"><input type="checkbox" data-pact="lines" ${pLines?'checked':''}> Prerequisite lines</label></div>
-    <div class="pscroll"><div class="psize" style="width:${CW*z}px;height:${CH*z}px"><div class="pcanvas" style="width:${CW}px;height:${CH}px;transform:scale(${z})">${svg}${html}</div></div></div>`;}
+  wrap.innerHTML=`<div class="pzoom"><button class="ib" data-pact="zout" aria-label="Zoom out">−</button><button class="lnkbtn" data-pact="zfit">${Math.round(z*100)}%</button><button class="ib" data-pact="zin" aria-label="Zoom in">+</button><button class="lnkbtn ptidy" data-pact="tidy" title="Reorder courses within each semester so fewer lines cross">Tidy lines</button><label class="ptog"><input type="checkbox" data-pact="lines" ${pLines?'checked':''}> Prerequisite lines</label></div>
+    <div class="pscroll"><div class="psize" style="width:${CW*z}px;height:${CH*z}px"><div class="pcanvas${pLines?'':' nolines'}" style="width:${CW}px;height:${CH}px;transform:scale(${z})">${svg}${html}${chips}</div></div></div>`;}
 function roundPath(d){/* turn an orthogonal M/H/V path into one with small rounded corners */
   const pts=[];let x=0,y=0;for(const m of d.matchAll(/([MHV])\s*(-?[\d.]+)(?:\s+(-?[\d.]+))?/g)){if(m[1]==='M'){x=+m[2];y=+m[3];}else if(m[1]==='H')x=+m[2];else y=+m[2];pts.push([x,y]);}
   const P=pts.filter((q,i)=>i===0||q[0]!==pts[i-1][0]||q[1]!==pts[i-1][1]);if(P.length<3)return d;let s=`M${P[0][0]} ${P[0][1]}`;
@@ -2740,7 +2765,7 @@ function planFromProg(pr,keep){const old={};if(keep)for(const t of PL().terms)fo
 function setProgram(year,id,start){const p=PL(),snap=JSON.stringify(S),pr=(id.startsWith('ai-')?p.custom.find(c=>c.id===id):progsFor(year).find(x=>x.id===id));if(!pr)return;
   /* switching catalogs keeps what you've done in the semesters you did it; only the remaining requirements come from the new catalog */
   const hist=p.terms.length?planHistory():[];p.year=year;p.prog=id;p.start=start;p.terms=planFromProg(pr,false);planMigrate();
-  if(hist.length){placeHistory(hist);replanRemaining();}save();renderPlanner2();toast(progLabel(pr)+' loaded'+(hist.length?` · your ${hist.length} completed, current and transfer courses kept`:''),snap);}
+  if(hist.length){placeHistory(hist);replanRemaining();tidyRows();}save();renderPlanner2();toast(progLabel(pr)+' loaded'+(hist.length?` · your ${hist.length} completed, current and transfer courses kept`:''),snap);}
 
 /* ---------- program picker ---------- */
 function openProg(){if(!CAT&&!catErr){loadCatalog().then(openProg,openProg);return;}const p=PL(),ys=catYears();
@@ -2939,11 +2964,12 @@ function markPastDone(){const snap=JSON.stringify(S);let n=0;for(const t of pTer
 $('#v-plan').addEventListener('click',e=>{const b=e.target.closest('[data-pact]');if(!b)return;const a=b.dataset.pact;
   if(a==='prog')openProg();else if(a==='ai'){openProg();}else if(a==='add')openAdd(b.dataset.tid);else if(a==='colmenu')openColMenu(b.dataset.tid,b);
   else if(a==='addterm')openAddTerm(b);else if(a==='fromsem')fillFromSemesters();else if(a==='pastdone')markPastDone();
-  else if(a==='trans')$('#ptfile').click();else if(a==='replan'){const snap=JSON.stringify(S),r=replanRemaining();save();renderPlanner2();toast(r.moved?'Remaining courses laid out from next term':'Nothing left to plan',r.moved?snap:null);}
+  else if(a==='trans')$('#ptfile').click();else if(a==='replan'){const snap=JSON.stringify(S),r=replanRemaining();tidyRows();save();renderPlanner2();toast(r.moved?'Remaining courses laid out from next term':'Nothing left to plan',r.moved?snap:null);}
   else if(a==='pside'){pSideColl=!pSideColl;try{localStorage.setItem('cm-pside',pSideColl?'1':'');}catch{}document.querySelector('.pside')?.classList.remove('peek');renderPlanner2();}
   else if(a==='ger')$('#pgfile').click();else if(a==='gerclear'){const snap=JSON.stringify(S);delete PL().ger;save();renderPlanner2();toast('GER list removed',snap);}
   else if(a==='zin'||a==='zout'){const cur=pZoom??(parseFloat((document.querySelector('.pcanvas')||{}).style?.transform?.match(/[\d.]+/)?.[0])||1);pZoom=Math.max(.4,Math.min(1.6,cur+(a==='zin'?.1:-.1)));renderPlanner2();}
   else if(a==='zfit'){pZoom=null;renderPlanner2();}
+  else if(a==='tidy'){const snap=JSON.stringify(S),r=tidyRows();save();renderPlanner2();toast(r.after<r.before?`Reordered courses: ${r.before-r.after} fewer crossing line${r.before-r.after===1?'':'s'}`:'Already as tidy as it gets',r.after<r.before?snap:null);}
   else if(a==='goto'){const el=document.querySelector(`.pbox[data-pid="${b.dataset.pid}"]`);if(el){el.scrollIntoView({block:'center',inline:'center',behavior:'smooth'});el.classList.add('flash');setTimeout(()=>el.classList.remove('flash'),1400);}}});
 $('#v-plan').addEventListener('change',e=>{if(e.target.dataset.pact==='lines'){pLines=e.target.checked;document.querySelector('.plines')?.classList.toggle('off',!pLines);}});
 $('#pgfile').onchange=e=>{const f=e.target.files[0];e.target.value='';if(f)importGER(f);};
@@ -2963,6 +2989,7 @@ $('#pbrowse').addEventListener('change',e=>{if(e.target.id==='cbsubj'){CB.chip=e
 /* hover: light up a course's chain */
 $('#v-plan').addEventListener('pointerover',e=>{if(e.pointerType!=='mouse')return;const b=e.target.closest('.pbox');const id=b&&b.dataset.pid;if(id===pHover)return;pHover=id;const svg=document.querySelector('.plines');if(!svg)return;
   svg.classList.toggle('focus',!!id);for(const p of svg.querySelectorAll('.pe'))p.classList.toggle('hi',!!id&&(p.dataset.a===id||p.dataset.b===id));
+  for(const c of document.querySelectorAll('.pstub[data-a]'))c.classList.toggle('hi',!!id&&(c.dataset.a===id||c.dataset.b===id));
   document.querySelectorAll('.pbox.rel').forEach(x=>x.classList.remove('rel'));if(id)for(const p of svg.querySelectorAll('.pe.hi'))for(const k of[p.dataset.a,p.dataset.b])document.querySelector(`.pbox[data-pid="${k}"]`)?.classList.add('rel');});
 /* drag a course to another term; a plain click opens it */
 let PD=null;
