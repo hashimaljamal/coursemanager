@@ -51,10 +51,10 @@ h1{font-size:clamp(22px,2.4vw,30px);line-height:1.1;margin:0;font-stretch:112%;f
 .sbar{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;padding:14px 0 12px;border-bottom:2px solid var(--ink);margin-bottom:14px}.sbar h2{margin:0;font-size:26px;font-weight:900;font-stretch:115%}.sbar p{margin:2px 0 0}.sbar a{color:inherit}.sbtns{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.sbtns .btn{text-decoration:none;display:inline-grid;place-items:center;line-height:1.2}
 .sframewrap{border:1.5px solid var(--ink);border-radius:16px;overflow:hidden;background:#fff;box-shadow:0 2px 10px rgb(0 0 0/.08);height:calc(100dvh - 230px);min-height:480px;position:relative}
 .sframe{width:100%;height:100%;border:0;display:block;background:#fff;transition:filter .2s}
-:root[data-theme=dark] .sframewrap.inv,:root[data-theme=dark] .sframewrap.inv .sframe{background:#000}:root[data-theme=dark] .sframewrap.inv .sframe{filter:invert(.9) hue-rotate(180deg)}
-@media(prefers-color-scheme:dark){:root:not([data-theme=light]) .sframewrap.inv,:root:not([data-theme=light]) .sframewrap.inv .sframe{background:#000}:root:not([data-theme=light]) .sframewrap.inv .sframe{filter:invert(.9) hue-rotate(180deg)}}
+/* their site follows your device's light/dark setting; when Course Manager's theme differs, the frame is inverted to match */
+.sframewrap.inv .sframe{filter:invert(.92) hue-rotate(180deg)}
 .sframewrap.msg{background:var(--bg);display:grid;place-items:center;text-align:center;padding:30px}.sframewrap.msg h3{margin:0 0 6px;font-size:20px}.sframewrap.msg .btn{text-decoration:none;display:inline-grid}
-#sinvwrap{display:none}:root[data-theme=dark] #sinvwrap{display:inline-flex}@media(prefers-color-scheme:dark){:root:not([data-theme=light]) #sinvwrap{display:inline-flex}}
+#sinvwrap[hidden]{display:none}
 @media(max-width:600px){.sframewrap{height:calc(100dvh - 260px);border-radius:12px}}
 .tabs a[aria-current=page]{background:var(--bg);color:var(--ink);box-shadow:0 1px 3px rgb(0 0 0/.14)}
 body:not([data-view=tt]) .tonly,body:not([data-view=grades]) .gonly,body:not([data-view=tasks]) .konly,body:not([data-view=home]) .honly{display:none!important}
@@ -573,7 +573,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 </header>
 <section id="v-home" hidden><div class="pbar hhero" id="hhero"></div><div class="hwrap"><div class="hleft" id="hleft"></div><div class="hgrid" id="hgrid"></div></div></section>
 <section id="v-sched" hidden><div class="sbar"><div><h2>Scheduler</h2><p class="hint">AUS Scheduler by <a href="https://github.com/yousefbilal" target="_blank" rel="noopener">yousefbilal</a> and ak, embedded from their site. It's online while registration is open.</p></div>
-<div class="sbtns"><label class="ptog" id="sinvwrap"><input type="checkbox" id="sinv"> Match dark mode</label><button class="btn ghost" id="sreload">Reload</button><a class="btn ghost" id="sopen" href="https://www.aus-scheduler.com/" target="_blank" rel="noopener">Open in new tab</a></div></div>
+<div class="sbtns"><label class="ptog" id="sinvwrap" hidden><input type="checkbox" id="sinv"> Match my theme</label><button class="btn ghost" id="sreload">Reload</button><a class="btn ghost" id="sopen" href="https://www.aus-scheduler.com/" target="_blank" rel="noopener">Open in new tab</a></div></div>
 <div class="sframewrap" id="sframewrap"></div></section>
 <section id="v-plan" hidden><div class="pbar"><div class="pleft" id="phead"></div>
   <div class="acts">
@@ -2344,14 +2344,19 @@ async function schedCheck(force){if(SCH.busy)return;if(!force&&SCH.up!=null&&Dat
   clearTimeout(tm);SCH={up,frame,at:Date.now(),busy:false};try{sessionStorage.setItem('cm-sched',JSON.stringify({up,frame,at:SCH.at}));}catch{}schedShow();}
 function schedShow(){const t=$('#tab-sched');if(!t)return;t.hidden=!SCH.up;t.closest('.tabs').classList.toggle('six',!!SCH.up);if(document.body.dataset.view==='sched')renderSched();}
 let schedLoaded=false;
-function renderSched(){const w=$('#sframewrap');let inv=true;try{inv=localStorage.getItem('cm-sinv')!=='0';}catch{}$('#sinv').checked=inv;w.classList.toggle('inv',inv);
+/* the embedded site follows the device's colour scheme, so it only needs flipping when our theme was set the other way */
+const osDark=matchMedia('(prefers-color-scheme: dark)');
+function themeMismatch(){const t=document.documentElement.dataset.theme;const ours=t==='dark'?true:t==='light'?false:osDark.matches;return ours!==osDark.matches;}
+function schedTheme(){const w=$('#sframewrap'),mm=themeMismatch();let on=true;try{on=localStorage.getItem('cm-sinv')!=='0';}catch{}$('#sinvwrap').hidden=!mm;$('#sinv').checked=on;w.classList.toggle('inv',mm&&on&&!w.classList.contains('msg'));return mm&&on;}
+osDark.addEventListener('change',schedTheme);new MutationObserver(schedTheme).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+function renderSched(){const w=$('#sframewrap'),inv=schedTheme();
   if(SCH.up==null){w.className='sframewrap msg';w.innerHTML='<div><h3>Checking AUS Scheduler…</h3></div>';schedCheck();return;}
   if(!SCH.up){schedLoaded=false;w.className='sframewrap msg';w.innerHTML=`<div><h3>AUS Scheduler is offline right now</h3><p class="hint">It usually comes back when registration opens. The Scheduler tab shows up on its own once it’s online.</p><button class="btn ghost" id="srecheck">Check again</button></div>`;return;}
   if(!SCH.frame){w.className='sframewrap msg';w.innerHTML=`<div><h3>AUS Scheduler is online</h3><p class="hint">It doesn’t allow being shown inside other sites, so it opens in its own tab.</p><a class="btn" href="${SCHED_URL}" target="_blank" rel="noopener">Open AUS Scheduler</a></div>`;return;}
   if(!schedLoaded||!w.querySelector('iframe')){w.className='sframewrap'+(inv?' inv':'');w.innerHTML=`<iframe class="sframe" src="${SCHED_URL}" title="AUS Scheduler" referrerpolicy="no-referrer" allow="clipboard-write"></iframe>`;schedLoaded=true;}}
 $('#sframewrap').addEventListener('click',e=>{if(e.target.id==='srecheck'){$('#sframewrap').innerHTML='<div><h3>Checking AUS Scheduler…</h3></div>';schedCheck(true);}});
 $('#sreload').onclick=()=>{schedLoaded=false;Promise.resolve(schedCheck(true)).then(()=>renderSched());};
-$('#sinv').onchange=e=>{try{localStorage.setItem('cm-sinv',e.target.checked?'1':'0');}catch{}$('#sframewrap').classList.toggle('inv',e.target.checked);};
+$('#sinv').onchange=e=>{try{localStorage.setItem('cm-sinv',e.target.checked?'1':'0');}catch{}schedTheme();};
 schedCheck();document.addEventListener('visibilitychange',()=>{if(!document.hidden)schedCheck();});
 const VIEWS={home:['#home','Home'],grades:['#grades','Grades'],tt:['#timetable','Timetable'],tasks:['#tasks','Tasks'],plan:['#plan','Plan'],sched:['#scheduler','Scheduler']};
 function route(){const h=location.hash,v=h==='#grades'?'grades':h==='#timetable'?'tt':h==='#tasks'?'tasks':h==='#plan'||h==='#planner'?'plan':h==='#scheduler'?'sched':'home';const prevV=document.body.dataset.view;document.body.dataset.view=v;
