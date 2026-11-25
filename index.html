@@ -48,6 +48,14 @@ h1{font-size:clamp(22px,2.4vw,30px);line-height:1.1;margin:0;font-stretch:112%;f
 .theme{grid-area:theme}
 .tabs{grid-area:tabs;display:inline-flex;align-self:center;background:var(--soft);border-radius:11px;padding:3px;gap:2px;margin-left:16px}
 .tabs a{padding:7px 16px;border-radius:8px;font-weight:700;font-size:14px;color:var(--mute);text-decoration:none;min-height:36px;display:grid;place-items:center}
+.sbar{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;padding:14px 0 12px;border-bottom:2px solid var(--ink);margin-bottom:14px}.sbar h2{margin:0;font-size:26px;font-weight:900;font-stretch:115%}.sbar p{margin:2px 0 0}.sbar a{color:inherit}.sbtns{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.sbtns .btn{text-decoration:none;display:inline-grid;place-items:center;line-height:1.2}
+.sframewrap{border:1.5px solid var(--ink);border-radius:16px;overflow:hidden;background:#fff;box-shadow:0 2px 10px rgb(0 0 0/.08);height:calc(100dvh - 230px);min-height:480px;position:relative}
+.sframe{width:100%;height:100%;border:0;display:block;background:#fff;transition:filter .2s}
+:root[data-theme=dark] .sframewrap.inv,:root[data-theme=dark] .sframewrap.inv .sframe{background:#000}:root[data-theme=dark] .sframewrap.inv .sframe{filter:invert(.9) hue-rotate(180deg)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]) .sframewrap.inv,:root:not([data-theme=light]) .sframewrap.inv .sframe{background:#000}:root:not([data-theme=light]) .sframewrap.inv .sframe{filter:invert(.9) hue-rotate(180deg)}}
+.sframewrap.msg{background:var(--bg);display:grid;place-items:center;text-align:center;padding:30px}.sframewrap.msg h3{margin:0 0 6px;font-size:20px}.sframewrap.msg .btn{text-decoration:none;display:inline-grid}
+#sinvwrap{display:none}:root[data-theme=dark] #sinvwrap{display:inline-flex}@media(prefers-color-scheme:dark){:root:not([data-theme=light]) #sinvwrap{display:inline-flex}}
+@media(max-width:600px){.sframewrap{height:calc(100dvh - 260px);border-radius:12px}}
 .tabs a[aria-current=page]{background:var(--bg);color:var(--ink);box-shadow:0 1px 3px rgb(0 0 0/.14)}
 body:not([data-view=tt]) .tonly,body:not([data-view=grades]) .gonly,body:not([data-view=tasks]) .konly,body:not([data-view=home]) .honly{display:none!important}
 .rline{margin:0;font-size:12px;color:var(--mute)}
@@ -489,7 +497,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 :root[data-theme=dark] .pbox{border-color:#111}
 @media(max-width:900px){.pwrap{grid-template-columns:1fr}.pside{order:2;position:static;max-height:none;overflow:visible;border-right:0;padding:14px 0 8px;border-top:1px solid var(--line);grid-template-columns:1fr 1fr}.pmain{padding:4px 0 20px}.pscroll{max-height:none}}
 @media(max-width:600px){.pside{grid-template-columns:1fr}.ppgrid{grid-template-columns:1fr!important}}
-@media(max-width:430px){.tabs a{font-size:12px!important;padding:7px 1px!important;letter-spacing:-.01em}}@media(max-width:350px){.tabs a{font-size:11px!important}}
+@media(max-width:430px){.tabs a{font-size:12px!important;padding:7px 1px!important;letter-spacing:-.01em}.tabs.six a{font-size:10.5px!important;letter-spacing:-.02em}}@media(max-width:350px){.tabs a{font-size:11px!important}}
 @media(max-width:400px){.acct.out span{display:none}.acct.out{padding:2px 6px}.brow{flex-wrap:nowrap}.semsw{min-width:0}}
 .ttag{display:inline-block;margin-left:6px;padding:1px 7px;border-radius:99px;font-size:11px;font-weight:700;background:var(--soft);color:var(--mute);vertical-align:2px}.ttag.now{background:var(--red);color:#fff}.ttag.old{opacity:.8}
 .kcard{max-width:540px}.knew{display:grid;gap:8px;padding:10px;border-radius:10px;background:var(--soft)}.knew .cgrid button{width:26px;height:26px;border-radius:50%;border:0;padding:0}.knew .cgrid button.on{box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--ink)}
@@ -530,7 +538,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
  h1{font-size:min(21px,5.3vw);white-space:nowrap}.brand{flex-direction:column;align-items:flex-start;gap:3px}.semsw{min-height:24px;padding:1px 6px 1px 9px;font-size:12px}
  .dacts{gap:4px}.top{column-gap:6px}
  .acts .btn{padding:0 8px;min-width:0}
- .tabs{display:grid;grid-template-columns:repeat(5,1fr);justify-self:stretch}.tabs a{padding:7px 4px;font-size:13px;min-height:34px}
+ .tabs{display:grid;grid-template-columns:repeat(5,1fr);justify-self:stretch}.tabs.six{grid-template-columns:repeat(6,1fr)}.tabs a{padding:7px 4px;font-size:13px;min-height:34px}
  .kopts{grid-auto-flow:row}
  .rgrid{grid-template-columns:1fr!important}
  .ttside{grid-template-columns:1fr}
@@ -551,7 +559,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 <div class="shell">
 <header class="top">
   <div class="brand"><h1>Course Manager</h1><div class="brow"><button class="semsw" id="semsw" aria-haspopup="menu" aria-expanded="false"><span id="semswl">Semester</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg></button><button class="acct" id="acct" hidden aria-haspopup="menu"></button></div></div>
-  <nav class="tabs" aria-label="Sections"><a href="#home" id="tab-home">Home</a><a href="#grades" id="tab-grades">Grades</a><a href="#timetable" id="tab-tt">Timetable</a><a href="#tasks" id="tab-tasks">Tasks</a><a href="#plan" id="tab-plan">Plan</a></nav>
+  <nav class="tabs" aria-label="Sections"><a href="#home" id="tab-home">Home</a><a href="#grades" id="tab-grades">Grades</a><a href="#timetable" id="tab-tt">Timetable</a><a href="#tasks" id="tab-tasks">Tasks</a><a href="#plan" id="tab-plan">Plan</a><a href="#scheduler" id="tab-sched" hidden>Scheduler</a></nav>
   <div class="dacts">
     <button class="btn ghost sm dbtn" id="impbtn" title="Import a backup file"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2v8M4.5 6.5 8 10l3.5-3.5M2.5 11v2.5h11V11"/></svg><span>Import</span></button>
     <button class="btn ghost sm dbtn" id="expbtn" title="Export a backup file"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 10V2M4.5 5.5 8 2l3.5 3.5M2.5 11v2.5h11V11"/></svg><span>Export</span></button>
@@ -564,6 +572,9 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
   <input type="file" id="calfile" hidden accept=".ics,text/calendar,.pdf,.docx,.txt,.md,.html,.htm,image/*">
 </header>
 <section id="v-home" hidden><div class="pbar hhero" id="hhero"></div><div class="hwrap"><div class="hleft" id="hleft"></div><div class="hgrid" id="hgrid"></div></div></section>
+<section id="v-sched" hidden><div class="sbar"><div><h2>Scheduler</h2><p class="hint">AUS Scheduler by <a href="https://github.com/yousefbilal" target="_blank" rel="noopener">yousefbilal</a> and ak, embedded from their site. It's online while registration is open.</p></div>
+<div class="sbtns"><label class="ptog" id="sinvwrap"><input type="checkbox" id="sinv"> Match dark mode</label><button class="btn ghost" id="sreload">Reload</button><a class="btn ghost" id="sopen" href="https://www.aus-scheduler.com/" target="_blank" rel="noopener">Open in new tab</a></div></div>
+<div class="sframewrap" id="sframewrap"></div></section>
 <section id="v-plan" hidden><div class="pbar"><div class="pleft" id="phead"></div>
   <div class="acts">
     <button class="btn" data-pact="prog">Program</button>
@@ -2323,11 +2334,30 @@ $('#nsdo').onclick=()=>{const t=$('#nsterm').value,y=$('#nsyear').value.trim();i
   edit=false;tFilter='all';fix();save();location.hash='#home';route();toast(`${t} ${y} added`,snap);if(!c)setTimeout(openSem,250);};
 
 /* ---------- sections ---------- */
-const VIEWS={home:['#home','Home'],grades:['#grades','Grades'],tt:['#timetable','Timetable'],tasks:['#tasks','Tasks'],plan:['#plan','Plan']};
-function route(){const h=location.hash,v=h==='#grades'?'grades':h==='#timetable'?'tt':h==='#tasks'?'tasks':h==='#plan'||h==='#planner'?'plan':'home';const prevV=document.body.dataset.view;document.body.dataset.view=v;
+/* ---------- Scheduler tab: AUS Scheduler, shown only while that site is online ---------- */
+const SCHED_URL='https://www.aus-scheduler.com/';let SCH={up:null,frame:true,at:0,busy:false};
+try{const c=JSON.parse(sessionStorage.getItem('cm-sched')||'null');if(c&&Date.now()-c.at<6e5)SCH={...SCH,...c};}catch{}
+async function schedCheck(force){if(SCH.busy)return;if(!force&&SCH.up!=null&&Date.now()-SCH.at<6e5){schedShow();return;}SCH.busy=true;
+  let up=null,frame=true;const ac=new AbortController(),tm=setTimeout(()=>ac.abort(),10000);
+  try{if(RELAY){const r=await fetch(RELAY+'?check=scheduler',{signal:ac.signal,cache:'no-store'});const j=await r.json().catch(()=>({}));if(typeof j.up==='boolean'){up=j.up;frame=j.frame!==false;}}}catch{}
+  if(up==null){/* older relay: if the site answers at all, call it up */try{await fetch(SCHED_URL,{mode:'no-cors',cache:'no-store',signal:ac.signal});up=true;}catch{up=false;}}
+  clearTimeout(tm);SCH={up,frame,at:Date.now(),busy:false};try{sessionStorage.setItem('cm-sched',JSON.stringify({up,frame,at:SCH.at}));}catch{}schedShow();}
+function schedShow(){const t=$('#tab-sched');if(!t)return;t.hidden=!SCH.up;t.closest('.tabs').classList.toggle('six',!!SCH.up);if(document.body.dataset.view==='sched')renderSched();}
+let schedLoaded=false;
+function renderSched(){const w=$('#sframewrap');let inv=true;try{inv=localStorage.getItem('cm-sinv')!=='0';}catch{}$('#sinv').checked=inv;w.classList.toggle('inv',inv);
+  if(SCH.up==null){w.className='sframewrap msg';w.innerHTML='<div><h3>Checking AUS Scheduler…</h3></div>';schedCheck();return;}
+  if(!SCH.up){schedLoaded=false;w.className='sframewrap msg';w.innerHTML=`<div><h3>AUS Scheduler is offline right now</h3><p class="hint">It usually comes back when registration opens. The Scheduler tab shows up on its own once it’s online.</p><button class="btn ghost" id="srecheck">Check again</button></div>`;return;}
+  if(!SCH.frame){w.className='sframewrap msg';w.innerHTML=`<div><h3>AUS Scheduler is online</h3><p class="hint">It doesn’t allow being shown inside other sites, so it opens in its own tab.</p><a class="btn" href="${SCHED_URL}" target="_blank" rel="noopener">Open AUS Scheduler</a></div>`;return;}
+  if(!schedLoaded||!w.querySelector('iframe')){w.className='sframewrap'+(inv?' inv':'');w.innerHTML=`<iframe class="sframe" src="${SCHED_URL}" title="AUS Scheduler" referrerpolicy="no-referrer" allow="clipboard-write"></iframe>`;schedLoaded=true;}}
+$('#sframewrap').addEventListener('click',e=>{if(e.target.id==='srecheck'){$('#sframewrap').innerHTML='<div><h3>Checking AUS Scheduler…</h3></div>';schedCheck(true);}});
+$('#sreload').onclick=()=>{schedLoaded=false;Promise.resolve(schedCheck(true)).then(()=>renderSched());};
+$('#sinv').onchange=e=>{try{localStorage.setItem('cm-sinv',e.target.checked?'1':'0');}catch{}$('#sframewrap').classList.toggle('inv',e.target.checked);};
+schedCheck();document.addEventListener('visibilitychange',()=>{if(!document.hidden)schedCheck();});
+const VIEWS={home:['#home','Home'],grades:['#grades','Grades'],tt:['#timetable','Timetable'],tasks:['#tasks','Tasks'],plan:['#plan','Plan'],sched:['#scheduler','Scheduler']};
+function route(){const h=location.hash,v=h==='#grades'?'grades':h==='#timetable'?'tt':h==='#tasks'?'tasks':h==='#plan'||h==='#planner'?'plan':h==='#scheduler'?'sched':'home';const prevV=document.body.dataset.view;document.body.dataset.view=v;
   for(const k in VIEWS){$('#v-'+k).hidden=k!==v;$('#tab-'+k).setAttribute('aria-current',k===v?'page':'false');}
   $('#dropover').textContent=v==='tt'?'Drop your .ics schedule':'Drop syllabi to add them';document.title=VIEWS[v][1]+' · Course Manager';
-  closeColor();closeSemMenu();renderSemBtn();if(v==='tt')renderTT();else if(v==='tasks')renderTasks();else if(v==='home')renderHome();else if(v==='plan'){if(prevV!=='plan')pScrollHome=true;renderPlanner2();}else render();}
+  closeColor();closeSemMenu();renderSemBtn();if(v==='tt')renderTT();else if(v==='tasks')renderTasks();else if(v==='home')renderHome();else if(v==='plan'){if(prevV!=='plan')pScrollHome=true;renderPlanner2();}else if(v==='sched')renderSched();else render();}
 addEventListener('hashchange',route);
 
 /* ================= PLANNER (degree flowchart) ================= */
