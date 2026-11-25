@@ -272,8 +272,11 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 .go{position:absolute;right:6px;top:3px;font-style:normal;font-size:11px;opacity:.85}
 .tlist{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:4px 26px;align-items:start}
 .tlist h3{font-size:15px;margin:10px 0 2px;border-bottom:2px solid var(--ink);padding-bottom:4px}
-.tb.tnow{outline:2.5px solid #fff;outline-offset:-4px}.tb.tnext{outline:2px dashed #fff;outline-offset:-4px}
-.tli.tnow,.tli.tnext{border-radius:10px;border-bottom-color:transparent;padding-left:8px;margin-left:-8px;width:calc(100% + 8px)}.tli.tnow{box-shadow:inset 0 0 0 2px var(--ink)}.tli.tnext{outline:2px dashed var(--ink);outline-offset:-2px}
+.tpill{font-style:normal;font-size:10px;font-weight:800;line-height:1;padding:3px 7px;border-radius:99px;white-space:nowrap;display:inline-flex;align-items:center;gap:4px;letter-spacing:.01em}
+.tb .tpill{position:absolute;right:5px;bottom:5px;background:rgb(0 0 0/.3);color:#fff}.tb .tpill.tnow::before,.tli .tpill.tnow::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor;animation:ccp 1.6s infinite}
+.tli .tpill{justify-self:start;margin-top:4px;font-size:11px}.tli .tpill.tnow{background:var(--red);color:#fff}.tli .tpill.tnext{background:var(--soft);color:var(--ink);border:1px solid var(--line)}
+.tnowl{position:absolute;left:-3px;right:0;height:2px;background:var(--red);z-index:4;pointer-events:none;transition:top .6s}.tnowl::before{content:'';position:absolute;left:-4px;top:-4px;width:10px;height:10px;border-radius:50%;background:var(--red)}
+.tgh b.ttoday{color:var(--red)}
 .tli{position:relative;display:grid;grid-template-columns:62px 5px minmax(0,1fr);gap:10px;width:100%;text-align:left;border:0;background:none;padding:9px 18px 9px 0;border-bottom:1px solid var(--line);font-family:inherit;color:var(--ink);cursor:pointer}
 .tlt{font-weight:700;font-size:14px;display:grid;line-height:1.25;align-content:start}.tlt small{font-weight:500;color:var(--mute);font-size:12px}
 .tlb{border-radius:3px}.tlc{display:grid;line-height:1.35;font-size:13px;min-width:0}.tlc span{overflow-wrap:anywhere}.tlc .t1{font-weight:800;font-size:14.5px}
@@ -1524,9 +1527,17 @@ document.addEventListener('keydown',e=>{const h=e.target.closest&&e.target.close
   document.querySelector(`.sortable[data-sort="${which}"] li[data-k="${li.dataset.k}"] .drag`)?.focus();});const ttOpen={};const secOpen=k=>(ttOpen[k]??innerWidth>900)?' open':'';
 /* the class on right now (solid white outline) and your next class (dashed) */
 let TTM={},ttMarkT=null;
-function ttMarks(){let cc=null;try{cc=classClock();}catch{}if(!cc)return{};const at=+cc.at;if(!cc.now)return{next:cc.s.key,at};
-  const T0=today0();let nx=null;for(let k=0;k<14&&!nx;k++){const l=classOn(addD(T0,k)).filter(x=>k>0||x.start>cc.s.start);if(l.length)nx=l[0];}return{now:cc.s.key,next:nx&&nx.key,at};}
-function renderTT(){TTM=ttMarks();clearTimeout(ttMarkT);if(TTM.at){const ms=Math.min(TTM.at-Date.now()+1500,2**31-1);if(ms>0)ttMarkT=setTimeout(()=>{if(document.body.dataset.view==='tt')renderTT();},ms);}
+/* the class on now and your next class get a small live label; today's column gets a red now-line */
+function ttMarks(){let cc=null;try{cc=classClock();}catch{}if(!cc)return{};const at=+cc.at;if(!cc.now)return{next:cc.s.key,nextAt:at,at};
+  const T0=today0();let nx=null,nd=null;for(let k=0;k<14&&!nx;k++){const d=addD(T0,k),l=classOn(d).filter(x=>k>0||x.start>cc.s.start);if(l.length){nx=l[0];nd=d;}}
+  let nextAt=null;if(nx){const a=new Date(nd);a.setMinutes(nx.start);nextAt=+a;}return{now:cc.s.key,nowEnd:at,next:nx&&nx.key,nextAt,at};}
+function relIn(ms){const m=Math.max(0,Math.round(ms/6e4));if(m<1)return'now';if(m<60)return`in ${m} min`;const T0=today0(),d=dDiff(T0,new Date(Date.now()+ms));if(d===0)return`in ${Math.floor(m/60)}h${m%60?' '+m%60+'m':''}`;if(d===1)return'tomorrow';return`in ${d} days`;}
+function leftTxt(ms){const m=Math.max(0,Math.ceil(ms/6e4));return m<60?`${m} min left`:`${Math.floor(m/60)}h${m%60?' '+m%60+'m':''} left`;}
+function ttTick(){if(document.body.dataset.view!=='tt'){clearInterval(ttTickI);ttTickI=null;return;}const now=Date.now();
+  for(const p of document.querySelectorAll('#ttgrid .tpill')){p.textContent=p.dataset.pill==='now'?`Now · ${leftTxt((TTM.nowEnd||now)-now)}`:`Next · ${relIn((TTM.nextAt||now)-now)}`;}
+  const l=document.querySelector('#ttgrid .tnowl');if(l){const d=new Date(),m=d.getHours()*60+d.getMinutes()+d.getSeconds()/60;l.style.top=((m-+l.dataset.lo)*+l.dataset.ppm)+'px';}}
+let ttTickI=null;
+function renderTT(){TTM=ttMarks();clearTimeout(ttMarkT);clearInterval(ttTickI);ttTickI=setInterval(ttTick,30000);setTimeout(ttTick,0);if(TTM.at){const ms=Math.min(TTM.at-Date.now()+1500,2**31-1);if(ms>0)ttMarkT=setTimeout(()=>{if(document.body.dataset.view==='tt')renderTT();},ms);}
   const t=TT(),vis=ttVisible(),courses=ttCourses(),f=ttFlags();
   document.querySelector('#ttexp').disabled=!vis.length;
   if(!t.slots.length){
@@ -1558,15 +1569,16 @@ function ttWeek(vis,t){
   const top=$('#ttgrid').getBoundingClientRect().top+scrollY,avail=Math.max(360,innerHeight-Math.max(0,top-scrollY)-40);
   const ppm=Math.min(1.7,Math.max(.8,(avail-34)/range)),H=Math.round(range*ppm);
   const hours=[];for(let m=lo;m<=hi;m+=60)hours.push(m);
+  const nd=new Date(),tdy=nd.getDay(),nowM=nd.getHours()*60+nd.getMinutes();let nowOk=false;try{nowOk=nowM>=lo&&nowM<=hi&&classOn(today0()).length>0;}catch{}
   const col=d=>{const list=layoutDay(vis.filter(s=>s.day===d));return`<div class="tcol" style="height:${H}px">${list.map(s=>{const a=blockAttrs(s),h=(s.end-s.start)*ppm-3,lines=Math.max(1,Math.floor((h-8)/15)),all=fieldsFor(s,t.opts,t.h24),fl=all.slice(0,lines),extra=lines-fl.length;
-      return`<button class="tb${a.g?' linked':''}${a.mk}" data-act="ttblock" data-key="${esc(s.key)}" style="top:${(s.start-lo)*ppm+1}px;height:${h}px;left:calc(${s._c/s._n*100}% + 2px);width:calc(${100/s._n}% - 4px);background:${a.bg};color:${a.ink}" title="${esc(a.title)}">${fl.map((x,i)=>`<span class="${i===0?'t1':''}${x.f==='name'&&extra>0?' w2':''}">${esc(x.v)}</span>`).join('')}${a.g?'<i class="go" aria-hidden="true">↗</i>':''}</button>`;}).join('')}</div>`;};
-  return`<div class="tgrid" style="--nd:${days.length};--ppm:${ppm*60}px"><div class="tgh"><span></span>${days.map(d=>`<b>${ttW<760?DAYS[d]:DAYN[d]}</b>`).join('')}</div>
+      return`<button class="tb${a.g?' linked':''}${a.mk}" data-act="ttblock" data-key="${esc(s.key)}" style="top:${(s.start-lo)*ppm+1}px;height:${h}px;left:calc(${s._c/s._n*100}% + 2px);width:calc(${100/s._n}% - 4px);background:${a.bg};color:${a.ink}" title="${esc(a.title)}">${fl.map((x,i)=>`<span class="${i===0?'t1':''}${x.f==='name'&&extra>0?' w2':''}">${esc(x.v)}</span>`).join('')}${a.g?'<i class="go" aria-hidden="true">↗</i>':''}${a.mk?`<em class="tpill${a.mk}" data-pill="${a.mk.trim().slice(1)}"></em>`:''}</button>`;}).join('')}${d===tdy&&nowOk?`<div class="tnowl" data-lo="${lo}" data-ppm="${ppm}" style="top:${(nowM-lo)*ppm}px" aria-hidden="true"></div>`:''}</div>`;};
+  return`<div class="tgrid" style="--nd:${days.length};--ppm:${ppm*60}px"><div class="tgh"><span></span>${days.map(d=>`<b class="${d===tdy?'ttoday':''}">${ttW<760?DAYS[d]:DAYN[d]}</b>`).join('')}</div>
     <div class="tgb"><div class="tgut" style="height:${H}px">${hours.map(m=>`<span style="top:${(m-lo)*ppm}px">${t.h24?fmtClock(m,1):fmtClock(m).replace(':00','')+' '+ampm(m)}</span>`).join('')}</div>${days.map(col).join('')}</div></div>`;
 }
 function ttList(vis,t){const days=weekDays(vis);
   return`<div class="tlist">${days.map(d=>{const l=vis.filter(s=>s.day===d).sort((a,b)=>a.start-b.start);if(!l.length)return'';
     return`<section><h3>${DAYN[d]}</h3>${l.map(s=>{const a=blockAttrs(s),fl=fieldsFor(s,t.opts,t.h24).filter(x=>x.f!=='time');
-      return`<button class="tli${a.g?' linked':''}${a.mk}" data-act="ttblock" data-key="${esc(s.key)}" title="${esc(a.title)}"><span class="tlt">${esc(fmtClock(s.start,t.h24))}<small>${esc(fmtClock(s.end,t.h24))}${t.h24?'':' '+ampm(s.end)}</small></span><span class="tlb" style="background:${a.bg}"></span><span class="tlc">${fl.map((x,i)=>`<span class="${i===0?'t1':''}">${esc(x.v)}</span>`).join('')}</span>${a.g?'<i class="go" aria-hidden="true">↗</i>':''}</button>`;}).join('')}</section>`;}).join('')}</div>`;}
+      return`<button class="tli${a.g?' linked':''}${a.mk}" data-act="ttblock" data-key="${esc(s.key)}" title="${esc(a.title)}"><span class="tlt">${esc(fmtClock(s.start,t.h24))}<small>${esc(fmtClock(s.end,t.h24))}${t.h24?'':' '+ampm(s.end)}</small></span><span class="tlb" style="background:${a.bg}"></span><span class="tlc">${fl.map((x,i)=>`<span class="${i===0?'t1':''}">${esc(x.v)}</span>`).join('')}${a.mk?`<em class="tpill${a.mk}" data-pill="${a.mk.trim().slice(1)}"></em>`:''}</span>${a.g?'<i class="go" aria-hidden="true">↗</i>':''}</button>`;}).join('')}</section>`;}).join('')}</div>`;}
 
 /* ---- interactions ---- */
 async function importICS(file,opt={}){
