@@ -445,13 +445,17 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 .pirow{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:10px 0 0;font-size:13.5px;font-weight:700}.pirow select,.pirow input[type=number]{width:60%}.pirow.chk{justify-content:flex-start;font-weight:500}
 .pacard{max-width:560px}#paq{width:100%;margin:8px 0}.palist{list-style:none;margin:8px 0 0;padding:0;max-height:min(50dvh,420px);overflow:auto;display:grid;gap:4px}.palist button{width:100%;text-align:left;border:1px solid var(--line);background:none;border-radius:9px;padding:8px 10px;cursor:pointer;display:grid;grid-template-columns:auto 1fr;gap:0 10px;font:inherit;color:inherit}.palist button:hover{border-color:var(--ink)}.palist button:disabled{opacity:.45;cursor:default}.palist button:disabled:hover{border-color:var(--line)}.palist b{font-size:13.5px}.palist span{font-size:13px}.palist small{grid-column:1/-1;color:var(--mute);font-size:11.5px}
 :root[data-theme=dark] .pbox,:root:not([data-theme=light]) .pbox{}
-.pwrap{position:relative}.pstog{justify-self:start;border:1px solid var(--line);background:none;border-radius:8px;font:inherit;font-size:12px;font-weight:700;color:var(--mute);padding:4px 9px;cursor:pointer}.pstog:hover{color:var(--ink);border-color:var(--ink)}
+.pwrap{position:relative}.pstog{justify-self:end;width:32px;height:32px;display:grid;place-items:center;border:1px solid var(--line);background:none;border-radius:8px;color:var(--mute);padding:0;cursor:pointer;margin-bottom:-14px;position:relative;z-index:1}.pstog:hover{color:var(--ink);border-color:var(--ink)}.pstog svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .15s}.pstog[aria-pressed=true]{color:var(--ink)}.pstog[aria-pressed=true] svg{fill:currentColor}.pstog[aria-pressed=false] svg{transform:rotate(45deg)}
 @media(min-width:901px){.pwrap.pcoll{grid-template-columns:22px minmax(0,1fr)}
- .pwrap.pcoll .pside{width:270px;margin-right:-248px;z-index:40;background:var(--bg);transform:translateX(-248px);transition:transform .18s ease,box-shadow .18s;padding-left:14px;border-right:1px solid var(--line)}
- .pwrap.pcoll .pside>*{transition:opacity .12s}.pwrap.pcoll .pside:not(:hover):not(:focus-within):not(.peek)>*{opacity:0;pointer-events:none}
+ /* a fixed strip at the left edge opens the panel; the sliding panel itself ignores the mouse until it's open, so it can't flicker */
+ .pwrap.pcoll .prail{display:block;position:absolute;left:0;top:0;bottom:0;width:22px;z-index:39;cursor:pointer}
+ .pwrap.pcoll .pside{width:270px;margin-right:-248px;z-index:40;background:var(--bg);transform:translateX(-248px);transition:transform .18s ease,box-shadow .18s;padding-left:14px;border-right:1px solid var(--line);pointer-events:none}
+ .pwrap.pcoll .pside>*{transition:opacity .12s;opacity:0}
  .pwrap.pcoll .pside::after{content:'›';position:absolute;right:3px;top:10px;width:16px;height:40px;display:grid;place-items:center;border-radius:6px;background:var(--soft);color:var(--mute);font-weight:900;font-size:15px;transition:opacity .12s}
- .pwrap.pcoll .pside:hover,.pwrap.pcoll .pside:focus-within,.pwrap.pcoll .pside.peek{transform:none;box-shadow:10px 0 28px rgb(0 0 0/.14)}
- .pwrap.pcoll .pside:hover::after,.pwrap.pcoll .pside:focus-within::after,.pwrap.pcoll .pside.peek::after{opacity:0}}
+ .pwrap.pcoll .prail:hover~.pside,.pwrap.pcoll .pside:hover,.pwrap.pcoll .pside:focus-within,.pwrap.pcoll .pside.peek{transform:none;box-shadow:10px 0 28px rgb(0 0 0/.14);pointer-events:auto}
+ .pwrap.pcoll .prail:hover~.pside>*,.pwrap.pcoll .pside:hover>*,.pwrap.pcoll .pside:focus-within>*,.pwrap.pcoll .pside.peek>*{opacity:1}
+ .pwrap.pcoll .prail:hover~.pside::after,.pwrap.pcoll .pside:hover::after,.pwrap.pcoll .pside:focus-within::after,.pwrap.pcoll .pside.peek::after{opacity:0}}
+.prail{display:none}
 @media(max-width:900px){.pstog{display:none}}
 .pcg{display:grid;grid-template-columns:auto 1fr;align-items:baseline;gap:0 10px;margin:-2px 0 8px}.pcg span{font-size:12px;color:var(--mute);font-weight:700}.pcg b{font-size:26px;font-weight:900;font-stretch:115%;justify-self:end;font-variant-numeric:tabular-nums}.pcg small{grid-column:1/-1;font-size:11.5px;color:var(--mute)}
 .pnext{margin:0 0 4px;font-size:13.5px}.pnl{list-style:none;margin:0 0 6px;padding:0;display:grid;gap:3px;font-size:13px}.pnl span{color:var(--mute);font-size:12px}
@@ -567,7 +571,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
     <button class="btn ghost" data-pact="trans">Transcript</button>
     <button class="btn ghost" data-pact="ger">GER list</button>
   </div>
-</div><div class="pwrap"><div class="pside" id="pside"></div><div class="pmain" id="pmain"></div></div>
+</div><div class="pwrap"><div class="prail" aria-hidden="true"></div><div class="pside" id="pside"></div><div class="pmain" id="pmain"></div></div>
 <section class="pbrowse" id="pbrowse"></section>
 <input type="file" id="ptfile" hidden accept=".pdf,.docx,.txt,.html,.htm,image/*">
 <input type="file" id="pgfile" hidden accept=".pdf,.docx,.txt,.html,.htm,.csv,image/*"><input type="file" id="ppfile" hidden multiple accept=".pdf,.docx,.txt,.html,.htm,image/*"></section>
@@ -2742,7 +2746,7 @@ function roundPath(d){/* turn an orthogonal M/H/V path into one with small round
   for(let i=1;i<P.length-1;i++){const[a,b,c]=[P[i-1],P[i],P[i+1]],r=Math.min(6,Math.hypot(b[0]-a[0],b[1]-a[1])/2,Math.hypot(c[0]-b[0],c[1]-b[1])/2);
     const u=[Math.sign(b[0]-a[0]),Math.sign(b[1]-a[1])],v=[Math.sign(c[0]-b[0]),Math.sign(c[1]-b[1])];s+=`L${b[0]-u[0]*r} ${b[1]-u[1]*r}Q${b[0]} ${b[1]} ${b[0]+v[0]*r} ${b[1]+v[1]*r}`;}
   const L=P[P.length-1];return s+`L${L[0]} ${L[1]}`;}
-function renderPSide(M,T){const p=PL(),pr=M&&M.pr,g=p.ger;let h=`<button class="pstog" data-pact="pside" title="${pSideColl?'Keep the panel open':'Hide the panel; hover the edge to see it'}">${pSideColl?'Pin panel':'Collapse panel'}</button>`;
+function renderPSide(M,T){const p=PL(),pr=M&&M.pr,g=p.ger;let h=`<button class="pstog" data-pact="pside" aria-pressed="${!pSideColl}" title="${pSideColl?'Pin the panel open':'Unpin: tuck the panel away (hover the left edge to see it)'}" aria-label="${pSideColl?'Pin the panel open':'Unpin the panel'}"><svg viewBox="0 0 24 24"><path d="M12 17v5"/><path d="M5 17h14v-1.8a2 2 0 0 0-1.1-1.8l-1.8-.9A2 2 0 0 1 15 10.8V6h1a2 2 0 0 0 0-4H8a2 2 0 0 0 0 4h1v4.8a2 2 0 0 1-1.1 1.8l-1.8.9A2 2 0 0 0 5 15.2Z"/></svg></button>`;
   if(pr){const req=T.req||T.total,pc=v=>Math.min(100,req?v/req*100:0);
     h+=`<section class="pscard"><h3>Progress</h3>${M.gpa.gpa!=null?`<div class="pcg"><span>CGPA</span><b>${g2(M.gpa.gpa)}</b><small>${fmt(M.gpa.h)} GPA credit hours${p.tx&&p.tx.gpa!=null&&Math.abs(p.tx.gpa-+g2(M.gpa.gpa))>.011?` · transcript says ${(+p.tx.gpa).toFixed(2)}`:''}</small></div>`:''}<div class="pbar2"><i class="d" style="width:${pc(T.done+T.ex)}%"></i><i class="n" style="width:${pc(T.now)}%"></i><i class="p" style="width:${pc(T.plan)}%"></i></div>
       <dl class="pstats"><div><dt>Completed</dt><dd>${fmt(T.done+T.ex)} cr</dd></div><div><dt>In progress</dt><dd>${fmt(T.now)} cr</dd></div><div><dt>Planned</dt><dd>${fmt(T.plan)} cr</dd></div><div><dt>Program</dt><dd>${fmt(req)} cr</dd></div>${T.ex?`<div><dt>Transfer</dt><dd>${fmt(T.ex)} cr</dd></div>`:''}${T.fail?`<div><dt>Failed (not counted)</dt><dd>${fmt(T.fail)} cr</dd></div>`:''}</dl>
@@ -2980,7 +2984,7 @@ $('#pgfile').onchange=e=>{const f=e.target.files[0];e.target.value='';if(f)impor
 $('#ptfile').onchange=e=>{const f=e.target.files[0];e.target.value='';if(f)importTranscript(f);};
 let pSideColl=false;try{pSideColl=localStorage.getItem('cm-pside')==='1';}catch{}
 /* collapsed panel: hover (or tap the edge on touch screens) to see it */
-$('#v-plan').addEventListener('click',e=>{const ps=e.target.closest('.pwrap.pcoll .pside');if(ps&&!ps.classList.contains('peek')&&!e.target.closest('button,a,input,select,label')){ps.classList.add('peek');return;}if(!ps)document.querySelector('.pside.peek')?.classList.remove('peek');},true);
+$('#v-plan').addEventListener('click',e=>{if(e.target.closest('.pwrap.pcoll .prail')){document.querySelector('.pside')?.classList.add('peek');return;}const ps=e.target.closest('.pwrap.pcoll .pside');if(ps&&!ps.classList.contains('peek')&&!e.target.closest('button,a,input,select,label')){ps.classList.add('peek');return;}if(!ps)document.querySelector('.pside.peek')?.classList.remove('peek');},true);
 /* course browser */
 $('#pbrowse').addEventListener('click',e=>{const b=e.target.closest('[data-cbtab],[data-cbchip],[data-cbopen],[data-cbadd],[data-cbgo]');if(!b)return;
   if(b.dataset.cbtab){CB.tab=b.dataset.cbtab;CB.chip='';CB.open='';renderBrowser();}
