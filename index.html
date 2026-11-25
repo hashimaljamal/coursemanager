@@ -430,6 +430,39 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 .pirow{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:10px 0 0;font-size:13.5px;font-weight:700}.pirow select,.pirow input[type=number]{width:60%}.pirow.chk{justify-content:flex-start;font-weight:500}
 .pacard{max-width:560px}#paq{width:100%;margin:8px 0}.palist{list-style:none;margin:8px 0 0;padding:0;max-height:min(50dvh,420px);overflow:auto;display:grid;gap:4px}.palist button{width:100%;text-align:left;border:1px solid var(--line);background:none;border-radius:9px;padding:8px 10px;cursor:pointer;display:grid;grid-template-columns:auto 1fr;gap:0 10px;font:inherit;color:inherit}.palist button:hover{border-color:var(--ink)}.palist button:disabled{opacity:.45;cursor:default}.palist button:disabled:hover{border-color:var(--line)}.palist b{font-size:13.5px}.palist span{font-size:13px}.palist small{grid-column:1/-1;color:var(--mute);font-size:11.5px}
 :root[data-theme=dark] .pbox,:root:not([data-theme=light]) .pbox{}
+.pwrap{position:relative}.pstog{justify-self:start;border:1px solid var(--line);background:none;border-radius:8px;font:inherit;font-size:12px;font-weight:700;color:var(--mute);padding:4px 9px;cursor:pointer}.pstog:hover{color:var(--ink);border-color:var(--ink)}
+@media(min-width:901px){.pwrap.pcoll{grid-template-columns:22px minmax(0,1fr)}
+ .pwrap.pcoll .pside{width:270px;margin-right:-248px;z-index:40;background:var(--bg);transform:translateX(-248px);transition:transform .18s ease,box-shadow .18s;padding-left:14px;border-right:1px solid var(--line)}
+ .pwrap.pcoll .pside>*{transition:opacity .12s}.pwrap.pcoll .pside:not(:hover):not(:focus-within):not(.peek)>*{opacity:0;pointer-events:none}
+ .pwrap.pcoll .pside::after{content:'›';position:absolute;right:3px;top:10px;width:16px;height:40px;display:grid;place-items:center;border-radius:6px;background:var(--soft);color:var(--mute);font-weight:900;font-size:15px;transition:opacity .12s}
+ .pwrap.pcoll .pside:hover,.pwrap.pcoll .pside:focus-within,.pwrap.pcoll .pside.peek{transform:none;box-shadow:10px 0 28px rgb(0 0 0/.14)}
+ .pwrap.pcoll .pside:hover::after,.pwrap.pcoll .pside:focus-within::after,.pwrap.pcoll .pside.peek::after{opacity:0}}
+@media(max-width:900px){.pstog{display:none}}
+.pcg{display:grid;grid-template-columns:auto 1fr;align-items:baseline;gap:0 10px;margin:-2px 0 8px}.pcg span{font-size:12px;color:var(--mute);font-weight:700}.pcg b{font-size:26px;font-weight:900;font-stretch:115%;justify-self:end;font-variant-numeric:tabular-nums}.pcg small{grid-column:1/-1;font-size:11.5px;color:var(--mute)}
+.pnext{margin:0 0 4px;font-size:13.5px}.pnl{list-style:none;margin:0 0 6px;padding:0;display:grid;gap:3px;font-size:13px}.pnl span{color:var(--mute);font-size:12px}
+.pbox.st-fail{background:repeating-linear-gradient(135deg,var(--pc) 0 7px,color-mix(in srgb,var(--red) 16%,var(--pc)) 7px 9px);border-color:var(--red);border-style:dashed;opacity:.8}.pbox.st-fail .pcode{text-decoration:line-through;text-decoration-color:var(--red)}
+.pbox.st-tr{opacity:.7}.pbox.st-reg{box-shadow:inset 0 0 0 2px color-mix(in srgb,var(--ink) 35%,transparent)}.pbox.sup{opacity:.45}
+.pst.fl,.kst.fl{background:var(--red)}.pst.ex,.kst.ex{font-size:8.5px}
+.pcol.xf{background:repeating-linear-gradient(45deg,transparent 0 8px,color-mix(in srgb,var(--ink) 4%,transparent) 8px 16px)}
+.seg5 button{font-size:12px;padding:8px 2px}
+.pbrowse{border-top:2px solid var(--ink);margin-top:18px;padding:14px 0 30px}
+.cbtop{display:flex;align-items:center;gap:14px;flex-wrap:wrap}.cbtop h2{margin:0;font-size:20px;font-weight:900;font-stretch:110%}.cbtop input{flex:1;min-width:200px;max-width:420px}
+.cbtabs{display:flex;gap:4px;margin:12px 0 8px;border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none}.cbtabs button{border:0;background:none;font:inherit;font-size:14px;font-weight:700;color:var(--mute);padding:8px 12px;border-bottom:3px solid transparent;cursor:pointer;white-space:nowrap}.cbtabs button.on{color:var(--ink);border-bottom-color:var(--red)}
+.cbchips{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 6px}.cbchips .chip{border:1px solid var(--line);background:none;border-radius:99px;font:inherit;font-size:12.5px;font-weight:700;padding:5px 11px;cursor:pointer;color:var(--ink)}.cbchips .chip.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.cbsub{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:700;margin:4px 0 6px}.cbcount{margin:2px 0 8px}
+.pbrowse .hcount{background:var(--soft);color:var(--ink)}.cbg{margin:0 0 12px}.cbg h4,.cbg summary{font-size:13px;font-weight:800;margin:6px 0;text-transform:uppercase;letter-spacing:.03em;color:var(--mute);cursor:default}.cbg summary{cursor:pointer}
+.cblist{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:6px}
+.cbrow{border:1px solid var(--line);border-radius:10px;min-width:0}.cbrow.open{grid-column:1/-1;border-color:var(--ink)}
+.cbhead{width:100%;display:grid;grid-template-columns:auto 1fr auto;gap:2px 10px;align-items:baseline;text-align:left;border:0;background:none;font:inherit;color:inherit;padding:8px 10px;cursor:pointer;border-radius:10px}.cbhead:hover{background:var(--soft)}
+.cbhead b{font-size:13.5px;white-space:nowrap}.cbhead span{font-size:13px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.cbrow.open .cbhead span{white-space:normal}.cbhead small{color:var(--mute);font-size:12px;white-space:nowrap}
+.cbst{grid-column:1/-1;font-style:normal;font-size:11.5px;font-weight:700;color:var(--mute)}.cbst.done,.cbst.tr{color:var(--ink)}.cbst.fail{color:var(--red)}.cbst.now{color:var(--red)}
+.cbdet{padding:2px 12px 12px;font-size:13.5px;line-height:1.5}.cbdet>p{margin:4px 0 10px;max-width:80ch}
+.cbdl{display:grid;gap:6px;margin:0 0 10px}.cbdl>div{display:grid;grid-template-columns:150px 1fr;gap:10px}.cbdl dt{font-size:12px;font-weight:700;color:var(--mute)}.cbdl dd{margin:0}
+.cbf{display:inline-block;border:1px solid var(--line);border-radius:6px;padding:1px 7px;margin:0 4px 4px 0;font-size:12px;font-weight:700}
+.pbrowse select{font-size:13.5px;min-height:36px;padding:4px 8px;width:auto}.cbadd select{max-width:340px}
+@media(max-width:600px){.cblist{grid-template-columns:1fr}.cbdl>div{grid-template-columns:1fr;gap:0}}
+.gpacg{display:grid;margin-top:8px;padding-top:8px;border-top:1px solid var(--line)}
+
 @media(prefers-color-scheme:dark){:root:not([data-theme=light]) .pbox{border-color:#111}}
 :root[data-theme=dark] .pbox{border-color:#111}
 @media(max-width:900px){.pwrap{grid-template-columns:1fr}.pside{order:2;position:static;max-height:none;overflow:visible;border-right:0;padding:14px 0 8px;border-top:1px solid var(--line);grid-template-columns:1fr 1fr}.pmain{padding:4px 0 20px}.pscroll{max-height:none}}
@@ -513,9 +546,12 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
   <div class="acts">
     <button class="btn" data-pact="prog">Program</button>
     <button class="btn ghost" data-pact="addterm">Add term</button>
+    <button class="btn ghost" data-pact="trans">Transcript</button>
     <button class="btn ghost" data-pact="ger">GER list</button>
   </div>
 </div><div class="pwrap"><div class="pside" id="pside"></div><div class="pmain" id="pmain"></div></div>
+<section class="pbrowse" id="pbrowse"></section>
+<input type="file" id="ptfile" hidden accept=".pdf,.docx,.txt,.html,.htm,image/*">
 <input type="file" id="pgfile" hidden accept=".pdf,.docx,.txt,.html,.htm,.csv,image/*"><input type="file" id="ppfile" hidden multiple accept=".pdf,.docx,.txt,.html,.htm,image/*"></section>
 <section id="v-tasks" hidden><div class="pbar"><div class="pleft" id="khead"></div>
   <div class="acts">
@@ -731,7 +767,8 @@ function render(){renderSide();renderPanel();}
 function renderSide(){
   const list=S.courses.filter(c=>!(c.isLab&&linkedBy(c.id)));
   const sm=semester();
-  $('#gpacard').innerHTML=`<span>Semester GPA</span>${sm.gpa==null?'<b class="nil">No grades yet</b>':`<b>${fmt2(sm.gpa)}</b>`}<small>${sm.n?`${sm.n} course${sm.n===1?'':'s'} · ${fmt(sm.cr)} credits`:'Enter scores to see it'}</small>`;
+  const cg=projCGPA(sm);
+  $('#gpacard').innerHTML=`<span>Semester GPA</span>${sm.gpa==null?'<b class="nil">No grades yet</b>':`<b>${fmt2(sm.gpa)}</b>`}<small>${sm.n?`${sm.n} course${sm.n===1?'':'s'} · ${fmt(sm.cr)} credits`:'Enter scores to see it'}</small>${cg?`<div class="gpacg"><span>Projected CGPA</span><b>${g2(cg.cg)}</b><small>Now ${g2(cg.prior)} over ${fmt(cg.h)} credits</small></div>`:''}`;
   $('#gpacard').classList.toggle('sel',S.sel==='gpa');$('#gpacard').hidden=!list.length;
   document.querySelector('.wrap').classList.toggle('nocourses',!list.length);
   $('#side').innerHTML=list.map(c=>{const p=coursePct(c),inc=c.comps.map(k=>labOf(c,k)).filter(Boolean);return`<button class="ci ${(S.sel===c.id||inc.some(l=>l.id===S.sel))?'sel':''}" data-sel="${c.id}" data-rid="${c.id}" style="--cc:${courseColor(c)}"><b><i class="cdot" aria-hidden="true"></i>${esc(c.code||'Untitled')}</b><em>${p==null?'':esc(letter(c,p))}</em><small>${p==null?'No grades yet':fmt(p)+'%'}${inc.length?' · incl. '+inc.map(l=>esc(l.code)).join(', '):''}</small></button>`}).join('')||'<p class="hint">No courses yet.</p>';
@@ -804,9 +841,11 @@ function renderGPA(){
   <p class="hint">Grade points come from each syllabus where it lists them, otherwise the standard 4.0 scale (A 4.0, A− 3.7, B+ 3.3 …). Labs that count inside a course aren’t listed separately; labs graded on their own are. Courses with 0 credits (like a (1-0-0) seminar) don’t affect GPA. Uncheck a course to leave it out.</p>`;
   gpaNumbers();
 }
+/* your CGPA if this semester ends with the grades you have now (earlier semesters come from the Planner) */
+function projCGPA(sm){let pr=null;try{pr=priorGPA(gpaCourses().map(c=>c.code));}catch{}if(!pr)return null;const q=pr.q+(sm.gpa!=null?sm.q:0),h=pr.h+(sm.gpa!=null?sm.cr:0);return{cg:h?q/h:null,prior:pr.gpa,h:pr.h};}
 function gpaNumbers(){
-  const sm=semester();
-  $('#gparesult').innerHTML=`<div class="big">${sm.gpa==null?'<div class="pct none">No grades yet</div>':`<div class="pct">${fmt2(sm.gpa)}</div>`}</div><p class="sub-r">${sm.n?`${sm.n} course${sm.n===1?'':'s'}, ${fmt(sm.cr)} credit hours, ${fmt2(sm.q)} quality points. It changes as you enter scores.`:'Enter scores in your courses to see your semester GPA.'}</p>`;
+  const sm=semester(),cg=projCGPA(sm);
+  $('#gparesult').innerHTML=`<div class="big">${sm.gpa==null?'<div class="pct none">No grades yet</div>':`<div class="pct">${fmt2(sm.gpa)}</div>`}${cg?`<div class="earned"><b>${g2(cg.cg)}</b><span>projected CGPA</span><span class="esub">now ${g2(cg.prior)} over ${fmt(cg.h)} credits</span></div>`:''}</div><p class="sub-r">${sm.n?`${sm.n} course${sm.n===1?'':'s'}, ${fmt(sm.cr)} credit hours, ${fmt2(sm.q)} quality points. It changes as you enter scores.`:'Enter scores in your courses to see your semester GPA.'}${cg?' Projected CGPA adds this semester to the grades from your earlier semesters in the Planner; a course you’re retaking replaces its old grade.':' Import your transcript in the Planner to see your projected CGPA here too.'}</p>`;
   for(const r of sm.rows){const q=s=>document.querySelector(s);const gl=q(`[data-gl="${r.co.id}"]`);if(!gl)continue;
     gl.textContent=r.L==null?'–':`${r.L} (${fmt(r.p)}%)`;q(`[data-gpt="${r.co.id}"]`).textContent=r.gp==null?'–':fmt2(r.gp);q(`[data-gq="${r.co.id}"]`).textContent=r.inc?fmt2(r.gp*r.c):'–';}
   renderSide();
@@ -1136,7 +1175,7 @@ $('#ssave').onclick=()=>{CFG={provider:$('#sprov').value,key:$('#skey').value.tr
 const SCOPES={grades:{name:'Grades',sub:'Courses, weights, scores, professors and missed-exam make-ups',get:()=>({courses:S.courses,sel:S.sel}),set:d=>{S.courses=Array.isArray(d.courses)?d.courses:[];S.sel=d.sel;}},
   timetable:{name:'Timetable',sub:'Your class schedule, colours, names and display options',get:()=>({tt:S.tt||{}}),set:d=>{S.tt=d.tt||{};}},
   tasks:{name:'Tasks',sub:'Your tasks, categories, semester, weeks off, academic calendar and finals',get:()=>({tasks:S.tasks||[],cats:S.cats||[],tstate:S.tstate||{},sem:S.sem||null,finals:S.finals||null}),set:d=>{S.tasks=d.tasks||[];mergeCats(d.cats);S.tstate=d.tstate||{};S.sem=d.sem||null;if(d.finals)S.finals=d.finals;else delete S.finals;}},
-  planner:{name:'Planner',sub:'Your program, degree flowchart, completed and exempt courses, and GER list (shared by all semesters)',get:()=>({plan:S.plan||null}),set:d=>{if(d.plan)S.plan=d.plan;else delete S.plan;}}};
+  planner:{name:'Planner',sub:'Your program, degree flowchart, completed, failed and transfer courses, grades, and GER list (shared by all semesters)',get:()=>({plan:S.plan||null}),set:d=>{if(d.plan)S.plan=d.plan;else delete S.plan;}}};
 const viewScope=()=>({grades:'grades',tt:'timetable',tasks:'tasks',plan:'planner'})[document.body.dataset.view]||null;
 /* three levels everywhere: this page · this semester · all semesters */
 const curSemName=()=>S.sem&&(S.sem.term||S.sem.year)?termNm(S):'this semester';
@@ -1213,7 +1252,7 @@ async function clearGrades(co){
 const ZC={planner:()=>{const p=S.plan;if(!p||!p.terms||!p.terms.length)return p&&p.ger?'your GER list':'';const n=p.terms.reduce((a,t)=>a+t.items.length,0);return`your degree plan (${n} courses)`+(p.ger?' and GER list':'');},grades:()=>{const n=S.courses.length,g=S.courses.reduce((a,c)=>a+c.comps.reduce((b,k)=>b+k.scores.filter(hasVal).length,0),0);return n?`${n} course${n===1?'':'s'} and ${g} score${g===1?'':'s'}`:'';},
   timetable:()=>{const n=(S.tt&&S.tt.slots||[]).length;return n?`${n} timetable class${n===1?'':'es'}`:'';},
   tasks:()=>{const n=(S.tasks||[]).length,c=(S.cats||[]).length,st=S.tstate&&Object.keys(S.tstate).length,sem=S.sem&&(S.sem.start||(S.sem.cal||[]).length);return[n&&`${n} task${n===1?'':'s'} you added`,st&&'task ticks and edits',sem&&'the semester and calendar',S.finals&&'your final exam schedules'].filter(Boolean).join(', ');}};
-const ZSUB={planner:'Your program, degree flowchart, completed and exempt courses, and GER list',grades:'Courses, weights, scores, professors and make-ups',timetable:'Your class schedule, colours, names and display options',tasks:'Tasks you added, ticks, semester dates, academic calendar and final exam schedules. Tasks from syllabi stay while their courses do.'};
+const ZSUB={planner:'Your program, degree flowchart, completed, failed and transfer courses, grades, and GER list',grades:'Courses, weights, scores, professors and make-ups',timetable:'Your class schedule, colours, names and display options',tasks:'Tasks you added, ticks, semester dates, academic calendar and final exam schedules. Tasks from syllabi stay while their courses do.'};
 const ttPrefs=()=>{const o=S.tt||{},t={};for(const k of ['opts','order','view','h24','exp','colors'])if(o[k]!==undefined)t[k]=o[k];return t;};
 const zClear={planner:()=>{delete S.plan;},grades:()=>{S.courses=[];S.sel=null;edit=false;},timetable:()=>{S.tt={};},tasks:()=>{S.tasks=[];S.tstate={};S.sem=S.sem&&(S.sem.term||S.sem.year)?{term:S.sem.term,year:S.sem.year,start:'',end:'',ov:{},cal:[]}:null;delete S.finals;},
   sem:()=>{const t=ttPrefs();zClear.grades();zClear.tasks();S.tt=t;}};
@@ -1744,7 +1783,7 @@ Rules:
 - dates: every notable date or period. start/end as YYYY-MM-DD (end = start for one-day items). Keep the calendar's own wording for title.
 - type: "start" first day of classes, "end" last day of classes, "break" vacations/recess, "holiday" public holidays or university closed, "makeup" make-up/compensation days (say in the title which weekday's schedule is followed, if stated), "exam" exam periods, "deadline" add/drop/withdrawal/registration/grade deadlines, otherwise "event".
 - terms: one entry per semester or term the calendar covers (Fall, Spring, Summer, Winter), in order. term is one of Fall, Spring, Summer, Winter; year is the year the term is named for; start = first day of classes, end = last day of classes. Put each date in the term whose section it is listed under.`;
-async function askCal(input,name,onStatus,kind='calendar'){const pv=provider(),today=iso(today0()),fin=kind==='finals',local=t=>fin?{finals:finFromText(t),basic:true}:kind==='calendar'?{local:calFromText(t),basic:true}:{basic:true},WHAT={finals:'Reading the exam schedule…',calendar:'Reading the calendar…',plan:'Reading your program pages…',ger:'Reading the GER list…'},INS={finals:typeof FIN_INSTR!=='undefined'?FIN_INSTR:'',calendar:CAL_INSTR,plan:PLAN_INSTR,ger:GER_INSTR},LBL={finals:'Exam schedule',calendar:'Calendar',plan:'Catalog pages',ger:'GER course list'};
+async function askCal(input,name,onStatus,kind='calendar'){const pv=provider(),today=iso(today0()),fin=kind==='finals',local=t=>fin?{finals:finFromText(t),basic:true}:kind==='calendar'?{local:calFromText(t),basic:true}:{basic:true},WHAT={finals:'Reading the exam schedule…',calendar:'Reading the calendar…',plan:'Reading your program pages…',ger:'Reading the GER list…',transcript:'Reading your transcript…'},INS={finals:typeof FIN_INSTR!=='undefined'?FIN_INSTR:'',calendar:CAL_INSTR,plan:PLAN_INSTR,ger:GER_INSTR,transcript:TR_INSTR},LBL={finals:'Exam schedule',calendar:'Calendar',plan:'Catalog pages',ger:'GER course list',transcript:'Transcript'};
   if(pv==='relay'){try{const imgs=[];for(const im of input.images.slice(0,4)){const j=await toJpeg(im);if(/^image\/(jpeg|png|webp)$/.test(j.type))imgs.push({mime:j.type,data:await b64(j)});}
       for(let a=0;a<2;a++){onStatus&&onStatus(WHAT[kind]);const ac=new AbortController(),kill=setTimeout(()=>ac.abort(),kind==='plan'?110000:75000);let r,j;
         try{r=await fetch(RELAY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({mode:kind,today,name,text:input.text.slice(0,80000),images:imgs}),signal:ac.signal});j=await r.json().catch(()=>({}));}catch(e){r={ok:false,status:e&&e.name==='AbortError'?504:0};j={};}finally{clearTimeout(kill);}
@@ -2264,7 +2303,7 @@ function gerCatsOf(c){c=normC(c);const e=gerIx()[c],up=(PL().ger&&PL().ger.list|
 function slotCats(x){const ph=String(x.c||'').toUpperCase();if(!/^GER/.test(ph))return[];const k=gerKey(ph+' '+(x.t||''));if(CORECATS.includes(k))return[k];return/^GER-?CORE/.test(ph)?CORECATS:[];}
 /* a completed course from a core list fills an open slot of that area, so the slot shows as completed */
 function gerAutoFill(){const p=PL(),slots=[],loose=[];let n=0;
-  for(const t of p.terms)for(const x of t.items){const sc=slotCats(x);if(sc.length){if(!x.pick)slots.push({x,t,sc});}else if(x.st&&!/\bor\b/i.test(x.c)&&REALC.test(normC(x.c))&&gerCatsOf(x.c).some(k=>CORECATS.includes(k)))loose.push({x,t});}
+  for(const t of p.terms)for(const x of t.items){const sc=slotCats(x);if(sc.length){if(!x.pick)slots.push({x,t,sc});}else if(x.st&&x.st!=='fail'&&!/\bor\b/i.test(x.c)&&REALC.test(normC(x.c))&&gerCatsOf(x.c).some(k=>CORECATS.includes(k)))loose.push({x,t});}
   loose.sort((a,b)=>(a.x.st==='done'?0:1)-(b.x.st==='done'?0:1));
   for(const L of loose){const cats=gerCatsOf(L.x.c),s=slots.filter(s=>!s.used&&s.sc.some(k=>cats.includes(k))).sort((a,b)=>a.sc.length-b.sc.length)[0];if(!s)continue;s.used=1;
     const code=normC(L.x.c);L.x.pt=L.x.t||gerIx()[code]?.t||'';L.x.pick=code;L.x.c=s.x.c;L.x.t=s.x.t;s.t.items=s.t.items.filter(i=>i!==s.x);n++;}
@@ -2288,11 +2327,11 @@ const REALC=/^[A-Z]{2,4} \d{3}(?:\d{2}|[A-Z])?$/;
 const normC=c=>String(c||'').toUpperCase().replace(/\s+/g,' ').replace(/^([A-Z]{2,4})\s?(\d{3}(?:\d{2}|[A-Z])?)$/,'$1 $2').trim();
 /* sorted columns */
 function pTerms(){return PL().terms.slice().sort((a,b)=>a.y-b.y||seasIx(a.s)-seasIx(b.s));}
-function termCal(t){const p=PL(),sy=+(p.start&&p.start.y)||new Date().getFullYear();return{s:t.s,y:t.s==='Fall'?sy+t.y-1:sy+t.y};}
-const termName=t=>{const c=termCal(t);return`${c.s} ${c.y}`;};
+function termCal(t){if(isX(t))return{s:'Transfer',y:0};const p=PL(),sy=+(p.start&&p.start.y)||new Date().getFullYear();return{s:t.s,y:t.s==='Fall'?sy+t.y-1:sy+t.y};}
+const termName=t=>{if(isX(t))return'Transfer credits';const c=termCal(t);return`${c.s} ${c.y}`;};
 function nowTerm(){const s=S.sem;if(s&&s.term&&s.year&&['Fall','Spring','Summer'].includes(s.term))return{s:s.term,y:+s.year};const d=today0(),m=d.getMonth();return{s:m<=4?'Spring':m<=6?'Summer':'Fall',y:d.getFullYear()};}
 const calKey=c=>c.y*10+seasIx(c.s)*(c.s==='Fall'?1:1)+(c.s==='Spring'?0:c.s==='Summer'?1:2);
-function termRel(t){const a=termCal(t),n=nowTerm(),ka=a.y*3+({Spring:0,Summer:1,Fall:2})[a.s],kn=n.y*3+({Spring:0,Summer:1,Fall:2})[n.s];return ka<kn?'past':ka===kn?'now':'future';}
+function termRel(t){if(isX(t))return'past';const a=termCal(t),n=nowTerm(),ka=a.y*3+({Spring:0,Summer:1,Fall:2})[a.s],kn=n.y*3+({Spring:0,Summer:1,Fall:2})[n.s];return ka<kn?'past':ka===kn?'now':'future';}
 /* categories */
 const GENP={MTH:'math',STA:'math',QBA:'math',PHY:'sci',CHM:'sci',BIO:'sci',ENV:'sci',WRI:'wri'};
 function majorPrefixes(pr){const c={};if(!pr)return new Set();for(const t of pr.terms)for(const i of t.i){const m=String(i.c).match(/^([A-Z]{2,4}) \d/);if(m&&!GENP[m[1]]&&!['NGN','IEN','ENG','BUS','DES','UPA'].includes(m[1]))c[m[1]]=(c[m[1]]||0)+1;}
@@ -2313,10 +2352,11 @@ function reqGroups(str){if(!str)return[];return String(str).split(/;|,|\band\b/i
 /* one evaluation pass: where every course sits, what each needs, and the arrows */
 function planModel(){const p=PL(),db=courseDB(),cols=pTerms(),pr=curProg(),mp=majorPrefixes(pr),where={},edges=[],warn={};
   const codesOf=x=>{const c=x.pick||x.c;return String(c).split(/\s+or\s+/i).map(normC).filter(z=>REALC.test(z));};
-  cols.forEach((t,k)=>t.items.forEach((x,r)=>{for(const c of codesOf(x))(where[c]=where[c]||[]).push({k,r,x});}));
-  const credBefore=[];let run=0;for(let k=0;k<cols.length;k++){credBefore[k]=run;for(const x of cols[k].items)if(x.st!=='exempt'||x.ecr)run+=+x.cr||0;}
-  const ok=(c,k,same)=>(where[c]||[]).some(w=>w.x.st==='done'||w.x.st==='exempt'||(same?w.k<=k:w.k<k));
-  cols.forEach((t,k)=>t.items.forEach((x,r)=>{const cs=codesOf(x);if(cs.length!==1)return;const d=db[cs[0]];if(!d)return;const miss=[];
+  const sup=supersededSet(cols);
+  cols.forEach((t,k)=>t.items.forEach((x,r)=>{if(x.st==='fail')return;for(const c of codesOf(x))(where[c]=where[c]||[]).push({k,r,x});}));
+  const credBefore=[];let run=0;for(let k=0;k<cols.length;k++){credBefore[k]=run;for(const x of cols[k].items)if(x.st!=='fail'&&!sup.has(x.id))run+=+x.cr||0;}
+  const ok=(c,k,same)=>(where[c]||[]).some(w=>w.x.st==='done'||w.x.st==='tr'||(same?w.k<=k:w.k<k));
+  cols.forEach((t,k)=>t.items.forEach((x,r)=>{if(x.st==='fail')return;const cs=codesOf(x);if(cs.length!==1)return;const d=db[cs[0]];if(!d)return;const miss=[];
     const chk=(str,same)=>{const cl=reqClauses(str);if(!cl.length)return;
       const evalC=c=>{const out={sat:true,miss:[],src:[]};for(const g of c){let sat=false,src=null;
           for(const a of g){if(a.c){if(a.c===cs[0]){sat=true;continue;}const ws=(where[a.c]||[]).filter(w=>w.x!==x);if(ws.length&&!src)src=ws.slice().sort((u,v)=>v.k-u.k).find(w=>same?w.k<=k:w.k<k)||ws[0];if(ok(a.c,k,same))sat=true;}
@@ -2324,51 +2364,275 @@ function planModel(){const p=PL(),db=courseDB(),cols=pTerms(),pr=curProg(),mp=ma
           if(src)out.src.push(src);if(!sat){out.sat=false;out.miss.push(g.map(a=>a.c||a.x).join(' or '));}}return out;};
       const R=cl.map(evalC),best=R.find(r=>r.sat)||R.slice().sort((a,b)=>b.src.length-a.src.length||a.miss.length-b.miss.length)[0];
       for(const src of best.src)if(src.x!==x)edges.push({a:src,b:{k,r,x},kind:same?'c':'p'});
-      if(!best.sat&&x.st!=='done'&&x.st!=='exempt')miss.push(R.length>1?R.map(r=>r.miss.join(' and ')).join(' — or — '):best.miss.join('; '));};
+      if(!best.sat&&x.st!=='done'&&x.st!=='tr')miss.push(R.length>1?R.map(r=>r.miss.join(' and ')).join(' — or — '):best.miss.join('; '));};
     chk(d.p,false);chk(d.pc,true);if(miss.length)warn[x.id]=miss;}));
   const seen=new Set(),E=edges.filter(e=>{const key=e.a.x.id+'>'+e.b.x.id;if(seen.has(key)||e.a.k>e.b.k)return false;seen.add(key);return true;});
-  return{cols,db,edges:E,warn,where,mp,pr,credBefore};}
-function planTotals(M){let done=0,plan=0,now=0,ex=0;for(const t of M.cols)for(const x of t.items){const c=+x.cr||0;if(x.st==='done')done+=c;else if(x.st==='exempt'){if(x.ecr)ex+=c;}else if(x.st==='now')now+=c;else plan+=c;}
-  const req=M.pr?M.pr.credits:0;return{done,plan,now,ex,req,total:done+plan+now+ex};}
+  return{cols,db,edges:E,warn,where,mp,pr,credBefore,sup,gpa:planGPA(cols,sup)};}
+function planTotals(M){let done=0,plan=0,now=0,ex=0,fail=0;for(const t of M.cols)for(const x of t.items){const c=+x.cr||0;if(x.st==='fail'){fail+=c;continue;}if(M.sup.has(x.id))continue;if(x.st==='done')done+=c;else if(x.st==='tr')ex+=c;else if(x.st==='now')now+=c;else plan+=c;}
+  const req=M.pr?M.pr.credits:0;return{done,plan,now,ex,fail,req,total:done+plan+now+ex};}
+
+/* ---------- transfer credits, repeats and CGPA ---------- */
+const isX=t=>!!t&&t.s==='Transfer';
+function xferTerm(){const p=PL();let t=p.terms.find(isX);if(!t){t={id:rid(),y:0,s:'Transfer',items:[]};p.terms.push(t);}return t;}
+const codesOfX=x=>String(x.pick||x.c).split(/\s+or\s+/i).map(normC).filter(z=>REALC.test(z));
+/* old "exempt" courses become transfer credits, which live in their own column outside the semesters */
+function planMigrate(){const p=PL();let ch=false;if(!p.terms.length)return false;if(!p.terms.some(isX)){xferTerm();ch=true;}const xt=xferTerm();
+  for(const t of p.terms)if(!isX(t))for(const x of t.items.slice())if(x.st==='exempt'||x.st==='tr'){t.items=t.items.filter(i=>i!==x);x.st='tr';x.home=t.id;delete x.ecr;xt.items.push(x);ch=true;}
+  for(const x of xt.items)if(x.st!=='tr'){x.st='tr';delete x.g;ch=true;}
+  return ch;}
+const GPV=g=>{g=String(g||'').toUpperCase().trim();return g in STDGP?STDGP[g]:null;};
+const g2=v=>v==null||isNaN(v)?'–':(Math.floor(v*100+1e-7)/100).toFixed(2);/* AUS truncates, it doesn't round */
+/* when a course is taken again, only the latest graded attempt counts toward credits and GPA */
+function supersededSet(cols){const last={},sup=new Set();for(const t of cols){if(isX(t))continue;for(const x of t.items){if(x.st!=='done'&&x.st!=='fail')continue;const cs=codesOfX(x);if(cs.length!==1)continue;const c=cs[0];if(last[c])sup.add(last[c].id);last[c]=x;}}return sup;}
+function planGPA(cols,sup,o={}){let q=0,h=0;const by={};
+  for(const t of cols){if(isX(t))continue;if(o.stop&&o.stop(t))break;let tq=0,th=0;
+    for(const x of t.items){if(x.st!=='done'&&x.st!=='fail')continue;const gp=GPV(x.g||(x.st==='fail'?'F':''));const cr=+x.cr||0;if(gp==null||!cr||sup.has(x.id))continue;
+      if(o.skip&&codesOfX(x).some(c=>o.skip.has(c)))continue;tq+=gp*cr;th+=cr;}
+    q+=tq;h+=th;if(th)by[t.id]={gpa:tq/th,hrs:th};}
+  return{gpa:h?q/h:null,q,h,by};}
+/* CGPA from earlier semesters, for the Grades tab: everything before the current semester, leaving out courses being retaken now */
+function priorGPA(curCodes){if(!S.plan||!S.plan.terms||!S.plan.terms.length)return null;const cols=pTerms(),sup=supersededSet(cols),s=S.sem,cur=s&&s.term&&s.year&&['Fall','Spring','Summer'].includes(s.term)?ckey({s:s.term,y:+s.year}):ckey(nowTerm());
+  const r=planGPA(cols,sup,{stop:t=>ckey(termCal(t))>=cur,skip:new Set((curCodes||[]).map(normC))});return r.h?r:null;}
+const ckey=c=>c.y*3+({Spring:0,Summer:1,Fall:2}[c.s]??-1);
+
+/* ---------- recommend: lay out every remaining course from the next term on ---------- */
+function replanRemaining(){const p=PL(),db=courseDB(),pr=curProg(),nk=ckey(nowTerm());
+  const progCr=pr?pr.terms.filter(t=>t.s!=='Summer').map(t=>t.i.reduce((s,x)=>s+(+x.cr||0),0)):[];const cap=Math.max(15,Math.min(18,progCr.length?Math.max(...progCr):17));
+  const sy=+(p.start&&p.start.y)||nowTerm().y;const earliest=x=>{if(x.o==null)return-1;const y=Math.floor(x.o/300)+1,s=SEAS[Math.floor(x.o%300/100)];return ckey(s==='Fall'?{s,y:sy+y-1}:{s,y:sy+y});};
+  const cols=pTerms(),pool=[];
+  cols.forEach((t,k)=>{if(isX(t))return;const fut=ckey(termCal(t))>nk;for(const x of t.items.slice()){if(x.st||x.reg||(fut&&x.pin))continue;pool.push({x,ord:x.o??(1e5+k*100+t.items.indexOf(x))});t.items=t.items.filter(i=>i!==x);}});
+  if(!pool.length)return{moved:0};
+  pool.sort((a,b)=>a.ord-b.ord);
+  const placed={},inPool=new Set(pool.flatMap(P=>codesOfX(P.x)));
+  const mark=(x,tk)=>{if(x.st==='fail')return;for(const c of codesOfX(x))placed[c]=Math.min(placed[c]??1e9,tk);};
+  for(const t of pTerms())for(const x of t.items)mark(x,isX(t)?-1:ckey(termCal(t)));
+  const credBefore=tk=>{let s=0;for(const t of pTerms())if(isX(t)||ckey(termCal(t))<tk)for(const x of t.items)if(x.st!=='fail')s+=+x.cr||0;return s;};
+  const sat=(str,tk,same)=>{const cl=reqClauses(str);if(!cl.length)return true;const cb=credBefore(tk);
+    const known=a=>a.c in placed||inPool.has(a.c);
+    return cl.some(c=>c.every(g=>{const cs=g.filter(a=>a.c);if(cs.length&&!cs.some(known))return true;return g.some(a=>a.c?((placed[a.c]??1e9)<tk||(same&&(placed[a.c]??1e9)<=tk)):a.cr!=null?cb>=a.cr:true);}));};
+  const futures=()=>pTerms().filter(t=>!isX(t)&&t.s!=='Summer'&&ckey(termCal(t))>nk&&!t.items.some(x=>x.reg));
+  let guard=0;
+  while(pool.some(P=>!P.used)&&guard++<6){
+    for(const t of futures()){const tk=ckey(termCal(t));let cr=t.items.reduce((s,x)=>s+(x.st==='fail'?0:+x.cr||0),0),ch=true;
+      while(ch){ch=false;for(const P of pool){if(P.used)continue;const x=P.x,c=+x.cr||0;if(cr+c>cap||earliest(x)>tk)continue;
+        const cs=codesOfX(x),d=cs.length===1?db[cs[0]]:null;if(cs.length&&t.items.some(i=>codesOfX(i).some(c=>cs.includes(c))))continue;if(d&&(!sat(d.p,tk,false)||!sat(d.pc,tk,true)))continue;
+        t.items.push(x);P.used=1;cr+=c;mark(x,tk);ch=true;}}}
+    if(pool.some(P=>!P.used)){const y=Math.max(4,...p.terms.map(t=>t.y))+1;p.terms.push({id:rid(),y,s:'Fall',items:[]},{id:rid(),y,s:'Spring',items:[]});}}
+  const left=pool.filter(P=>!P.used);if(left.length){const t=futures().pop()||pTerms().filter(t=>!isX(t)).pop();for(const P of left)t.items.push(P.x);}
+  /* drop empty extra years at the end */
+  for(;;){const ys=Math.max(...p.terms.map(t=>t.y));if(ys<=4)break;const last=p.terms.filter(t=>t.y===ys);if(last.some(t=>t.items.length))break;p.terms=p.terms.filter(t=>t.y!==ys);}
+  return{moved:pool.length};}
+function nextUp(M){const nk=ckey(nowTerm());const fut=M.cols.filter(t=>!isX(t)&&ckey(termCal(t))>nk&&t.items.length);if(!fut.length)return null;
+  const reg=fut[0].items.some(x=>x.reg)?fut[0]:null,rec=fut.find(t=>t.items.some(x=>!x.reg&&!x.st));return{reg,rec};}
+
+/* ---------- transcript ---------- */
+const TR_INSTR=`You read a university student's academic transcript. Reply with ONLY a JSON object, no prose:
+{"program":"BS in Computer Engineering","major":"Computer Engineering","cgpa":3.10,
+ "transfer":[{"code":"MTH 103","title":"Calculus I","credits":3,"source":"AP"}],
+ "terms":[{"term":"Fall","year":2024,"inProgress":false,"courses":[{"code":"NGN 110","title":"Introduction to Engineering and Computing","credits":2,"grade":"B+"}]}]}
+Rules: list every term in order, including terms shown as in progress or registered (inProgress true, grade null). Keep every attempt of a repeated course in the term it was taken, with the grade exactly as shown (A, B+, F, W, P, NP…). code = subject and number like "PHY 101L". credits = the credit hours of that row; for a failed course use its attempted hours. cgpa = the overall cumulative GPA shown, or null. transfer = transfer, AP or exam credit accepted, with no term.`;
+const TRG=/^(A\+?|A-|B[+-]?|C[+-]?|D[+-]?|F|W|WF|WP|P|NP|I|IP|AU|TR|CR|NC|S|U)$/;
+function pdfRows(items){const pages={};for(const it of items)(pages[it.p]=pages[it.p]||[]).push(it);const out=[];
+  for(const p of Object.keys(pages).sort((a,b)=>a-b)){const L=[];for(const it of pages[p].slice().sort((a,b)=>a.y-b.y||a.x-b.x)){const l=L.find(l=>Math.abs(l.y-it.y)<2.6);if(l)l.its.push(it);else L.push({y:it.y,its:[it]});}
+    for(const l of L.sort((a,b)=>a.y-b.y)){l.its.sort((a,b)=>a.x-b.x);const cells=[];let last=null;for(const it of l.its){const s=it.s.trim();if(!s)continue;const gap=last?it.x-(last.x+last.w):99;if(last&&gap<6&&!/^(A\+?|A-|B[+-]?|C[+-]?|D[+-]?|F|W|WF|P|NP|TR)$/.test(s)&&!/^\d+\.\d+$/.test(s))cells[cells.length-1]+=(gap>1.2?' ':'')+s;else cells.push(s);last=it;}if(cells.length)out.push(cells);}}
+  return out;}
+const textRows=t=>String(t).split(/\n/).map(l=>l.trim().split(/\s{2,}|\t+/).map(s=>s.trim()).filter(Boolean)).filter(c=>c.length);
+function trFromRows(rows){const R={terms:[],transfer:[],program:'',major:'',gpa:null};let sec='',term=null,pend=null,ph=false;
+  const NUM=/^\d+(\.\d+)?$/,CR3=/^\d+\.\d{2,3}$/;
+  const add=(o)=>{if(sec==='tr'){R.transfer.push(o);return;}if(term)term.courses.push(o);};
+  for(const c of rows){const line=c.join(' ');
+    if(/TRANSFER CREDIT/i.test(line)){sec='tr';term=null;continue;}
+    if(/^INSTITUTION CREDIT/i.test(line)){sec='in';continue;}
+    if(/COURSE\(?S\)? IN PROGRESS/i.test(line)){sec='ip';continue;}
+    if(/^TRANSCRIPT TOTALS/i.test(line)){sec='tot';continue;}
+    if(c.includes('Program')&&c.includes('Major')&&!R.program){ph=true;continue;}
+    if(ph){ph=false;R.program=c[0]||'';R.major=c[c.length-1]||'';continue;}
+    if(sec==='tot'&&/^Overall/i.test(c[0])){const n=c.filter(x=>NUM.test(x));if(n.length)R.gpa=+n[n.length-1];continue;}
+    const tm=line.match(/^Term:?\s*(Fall|Spring|Summer)\s+(\d{4})/i);if(tm){term={s:tm[1][0].toUpperCase()+tm[1].slice(1).toLowerCase(),y:+tm[2],ip:sec==='ip',courses:[]};R.terms.push(term);if(sec==='tr')sec='in';pend=null;continue;}
+    let i=0,code='';if(/^[A-Z]{2,4}$/.test(c[0])&&/^\d{3}[A-Z]?$/.test(c[1]||'')){code=c[0]+' '+c[1];i=2;}else{const m=(c[0]||'').match(/^([A-Z]{2,4})\s?(\d{3}[A-Z]?)$/);if(m){code=m[1]+' '+m[2];i=1;}}
+    if(!code){/* wrapped title: the grade and hours come on the next line */
+      if(pend&&/\d+\.\d{3}/.test(line)){const r=pend;pend=null;finish(r,c);}
+      else if(pend&&!c.some(x=>NUM.test(x)))pend.t+=' '+line;
+      continue;}
+    if(sec!=='tr'&&sec!=='in'&&sec!=='ip')continue;
+    const rest=c.slice(i).filter(x=>!/^(UG|GR|UGRD)$/.test(x));const r={c:code,t:''};
+    if(!/\d+\.\d{3}/.test(rest.join(' '))){r.t=rest.join(' ');pend=r;continue;}
+    finish(r,rest);}
+  /* the row's tail is: [grade] credit-hours [quality-points] [repeat flag]; cells can arrive merged, so read the joined text */
+  function finish(r,cells){const str=cells.join(' ').replace(/\s+/g,' ').trim();
+    const m=sec==='ip'?str.match(/^(.*?)\s*(\d+\.\d{2,3})$/):str.match(/^(.*?)\s*(?:\b(A\+?|A-|B[+-]?|C[+-]?|D[+-]?|F|W|WF|WP|P|NP|TR|CR|NC)\s+)?(\d+\.\d{3})(?:\s+(\d+\.\d{2,3}))?(?:\s+[EIA])?$/);
+    if(!m)return;r.t=(r.t+' '+m[1]).trim();if(sec==='ip'){r.cr=+m[2];r.g=null;}else{r.g=m[2]||null;r.cr=+m[3];}add(r);}
+  R.terms=R.terms.filter(t=>t.courses.length);return R;}
+function trFromAI(j){const R={terms:[],transfer:[],program:String(j.program||''),major:String(j.major||''),gpa:j.cgpa!=null&&!isNaN(+j.cgpa)?+j.cgpa:null};
+  const C=c=>({c:normC(c.code),t:String(c.title||''),cr:+c.credits||0,g:c.grade?String(c.grade).toUpperCase().trim():null});
+  for(const c of j.transfer||[]){const o=C(c);if(REALC.test(o.c))R.transfer.push(o);}
+  for(const t of j.terms||[]){const s=(String(t.term||'').match(/Fall|Spring|Summer/i)||[''])[0];const y=+t.year||+(String(t.term||'').match(/20\d\d/)||[0])[0];if(!s||!y)continue;
+    R.terms.push({s:s[0].toUpperCase()+s.slice(1).toLowerCase(),y,ip:!!t.inProgress,courses:(t.courses||[]).map(C).filter(o=>REALC.test(o.c))});}
+  R.terms=R.terms.filter(t=>t.courses.length);return R;}
+function findProgFor(R){const ys=catYears();const first=R.terms[0];if(!first)return null;const sy=first.s==='Fall'?first.y:first.y-1;
+  const want=`${sy}–${sy+1}`,year=ys.includes(want)?want:sy<+ys[0].slice(0,4)?ys[0]:ys[ys.length-1];
+  const key=s=>String(s||'').toLowerCase().replace(/^(bs|ba|b\.s\.|b\.a\.|bachelor of (science|arts))\s+(in\s+)?/,'').replace(/[^a-z ]/g,' ').replace(/\s+/g,' ').trim();
+  const mj=key(R.major)||key(R.program);if(!mj)return null;const ps=progsFor(year);
+  const hit=ps.filter(x=>key(x.name)===mj||key(x.name).includes(mj)||mj.includes(key(x.name)));
+  const pr=hit.find(x=>!x.sub)||hit[0];return pr?{year,pr,start:{s:'Fall',y:sy}}:null;}
+async function importTranscript(f){const st=$('#ptstatus');const say=(t,err)=>{if(st){st.className='hint'+(err?' err':'');st.textContent=t;}};say('Reading '+f.name+'…');
+  try{const inp=await readFile(f);let R=null,how='';
+    /* the built-in reader handles the AUS layout on your device; anything else goes to the AI reader */
+    const rows=inp.items&&inp.items.length?pdfRows(inp.items):textRows(inp.text||'');const L=trFromRows(rows);
+    if(L.terms.length&&L.terms.reduce((s,t)=>s+t.courses.length,0)>=3){R=L;how='built-in';}
+    else{const j=await askCal(inp,f.name,t=>say(t),'transcript');if(j&&!j.basic)R=trFromAI(j);how='AI';}
+    if(!R||!R.terms.length)throw new Error('No semesters were found in that file.');
+    await loadCatalog().catch(()=>{});applyTranscript(R,f.name,how);}
+  catch(err){say((err&&err.message)||'Couldn’t read that transcript.',true);}}
+function applyTranscript(R,name,how){const snap=JSON.stringify(S),p=PL(),db=courseDB();
+  if(!curProg()||!p.terms.length){const g=findProgFor(R);if(!g){$('#ptstatus').className='hint err';$('#ptstatus').textContent=`Choose your program first${R.program?' ('+R.program+')':''}, then import the transcript again.`;openProg();return;}
+    p.year=g.year;p.prog=g.pr.id;p.start=g.start;p.terms=planFromProg(g.pr,false);}
+  else{const f=R.terms[0];p.start={s:'Fall',y:f.s==='Fall'?f.y:f.y-1};}
+  /* undo an earlier import first, so importing twice doesn't duplicate anything */
+  for(const t of p.terms)for(const x of t.items.slice()){if(!x.imp)continue;if(x.imp==='add'){t.items=t.items.filter(i=>i!==x);continue;}
+    delete x.st;delete x.g;delete x.reg;if(x.impPick){delete x.pick;delete x.pt;delete x.impPick;}if(x.home){const h=findTerm(x.home);if(h&&h!==t){t.items=t.items.filter(i=>i!==x);h.items.push(x);}}delete x.imp;delete x.home;}
+  planMigrate();const sy=p.start.y,nk=ckey(nowTerm()),el=new Set(progElectives(curProg()).flatMap(g=>g.c)),mp=majorPrefixes(curProg());
+  const colFor=(s,y)=>{let t=pTerms().find(t=>!isX(t)&&t.s===s&&termCal(t).y===y);if(t)return t;const yi=s==='Fall'?y-sy+1:y-sy;if(yi<1)return pTerms().find(t=>!isX(t));
+    t={id:rid(),y:yi,s,items:[]};p.terms.push(t);if(s!=='Summer')for(const s2 of['Fall','Spring'])if(!p.terms.some(u=>u.y===yi&&u.s===s2))p.terms.push({id:rid(),y:yi,s:s2,items:[]});return t;};
+  const claimed=new Set(),seen=new Set();let n=0,terms=0;
+  const fits=(x,code)=>{const sc=slotCats(x);if(sc.length)return gerCatsOf(code).some(k=>sc.includes(k));const ph=String(x.c).toUpperCase();
+    if(/^(MJE|CNE|CNR)/.test(ph))return el.has(code)||(mp.has(code.split(' ')[0])&&+code.split(' ')[1].slice(0,3)>=300);return false;};
+  const find=code=>{const all=pTerms().flatMap(t=>t.items).filter(i=>!claimed.has(i));
+    let x=all.find(i=>!i.st&&(normC(i.pick||'')===code||codesOfX({c:i.c}).includes(code)));if(x)return{x};
+    if(seen.has(code))return null;
+    const sl=all.filter(i=>!i.pick&&!i.st&&fits(i,code)).sort((a,b)=>(slotCats(a).length||9)-(slotCats(b).length||9));if(sl[0])return{x:sl[0],slot:1};
+    const fr=all.find(i=>!i.pick&&!i.st&&/^FRE/i.test(String(i.c)));return fr?{x:fr,slot:1}:null;};
+  const place=(o,col,st)=>{if(/^W[FP]?$/.test(o.g||''))return;const code=o.c;let f=find(code),x;
+    if(f){x=f.x;if(f.slot){x.pick=code;x.pt=o.t||db[code]?.t||'';x.impPick=1;}else if(/\bor\b/i.test(x.c))x.pick=code;x.imp='match';const from=termOfItem(x.id);if(from!==col){x.home=from.id;from.items=from.items.filter(i=>i!==x);col.items.push(x);}}
+    else{x={id:rid(),c:code,t:db[code]?.t||o.t||'',cr:o.cr||+db[code]?.c||3,imp:'add'};col.items.push(x);}
+    claimed.add(x);seen.add(code);x.st=st;if(st==='reg'){delete x.st;x.reg=1;}if(o.g&&(st==='done'||st==='fail'))x.g=o.g;if(o.cr)x.cr=o.cr;else if(st==='fail'&&!x.cr)x.cr=+db[code]?.c||3;n++;};
+  for(const o of R.transfer)place(o,xferTerm(),'tr');
+  for(const t of R.terms.slice().sort((a,b)=>ckey(a)-ckey(b))){const k=ckey(t),col=colFor(t.s,t.y);terms++;
+    for(const o of t.courses){const g=o.g;let st=k<nk?'done':k===nk?'now':'reg';
+      if(g&&k<=nk){st=/^(F|NP|U|NC|WF)$/.test(g)?'fail':/^(I|IP)$/.test(g)?'now':'done';}else if(k<nk&&!g)st='done';
+      place(o,col,st);}}
+  for(const x of xferTerm().items)x.st='tr';
+  const rp=replanRemaining();p.tx={file:name,at:Date.now(),gpa:R.gpa,how};save();renderPlanner2();
+  const M=planModel(),gp=M.gpa.gpa,nu=nextUp(M);
+  $('#ptstatus').className='hint';$('#ptstatus').textContent=`Imported ${terms} semester${terms===1?'':'s'}, ${n} course${n===1?'':'s'}${R.transfer.length?` and ${R.transfer.length} transfer credit${R.transfer.length===1?'':'s'}`:''} (${how} reader).${gp!=null?` CGPA ${g2(gp)}${R.gpa!=null&&Math.abs(R.gpa-+g2(gp))>.011?` (your transcript says ${R.gpa.toFixed(2)})`:''}.`:''}`;
+  toast(`Transcript imported${nu&&nu.rec?' · next up: '+termName(nu.rec):''}`,snap);}
+
+/* ---------- course browser ---------- */
+let CB={tab:'all',chip:'',q:'',open:'',subj:''},DESC=null,descLoading=null;
+function loadDesc(){if(DESC)return Promise.resolve(DESC);if(descLoading)return descLoading;descLoading=fetch('catalog-desc.json').then(r=>{if(!r.ok)throw 0;return r.json();}).then(j=>DESC=j).catch(()=>{descLoading=null;DESC=null;});return descLoading;}
+function progElectives(pr){if(!pr)return[];const cp=customProg();if(cp&&cp.electives&&cp.electives.length)return cp.electives.map(g=>({g:g.group,r:'',c:g.courses.map(c=>c.c)}));return pr.el||[];}
+function progRequired(pr){const out=[];if(!pr)return out;for(const t of pr.terms)for(const i of t.i){const cs=String(i.c).split(/\s+or\s+/i).map(normC).filter(c=>REALC.test(c));for(const c of cs)if(!out.some(o=>o.c===c))out.push({c,y:t.y,s:t.s,alt:cs.length>1?cs:null});}return out;}
+let RQF=null,RQK='';function reqForIx(db){const k=PL().year||'';if(RQF&&RQK===k)return RQF;RQF={};RQK=k;for(const[c,d]of Object.entries(db))for(const s of[d.p,d.pc])for(const m of String(s||'').matchAll(/\b([A-Z]{2,4}) ?(\d{3}[A-Z]?)\b/g)){const r=m[1]+' '+m[2];(RQF[r]=RQF[r]||new Set()).add(c);}return RQF;}
+function fillsOf(code,pr,req,els){const out=[];const r=req.find(o=>o.c===code);if(r)out.push(`Required · Year ${r.y} ${r.s}${r.alt?` (one of ${r.alt.join(' or ')})`:''}`);
+  for(const g of els)if(g.c.includes(code))out.push(`${g.g}${g.r?' · '+g.r.toLowerCase():''}`);
+  const gc=gerCatsOf(code).filter(k=>CORECATS.includes(k));if(gc.length)out.push('GER · '+gc.map(gerName).join(', '));
+  if(!out.length&&pr)out.push('Free elective');return out;}
+function planStatusOf(code){const out=[];for(const t of pTerms())for(const x of t.items)if(codesOfX(x).includes(code)){const l={done:'Completed',now:'In progress',fail:'Failed',tr:'Transfer credit'}[x.st]||(x.reg?'Registered':'Planned');out.push({l,t,x});}return out;}
+function addTargets(code,pr){const p=PL(),els=progElectives(pr),mp=majorPrefixes(pr),gc=gerCatsOf(code),opts=[],nk=ckey(nowTerm());
+  for(const t of pTerms())for(const x of t.items){if(x.pick||x.st)continue;const sc=slotCats(x),ph=String(x.c).toUpperCase();let ok=false;
+    if(sc.length)ok=gc.some(k=>sc.includes(k));else if(/^(MJE|CNE|CNR)/.test(ph))ok=els.some(g=>g.c.includes(code))||(mp.has(code.split(' ')[0])&&+code.split(' ')[1].slice(0,3)>=300);else if(/^FRE/.test(ph))ok=true;
+    const l=`Fill ${sc.length?'GER: '+(x.t||''):x.t||x.c} · ${termName(t)}`;if(ok&&!opts.some(o=>o.l===l))opts.push({v:'slot:'+x.id,l});}
+  for(const t of pTerms())if(isX(t)||ckey(termCal(t))>=nk)opts.push({v:'term:'+t.id,l:isX(t)?'Add as a transfer credit':`Add to ${termName(t)}`});
+  return opts;}
+function cbAdd(code,target){const db=courseDB(),d=db[code],snap=JSON.stringify(S),[k,id]=target.split(':');
+  if(k==='slot'){const x=findItem(id);if(!x)return;fillSlot(x,code);}
+  else{const t=findTerm(id);if(!t)return;const x={id:rid(),c:code,t:d?d.t:(gerIx()[code]?.t||''),cr:d&&!isNaN(+d.c)&&d.c!==''?+d.c:(gerIx()[code]?.cr||3),pin:1};if(isX(t))x.st='tr';t.items.push(x);}
+  save();renderPlanner2();toast(`${code} added to your plan`,snap);}
+function fillSlot(x,c){const d=courseDB()[c];x.pick=c;x.pt=d?d.t:(gerIx()[c]?.t||'');if(d&&d.c!==''&&!isNaN(+d.c))x.cr=+d.c;else if(gerIx()[c])x.cr=gerIx()[c].cr;
+  if(slotCats(x).length)for(const t of PL().terms)for(const i of t.items.slice())if(i!==x&&!i.pick&&normC(i.c)===c){if(i.st){x.st=i.st;if(i.g)x.g=i.g;const from=termOfItem(x.id);if(from!==t){from.items=from.items.filter(z=>z!==x);t.items.splice(t.items.indexOf(i),0,x);}}t.items=t.items.filter(z=>z!==i);}}
+function renderBrowser(){const el=$('#pbrowse');if(!el)return;if(!CAT){el.innerHTML='';return;}
+  const db=courseDB(),pr=curProg(),req=progRequired(pr),els=progElectives(pr),mp=majorPrefixes(pr),p=PL(),q=CB.q.trim().toLowerCase();
+  const TABS=[['all','All courses'],['major','Major courses'],['elec','Major electives'],['ger','GERs']];
+  const row=c=>({c,t:db[c]?.t||gerIx()[c]?.t||'',cr:db[c]?db[c].c:(gerIx()[c]?String(gerIx()[c].cr):'')});
+  let groups=[],chips=[];
+  if(CB.tab==='all'){const subs=[...new Set(Object.keys(db).map(c=>c.split(' ')[0]))].sort();chips=[['','All subjects'],...subs.map(s=>[s,s])];
+    const pick=CB.chip&&subs.includes(CB.chip)?CB.chip:'';const by={};for(const c of Object.keys(db).sort())if(!pick||c.startsWith(pick+' '))(by[c.split(' ')[0]]=by[c.split(' ')[0]]||[]).push(row(c));
+    groups=Object.entries(by).map(([k,v])=>({h:k,rows:v}));}
+  else if(CB.tab==='major'){if(pr){const by={};for(const r of req){const cat=pcatOf({c:r.c},mp);(by[cat]=by[cat]||[]).push(row(r.c));}
+      const order=['major','core','math','sci','wri','other'];chips=[['','All types'],...order.filter(k=>by[k]).map(k=>[k,PCATN[k]])];groups=order.filter(k=>by[k]&&(!CB.chip||CB.chip===k)).map(k=>({h:PCATN[k],rows:by[k]}));}}
+  else if(CB.tab==='elec'){if(pr){let gs=els.map(g=>({h:g.g+(g.r?` · ${g.r.toLowerCase()}`:''),rows:g.c.map(row)}));
+      if(!gs.length){const rc=new Set(req.map(r=>r.c));gs=[{h:'Upper-level courses in your major’s subjects (the catalog list for this program wasn’t available, so check with your advisor)',rows:Object.keys(db).filter(c=>mp.has(c.split(' ')[0])&&+c.split(' ')[1].slice(0,3)>=300&&!rc.has(c)).sort().map(row)}];}
+      chips=gs.length>1?[['','All groups'],...gs.map((g,i)=>[String(i),g.h.split(' · ')[0]])]:[];groups=gs.filter((g,i)=>!CB.chip||CB.chip===String(i));}}
+  else{const off=new Set((p.ger&&p.ger.list||[]).map(g=>g.code));chips=[['','All'],...CORECATS.map(k=>[k,gerName(k)]),...(off.size?[['off','Offered '+(p.ger.term||'next semester')]]:[])];
+    const ks=CB.chip&&CB.chip!=='off'?[CB.chip]:CORECATS;groups=ks.map(k=>({h:gerName(k),rows:GERLIST[k].map(([c])=>row(c)).filter(r=>CB.chip!=='off'||off.has(r.c))}));}
+  if(q)groups=groups.map(g=>({...g,rows:g.rows.filter(r=>r.c.toLowerCase().includes(q)||r.c.replace(' ','').toLowerCase().includes(q.replace(/\s/g,''))||(r.t||'').toLowerCase().includes(q))})).filter(g=>g.rows.length);
+  const total=groups.reduce((s,g)=>s+g.rows.length,0),many=CB.tab==='all'&&!q&&!CB.chip;
+  const rowH=r=>{const ps=planStatusOf(r.c),o=CB.open===r.c;return`<li class="cbrow${o?' open':''}"><button class="cbhead" data-cbopen="${esc(r.c)}" aria-expanded="${o}"><b>${esc(r.c)}</b><span>${esc(r.t||'')}</span><small>${r.cr!==''&&r.cr!=null?esc(r.cr)+' cr':''}</small>${ps.length?`<em class="cbst ${ps[ps.length-1].x.st||'plan'}">${esc(ps[ps.length-1].l)}${ps[ps.length-1].x.g?' · '+esc(ps[ps.length-1].x.g):''}</em>`:''}</button>${o?cbDetail(r.c,pr,req,els,db):''}</li>`;};
+  const body=!pr&&(CB.tab==='major'||CB.tab==='elec')?'<p class="hint">Choose your program first.</p>':!total?'<p class="hint">No courses match.</p>':
+    groups.map(g=>many?`<details class="cbg"${g.rows.some(r=>r.c===CB.open)?' open':''}><summary>${esc(g.h)} <span class="hcount">${g.rows.length}</span></summary><ul class="cblist">${g.rows.map(rowH).join('')}</ul></details>`:`<section class="cbg"><h4>${esc(g.h)} <span class="hcount">${g.rows.length}</span></h4><ul class="cblist">${g.rows.slice(0,q?120:400).map(rowH).join('')}</ul></section>`).join('');
+  el.innerHTML=`<div class="cbtop"><h2>Course browser</h2><input id="cbq" type="search" placeholder="Search by code or title" value="${esc(CB.q)}" aria-label="Search courses"></div>
+    <div class="cbtabs" role="tablist">${TABS.map(([k,l])=>`<button role="tab" aria-selected="${CB.tab===k}" class="${CB.tab===k?'on':''}" data-cbtab="${k}">${l}</button>`).join('')}</div>
+    ${chips.length?(CB.tab==='all'?`<label class="cbsub">Subject <select id="cbsubj">${chips.map(([k,l])=>`<option value="${esc(k)}"${CB.chip===k?' selected':''}>${esc(l)}</option>`).join('')}</select></label>`:`<div class="cbchips">${chips.map(([k,l])=>`<button class="chip${CB.chip===k?' on':''}" data-cbchip="${esc(k)}">${esc(l)}</button>`).join('')}</div>`):''}
+    <p class="hint cbcount">${total} course${total===1?'':'s'}</p><div class="cbbody">${body}</div>`;}
+function cbDetail(code,pr,req,els,db){const d=db[code],ds=DESC&&DESC[code],ps=planStatusOf(code),rf=[...(reqForIx(db)[code]||[])].sort(),gi=gerIx()[code];
+  if(!DESC)loadDesc().then(()=>{if(CB.open===code)renderBrowser();});
+  const opts=addTargets(code,pr);
+  return`<div class="cbdet">${ds?`<p>${esc(ds.d)}</p>`:DESC?'':'<p class="hint">Loading the catalog description…</p>'}${!ds&&DESC&&!d&&gi?`<p class="hint">Special-topics course${gi.n?` · ${esc(gi.n)}`:''}. It isn’t described in the catalog.</p>`:''}
+    <dl class="cbdl">
+      <div><dt>Credits</dt><dd>${d&&d.c!==''?esc(d.c):gi?gi.cr:'–'}${ds&&ds.h?` (${esc(ds.h[0])} lecture, ${esc(ds.h[1])} lab hours)`:''}</dd></div>
+      <div><dt>Prerequisites</dt><dd>${d&&d.p?esc(d.p):'None listed'}</dd></div>
+      ${d&&d.pc?`<div><dt>Prerequisite or same term</dt><dd>${esc(d.pc)}</dd></div>`:''}${d&&d.co?`<div><dt>Corequisite</dt><dd>${esc(d.co)}</dd></div>`:''}
+      ${d&&d.r?`<div><dt>Repeatable</dt><dd>May be taken more than once for credit</dd></div>`:''}
+      <div><dt>Fills</dt><dd>${fillsOf(code,pr,req,els).map(f=>`<span class="cbf">${esc(f)}</span>`).join('')}</dd></div>
+      ${gi&&gi.n?`<div><dt>GER perspective</dt><dd>${esc(gi.n)}</dd></div>`:''}
+      ${rf.length?`<div><dt>Needed for</dt><dd>${rf.slice(0,24).map(c=>`<button class="lnkbtn" data-cbgo="${esc(c)}">${esc(c)}</button>`).join(', ')}${rf.length>24?` and ${rf.length-24} more`:''}</dd></div>`:''}
+      ${ps.length?`<div><dt>In your plan</dt><dd>${ps.map(s=>`${esc(s.l)}${s.x.g?' ('+esc(s.x.g)+')':''} · ${esc(termName(s.t))}`).join('; ')}</dd></div>`:''}
+    </dl>${opts.length?`<div class="srow cbadd"><select data-cbto="${esc(code)}" aria-label="Where to add ${esc(code)}">${opts.map(o=>`<option value="${esc(o.v)}">${esc(o.l)}</option>`).join('')}</select><button class="btn sm" data-cbadd="${esc(code)}">Add to plan</button></div>`:PL().terms.length?'':'<p class="hint">Choose your program to add courses to a plan.</p>'}</div>`;}
 
 /* ---------- render ---------- */
-const PB={W:150,H:70,G:14,GUT:48,HEAD:56,TOP:30};let pZoom=null,pLines=true,pHover=null;
+const PB={W:150,H:70,G:22,GUT:48,HEAD:56,TOP:30};let pZoom=null,pLines=true,pHover=null;
 function renderPlanner2(){const v=$('#v-plan');if(!v)return;const p=PL();
   if(!CAT&&!catErr){$('#pmain').innerHTML='<div class="ttempty"><p class="hint">Loading the course catalogs…</p></div>';loadCatalog().then(renderPlanner2,renderPlanner2);return;}
   const pr=curProg();
   if(!pr||!p.terms.length){$('#phead').innerHTML=`<div class="semline"><b>Degree planner</b><span class="wk">Plan your degree</span></div>`;renderPSide(null);
-    $('#pmain').innerHTML=`<div class="ttempty"><h2>Pick your program</h2><p>Choose your catalog year, college and major. Your program’s recommended sequence is laid out as a flowchart, with arrows for prerequisites. Then mark what you’ve done, move courses around, and add summers or extra years.</p>${catErr?`<p class="note warn">The built-in catalogs couldn’t be loaded (${esc(catErr)}). Make sure <b>catalog-data.json</b> is uploaded next to index.html, or upload your major’s catalog pages instead.</p>`:''}<div class="gempty"><button class="btn" data-pact="prog">Choose program</button><button class="btn ghost" data-pact="ai">Upload catalog pages</button></div></div>`;return;}
-  if(gerAutoFill())save();
+    renderBrowser();$('#pmain').innerHTML=`<div class="ttempty"><h2>Pick your program</h2><p>Choose your catalog year, college and major. Your program’s recommended sequence is laid out as a flowchart, with arrows for prerequisites. Then mark what you’ve done, move courses around, and add summers or extra years.</p>${catErr?`<p class="note warn">The built-in catalogs couldn’t be loaded (${esc(catErr)}). Make sure <b>catalog-data.json</b> is uploaded next to index.html, or upload your major’s catalog pages instead.</p>`:''}<div class="gempty"><button class="btn" data-pact="prog">Choose program</button><button class="btn ghost" data-pact="trans">Import transcript</button><button class="btn ghost" data-pact="ai">Upload catalog pages</button></div><p class="hint" id="ptstatus"></p></div>`;return;}
+  if(planMigrate()|gerAutoFill())save();
   const M=planModel(),T=planTotals(M);
-  $('#phead').innerHTML=`<div class="semline"><b>${esc(p.year)} catalog</b><span class="wk">${esc(progLabel(pr))}</span><span class="hint">${fmt(T.done+T.ex)} of ${fmt(T.req||T.total)} credits done${T.now?` · ${fmt(T.now)} in progress`:''}${Object.keys(M.warn).length?` · <b class="perr">${Object.keys(M.warn).length} prerequisite issue${Object.keys(M.warn).length===1?'':'s'}</b>`:''}</span></div>`;
-  renderPSide(M,T);drawChart(M);}
+  $('#phead').innerHTML=`<div class="semline"><b>${esc(p.year)} catalog</b><span class="wk">${esc(progLabel(pr))}</span><span class="hint">${fmt(T.done+T.ex)} of ${fmt(T.req||T.total)} credits done${T.now?` · ${fmt(T.now)} in progress`:''}${M.gpa.gpa!=null?` · CGPA <b>${g2(M.gpa.gpa)}</b>`:''}${Object.keys(M.warn).length?` · <b class="perr">${Object.keys(M.warn).length} prerequisite issue${Object.keys(M.warn).length===1?'':'s'}</b>`:''}</span></div>`;
+  renderPSide(M,T);drawChart(M);renderBrowser();}
 function boxHTML(x,M,col){const db=M.db,code=x.pick||x.c,cs=String(code).split(/\s+or\s+/i),d=cs.length===1?db[normC(code)]:null,cat=pcatOf(x,M.mp);
   const isPh=!REALC.test(normC(x.c))&&!/\bor\b/i.test(x.c);const title=x.pick?(db[normC(x.pick)]?.t||x.pt||''):(d?d.t:x.t)||'';
   const tag=isPh?(x.pick?`<em class="pph">${esc(x.c==='GER-Core'?'GER':x.c)}</em>`:''):'';
   const w=M.warn[x.id];
-  return`<div class="pbox pc-${cat}${x.st?' st-'+x.st:''}${w?' warn':''}${isPh&&!x.pick?' ph':''}" data-pid="${x.id}" tabindex="0" role="button" aria-label="${esc(code+' '+title)}">
-    <b class="pcode">${esc(code)}${tag}</b><span class="ptitle">${esc(isPh&&!x.pick?(x.t||PCATN[cat]):title)}</span><span class="pcr">${x.cr!=null?fmt(x.cr)+' cr':''}${x.g?` · ${esc(x.g)}`:''}</span>
-    ${x.st==='done'?'<i class="pst" title="Completed">✓</i>':x.st==='exempt'?'<i class="pst ex" title="Exempt">E</i>':x.st==='now'?'<i class="pst now" title="In progress">●</i>':''}${w?`<i class="pwarn" title="${esc('Missing: '+w.join('; '))}">!</i>`:''}</div>`;}
-function drawChart(M){const cols=M.cols,{W,H,G,GUT,HEAD,TOP}=PB;const maxR=Math.max(4,...cols.map(c=>c.items.length+1));
-  const CW=cols.length*(W+GUT)+GUT/2,CH=TOP+HEAD+maxR*(H+G)+10;
-  const colX=k=>GUT/2+k*(W+GUT),rowY=r=>TOP+HEAD+r*(H+G);
-  let html='',yrs={};cols.forEach((t,k)=>{(yrs[t.y]=yrs[t.y]||[]).push(k);});
-  for(const y in yrs){const ks=yrs[y],x0=colX(ks[0]),x1=colX(ks[ks.length-1])+W,cr=ks.reduce((a,k)=>a+cols[k].items.reduce((s,x)=>s+(+x.cr||0),0),0);
-    html+=`<div class="pyr" style="left:${x0}px;width:${x1-x0}px"><b>${['First','Second','Third','Fourth','Fifth','Sixth','Seventh'][y-1]||'Year '+y} Year</b><span>${fmt(cr)} credit hours</span></div>`;}
-  cols.forEach((t,k)=>{const rel=termRel(t),cr=t.items.reduce((s,x)=>s+(+x.cr||0),0);
-    html+=`<div class="pcol${rel==='now'?' now':''}${t.s==='Summer'?' sum':''}" data-tid="${t.id}" style="left:${colX(k)-6}px;top:${TOP}px;width:${W+12}px;height:${CH-TOP}px"></div>
-      <div class="pch${rel==='now'?' now':''}" style="left:${colX(k)}px;top:${TOP+6}px;width:${W}px"><b>${esc(termName(t))}</b><span>${fmt(cr)} cr${rel==='now'?' · now':''}</span><button class="pcm" data-pact="colmenu" data-tid="${t.id}" aria-label="Options for ${esc(termName(t))}">⋯</button></div>`;
+  const sp=M.sup.has(x.id);
+  return`<div class="pbox pc-${cat}${x.st?' st-'+x.st:''}${x.reg?' st-reg':''}${sp?' sup':''}${w?' warn':''}${isPh&&!x.pick?' ph':''}" data-pid="${x.id}" tabindex="0" role="button" aria-label="${esc(code+' '+title)}">
+    <b class="pcode">${esc(code)}${tag}</b><span class="ptitle">${esc(isPh&&!x.pick?(x.t||PCATN[cat]):title)}</span><span class="pcr">${x.cr!=null?fmt(x.cr)+' cr':''}${x.g?` · ${esc(x.g)}`:''}${x.reg?' · registered':''}${sp?' · retaken':''}</span>
+    ${x.st==='done'?'<i class="pst" title="Completed">✓</i>':x.st==='tr'?'<i class="pst ex" title="Transfer credit">TR</i>':x.st==='fail'?'<i class="pst fl" title="Failed, credits not counted">F</i>':x.st==='now'?'<i class="pst now" title="In progress">●</i>':''}${w?`<i class="pwarn" title="${esc('Missing: '+w.join('; '))}">!</i>`:''}</div>`;}
+function drawChart(M){const cols=M.cols,{W,H,HEAD,TOP}=PB,STEP=6;const maxR=Math.max(4,...cols.map(c=>c.items.length+1));
+  /* every line gets its own vertical lane in a gutter, so no two lines run on top of each other */
+  const lanes={},need=(g,key,sort)=>{const L=lanes[g]=lanes[g]||[];let o=L.find(l=>l.key===key);if(!o){o={key,sort};L.push(o);}return o;};
+  const E=M.edges.map(e=>{const a=e.a,b=e.b,o={a,b,kind:e.kind};
+    if(a.k===b.k){o.type='same';o.L1=need(a.k,'c'+a.x.id,[1,a.r]);}
+    else{o.type=b.k===a.k+1?'adj':'long';o.L1=need(a.k,'o'+a.x.id,[0,-a.r]);if(o.type==='long')o.L2=need(b.k-1,'i'+b.x.id+'|'+a.x.id,[2,-b.r]);}return o;});
+  const gw=cols.map((_,g)=>{const L=lanes[g]||[];L.sort((p,q)=>p.sort[0]-q.sort[0]||p.sort[1]-q.sort[1]);L.forEach((l,i)=>l.i=i);return Math.max(44,26+L.length*STEP);});
+  const xs=[];let acc=24;cols.forEach((_,k)=>{xs[k]=acc;acc+=W+gw[k];});const CW=acc;
+  const colX=k=>xs[k],laneX=(g,l)=>xs[g]+W+(gw[g]-((lanes[g]||[]).length-1)*STEP)/2+l.i*STEP;
+  /* lines that cross several terms run in the gap above their target's row, each on its own track; the gap grows to fit */
+  const chan={};let maxT=0;for(const o of E)if(o.type==='long'){const l1=laneX(o.a.k,o.L1),l2=laneX(o.b.k-1,o.L2),lo=Math.min(l1,l2),hi=Math.max(l1,l2),C=chan[o.b.r]=chan[o.b.r]||[];let t=0;while(C.some(c=>c.t===t&&c.lo<hi+3&&lo<c.hi+3))t++;C.push({t,lo,hi});o.tk=t;maxT=Math.max(maxT,t);}
+  const G=PB.G=Math.max(22,14+maxT*4),rowY=r=>TOP+HEAD+r*(H+G),toff=t=>(t%2?-1:1)*Math.ceil(t/2)*4;
+  const CH=TOP+HEAD+maxR*(H+G)+10;let html='',yrs={};cols.forEach((t,k)=>{(yrs[t.y]=yrs[t.y]||[]).push(k);});
+  const colCr=t=>t.items.reduce((s,x)=>s+(x.st==='fail'||M.sup.has(x.id)?0:+x.cr||0),0);
+  for(const y in yrs){const ks=yrs[y],x0=colX(ks[0]),x1=colX(ks[ks.length-1])+W,cr=ks.reduce((a,k)=>a+colCr(cols[k]),0);
+    html+=`<div class="pyr" style="left:${x0}px;width:${x1-x0}px"><b>${+y===0?'Transfer':(['First','Second','Third','Fourth','Fifth','Sixth','Seventh'][y-1]||'Year '+y)+' Year'}</b><span>${fmt(cr)} cr</span></div>`;}
+  cols.forEach((t,k)=>{const rel=termRel(t),xf=isX(t),cr=colCr(t),tg=M.gpa.by[t.id];
+    html+=`<div class="pcol${rel==='now'?' now':''}${t.s==='Summer'?' sum':''}${xf?' xf':''}" data-tid="${t.id}" style="left:${colX(k)-6}px;top:${TOP}px;width:${W+12}px;height:${CH-TOP}px"></div>
+      <div class="pch${rel==='now'?' now':''}" style="left:${colX(k)}px;top:${TOP+6}px;width:${W}px"><b>${esc(termName(t))}</b><span>${fmt(cr)} cr${rel==='now'?' · now':''}${tg?` · GPA ${g2(tg.gpa)}`:''}${!xf&&t.items.some(x=>x.reg)?' · registered':''}</span>${xf?'':`<button class="pcm" data-pact="colmenu" data-tid="${t.id}" aria-label="Options for ${esc(termName(t))}">⋯</button>`}</div>`;
     t.items.forEach((x,r)=>{html+=`<div class="pslot" style="left:${colX(k)}px;top:${rowY(r)}px;width:${W}px;height:${H}px">${boxHTML(x,M,t)}</div>`;});
-    html+=`<button class="padd" data-pact="add" data-tid="${t.id}" style="left:${colX(k)}px;top:${rowY(t.items.length)}px;width:${W}px">+ Add</button>`;});
-  /* arrows: right edge → lane in the gutter → (row channel) → lane before the target → target's left edge */
-  const lanes={},lane=(g,key)=>{const L=lanes[g]=lanes[g]||[];let i=L.indexOf(key);if(i<0){L.push(key);i=L.length-1;}return i;};
-  const laneX=(g,i)=>colX(g)+W+10+((i*7)%(GUT-18));
-  let paths='';for(const e of M.edges){const a=e.a,b=e.b,sx=colX(a.k)+W,sy=rowY(a.r)+H/2,tx=colX(b.k),ty=rowY(b.r)+H/2;let d;
-    if(a.k===b.k){const lx=colX(a.k)+W+8+((lane(a.k,'c'+a.x.id)*6)%(GUT-16));d=`M${sx} ${sy}H${lx}V${ty}H${sx+2}`;}
-    else{const l1=laneX(a.k,lane(a.k,a.x.id));
-      if(b.k===a.k+1)d=`M${sx} ${sy}H${l1}V${ty}H${tx-2}`;
-      else{const ch=rowY(b.r)-G/2,l2=colX(b.k)-GUT+10+((lane(b.k-1,'in'+b.x.id)*7)%(GUT-18));d=`M${sx} ${sy}H${l1}V${ch}H${l2}V${ty}H${tx-2}`;}}
-    paths+=`<path d="${roundPath(d)}" class="pe ${e.kind}" data-a="${a.x.id}" data-b="${b.x.id}"/>`;}
+    html+=`<button class="padd" data-pact="add" data-tid="${t.id}" style="left:${colX(k)}px;top:${rowY(t.items.length)}px;width:${W}px">+ ${xf?'Transfer credit':'Add'}</button>`;});
+  /* exits leave from the upper half of a box, entries arrive spread over the lower half */
+  /* each kind of connection has its own height band on a box edge: same-term entries 5–17, same-term exits 22, exits 28, entries 37–62 */
+  const exY=(r,same)=>rowY(r)+(same?22:H/2-7);
+  const ins={},rins={};for(const o of E){if(o.type==='same')(rins[o.b.x.id]=rins[o.b.x.id]||[]).push(o);else(ins[o.b.x.id]=ins[o.b.x.id]||[]).push(o);}
+  for(const o of E)if(o.type==='long')o.cy=rowY(o.b.r)-G/2+toff(o.tk);
+  const spread=(L,r,key,top,room)=>{L.sort((p,q)=>key(p)-key(q));const n=L.length,st=n>1?Math.min(7,room/(n-1)):0;L.forEach((o,i)=>o.ey=rowY(r)+top+i*st);};
+  for(const id in ins){const L=ins[id];spread(L,L[0].b.r,o=>o.type==='long'?o.cy:exY(o.a.r),H/2+2,H/2-10);}
+  for(const id in rins){const L=rins[id];spread(L,L[0].b.r,o=>exY(o.a.r,true),5,12);}
+  let paths='';for(const o of E){const a=o.a,b=o.b,sx=colX(a.k)+W,tx=colX(b.k);let d;
+    if(o.type==='same'){const lx=laneX(a.k,o.L1);d=`M${sx} ${exY(a.r,true)}H${lx}V${o.ey}H${sx+2}`;}
+    else{const sy=exY(a.r),l1=laneX(a.k,o.L1);
+      if(o.type==='adj')d=`M${sx} ${sy}H${l1}V${o.ey}H${tx-2}`;
+      else{const l2=laneX(b.k-1,o.L2);d=`M${sx} ${sy}H${l1}V${o.cy}H${l2}V${o.ey}H${tx-2}`;}}
+    paths+=`<path d="${roundPath(d)}" class="pe ${o.kind}" data-a="${a.x.id}" data-b="${b.x.id}"/>`;}
   const svg=`<svg class="plines${pLines?'':' off'}" width="${CW}" height="${CH}" viewBox="0 0 ${CW} ${CH}"><defs><marker id="parr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L8 4L0 8z" class="pah"/></marker><marker id="parr2" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L8 4L0 8z" class="pah hi"/></marker></defs>${paths}</svg>`;
   const wrap=$('#pmain');const avail=wrap.clientWidth||900,z=pZoom==null?Math.max(.8,Math.min(1,avail/CW)):pZoom;
   wrap.innerHTML=`<div class="pzoom"><button class="ib" data-pact="zout" aria-label="Zoom out">−</button><button class="lnkbtn" data-pact="zfit">${Math.round(z*100)}%</button><button class="ib" data-pact="zin" aria-label="Zoom in">+</button><label class="ptog"><input type="checkbox" data-pact="lines" ${pLines?'checked':''}> Prerequisite lines</label></div>
@@ -2379,29 +2643,33 @@ function roundPath(d){/* turn an orthogonal M/H/V path into one with small round
   for(let i=1;i<P.length-1;i++){const[a,b,c]=[P[i-1],P[i],P[i+1]],r=Math.min(6,Math.hypot(b[0]-a[0],b[1]-a[1])/2,Math.hypot(c[0]-b[0],c[1]-b[1])/2);
     const u=[Math.sign(b[0]-a[0]),Math.sign(b[1]-a[1])],v=[Math.sign(c[0]-b[0]),Math.sign(c[1]-b[1])];s+=`L${b[0]-u[0]*r} ${b[1]-u[1]*r}Q${b[0]} ${b[1]} ${b[0]+v[0]*r} ${b[1]+v[1]*r}`;}
   const L=P[P.length-1];return s+`L${L[0]} ${L[1]}`;}
-function renderPSide(M,T){const p=PL(),pr=M&&M.pr,g=p.ger;let h='';
+function renderPSide(M,T){const p=PL(),pr=M&&M.pr,g=p.ger;let h=`<button class="pstog" data-pact="pside" title="${pSideColl?'Keep the panel open':'Hide the panel; hover the edge to see it'}">${pSideColl?'Pin panel':'Collapse panel'}</button>`;
   if(pr){const req=T.req||T.total,pc=v=>Math.min(100,req?v/req*100:0);
-    h+=`<section class="pscard"><h3>Progress</h3><div class="pbar2"><i class="d" style="width:${pc(T.done+T.ex)}%"></i><i class="n" style="width:${pc(T.now)}%"></i><i class="p" style="width:${pc(T.plan)}%"></i></div>
-      <dl class="pstats"><div><dt>Completed</dt><dd>${fmt(T.done+T.ex)} cr</dd></div><div><dt>In progress</dt><dd>${fmt(T.now)} cr</dd></div><div><dt>Planned</dt><dd>${fmt(T.plan)} cr</dd></div><div><dt>Program</dt><dd>${fmt(req)} cr</dd></div></dl>
+    h+=`<section class="pscard"><h3>Progress</h3>${M.gpa.gpa!=null?`<div class="pcg"><span>CGPA</span><b>${g2(M.gpa.gpa)}</b><small>${fmt(M.gpa.h)} GPA credit hours${p.tx&&p.tx.gpa!=null&&Math.abs(p.tx.gpa-+g2(M.gpa.gpa))>.011?` · transcript says ${(+p.tx.gpa).toFixed(2)}`:''}</small></div>`:''}<div class="pbar2"><i class="d" style="width:${pc(T.done+T.ex)}%"></i><i class="n" style="width:${pc(T.now)}%"></i><i class="p" style="width:${pc(T.plan)}%"></i></div>
+      <dl class="pstats"><div><dt>Completed</dt><dd>${fmt(T.done+T.ex)} cr</dd></div><div><dt>In progress</dt><dd>${fmt(T.now)} cr</dd></div><div><dt>Planned</dt><dd>${fmt(T.plan)} cr</dd></div><div><dt>Program</dt><dd>${fmt(req)} cr</dd></div>${T.ex?`<div><dt>Transfer</dt><dd>${fmt(T.ex)} cr</dd></div>`:''}${T.fail?`<div><dt>Failed (not counted)</dt><dd>${fmt(T.fail)} cr</dd></div>`:''}</dl>
       ${T.total<req?`<p class="hint perr">Your plan is ${fmt(req-T.total)} credits short of the program.</p>`:''}
-      <button class="btn ghost sm" data-pact="fromsem">Fill in from my semesters</button><button class="btn ghost sm" data-pact="pastdone">Mark past terms completed</button></section>`;
+      <button class="btn sm" data-pact="trans">Import transcript</button><p class="hint" id="ptstatus">${p.tx?`Last import: ${esc(p.tx.file||'transcript')}`:'Your semesters, grades and transfer credits are filled in, and the rest of your courses are laid out from next term.'}</p>
+      <button class="btn ghost sm" data-pact="replan">Re-plan remaining courses</button><button class="btn ghost sm" data-pact="fromsem">Fill in from my semesters</button><button class="btn ghost sm" data-pact="pastdone">Mark past terms completed</button></section>`;
+    const nu=nextUp(M);if(nu&&(nu.rec||nu.reg)){const li=t=>t.items.filter(x=>!x.st||x.reg).map(x=>`<li><button class="lnkbtn" data-pact="goto" data-pid="${x.id}">${esc(x.pick||x.c)}</button> <span>${esc(x.pick?(M.db[normC(x.pick)]?.t||x.pt||''):(M.db[normC(x.c)]?.t||x.t||''))}</span></li>`).join('');
+      h+=`<section class="pscard"><h3>Recommended next</h3>${nu.reg&&nu.reg!==nu.rec?`<p class="hint">${esc(termName(nu.reg))}: you’re registered for ${nu.reg.items.filter(x=>x.reg).length} course${nu.reg.items.filter(x=>x.reg).length===1?'':'s'}.</p>`:''}${nu.rec?`<p class="pnext"><b>${esc(termName(nu.rec))}</b> · ${fmt(nu.rec.items.reduce((s,x)=>s+(+x.cr||0),0))} cr</p><ul class="pnl">${li(nu.rec)}</ul><p class="hint">Picked from your program’s sequence, with every prerequisite done by then.</p>`:''}</section>`;}
     const wl=Object.entries(M.warn);if(wl.length)h+=`<section class="pscard"><h3>Prerequisite issues <span class="hcount">${wl.length}</span></h3><ul class="pwl">${wl.slice(0,8).map(([id,m])=>{const x=findItem(id);return`<li><button class="lnkbtn" data-pact="goto" data-pid="${id}">${esc(x?x.pick||x.c:'')}</button> needs ${esc(m.join('; '))}</li>`;}).join('')}</ul></section>`;}
   h+=`<section class="pscard"><h3>GER courses offered</h3>${g&&g.list&&g.list.length?`<p class="hint">${esc(g.term||'Next semester')}: ${g.list.length} courses. They’re suggested first when you fill a GER slot.</p><div class="srow"><button class="btn ghost sm" data-pact="ger">Upload new list</button><button class="lnkbtn" data-pact="gerclear">Remove</button></div>`:`<p class="hint">Upload the list of GER courses offered next semester (PDF, Word, photo or text). Each GER slot then suggests courses that fit it.</p><button class="btn ghost sm" data-pact="ger">Upload GER list</button>`}<p class="hint" id="pgstatus"></p></section>`;
   if(pr){const cats=new Set();for(const t of M.cols)for(const x of t.items)cats.add(pcatOf(x,M.mp));
-    h+=`<section class="pscard"><h3>Key</h3><ul class="pkey">${[...cats].map(c=>`<li><i class="pc-${c}"></i>${PCATN[c]}</li>`).join('')}<li><svg width="34" height="8"><path d="M1 4H30" class="pe p"/></svg>Prerequisite</li><li><svg width="34" height="8"><path d="M1 4H30" class="pe c"/></svg>Prerequisite or same term</li><li><i class="kst">✓</i>Completed</li><li><i class="kst ex">E</i>Exempt</li><li><i class="kst warn">!</i>Missing a prerequisite</li></ul></section>`;}
-  $('#pside').innerHTML=h;}
+    h+=`<section class="pscard"><h3>Key</h3><ul class="pkey">${[...cats].map(c=>`<li><i class="pc-${c}"></i>${PCATN[c]}</li>`).join('')}<li><svg width="34" height="8"><path d="M1 4H30" class="pe p"/></svg>Prerequisite</li><li><svg width="34" height="8"><path d="M1 4H30" class="pe c"/></svg>Prerequisite or same term</li><li><i class="kst">✓</i>Completed</li><li><i class="kst ex">TR</i>Transfer credit</li><li><i class="kst fl">F</i>Failed (credits not counted)</li><li><i class="kst warn">!</i>Missing a prerequisite</li></ul></section>`;}
+  $('#pside').innerHTML=h;$('.pwrap').classList.toggle('pcoll',pSideColl);}
 function findItem(id){for(const t of PL().terms)for(const x of t.items)if(x.id===id)return x;return null;}
 const findTerm=id=>PL().terms.find(t=>t.id===id);
 const termOfItem=id=>PL().terms.find(t=>t.items.some(x=>x.id===id));
 
 /* ---------- build from a program ---------- */
-function planFromProg(pr,keep){const old={};if(keep)for(const t of PL().terms)for(const x of t.items){if(x.st||x.g)old[normC(x.pick||x.c)]={st:x.st,g:x.g,ecr:x.ecr};}
+function planFromProg(pr,keep){const old={};if(keep)for(const t of PL().terms)for(const x of t.items){if((x.st||x.g)&&x.st!=='tr'&&x.st!=='fail')old[normC(x.pick||x.c)]={st:x.st,g:x.g};}
   const ys=Math.max(4,...pr.terms.map(t=>t.y)),terms=[];
   for(let y=1;y<=ys;y++)for(const s of SEAS){const src=pr.terms.filter(t=>t.y===y&&t.s===s);if(s==='Summer'&&!src.length)continue;
-    terms.push({id:rid(),y,s,items:src.flatMap(t=>t.i).map(x=>{const o={id:rid(),c:x.c,t:x.t,cr:x.cr==null?null:+x.cr};const k=old[normC(x.c)];if(k)Object.assign(o,k);return o;})});}
+    terms.push({id:rid(),y,s,items:src.flatMap(t=>t.i).map((x,r)=>{const o={id:rid(),c:x.c,t:x.t,cr:x.cr==null?null:+x.cr,o:((y-1)*3+SEAS.indexOf(s))*100+r};const k=old[normC(x.c)];if(k)Object.assign(o,k);return o;})});}
   return terms;}
 function setProgram(year,id,start){const p=PL(),snap=JSON.stringify(S),pr=(id.startsWith('ai-')?p.custom.find(c=>c.id===id):progsFor(year).find(x=>x.id===id));if(!pr)return;
-  const keep=p.terms.length>0;p.year=year;p.prog=id;p.start=start;p.terms=planFromProg(pr,keep);save();renderPlanner2();toast(progLabel(pr)+' loaded',snap);}
+  const keep=p.terms.length>0,xt=p.terms.find(isX);p.year=year;p.prog=id;p.start=start;p.terms=planFromProg(pr,keep);
+  if(xt){p.terms.unshift(xt);const xc=new Set(xt.items.flatMap(codesOfX));for(const t of p.terms)if(t!==xt)t.items=t.items.filter(i=>!codesOfX(i).some(c=>xc.has(c)));}planMigrate();save();renderPlanner2();toast(progLabel(pr)+' loaded',snap);}
 
 /* ---------- program picker ---------- */
 function openProg(){if(!CAT&&!catErr){loadCatalog().then(openProg,openProg);return;}const p=PL(),ys=catYears();
@@ -2416,7 +2684,7 @@ function ppInfo(){const pr=progsFor($('#ppyear').value).find(x=>x.id===$('#ppmaj
 $('#ppyear').onchange=()=>ppFill(PL().prog);$('#ppcol').onchange=()=>ppFill();$('#ppmaj').onchange=ppInfo;
 $('#ppcancel').onclick=()=>$('#ppmodal').classList.remove('on');$('#ppmodal').addEventListener('click',e=>{if(e.target===$('#ppmodal'))$('#ppmodal').classList.remove('on');});
 $('#ppdo').onclick=async()=>{const y=$('#ppyear').value,id=$('#ppmaj').value,st={s:$('#ppss').value,y:+$('#ppsy').value||new Date().getFullYear()};if(!id)return;
-  const p=PL();if(p.terms.length&&(p.prog!==id||p.year!==y)&&!await confirmBox('Switch program?','Your flowchart is rebuilt from the new program. Courses you marked completed or exempt keep their status wherever the same course appears.','Switch'))return;
+  const p=PL();if(p.terms.length&&(p.prog!==id||p.year!==y)&&!await confirmBox('Switch program?','Your flowchart is rebuilt from the new program. Courses you marked completed keep their status wherever the same course appears, and your transfer credits stay.','Switch'))return;
   $('#ppmodal').classList.remove('on');if(p.prog===id&&p.year===y&&p.terms.length){const snap=JSON.stringify(S);p.start=st;save();renderPlanner2();toast('Start term updated',snap);return;}setProgram(y,id,st);};
 $('#ppai').onclick=()=>$('#ppfile').click();
 $('#ppfile').onchange=async e=>{const f=[...e.target.files];e.target.value='';if(!f.length)return;await importProgramPages(f);};
@@ -2497,24 +2765,35 @@ function openPItem(id){const x=findItem(id);if(!x)return;PI=id;const M=planModel
   if(M.warn[id])h+=`<p class="note warn">Not met by ${esc(termName(t))}: ${esc(M.warn[id].join('; '))}</p>`;
   if(need.length)h+=`<p class="pireq"><b>Needed for</b> ${esc([...new Set(need)].join(', '))}</p>`;
   if(isPh||alts.length)h+=`<div class="pipick"><b>${alts.length?'Which one?':x.pick?'Chosen course':'Choose a course for this slot'}</b>${alts.length?`<div class="srow">${alts.map(a=>`<button class="btn ${x.pick===a?'':'ghost '}sm" data-pick="${a}">${esc(a)}</button>`).join('')}</div>`:`<div class="srow"><button class="btn ghost sm" data-pact="pick">${x.pick?'Change course':'Choose course'}</button>${x.pick?'<button class="lnkbtn" data-pick="">Clear</button>':''}</div>`}</div>`;
-  h+=`<div class="pist"><b>Status</b><div class="seg">${[['','Planned'],['now','In progress'],['done','Completed'],['exempt','Exempt']].map(([v,l])=>`<button class="${(x.st||'')===v?'on':''}" data-st="${v}">${l}</button>`).join('')}</div></div>`;
-  if(x.st==='done')h+=`<label class="pirow">Grade <select id="pigrade"><option value="">—</option>${['A','A-','B+','B','B-','C+','C','C-','D+','D','F','P','W'].map(g=>`<option${x.g===g?' selected':''}>${g}</option>`).join('')}</select></label>`;
-  if(x.st==='exempt')h+=`<label class="pirow chk"><input type="checkbox" id="piecr" ${x.ecr?'checked':''}> Counts toward my credits (transfer or AP credit)</label><p class="hint">Exempt courses count as done for prerequisites.</p>`;
+  h+=`<div class="pist"><b>Status</b><div class="seg seg5">${[['','Planned'],['now','In progress'],['done','Completed'],['fail','Failed'],['tr','Transfer']].map(([v,l])=>`<button class="${(x.st||'')===v?'on':''}" data-st="${v}">${l}</button>`).join('')}</div></div>`;
+  if(x.st==='done'||x.st==='fail')h+=`<label class="pirow">Grade <select id="pigrade"><option value="">—</option>${(x.st==='fail'?['F','NP','WF']:['A','A-','B+','B','B-','C+','C','C-','D+','D','P']).map(g=>`<option${x.g===g?' selected':''}>${g}</option>`).join('')}</select></label>`;
+  if(x.st==='tr')h+=`<p class="hint">Transfer, AP and exam credits sit in their own column. They count toward your credits and as done for prerequisites, but not toward your GPA.</p>`;
+  if(x.st==='fail'){const again=pTerms().some(t=>t.items.some(i=>i!==x&&codesOfX(i).some(c=>codesOfX(x).includes(c))));h+=`<p class="hint">A failed attempt stays on your plan but its credits don’t count. The grade counts in your CGPA until you retake the course, then only the newer grade counts.</p>${again?'':'<button class="btn ghost sm" data-pact="retake">Plan a retake next term</button>'}`;}
+  if(M.sup.has(x.id))h+=`<p class="hint">You took this course again later, so this attempt doesn’t count toward your credits or CGPA.</p>`;
+  if(!isX(t))h+=`<label class="pirow chk"><input type="checkbox" id="pireg" ${x.reg?'checked':''}> I’m registered for this course</label>`;
   h+=`<label class="pirow">Term <select id="pimove">${pTerms().map(o=>`<option value="${o.id}"${o.id===t.id?' selected':''}>${esc(termName(o))}</option>`).join('')}</select></label>`;
   h+=`<label class="pirow">Credits <input id="picr" type="number" min="0" max="12" step="1" value="${x.cr??''}"></label>`;
   $('#pibody').innerHTML=h;$('#pimodal').classList.add('on');}
 $('#piclose').onclick=()=>{$('#pimodal').classList.remove('on');PI=null;};$('#pimodal').addEventListener('click',e=>{if(e.target===$('#pimodal')){$('#pimodal').classList.remove('on');PI=null;}});
 $('#pidel').onclick=async()=>{const x=findItem(PI);if(!x)return;const snap=JSON.stringify(S),t=termOfItem(PI);t.items=t.items.filter(i=>i.id!==PI);$('#pimodal').classList.remove('on');save();renderPlanner2();toast(`${x.pick||x.c} removed from your plan`,snap);};
-$('#pibody').addEventListener('click',e=>{const x=findItem(PI);if(!x)return;const b=e.target.closest('[data-st],[data-pick],[data-pact]');if(!b)return;
-  if(b.dataset.st!=null){x.st=b.dataset.st||undefined;if(!x.st)delete x.st;if(x.st!=='done')delete x.g;if(x.st!=='exempt')delete x.ecr;save();renderPlanner2();openPItem(PI);}
+$('#pibody').addEventListener('click',e=>{const x=findItem(PI);if(!x)return;const b=e.target.closest('[data-st],[data-pick],[data-pact]');if(!b)return;e.stopPropagation();
+  if(b.dataset.st!=null){const v=b.dataset.st,t=termOfItem(PI);
+    if(v==='tr'){if(!isX(t))moveItem(PI,xferTerm().id);}
+    else{if(isX(t)){const h=findTerm(x.home)&&!isX(findTerm(x.home))?findTerm(x.home):pTerms().find(u=>!isX(u)&&ckey(termCal(u))>=ckey(nowTerm()))||pTerms().find(u=>!isX(u));moveItem(PI,h.id);}
+      if(v)x.st=v;else delete x.st;if(v==='fail'&&!/^(F|NP|WF)$/.test(x.g||''))x.g='F';else if(v!=='done'&&v!=='fail')delete x.g;else if(v==='done'&&/^(F|NP|WF)$/.test(x.g||''))delete x.g;if(v)delete x.reg;}
+    save();renderPlanner2();openPItem(PI);}
+  else if(b.dataset.pact==='retake'){const t=termOfItem(PI),ts=pTerms().filter(u=>!isX(u)),i=ts.indexOf(t),nt=ts.slice(i+1).find(u=>u.s!=='Summer')||ts[i+1];const snap=JSON.stringify(S);
+    const tgt=nt||(()=>{const y=Math.max(...PL().terms.map(u=>u.y))+1,n={id:rid(),y,s:'Fall',items:[]};PL().terms.push(n,{id:rid(),y,s:'Spring',items:[]});return n;})();
+    tgt.items.push({id:rid(),c:x.pick||x.c,t:x.pick?(courseDB()[normC(x.pick)]?.t||x.pt||''):x.t,cr:x.cr,pin:1});save();renderPlanner2();openPItem(PI);toast(`Retake added to ${termName(tgt)}`,snap);}
   else if(b.dataset.pick!=null){if(b.dataset.pick)x.pick=b.dataset.pick;else{delete x.pick;delete x.pt;if(slotCats(x).length){delete x.st;delete x.g;delete x.ecr;}}const d=courseDB()[x.pick];if(d&&+d.c>=0&&x.pick&&!/\bor\b/.test(x.c))x.cr=+d.c||x.cr;save();renderPlanner2();openPItem(PI);}
   else if(b.dataset.pact==='pick')openAdd(termOfItem(PI).id,PI);});
 $('#pibody').addEventListener('change',e=>{const x=findItem(PI);if(!x)return;
   if(e.target.id==='pigrade'){x.g=e.target.value||undefined;if(!x.g)delete x.g;save();renderPlanner2();}
-  if(e.target.id==='piecr'){x.ecr=e.target.checked||undefined;if(!x.ecr)delete x.ecr;save();renderPlanner2();}
+  if(e.target.id==='pireg'){if(e.target.checked){x.reg=1;delete x.st;}else delete x.reg;save();renderPlanner2();openPItem(PI);}
   if(e.target.id==='picr'){const v=e.target.value.trim();x.cr=v===''?null:Math.max(0,+v||0);save();renderPlanner2();}
   if(e.target.id==='pimove'){moveItem(PI,e.target.value);openPItem(PI);}});
 function moveItem(id,tid,idx){const from=termOfItem(id),to=findTerm(tid);if(!from||!to)return;const x=from.items.find(i=>i.id===id);from.items=from.items.filter(i=>i.id!==id);
+  if(isX(to)&&!isX(from)){x.home=from.id;x.st='tr';delete x.g;delete x.reg;}else if(isX(from)&&!isX(to)&&x.st==='tr')delete x.st;if(!isX(to))x.pin=1;
   if(idx==null||idx>to.items.length)to.items.push(x);else to.items.splice(idx,0,x);save();renderPlanner2();}
 
 /* ---------- add / choose course ---------- */
@@ -2542,9 +2821,8 @@ $('#paq').addEventListener('input',paList);
 $('#pacancel').onclick=()=>$('#pamodal').classList.remove('on');$('#pamodal').addEventListener('click',e=>{if(e.target===$('#pamodal'))$('#pamodal').classList.remove('on');});
 $('#pamodal').addEventListener('click',e=>{const b=e.target.closest('[data-addc],[data-addph]');if(!b||!PA)return;const db=courseDB(),snap=JSON.stringify(S);
   if(b.dataset.addc){const c=b.dataset.addc,d=db[c];
-    if(PA.forId){const x=findItem(PA.forId);x.pick=c;x.pt=d?d.t:(gerIx()[c]?.t||'');if(d&&d.c!==''&&!isNaN(+d.c))x.cr=+d.c;else if(gerIx()[c])x.cr=gerIx()[c].cr;
-      if(slotCats(x).length)for(const t of PL().terms)for(const i of t.items.slice())if(i!==x&&!i.pick&&normC(i.c)===c){if(i.st){x.st=i.st;if(i.g)x.g=i.g;if(i.ecr)x.ecr=i.ecr;const from=termOfItem(x.id);if(from!==t){from.items=from.items.filter(z=>z!==x);t.items.splice(t.items.indexOf(i),0,x);}}t.items=t.items.filter(z=>z!==i);}$('#pamodal').classList.remove('on');save();renderPlanner2();if($('#pimodal').classList.contains('on'))openPItem(PA.forId);toast(`${c} chosen`,snap);return;}
-    findTerm(PA.tid).items.push({id:rid(),c,t:d?d.t:'',cr:d&&!isNaN(+d.c)?+d.c:3});}
+    if(PA.forId){const x=findItem(PA.forId);fillSlot(x,c);$('#pamodal').classList.remove('on');save();renderPlanner2();if($('#pimodal').classList.contains('on'))openPItem(PA.forId);toast(`${c} chosen`,snap);return;}
+    {const t=findTerm(PA.tid),o={id:rid(),c,t:d?d.t:'',cr:d&&!isNaN(+d.c)?+d.c:3,pin:1};if(isX(t))o.st='tr';t.items.push(o);}}
   else{const[c,t]=b.dataset.addph.split('|');findTerm(PA.tid).items.push({id:rid(),c,t,cr:3});}
   $('#pamodal').classList.remove('on');save();renderPlanner2();toast('Added',snap);});
 
@@ -2555,7 +2833,7 @@ function openColMenu(tid,btn){document.querySelectorAll('.pmenu').forEach(m=>m.r
   const off=e=>{if(!e.target.closest('.pmenu')){m.remove();document.removeEventListener('pointerdown',off,true);}};setTimeout(()=>document.addEventListener('pointerdown',off,true),0);
   m.addEventListener('click',async e=>{const a=e.target.closest('[data-cm]');if(!a)return;m.remove();const snap=JSON.stringify(S);
     if(a.dataset.cm==='del'){if(t.items.length&&!await confirmBox(`Remove ${termName(t)}?`,'Its courses are removed from your plan too.','Remove'))return;PL().terms=PL().terms.filter(x=>x!==t);}
-    else for(const x of t.items){if(a.dataset.cm==='plan'){delete x.st;delete x.g;}else if(x.st!=='exempt')x.st=a.dataset.cm;}
+    else for(const x of t.items){if(x.st==='tr'||x.st==='fail')continue;if(a.dataset.cm==='plan'){delete x.st;delete x.g;}else{x.st=a.dataset.cm;delete x.reg;}}
     save();renderPlanner2();toast(`${termName(t)} updated`,snap);});}
 function addTerm(kind){const p=PL(),snap=JSON.stringify(S),ys=Math.max(4,...p.terms.map(t=>t.y));
   if(kind==='year'){const y=ys+1;p.terms.push({id:rid(),y,s:'Fall',items:[]},{id:rid(),y,s:'Spring',items:[]});save();renderPlanner2();toast(`Year ${y} added`,snap);return;}
@@ -2590,12 +2868,27 @@ function markPastDone(){const snap=JSON.stringify(S);let n=0;for(const t of pTer
 $('#v-plan').addEventListener('click',e=>{const b=e.target.closest('[data-pact]');if(!b)return;const a=b.dataset.pact;
   if(a==='prog')openProg();else if(a==='ai'){openProg();}else if(a==='add')openAdd(b.dataset.tid);else if(a==='colmenu')openColMenu(b.dataset.tid,b);
   else if(a==='addterm')openAddTerm(b);else if(a==='fromsem')fillFromSemesters();else if(a==='pastdone')markPastDone();
+  else if(a==='trans')$('#ptfile').click();else if(a==='replan'){const snap=JSON.stringify(S),r=replanRemaining();save();renderPlanner2();toast(r.moved?'Remaining courses laid out from next term':'Nothing left to plan',r.moved?snap:null);}
+  else if(a==='pside'){pSideColl=!pSideColl;try{localStorage.setItem('cm-pside',pSideColl?'1':'');}catch{}document.querySelector('.pside')?.classList.remove('peek');renderPlanner2();}
   else if(a==='ger')$('#pgfile').click();else if(a==='gerclear'){const snap=JSON.stringify(S);delete PL().ger;save();renderPlanner2();toast('GER list removed',snap);}
   else if(a==='zin'||a==='zout'){const cur=pZoom??(parseFloat((document.querySelector('.pcanvas')||{}).style?.transform?.match(/[\d.]+/)?.[0])||1);pZoom=Math.max(.4,Math.min(1.6,cur+(a==='zin'?.1:-.1)));renderPlanner2();}
   else if(a==='zfit'){pZoom=null;renderPlanner2();}
   else if(a==='goto'){const el=document.querySelector(`.pbox[data-pid="${b.dataset.pid}"]`);if(el){el.scrollIntoView({block:'center',inline:'center',behavior:'smooth'});el.classList.add('flash');setTimeout(()=>el.classList.remove('flash'),1400);}}});
 $('#v-plan').addEventListener('change',e=>{if(e.target.dataset.pact==='lines'){pLines=e.target.checked;document.querySelector('.plines')?.classList.toggle('off',!pLines);}});
 $('#pgfile').onchange=e=>{const f=e.target.files[0];e.target.value='';if(f)importGER(f);};
+$('#ptfile').onchange=e=>{const f=e.target.files[0];e.target.value='';if(f)importTranscript(f);};
+let pSideColl=false;try{pSideColl=localStorage.getItem('cm-pside')==='1';}catch{}
+/* collapsed panel: hover (or tap the edge on touch screens) to see it */
+$('#v-plan').addEventListener('click',e=>{const ps=e.target.closest('.pwrap.pcoll .pside');if(ps&&!ps.classList.contains('peek')&&!e.target.closest('button,a,input,select,label')){ps.classList.add('peek');return;}if(!ps)document.querySelector('.pside.peek')?.classList.remove('peek');},true);
+/* course browser */
+$('#pbrowse').addEventListener('click',e=>{const b=e.target.closest('[data-cbtab],[data-cbchip],[data-cbopen],[data-cbadd],[data-cbgo]');if(!b)return;
+  if(b.dataset.cbtab){CB.tab=b.dataset.cbtab;CB.chip='';CB.open='';renderBrowser();}
+  else if(b.dataset.cbchip!=null){CB.chip=b.dataset.cbchip;renderBrowser();}
+  else if(b.dataset.cbopen){CB.open=CB.open===b.dataset.cbopen?'':b.dataset.cbopen;renderBrowser();}
+  else if(b.dataset.cbgo){CB.tab='all';CB.chip='';CB.q=b.dataset.cbgo;CB.open=b.dataset.cbgo;renderBrowser();$('#cbq')?.scrollIntoView({block:'nearest'});}
+  else if(b.dataset.cbadd){const sel=document.querySelector(`[data-cbto="${CSS.escape(b.dataset.cbadd)}"]`);if(sel)cbAdd(b.dataset.cbadd,sel.value);}});
+let cbT=null;$('#pbrowse').addEventListener('input',e=>{if(e.target.id!=='cbq')return;CB.q=e.target.value;clearTimeout(cbT);cbT=setTimeout(()=>{const pos=e.target.selectionStart;renderBrowser();const i=$('#cbq');i.focus();try{i.setSelectionRange(pos,pos);}catch{}},150);});
+$('#pbrowse').addEventListener('change',e=>{if(e.target.id==='cbsubj'){CB.chip=e.target.value;renderBrowser();}});
 /* hover: light up a course's chain */
 $('#v-plan').addEventListener('pointerover',e=>{if(e.pointerType!=='mouse')return;const b=e.target.closest('.pbox');const id=b&&b.dataset.pid;if(id===pHover)return;pHover=id;const svg=document.querySelector('.plines');if(!svg)return;
   svg.classList.toggle('focus',!!id);for(const p of svg.querySelectorAll('.pe'))p.classList.toggle('hi',!!id&&(p.dataset.a===id||p.dataset.b===id));
@@ -2620,6 +2913,8 @@ const pdEnd=e=>{if(!PD||(e&&e.pointerId!==PD.pid))return;clearTimeout(PD.timer);
 addEventListener('pointerup',pdEnd);addEventListener('pointercancel',e=>{if(PD&&PD.on){PD.ghost.remove();PD.b.classList.remove('pdrag');}PD=null;});
 $('#v-plan').addEventListener('keydown',e=>{const b=e.target.closest('.pbox');if(b&&(e.key==='Enter'||e.key===' ')){e.preventDefault();openPItem(b.dataset.pid);}});
 
+/* used by the self-check page */
+window.cmPlan={pTerms,termName,planModel,planTotals,g2,findItem,replanRemaining,trFromRows,pdfRows,priorGPA,nextUp,renderPlanner2};
 /* used by the self-check page: lint every built-in program's flowchart */
 window.cmPlanCheck=async()=>{await loadCatalog();const keep=S.plan,out=[];for(const y of catYears())for(const pr of progsFor(y)){S.plan={year:y,prog:pr.id,start:{s:'Fall',y:2025},terms:planFromProg(pr,false),custom:[]};const M=planModel();
   const w=Object.entries(M.warn).map(([id,m])=>findItem(id).c+': '+m.join('; '));const nodb=[];for(const t of M.cols)for(const x of t.items){const c=normC(x.c);if(REALC.test(c)&&!M.db[c]&&!gerIx()[c])nodb.push(c);}
