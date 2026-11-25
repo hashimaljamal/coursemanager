@@ -423,7 +423,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 .plines.focus .pe{opacity:.12}.plines.focus .pe.hi{opacity:1;stroke:var(--red);stroke-width:2.2;marker-end:url(#parr2)}
 .pcanvas:has(.plines.focus) .pbox:not(.rel):not(:hover){opacity:.45}
 .pghost{position:fixed;z-index:80;pointer-events:none;box-shadow:0 12px 30px rgb(0 0 0/.25);transform:rotate(-2deg);opacity:.95}.pbox.pdrag{opacity:.25}
-.ppcard{max-width:560px}.ppgrid{margin:10px 0 0}.ppcard label{display:grid;gap:4px;font-size:13px;font-weight:700}.ppfull{margin-top:10px}.ppcard select,.ppcard input{width:100%}
+.ppcard{max-width:560px}.pph4{margin:14px 0 2px;font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--mute)}.ppgrid{margin:10px 0 0}.ppcard label{display:grid;gap:4px;font-size:13px;font-weight:700}.ppfull{margin-top:10px}.ppcard select,.ppcard input{width:100%}
 .ppai{margin:12px 0 0;border:1px solid var(--line);border-radius:10px;padding:8px 12px}.ppai summary{cursor:pointer;font-weight:700;font-size:13.5px}.ppsteps{margin:8px 0;padding-left:18px;font-size:13px;line-height:1.45;color:var(--mute)}.ppsteps b{color:var(--ink)}
 .picard{max-width:520px}.pisub{margin:-4px 0 10px;color:var(--mute);font-size:13.5px}.pireq{font-size:13px;margin:0 0 6px}.pireq b{display:block;font-size:11.5px;color:var(--mute);text-transform:uppercase;letter-spacing:.03em}
 .pipick,.pist{margin:12px 0 6px}.pipick>b,.pist>b{display:block;font-size:12px;color:var(--mute);margin-bottom:6px}.seg{display:flex;border:1.5px solid var(--ink);border-radius:10px;overflow:hidden}.seg button{flex:1;border:0;background:none;font:inherit;font-size:13px;font-weight:700;padding:8px 4px;cursor:pointer;color:var(--ink)}.seg button+button{border-left:1px solid var(--line)}.seg button.on{background:var(--ink);color:var(--bg)}
@@ -455,7 +455,10 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 .cbrow{border:1px solid var(--line);border-radius:10px;min-width:0}.cbrow.open{grid-column:1/-1;border-color:var(--ink)}
 .cbhead{width:100%;display:grid;grid-template-columns:auto 1fr auto;gap:2px 10px;align-items:baseline;text-align:left;border:0;background:none;font:inherit;color:inherit;padding:8px 10px;cursor:pointer;border-radius:10px}.cbhead:hover{background:var(--soft)}
 .cbhead b{font-size:13.5px;white-space:nowrap}.cbhead span{font-size:13px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.cbrow.open .cbhead span{white-space:normal}.cbhead small{color:var(--mute);font-size:12px;white-space:nowrap}
-.cbst{grid-column:1/-1;font-style:normal;font-size:11.5px;font-weight:700;color:var(--mute)}.cbst.done,.cbst.tr{color:var(--ink)}.cbst.fail{color:var(--red)}.cbst.now{color:var(--red)}
+.cbmeta{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;margin-top:3px}
+.cblab{display:inline-flex;align-items:center;gap:4px;font-style:normal;font-size:11.5px;font-weight:800;border-radius:6px;padding:2px 7px;border:1.5px solid currentColor;line-height:1.3}.cblab svg{width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linejoin:round;stroke-linecap:round}
+.cblab.k-lab{background:#0f766e;border-color:#0f766e;color:#fff}.cblab.k-sep{background:#ccfbf1;border-color:#0f766e;color:#0f5f58}.cblab.k-inc{background:#e0f2fe;border-color:#0369a1;color:#075985}.cblab.k-none{color:var(--mute);border-color:var(--line);font-weight:700}
+.cbst{font-style:normal;font-size:11.5px;font-weight:700;color:var(--mute)}.cbst.done,.cbst.tr{color:var(--ink)}.cbst.fail{color:var(--red)}.cbst.now{color:var(--red)}
 .cbdet{padding:2px 12px 12px;font-size:13.5px;line-height:1.5}.cbdet>p{margin:4px 0 10px;max-width:80ch}
 .cbdl{display:grid;gap:6px;margin:0 0 10px}.cbdl>div{display:grid;grid-template-columns:150px 1fr;gap:10px}.cbdl dt{font-size:12px;font-weight:700;color:var(--mute)}.cbdl dd{margin:0}
 .cbf{display:inline-block;border:1px solid var(--line);border-radius:6px;padding:1px 7px;margin:0 4px 4px 0;font-size:12px;font-weight:700}
@@ -529,7 +532,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 <div class="shell">
 <header class="top">
   <div class="brand"><h1>Course Manager</h1><div class="brow"><button class="semsw" id="semsw" aria-haspopup="menu" aria-expanded="false"><span id="semswl">Semester</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg></button><button class="acct" id="acct" hidden aria-haspopup="menu"></button></div></div>
-  <nav class="tabs" aria-label="Sections"><a href="#home" id="tab-home">Home</a><a href="#grades" id="tab-grades">Grades</a><a href="#timetable" id="tab-tt">Timetable</a><a href="#tasks" id="tab-tasks">Tasks</a><a href="#planner" id="tab-plan">Planner</a></nav>
+  <nav class="tabs" aria-label="Sections"><a href="#home" id="tab-home">Home</a><a href="#grades" id="tab-grades">Grades</a><a href="#timetable" id="tab-tt">Timetable</a><a href="#tasks" id="tab-tasks">Tasks</a><a href="#plan" id="tab-plan">Plan</a></nav>
   <div class="dacts">
     <button class="btn ghost sm dbtn" id="impbtn" title="Import a backup file"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2v8M4.5 6.5 8 10l3.5-3.5M2.5 11v2.5h11V11"/></svg><span>Import</span></button>
     <button class="btn ghost sm dbtn" id="expbtn" title="Export a backup file"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 10V2M4.5 5.5 8 2l3.5 3.5M2.5 11v2.5h11V11"/></svg><span>Export</span></button>
@@ -653,10 +656,13 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 <input type="file" id="upsylf" multiple hidden accept=".pdf,.docx,.txt,.md,.rtf,.html,.htm,image/*"><input type="file" id="upicsf" hidden accept=".ics,text/calendar"><input type="file" id="upcalf" hidden accept=".ics,text/calendar,.pdf,.docx,.txt,.md,.html,.htm,image/*">
 <div class="mact upact"><button class="lnkbtn" id="upsem">Set semester dates by hand</button><span class="sp"></span><button class="btn ghost" id="upcancel">Cancel</button><button class="btn" id="updo" disabled>Upload</button></div></div></div>
 <div id="ppmodal" class="modal"><div class="card cnf dcard ppcard"><h3>Your program</h3>
+<h4 class="pph4">Catalog</h4>
 <div class="grid2 ppgrid"><label>Catalog year<select id="ppyear"></select></label><label>College<select id="ppcol"></select></label></div>
 <label class="ppfull">Major<select id="ppmaj"></select></label><p class="hint" id="ppinfo"></p>
-<div class="grid2 ppgrid"><label>I started in<select id="ppss"><option>Fall</option><option>Spring</option></select></label><label>Year<input id="ppsy" inputmode="numeric"></label></div>
-<p class="hint">Use the catalog year you entered AUS under: your degree requirements follow that catalog.</p>
+<p class="hint">Your degree requirements follow this catalog. If you switched to a newer catalog, pick that one: the courses you’ve already taken stay where they are.</p>
+<h4 class="pph4">When you started</h4>
+<div class="grid2 ppgrid"><label>First semester<select id="ppss"><option>Fall</option><option>Spring</option></select></label><label>Year<input id="ppsy" inputmode="numeric"></label></div>
+<p class="hint">This only names your semesters, and it doesn’t have to match the catalog year. Importing a transcript sets it for you.</p>
 <details class="ppai"><summary>Not listed, or want it read from your own catalog pages?</summary>
 <ol class="ppsteps"><li>Open your catalog PDF and find your major’s section.</li><li>Save or print to PDF just the pages with your <b>degree requirements</b> and the <b>proposed sequence of study</b> (the year-by-year table). That’s usually 2–4 pages. Screenshots work too.</li><li>Upload them here. The AI reads them and lays your program out as a flowchart. Check it afterwards: you can move, add or change any course.</li></ol>
 <button class="btn ghost sm" id="ppai">Upload catalog pages</button></details>
@@ -845,7 +851,7 @@ function renderGPA(){
 function projCGPA(sm){let pr=null;try{pr=priorGPA(gpaCourses().map(c=>c.code));}catch{}if(!pr)return null;const q=pr.q+(sm.gpa!=null?sm.q:0),h=pr.h+(sm.gpa!=null?sm.cr:0);return{cg:h?q/h:null,prior:pr.gpa,h:pr.h};}
 function gpaNumbers(){
   const sm=semester(),cg=projCGPA(sm);
-  $('#gparesult').innerHTML=`<div class="big">${sm.gpa==null?'<div class="pct none">No grades yet</div>':`<div class="pct">${fmt2(sm.gpa)}</div>`}${cg?`<div class="earned"><b>${g2(cg.cg)}</b><span>projected CGPA</span><span class="esub">now ${g2(cg.prior)} over ${fmt(cg.h)} credits</span></div>`:''}</div><p class="sub-r">${sm.n?`${sm.n} course${sm.n===1?'':'s'}, ${fmt(sm.cr)} credit hours, ${fmt2(sm.q)} quality points. It changes as you enter scores.`:'Enter scores in your courses to see your semester GPA.'}${cg?' Projected CGPA adds this semester to the grades from your earlier semesters in the Planner; a course you’re retaking replaces its old grade.':' Import your transcript in the Planner to see your projected CGPA here too.'}</p>`;
+  $('#gparesult').innerHTML=`<div class="big">${sm.gpa==null?'<div class="pct none">No grades yet</div>':`<div class="pct">${fmt2(sm.gpa)}</div>`}${cg?`<div class="earned"><b>${g2(cg.cg)}</b><span>projected CGPA</span><span class="esub">now ${g2(cg.prior)} over ${fmt(cg.h)} credits</span></div>`:''}</div><p class="sub-r">${sm.n?`${sm.n} course${sm.n===1?'':'s'}, ${fmt(sm.cr)} credit hours, ${fmt2(sm.q)} quality points. It changes as you enter scores.`:'Enter scores in your courses to see your semester GPA.'}${cg?' Projected CGPA adds this semester to the grades from your earlier semesters in Plan; a course you’re retaking replaces its old grade.':' Import your transcript in Plan to see your projected CGPA here too.'}</p>`;
   for(const r of sm.rows){const q=s=>document.querySelector(s);const gl=q(`[data-gl="${r.co.id}"]`);if(!gl)continue;
     gl.textContent=r.L==null?'–':`${r.L} (${fmt(r.p)}%)`;q(`[data-gpt="${r.co.id}"]`).textContent=r.gp==null?'–':fmt2(r.gp);q(`[data-gq="${r.co.id}"]`).textContent=r.inc?fmt2(r.gp*r.c):'–';}
   renderSide();
@@ -1175,7 +1181,7 @@ $('#ssave').onclick=()=>{CFG={provider:$('#sprov').value,key:$('#skey').value.tr
 const SCOPES={grades:{name:'Grades',sub:'Courses, weights, scores, professors and missed-exam make-ups',get:()=>({courses:S.courses,sel:S.sel}),set:d=>{S.courses=Array.isArray(d.courses)?d.courses:[];S.sel=d.sel;}},
   timetable:{name:'Timetable',sub:'Your class schedule, colours, names and display options',get:()=>({tt:S.tt||{}}),set:d=>{S.tt=d.tt||{};}},
   tasks:{name:'Tasks',sub:'Your tasks, categories, semester, weeks off, academic calendar and finals',get:()=>({tasks:S.tasks||[],cats:S.cats||[],tstate:S.tstate||{},sem:S.sem||null,finals:S.finals||null}),set:d=>{S.tasks=d.tasks||[];mergeCats(d.cats);S.tstate=d.tstate||{};S.sem=d.sem||null;if(d.finals)S.finals=d.finals;else delete S.finals;}},
-  planner:{name:'Planner',sub:'Your program, degree flowchart, completed, failed and transfer courses, grades, and GER list (shared by all semesters)',get:()=>({plan:S.plan||null}),set:d=>{if(d.plan)S.plan=d.plan;else delete S.plan;}}};
+  planner:{name:'Plan',sub:'Your program, degree flowchart, completed, failed and transfer courses, grades, and GER list (shared by all semesters)',get:()=>({plan:S.plan||null}),set:d=>{if(d.plan)S.plan=d.plan;else delete S.plan;}}};
 const viewScope=()=>({grades:'grades',tt:'timetable',tasks:'tasks',plan:'planner'})[document.body.dataset.view]||null;
 /* three levels everywhere: this page · this semester · all semesters */
 const curSemName=()=>S.sem&&(S.sem.term||S.sem.year)?termNm(S):'this semester';
@@ -1230,7 +1236,7 @@ $('#impf').onchange=async e=>{const f=e.target.files[0];e.target.value='';const 
   else{if(B.kind!=='all'){toast('That file has one '+(B.kind==='semester'?'semester':'page')+'. Choose “This semester”'+(B.kind==='page'?' or “This page”':'')+' to import it.');return;}
     if(!await confirmBox('Replace all semesters?',`Everything in this browser is replaced by the file (${B.n} semester${B.n===1?'':'s'}).`,'Import'))return;
     S={...B.all,at:Date.now()};done='Backup imported';}
-  edit=false;fix();save();const target={grades:'#grades',timetable:'#timetable',tasks:'#tasks',planner:'#planner'}[tgt];if(target&&location.hash!==target)location.hash=target;else route();toast(done,snap);};
+  edit=false;fix();save();const target={grades:'#grades',timetable:'#timetable',tasks:'#tasks',planner:'#plan'}[tgt];if(target&&location.hash!==target)location.hash=target;else route();toast(done,snap);};
 
 new MutationObserver(()=>{for(const c of document.querySelectorAll('.stack td:not([data-l])')){let i=0,p=c;while(p=p.previousElementSibling)i++;c.dataset.l=c.closest('table').rows[0].cells[i]?.textContent||'';}}).observe(document.getElementById('panel'),{childList:true,subtree:true});
 
@@ -2268,8 +2274,8 @@ $('#nsdo').onclick=()=>{const t=$('#nsterm').value,y=$('#nsyear').value.trim();i
   edit=false;tFilter='all';fix();save();location.hash='#home';route();toast(`${t} ${y} added`,snap);if(!c)setTimeout(openSem,250);};
 
 /* ---------- sections ---------- */
-const VIEWS={home:['#home','Home'],grades:['#grades','Grades'],tt:['#timetable','Timetable'],tasks:['#tasks','Tasks'],plan:['#planner','Planner']};
-function route(){const h=location.hash,v=h==='#grades'?'grades':h==='#timetable'?'tt':h==='#tasks'?'tasks':h==='#planner'?'plan':'home';document.body.dataset.view=v;
+const VIEWS={home:['#home','Home'],grades:['#grades','Grades'],tt:['#timetable','Timetable'],tasks:['#tasks','Tasks'],plan:['#plan','Plan']};
+function route(){const h=location.hash,v=h==='#grades'?'grades':h==='#timetable'?'tt':h==='#tasks'?'tasks':h==='#plan'||h==='#planner'?'plan':'home';document.body.dataset.view=v;
   for(const k in VIEWS){$('#v-'+k).hidden=k!==v;$('#tab-'+k).setAttribute('aria-current',k===v?'page':'false');}
   $('#dropover').textContent=v==='tt'?'Drop your .ics schedule':'Drop syllabi to add them';document.title=VIEWS[v][1]+' · Course Manager';
   closeColor();closeSemMenu();renderSemBtn();if(v==='tt')renderTT();else if(v==='tasks')renderTasks();else if(v==='home')renderHome();else if(v==='plan')renderPlanner2();else render();}
@@ -2484,42 +2490,55 @@ async function importTranscript(f){const st=$('#ptstatus');const say=(t,err)=>{i
     if(!R||!R.terms.length)throw new Error('No semesters were found in that file.');
     await loadCatalog().catch(()=>{});applyTranscript(R,f.name,how);}
   catch(err){say((err&&err.message)||'Couldn’t read that transcript.',true);}}
-function applyTranscript(R,name,how){const snap=JSON.stringify(S),p=PL(),db=courseDB();
-  if(!curProg()||!p.terms.length){const g=findProgFor(R);if(!g){$('#ptstatus').className='hint err';$('#ptstatus').textContent=`Choose your program first${R.program?' ('+R.program+')':''}, then import the transcript again.`;openProg();return;}
-    p.year=g.year;p.prog=g.pr.id;p.start=g.start;p.terms=planFromProg(g.pr,false);}
-  else{const f=R.terms[0];p.start={s:'Fall',y:f.s==='Fall'?f.y:f.y-1};}
-  /* undo an earlier import first, so importing twice doesn't duplicate anything */
-  for(const t of p.terms)for(const x of t.items.slice()){if(!x.imp)continue;if(x.imp==='add'){t.items=t.items.filter(i=>i!==x);continue;}
-    delete x.st;delete x.g;delete x.reg;if(x.impPick){delete x.pick;delete x.pt;delete x.impPick;}if(x.home){const h=findTerm(x.home);if(h&&h!==t){t.items=t.items.filter(i=>i!==x);h.items.push(x);}}delete x.imp;delete x.home;}
-  planMigrate();const sy=p.start.y,nk=ckey(nowTerm()),el=new Set(progElectives(curProg()).flatMap(g=>g.c)),mp=majorPrefixes(curProg());
+/* put courses you've taken (from a transcript, or kept from your plan when you switch catalogs) into their real semesters */
+function placeHistory(list){const p=PL(),db=courseDB(),sy=p.start.y,el=new Set(progElectives(curProg()).flatMap(g=>g.c)),mp=majorPrefixes(curProg());
   const colFor=(s,y)=>{let t=pTerms().find(t=>!isX(t)&&t.s===s&&termCal(t).y===y);if(t)return t;const yi=s==='Fall'?y-sy+1:y-sy;if(yi<1)return pTerms().find(t=>!isX(t));
     t={id:rid(),y:yi,s,items:[]};p.terms.push(t);if(s!=='Summer')for(const s2 of['Fall','Spring'])if(!p.terms.some(u=>u.y===yi&&u.s===s2))p.terms.push({id:rid(),y:yi,s:s2,items:[]});return t;};
-  const claimed=new Set(),seen=new Set();let n=0,terms=0;
+  const claimed=new Set(),seen=new Set();let n=0;
   const fits=(x,code)=>{const sc=slotCats(x);if(sc.length)return gerCatsOf(code).some(k=>sc.includes(k));const ph=String(x.c).toUpperCase();
     if(/^(MJE|CNE|CNR)/.test(ph))return el.has(code)||(mp.has(code.split(' ')[0])&&+code.split(' ')[1].slice(0,3)>=300);return false;};
   const find=code=>{const all=pTerms().flatMap(t=>t.items).filter(i=>!claimed.has(i));
-    let x=all.find(i=>!i.st&&(normC(i.pick||'')===code||codesOfX({c:i.c}).includes(code)));if(x)return{x};
+    let x=all.find(i=>!i.st&&!i.reg&&(normC(i.pick||'')===code||codesOfX({c:i.c}).includes(code)));if(x)return{x};
     if(seen.has(code))return null;
-    const sl=all.filter(i=>!i.pick&&!i.st&&fits(i,code)).sort((a,b)=>(slotCats(a).length||9)-(slotCats(b).length||9));if(sl[0])return{x:sl[0],slot:1};
-    const fr=all.find(i=>!i.pick&&!i.st&&/^FRE/i.test(String(i.c)));return fr?{x:fr,slot:1}:null;};
-  const place=(o,col,st)=>{if(/^W[FP]?$/.test(o.g||''))return;const code=o.c;let f=find(code),x;
-    if(f){x=f.x;if(f.slot){x.pick=code;x.pt=o.t||db[code]?.t||'';x.impPick=1;}else if(/\bor\b/i.test(x.c))x.pick=code;x.imp='match';const from=termOfItem(x.id);if(from!==col){x.home=from.id;from.items=from.items.filter(i=>i!==x);col.items.push(x);}}
-    else{x={id:rid(),c:code,t:db[code]?.t||o.t||'',cr:o.cr||+db[code]?.c||3,imp:'add'};col.items.push(x);}
-    claimed.add(x);seen.add(code);x.st=st;if(st==='reg'){delete x.st;x.reg=1;}if(o.g&&(st==='done'||st==='fail'))x.g=o.g;if(o.cr)x.cr=o.cr;else if(st==='fail'&&!x.cr)x.cr=+db[code]?.c||3;n++;};
-  for(const o of R.transfer)place(o,xferTerm(),'tr');
-  for(const t of R.terms.slice().sort((a,b)=>ckey(a)-ckey(b))){const k=ckey(t),col=colFor(t.s,t.y);terms++;
-    for(const o of t.courses){const g=o.g;let st=k<nk?'done':k===nk?'now':'reg';
-      if(g&&k<=nk){st=/^(F|NP|U|NC|WF)$/.test(g)?'fail':/^(I|IP)$/.test(g)?'now':'done';}else if(k<nk&&!g)st='done';
-      place(o,col,st);}}
-  for(const x of xferTerm().items)x.st='tr';
-  const rp=replanRemaining();p.tx={file:name,at:Date.now(),gpa:R.gpa,how};save();renderPlanner2();
+    const sl=all.filter(i=>!i.pick&&!i.st&&!i.reg&&fits(i,code)).sort((a,b)=>(slotCats(a).length||9)-(slotCats(b).length||9));if(sl[0])return{x:sl[0],slot:1};
+    const fr=all.find(i=>!i.pick&&!i.st&&!i.reg&&/^FRE/i.test(String(i.c)));return fr?{x:fr,slot:1}:null;};
+  const order=list.slice().sort((a,b)=>(a.cal?ckey(a.cal):-9)-(b.cal?ckey(b.cal):-9));
+  for(const o of order){if(/^W[FP]?$/.test(o.g||''))continue;const code=o.c,col=o.cal?colFor(o.cal.s,o.cal.y):xferTerm();let f=find(code),x;
+    if(f){x=f.x;if(f.slot){x.pick=code;x.pt=o.t||db[code]?.t||'';if(o.imp)x.impPick=1;}else if(/\bor\b/i.test(x.c))x.pick=code;if(o.imp)x.imp='match';const from=termOfItem(x.id);if(from!==col){x.home=from.id;from.items=from.items.filter(i=>i!==x);col.items.push(x);}}
+    else{x={id:o.id||rid(),c:code,t:db[code]?.t||o.t||'',cr:o.cr||+db[code]?.c||3};if(o.imp)x.imp='add';col.items.push(x);}
+    claimed.add(x);seen.add(code);delete x.st;delete x.reg;delete x.g;
+    if(o.st==='reg')x.reg=1;else x.st=o.cal?o.st:'tr';if(o.g&&(o.st==='done'||o.st==='fail'))x.g=o.g;if(o.cr)x.cr=o.cr;else if(o.st==='fail'&&!x.cr)x.cr=+db[code]?.c||3;n++;}
+  for(const x of xferTerm().items)x.st='tr';return n;}
+/* everything you've done, so it survives a catalog switch */
+function planHistory(){const out=[];for(const t of pTerms())for(const x of t.items){if(!x.st&&!x.reg)continue;const cs=codesOfX(x);if(cs.length!==1)continue;
+  out.push({id:x.id,c:cs[0],t:x.pick?(x.pt||''):(x.t||''),cr:x.cr,g:x.g,st:x.reg?'reg':x.st,cal:isX(t)?null:termCal(t),imp:!!x.imp});}return out;}
+function applyTranscript(R,name,how){const snap=JSON.stringify(S),p=PL();let picked=null;
+  if(!curProg()||!p.terms.length){const g=findProgFor(R);if(!g){$('#ptstatus').className='hint err';$('#ptstatus').textContent=`Choose your program first${R.program?' ('+R.program+')':''}, then import the transcript again.`;openProg();return;}
+    p.year=g.year;p.prog=g.pr.id;p.start=g.start;p.terms=planFromProg(g.pr,false);picked=g;}
+  else{const f=R.terms[0];p.start={s:'Fall',y:f.s==='Fall'?f.y:f.y-1};}/* your start term comes from the transcript; your catalog stays whatever you chose */
+  /* undo an earlier import first, so importing twice doesn't duplicate anything */
+  for(const t of p.terms)for(const x of t.items.slice()){if(!x.imp)continue;if(x.imp==='add'){t.items=t.items.filter(i=>i!==x);continue;}
+    delete x.st;delete x.g;delete x.reg;if(x.impPick){delete x.pick;delete x.pt;delete x.impPick;}if(x.home){const h=findTerm(x.home);if(h&&h!==t){t.items=t.items.filter(i=>i!==x);h.items.push(x);}}delete x.imp;delete x.home;}
+  planMigrate();const nk=ckey(nowTerm()),list=[];
+  for(const o of R.transfer)list.push({c:o.c,t:o.t,cr:o.cr,st:'tr',cal:null,imp:true});
+  for(const t of R.terms){const k=ckey(t);for(const o of t.courses){const g=o.g;let st=k<nk?'done':k===nk?'now':'reg';
+      if(g&&k<=nk)st=/^(F|NP|U|NC|WF)$/.test(g)?'fail':/^(I|IP)$/.test(g)?'now':'done';
+      list.push({c:o.c,t:o.t,cr:o.cr,g,st,cal:{s:t.s,y:t.y},imp:true});}}
+  const n=placeHistory(list),terms=R.terms.length;
+  replanRemaining();p.tx={file:name,at:Date.now(),gpa:R.gpa,how};save();renderPlanner2();
   const M=planModel(),gp=M.gpa.gpa,nu=nextUp(M);
-  $('#ptstatus').className='hint';$('#ptstatus').textContent=`Imported ${terms} semester${terms===1?'':'s'}, ${n} course${n===1?'':'s'}${R.transfer.length?` and ${R.transfer.length} transfer credit${R.transfer.length===1?'':'s'}`:''} (${how} reader).${gp!=null?` CGPA ${g2(gp)}${R.gpa!=null&&Math.abs(R.gpa-+g2(gp))>.011?` (your transcript says ${R.gpa.toFixed(2)})`:''}.`:''}`;
+  $('#ptstatus').className='hint';$('#ptstatus').textContent=`Imported ${terms} semester${terms===1?'':'s'}, ${n-R.transfer.length} course${n-R.transfer.length===1?'':'s'}${R.transfer.length?` and ${R.transfer.length} transfer credit${R.transfer.length===1?'':'s'}`:''} (${how} reader).${gp!=null?` CGPA ${g2(gp)}${R.gpa!=null&&Math.abs(R.gpa-+g2(gp))>.011?` (your transcript says ${R.gpa.toFixed(2)})`:''}.`:''}${picked?` Using the ${picked.year} catalog; switch it under Program and your semesters stay.`:''}`;
   toast(`Transcript imported${nu&&nu.rec?' · next up: '+termName(nu.rec):''}`,snap);}
 
 /* ---------- course browser ---------- */
 let CB={tab:'all',chip:'',q:'',open:'',subj:''},DESC=null,descLoading=null;
 function loadDesc(){if(DESC)return Promise.resolve(DESC);if(descLoading)return descLoading;descLoading=fetch('catalog-desc.json').then(r=>{if(!r.ok)throw 0;return r.json();}).then(j=>DESC=j).catch(()=>{descLoading=null;DESC=null;});return descLoading;}
+/* lab status for a course: a lab course itself, a lecture with a separate lab course, lab hours built in, or no lab */
+function labInfo(code,db){const L=CAT&&CAT.labs||{},m=code.match(/^(.*\d)L$/);
+  if(m)return{k:'lab',l:'Lab course',d:`This is a lab course${db[m[1]]?`, paired with ${m[1]}`:''}${L[code]?` · ${L[code]} lab hours a week`:''}.`,o:db[m[1]]?m[1]:''};
+  if(db[code+'L'])return{k:'sep',l:`Has a lab · ${code}L`,d:`Has a separate lab course, ${code}L (${db[code+'L'].c||1} credit${+db[code+'L'].c===1?'':'s'}), usually taken in the same term.`,o:code+'L'};
+  if(L[code])return{k:'inc',l:`Lab built in · ${L[code]} hr${L[code]===1?'':'s'}/wk`,d:`The catalog lists ${L[code]} lab hour${L[code]===1?'':'s'} a week inside this course (for some courses that’s a recitation or problem session). There’s no separate lab to register for.`};
+  return{k:'none',l:'No lab',d:'No lab.'};}
 function progElectives(pr){if(!pr)return[];const cp=customProg();if(cp&&cp.electives&&cp.electives.length)return cp.electives.map(g=>({g:g.group,r:'',c:g.courses.map(c=>c.c)}));return pr.el||[];}
 function progRequired(pr){const out=[];if(!pr)return out;for(const t of pr.terms)for(const i of t.i){const cs=String(i.c).split(/\s+or\s+/i).map(normC).filter(c=>REALC.test(c));for(const c of cs)if(!out.some(o=>o.c===c))out.push({c,y:t.y,s:t.s,alt:cs.length>1?cs:null});}return out;}
 let RQF=null,RQK='';function reqForIx(db){const k=PL().year||'';if(RQF&&RQK===k)return RQF;RQF={};RQK=k;for(const[c,d]of Object.entries(db))for(const s of[d.p,d.pc])for(const m of String(s||'').matchAll(/\b([A-Z]{2,4}) ?(\d{3}[A-Z]?)\b/g)){const r=m[1]+' '+m[2];(RQF[r]=RQF[r]||new Set()).add(c);}return RQF;}
@@ -2557,7 +2576,7 @@ function renderBrowser(){const el=$('#pbrowse');if(!el)return;if(!CAT){el.innerH
     const ks=CB.chip&&CB.chip!=='off'?[CB.chip]:CORECATS;groups=ks.map(k=>({h:gerName(k),rows:GERLIST[k].map(([c])=>row(c)).filter(r=>CB.chip!=='off'||off.has(r.c))}));}
   if(q)groups=groups.map(g=>({...g,rows:g.rows.filter(r=>r.c.toLowerCase().includes(q)||r.c.replace(' ','').toLowerCase().includes(q.replace(/\s/g,''))||(r.t||'').toLowerCase().includes(q))})).filter(g=>g.rows.length);
   const total=groups.reduce((s,g)=>s+g.rows.length,0),many=CB.tab==='all'&&!q&&!CB.chip;
-  const rowH=r=>{const ps=planStatusOf(r.c),o=CB.open===r.c;return`<li class="cbrow${o?' open':''}"><button class="cbhead" data-cbopen="${esc(r.c)}" aria-expanded="${o}"><b>${esc(r.c)}</b><span>${esc(r.t||'')}</span><small>${r.cr!==''&&r.cr!=null?esc(r.cr)+' cr':''}</small>${ps.length?`<em class="cbst ${ps[ps.length-1].x.st||'plan'}">${esc(ps[ps.length-1].l)}${ps[ps.length-1].x.g?' · '+esc(ps[ps.length-1].x.g):''}</em>`:''}</button>${o?cbDetail(r.c,pr,req,els,db):''}</li>`;};
+  const rowH=r=>{const ps=planStatusOf(r.c),o=CB.open===r.c,lb=labInfo(r.c,db);return`<li class="cbrow${o?' open':''}"><button class="cbhead" data-cbopen="${esc(r.c)}" aria-expanded="${o}"><b>${esc(r.c)}</b><span>${esc(r.t||'')}</span><small>${r.cr!==''&&r.cr!=null?esc(r.cr)+' cr':''}</small><span class="cbmeta"><i class="cblab k-${lb.k}">${lb.k==='none'?'':'<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 1.5h4M6.8 1.5v4.2L2.6 12.6A1.3 1.3 0 0 0 3.7 14.5h8.6a1.3 1.3 0 0 0 1.1-1.9L9.2 5.7V1.5"/></svg>'}${esc(lb.l)}</i>${ps.length?`<em class="cbst ${ps[ps.length-1].x.st||'plan'}">${esc(ps[ps.length-1].l)}${ps[ps.length-1].x.g?' · '+esc(ps[ps.length-1].x.g):''}</em>`:''}</span></button>${o?cbDetail(r.c,pr,req,els,db):''}</li>`;};
   const body=!pr&&(CB.tab==='major'||CB.tab==='elec')?'<p class="hint">Choose your program first.</p>':!total?'<p class="hint">No courses match.</p>':
     groups.map(g=>many?`<details class="cbg"${g.rows.some(r=>r.c===CB.open)?' open':''}><summary>${esc(g.h)} <span class="hcount">${g.rows.length}</span></summary><ul class="cblist">${g.rows.map(rowH).join('')}</ul></details>`:`<section class="cbg"><h4>${esc(g.h)} <span class="hcount">${g.rows.length}</span></h4><ul class="cblist">${g.rows.slice(0,q?120:400).map(rowH).join('')}</ul></section>`).join('');
   el.innerHTML=`<div class="cbtop"><h2>Course browser</h2><input id="cbq" type="search" placeholder="Search by code or title" value="${esc(CB.q)}" aria-label="Search courses"></div>
@@ -2570,6 +2589,7 @@ function cbDetail(code,pr,req,els,db){const d=db[code],ds=DESC&&DESC[code],ps=pl
   return`<div class="cbdet">${ds?`<p>${esc(ds.d)}</p>`:DESC?'':'<p class="hint">Loading the catalog description…</p>'}${!ds&&DESC&&!d&&gi?`<p class="hint">Special-topics course${gi.n?` · ${esc(gi.n)}`:''}. It isn’t described in the catalog.</p>`:''}
     <dl class="cbdl">
       <div><dt>Credits</dt><dd>${d&&d.c!==''?esc(d.c):gi?gi.cr:'–'}${ds&&ds.h?` (${esc(ds.h[0])} lecture, ${esc(ds.h[1])} lab hours)`:''}</dd></div>
+      <div><dt>Lab</dt><dd>${(()=>{const lb=labInfo(code,db);return`<i class="cblab k-${lb.k}">${esc(lb.l)}</i> ${esc(lb.d)}${lb.o?` <button class="lnkbtn" data-cbgo="${esc(lb.o)}">Open ${esc(lb.o)}</button>`:''}`;})()}</dd></div>
       <div><dt>Prerequisites</dt><dd>${d&&d.p?esc(d.p):'None listed'}</dd></div>
       ${d&&d.pc?`<div><dt>Prerequisite or same term</dt><dd>${esc(d.pc)}</dd></div>`:''}${d&&d.co?`<div><dt>Corequisite</dt><dd>${esc(d.co)}</dd></div>`:''}
       ${d&&d.r?`<div><dt>Repeatable</dt><dd>May be taken more than once for credit</dd></div>`:''}
@@ -2668,8 +2688,9 @@ function planFromProg(pr,keep){const old={};if(keep)for(const t of PL().terms)fo
     terms.push({id:rid(),y,s,items:src.flatMap(t=>t.i).map((x,r)=>{const o={id:rid(),c:x.c,t:x.t,cr:x.cr==null?null:+x.cr,o:((y-1)*3+SEAS.indexOf(s))*100+r};const k=old[normC(x.c)];if(k)Object.assign(o,k);return o;})});}
   return terms;}
 function setProgram(year,id,start){const p=PL(),snap=JSON.stringify(S),pr=(id.startsWith('ai-')?p.custom.find(c=>c.id===id):progsFor(year).find(x=>x.id===id));if(!pr)return;
-  const keep=p.terms.length>0,xt=p.terms.find(isX);p.year=year;p.prog=id;p.start=start;p.terms=planFromProg(pr,keep);
-  if(xt){p.terms.unshift(xt);const xc=new Set(xt.items.flatMap(codesOfX));for(const t of p.terms)if(t!==xt)t.items=t.items.filter(i=>!codesOfX(i).some(c=>xc.has(c)));}planMigrate();save();renderPlanner2();toast(progLabel(pr)+' loaded',snap);}
+  /* switching catalogs keeps what you've done in the semesters you did it; only the remaining requirements come from the new catalog */
+  const hist=p.terms.length?planHistory():[];p.year=year;p.prog=id;p.start=start;p.terms=planFromProg(pr,false);planMigrate();
+  if(hist.length){placeHistory(hist);replanRemaining();}save();renderPlanner2();toast(progLabel(pr)+' loaded'+(hist.length?` · your ${hist.length} completed, current and transfer courses kept`:''),snap);}
 
 /* ---------- program picker ---------- */
 function openProg(){if(!CAT&&!catErr){loadCatalog().then(openProg,openProg);return;}const p=PL(),ys=catYears();
@@ -2684,8 +2705,8 @@ function ppInfo(){const pr=progsFor($('#ppyear').value).find(x=>x.id===$('#ppmaj
 $('#ppyear').onchange=()=>ppFill(PL().prog);$('#ppcol').onchange=()=>ppFill();$('#ppmaj').onchange=ppInfo;
 $('#ppcancel').onclick=()=>$('#ppmodal').classList.remove('on');$('#ppmodal').addEventListener('click',e=>{if(e.target===$('#ppmodal'))$('#ppmodal').classList.remove('on');});
 $('#ppdo').onclick=async()=>{const y=$('#ppyear').value,id=$('#ppmaj').value,st={s:$('#ppss').value,y:+$('#ppsy').value||new Date().getFullYear()};if(!id)return;
-  const p=PL();if(p.terms.length&&(p.prog!==id||p.year!==y)&&!await confirmBox('Switch program?','Your flowchart is rebuilt from the new program. Courses you marked completed keep their status wherever the same course appears, and your transfer credits stay.','Switch'))return;
-  $('#ppmodal').classList.remove('on');if(p.prog===id&&p.year===y&&p.terms.length){const snap=JSON.stringify(S);p.start=st;save();renderPlanner2();toast('Start term updated',snap);return;}setProgram(y,id,st);};
+  const p=PL();if(p.terms.length&&(p.prog!==id||p.year!==y)&&!await confirmBox('Switch catalog or program?','The remaining requirements come from the new catalog. Courses you’ve completed, failed, are taking or are registered for stay in their semesters with their grades, and your transfer credits stay.','Switch'))return;
+  $('#ppmodal').classList.remove('on');if(p.prog===id&&p.year===y&&p.terms.length){if(p.start&&p.start.s===st.s&&p.start.y===st.y)return;const snap=JSON.stringify(S);setProgram(y,id,st);toast('Start term updated',snap);return;}setProgram(y,id,st);};
 $('#ppai').onclick=()=>$('#ppfile').click();
 $('#ppfile').onchange=async e=>{const f=[...e.target.files];e.target.value='';if(!f.length)return;await importProgramPages(f);};
 
@@ -2811,7 +2832,7 @@ function paList(){const q=$('#paq').value.trim().toLowerCase(),db=courseDB(),p=P
       .sort((a,b)=>(a.dis-b.dis)||(b.off-a.off)||a.c.localeCompare(b.c));
     if(q)rows=rows.filter(r=>r.c.toLowerCase().includes(q)||r.c.replace(' ','').toLowerCase().includes(q.replace(/\s/g,''))||(r.t||'').toLowerCase().includes(q));}
   else if(x&&/^GER/.test(ph)&&ger.length){rows=ger.filter(g=>!gk||g.cats.includes(gk)||(!g.cats.length)).map(g=>({c:g.code,t:g.title||db[g.code]?.t||'',cr:+(db[g.code]?.c)||3,tag:'Offered '+(p.ger.term||'next semester')+(g.cats.length?' · '+g.cats.map(gerName).join(', '):'')}));}
-  if(x&&/^(MJE|CNE|CNR)/.test(ph)){const cp=customProg(),el=cp&&cp.electives?cp.electives.flatMap(g=>g.courses.map(c=>({c:c.c,t:c.t||db[c.c]?.t||'',cr:c.cr||+db[c.c]?.c||3,tag:g.group}))):[];
+  if(x&&/^(MJE|CNE|CNR)/.test(ph)){const el=progElectives(curProg()).flatMap(g=>g.c.map(c=>({c,t:db[c]?.t||'',cr:+db[c]?.c||3,tag:g.g+(g.r?' · '+g.r.toLowerCase():'')})));
     rows=el.length?el:Object.keys(db).filter(k=>M.mp.has(k.split(' ')[0])&&+k.split(' ')[1].slice(0,3)>=300&&+k.split(' ')[1].slice(0,3)<500&&!inPlan.has(k)).map(k=>({c:k,t:db[k].t,cr:+db[k].c||3,tag:'Major subject'}));}
   if(q&&!sc.length){const all=Object.keys(db).map(k=>({c:k,t:db[k].t,cr:+db[k].c,tag:''}));const pool=[...rows,...all.filter(a=>!rows.some(r=>r.c===a.c))];rows=pool.filter(r=>r.c.toLowerCase().includes(q)||r.c.replace(' ','').toLowerCase().includes(q.replace(/\s/g,''))||(r.t||'').toLowerCase().includes(q));}
   else if(!rows.length)rows=[];
