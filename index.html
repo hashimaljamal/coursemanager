@@ -388,6 +388,54 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 .amenu{min-width:260px;padding:10px}.aid{display:flex;align-items:center;gap:10px;padding:4px 4px 8px}.aid img,.aid>b{width:36px;height:36px;border-radius:99px;display:grid;place-items:center;background:var(--soft);font-weight:800}
 .aid span{display:grid;min-width:0}.aid small{color:var(--mute);font-size:12px;overflow:hidden;text-overflow:ellipsis}.ast{display:flex;align-items:center;gap:7px;font-size:13px;margin:0 4px 6px}.ast i{width:8px;height:8px;border-radius:99px;background:#9ca3af;flex:none}.ast small{color:var(--mute)}
 @media(max-width:600px){.acct{min-height:24px;padding:1px 8px 1px 6px;font-size:12px}.acct.in{width:26px;height:26px}.acct.in img{width:24px;height:24px}.brand .semsw+.acct{margin-top:0}}
+
+/* ===== planner ===== */
+.pwrap{display:grid;grid-template-columns:250px minmax(0,1fr)}
+.pside{position:sticky;top:0;align-self:start;max-height:calc(100dvh - 150px);overflow:auto;scrollbar-width:thin;padding:12px 14px 24px 0;border-right:1px solid var(--line);display:grid;gap:14px;align-content:start}
+.pscard h3{font-size:13px;margin:0 0 8px;display:flex;align-items:center;gap:6px}.pscard .btn{width:100%;margin-top:6px}.pscard .srow .btn{width:auto}
+.pbar2{display:flex;height:10px;border-radius:99px;background:var(--soft);overflow:hidden;margin-bottom:8px}.pbar2 i{display:block;height:100%}.pbar2 .d{background:var(--ink)}.pbar2 .n{background:var(--red)}.pbar2 .p{background:color-mix(in srgb,var(--ink) 22%,transparent)}
+.pstats{display:grid;grid-template-columns:1fr 1fr;gap:6px 10px;margin:0}.pstats div{display:grid}.pstats dt{font-size:11.5px;color:var(--mute)}.pstats dd{margin:0;font-weight:800;font-size:15px;font-variant-numeric:tabular-nums}
+.perr{color:var(--red)}.pwl{list-style:none;margin:0;padding:0;display:grid;gap:5px;font-size:12.5px;color:var(--mute)}.pwl .lnkbtn{font-weight:800;color:var(--ink)}
+.pkey{list-style:none;margin:0;padding:0;display:grid;gap:5px;font-size:12.5px}.pkey li{display:flex;align-items:center;gap:8px}.pkey li>i{width:22px;height:14px;border-radius:4px;border:1.5px solid var(--ink);flex:none}
+.kst{width:18px!important;height:18px!important;border-radius:99px!important;display:grid;place-items:center;font-style:normal;font-size:11px;font-weight:900;background:var(--ink);color:var(--bg);border:0!important}.kst.ex{background:#7c7c7c}.kst.warn{background:var(--red)}
+.pmain{min-width:0;padding:10px 0 20px 16px;position:relative}
+.pzoom{display:flex;align-items:center;gap:6px;margin-bottom:6px;font-size:13px}.pzoom .lnkbtn{min-width:44px;font-weight:700}.ptog{display:flex;align-items:center;gap:6px;margin-left:auto;color:var(--mute)}
+.pscroll{overflow:auto;max-height:calc(100dvh - 190px);scrollbar-width:thin;border-radius:12px}
+.psize{position:relative}.pcanvas{position:absolute;left:0;top:0;transform-origin:0 0}
+.pyr{position:absolute;top:0;display:flex;align-items:baseline;justify-content:center;gap:8px;border-bottom:2px solid var(--ink);padding-bottom:4px;white-space:nowrap}.pyr b{font-size:15px;font-weight:900;font-stretch:110%}.pyr span{font-size:11.5px;color:var(--mute)}
+.pcol{position:absolute;border-radius:12px;transition:background .15s}.pcol.now{background:color-mix(in srgb,var(--red) 6%,transparent)}.pcol.sum{background:repeating-linear-gradient(-45deg,transparent 0 8px,color-mix(in srgb,var(--ink) 3%,transparent) 8px 16px)}.pcol.drop{background:color-mix(in srgb,var(--ink) 9%,transparent);outline:2px dashed var(--ink)}
+.pch{position:absolute;display:grid;grid-template-columns:1fr auto;align-items:center;font-size:13px;line-height:1.15}.pch b{font-weight:800}.pch span{grid-row:2;color:var(--mute);font-size:11.5px}.pch.now b{color:var(--red)}
+.pcm{grid-row:1/3;grid-column:2;border:0;background:none;color:var(--mute);font-size:18px;line-height:1;cursor:pointer;width:28px;height:28px;border-radius:7px}.pcm:hover{background:var(--soft);color:var(--ink)}
+.pslot{position:absolute}
+.pbox{--pc:#e9e9e9;position:relative;width:100%;height:100%;box-sizing:border-box;border:1.5px solid var(--ink);border-radius:9px;background:var(--pc);color:#111;padding:6px 8px 5px;display:grid;grid-template-rows:auto 1fr auto;cursor:grab;user-select:none;-webkit-user-select:none;touch-action:manipulation;overflow:hidden;transition:opacity .15s,box-shadow .15s}
+.pbox:hover,.pbox:focus-visible{box-shadow:0 0 0 2px var(--ink);outline:0}.pbox.flash{box-shadow:0 0 0 3px var(--red)}
+.pcode{font-size:13.5px;font-weight:900;display:flex;align-items:center;gap:5px;white-space:nowrap}.pph{font-style:normal;font-size:9.5px;font-weight:800;border:1px solid currentColor;border-radius:4px;padding:0 3px;opacity:.7}
+.ptitle{font-size:11px;line-height:1.2;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;opacity:.85}.pcr{font-size:10.5px;font-weight:700;opacity:.7}
+.pc-major{--pc:#bfe3ff}.pc-core{--pc:#c4f1dd}.pc-math{--pc:#ead3f8}.pc-sci{--pc:#fbefa8}.pc-wri{--pc:#d7dbff}.pc-ger{--pc:#ffffff}.pc-mje{--pc:#ffdcc2}.pc-fre{--pc:#f3f3f3}.pc-other{--pc:#e4e4e4}
+.pkey .pc-major{background:#bfe3ff}.pkey .pc-core{background:#c4f1dd}.pkey .pc-math{background:#ead3f8}.pkey .pc-sci{background:#fbefa8}.pkey .pc-wri{background:#d7dbff}.pkey .pc-ger{background:#fff}.pkey .pc-mje{background:#ffdcc2}.pkey .pc-fre{background:#f3f3f3}.pkey .pc-other{background:#e4e4e4}
+.pbox.ph{border-style:dashed}.pbox.st-done{opacity:.62}.pbox.st-done .pcode{text-decoration:line-through;text-decoration-thickness:1.5px}
+.pbox.st-exempt{background:repeating-linear-gradient(-45deg,var(--pc) 0 6px,color-mix(in srgb,var(--pc) 70%,#999) 6px 7px);opacity:.75}.pbox.st-now{box-shadow:0 0 0 2px var(--red)}
+.pst{position:absolute;top:5px;right:6px;width:17px;height:17px;border-radius:99px;background:#111;color:#fff;font-style:normal;font-size:10.5px;font-weight:900;display:grid;place-items:center}.pst.ex{background:#6b6b6b}.pst.now{background:var(--red);font-size:8px}
+.pwarn{position:absolute;bottom:5px;right:6px;width:17px;height:17px;border-radius:99px;background:var(--red);color:#fff;font-style:normal;font-size:11px;font-weight:900;display:grid;place-items:center}.pbox.warn{border-color:var(--red)}
+.padd{position:absolute;height:30px;border:1.5px dashed var(--line);background:none;border-radius:9px;color:var(--mute);font:inherit;font-size:12.5px;font-weight:700;cursor:pointer}.padd:hover{border-color:var(--ink);color:var(--ink)}
+.plines{position:absolute;left:0;top:0;pointer-events:none;overflow:visible}.plines.off{display:none}
+.pe{fill:none;stroke:color-mix(in srgb,var(--ink) 55%,transparent);stroke-width:1.6;marker-end:url(#parr);transition:opacity .15s,stroke .15s}.pe.c{stroke-dasharray:2.5 3}.pah{fill:color-mix(in srgb,var(--ink) 55%,transparent)}.pah.hi{fill:var(--red)}
+.plines.focus .pe{opacity:.12}.plines.focus .pe.hi{opacity:1;stroke:var(--red);stroke-width:2.2;marker-end:url(#parr2)}
+.pcanvas:has(.plines.focus) .pbox:not(.rel):not(:hover){opacity:.45}
+.pghost{position:fixed;z-index:80;pointer-events:none;box-shadow:0 12px 30px rgb(0 0 0/.25);transform:rotate(-2deg);opacity:.95}.pbox.pdrag{opacity:.25}
+.ppcard{max-width:560px}.ppgrid{margin:10px 0 0}.ppcard label{display:grid;gap:4px;font-size:13px;font-weight:700}.ppfull{margin-top:10px}.ppcard select,.ppcard input{width:100%}
+.ppai{margin:12px 0 0;border:1px solid var(--line);border-radius:10px;padding:8px 12px}.ppai summary{cursor:pointer;font-weight:700;font-size:13.5px}.ppsteps{margin:8px 0;padding-left:18px;font-size:13px;line-height:1.45;color:var(--mute)}.ppsteps b{color:var(--ink)}
+.picard{max-width:520px}.pisub{margin:-4px 0 10px;color:var(--mute);font-size:13.5px}.pireq{font-size:13px;margin:0 0 6px}.pireq b{display:block;font-size:11.5px;color:var(--mute);text-transform:uppercase;letter-spacing:.03em}
+.pipick,.pist{margin:12px 0 6px}.pipick>b,.pist>b{display:block;font-size:12px;color:var(--mute);margin-bottom:6px}.seg{display:flex;border:1.5px solid var(--ink);border-radius:10px;overflow:hidden}.seg button{flex:1;border:0;background:none;font:inherit;font-size:13px;font-weight:700;padding:8px 4px;cursor:pointer;color:var(--ink)}.seg button+button{border-left:1px solid var(--line)}.seg button.on{background:var(--ink);color:var(--bg)}
+.pirow{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:10px 0 0;font-size:13.5px;font-weight:700}.pirow select,.pirow input[type=number]{width:60%}.pirow.chk{justify-content:flex-start;font-weight:500}
+.pacard{max-width:560px}#paq{width:100%;margin:8px 0}.palist{list-style:none;margin:8px 0 0;padding:0;max-height:min(50dvh,420px);overflow:auto;display:grid;gap:4px}.palist button{width:100%;text-align:left;border:1px solid var(--line);background:none;border-radius:9px;padding:8px 10px;cursor:pointer;display:grid;grid-template-columns:auto 1fr;gap:0 10px;font:inherit;color:inherit}.palist button:hover{border-color:var(--ink)}.palist b{font-size:13.5px}.palist span{font-size:13px}.palist small{grid-column:1/-1;color:var(--mute);font-size:11.5px}
+:root[data-theme=dark] .pbox,:root:not([data-theme=light]) .pbox{}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]) .pbox{border-color:#111}}
+:root[data-theme=dark] .pbox{border-color:#111}
+@media(max-width:900px){.pwrap{grid-template-columns:1fr}.pside{order:2;position:static;max-height:none;overflow:visible;border-right:0;padding:14px 0 8px;border-top:1px solid var(--line);grid-template-columns:1fr 1fr}.pmain{padding:4px 0 20px}.pscroll{max-height:none}}
+@media(max-width:600px){.pside{grid-template-columns:1fr}.ppgrid{grid-template-columns:1fr!important}}
+@media(max-width:430px){.tabs a{font-size:12px!important;padding:7px 1px!important;letter-spacing:-.01em}}@media(max-width:350px){.tabs a{font-size:11px!important}}
+@media(max-width:400px){.acct.out span{display:none}.acct.out{padding:2px 6px}.brow{flex-wrap:nowrap}.semsw{min-width:0}}
 .ttag{display:inline-block;margin-left:6px;padding:1px 7px;border-radius:99px;font-size:11px;font-weight:700;background:var(--soft);color:var(--mute);vertical-align:2px}.ttag.now{background:var(--red);color:#fff}.ttag.old{opacity:.8}
 .kcard{max-width:540px}.knew{display:grid;gap:8px;padding:10px;border-radius:10px;background:var(--soft)}.knew .cgrid button{width:26px;height:26px;border-radius:50%;border:0;padding:0}.knew .cgrid button.on{box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--ink)}
 .kcard textarea{width:100%;resize:vertical;min-height:64px!important;margin:0!important}
@@ -427,7 +475,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
  h1{font-size:min(21px,5.3vw);white-space:nowrap}.brand{flex-direction:column;align-items:flex-start;gap:3px}.semsw{min-height:24px;padding:1px 6px 1px 9px;font-size:12px}
  .dacts{gap:4px}.top{column-gap:6px}
  .acts .btn{padding:0 8px;min-width:0}
- .tabs{display:grid;grid-template-columns:repeat(4,1fr);justify-self:stretch}.tabs a{padding:7px 4px;font-size:13px;min-height:34px}
+ .tabs{display:grid;grid-template-columns:repeat(5,1fr);justify-self:stretch}.tabs a{padding:7px 4px;font-size:13px;min-height:34px}
  .kopts{grid-auto-flow:row}
  .rgrid{grid-template-columns:1fr!important}
  .ttside{grid-template-columns:1fr}
@@ -448,7 +496,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 <div class="shell">
 <header class="top">
   <div class="brand"><h1>Course Manager</h1><div class="brow"><button class="semsw" id="semsw" aria-haspopup="menu" aria-expanded="false"><span id="semswl">Semester</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg></button><button class="acct" id="acct" hidden aria-haspopup="menu"></button></div></div>
-  <nav class="tabs" aria-label="Sections"><a href="#home" id="tab-home">Home</a><a href="#grades" id="tab-grades">Grades</a><a href="#timetable" id="tab-tt">Timetable</a><a href="#tasks" id="tab-tasks">Tasks</a></nav>
+  <nav class="tabs" aria-label="Sections"><a href="#home" id="tab-home">Home</a><a href="#grades" id="tab-grades">Grades</a><a href="#timetable" id="tab-tt">Timetable</a><a href="#tasks" id="tab-tasks">Tasks</a><a href="#planner" id="tab-plan">Planner</a></nav>
   <div class="dacts">
     <button class="btn ghost sm dbtn" id="impbtn" title="Import a backup file"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2v8M4.5 6.5 8 10l3.5-3.5M2.5 11v2.5h11V11"/></svg><span>Import</span></button>
     <button class="btn ghost sm dbtn" id="expbtn" title="Export a backup file"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 10V2M4.5 5.5 8 2l3.5 3.5M2.5 11v2.5h11V11"/></svg><span>Export</span></button>
@@ -461,6 +509,14 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
   <input type="file" id="calfile" hidden accept=".ics,text/calendar,.pdf,.docx,.txt,.md,.html,.htm,image/*">
 </header>
 <section id="v-home" hidden><div class="pbar hhero" id="hhero"></div><div class="hwrap"><div class="hleft" id="hleft"></div><div class="hgrid" id="hgrid"></div></div></section>
+<section id="v-plan" hidden><div class="pbar"><div class="pleft" id="phead"></div>
+  <div class="acts">
+    <button class="btn" data-pact="prog">Program</button>
+    <button class="btn ghost" data-pact="addterm">Add term</button>
+    <button class="btn ghost" data-pact="ger">GER list</button>
+  </div>
+</div><div class="pwrap"><div class="pside" id="pside"></div><div class="pmain" id="pmain"></div></div>
+<input type="file" id="pgfile" hidden accept=".pdf,.docx,.txt,.html,.htm,.csv,image/*"><input type="file" id="ppfile" hidden multiple accept=".pdf,.docx,.txt,.html,.htm,image/*"></section>
 <section id="v-tasks" hidden><div class="pbar"><div class="pleft" id="khead"></div>
   <div class="acts">
     <button class="btn" id="ktaskadd">Add task</button>
@@ -560,6 +616,21 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 </div>
 <input type="file" id="upsylf" multiple hidden accept=".pdf,.docx,.txt,.md,.rtf,.html,.htm,image/*"><input type="file" id="upicsf" hidden accept=".ics,text/calendar"><input type="file" id="upcalf" hidden accept=".ics,text/calendar,.pdf,.docx,.txt,.md,.html,.htm,image/*">
 <div class="mact upact"><button class="lnkbtn" id="upsem">Set semester dates by hand</button><span class="sp"></span><button class="btn ghost" id="upcancel">Cancel</button><button class="btn" id="updo" disabled>Upload</button></div></div></div>
+<div id="ppmodal" class="modal"><div class="card cnf dcard ppcard"><h3>Your program</h3>
+<div class="grid2 ppgrid"><label>Catalog year<select id="ppyear"></select></label><label>College<select id="ppcol"></select></label></div>
+<label class="ppfull">Major<select id="ppmaj"></select></label><p class="hint" id="ppinfo"></p>
+<div class="grid2 ppgrid"><label>I started in<select id="ppss"><option>Fall</option><option>Spring</option></select></label><label>Year<input id="ppsy" inputmode="numeric"></label></div>
+<p class="hint">Use the catalog year you entered AUS under: your degree requirements follow that catalog.</p>
+<details class="ppai"><summary>Not listed, or want it read from your own catalog pages?</summary>
+<ol class="ppsteps"><li>Open your catalog PDF and find your major’s section.</li><li>Save or print to PDF just the pages with your <b>degree requirements</b> and the <b>proposed sequence of study</b> (the year-by-year table). That’s usually 2–4 pages. Screenshots work too.</li><li>Upload them here. The AI reads them and lays your program out as a flowchart. Check it afterwards: you can move, add or change any course.</li></ol>
+<button class="btn ghost sm" id="ppai">Upload catalog pages</button></details>
+<p class="hint" id="ppnote"></p>
+<div class="mact"><button class="btn ghost" id="ppcancel">Cancel</button><button class="btn" id="ppdo">Use this program</button></div></div></div>
+<div id="pimodal" class="modal"><div class="card cnf dcard picard"><h3 id="pititle"></h3><div id="pibody"></div>
+<div class="mact"><button class="btn ghost danger-ghost" id="pidel">Remove from plan</button><span class="sp"></span><button class="btn" id="piclose">Done</button></div></div></div>
+<div id="pamodal" class="modal"><div class="card cnf dcard pacard"><h3 id="patitle">Add a course</h3><input id="paq" type="search" placeholder="Search by code or title, e.g. COE 420 or robotics" autocomplete="off">
+<div class="srow" id="paph"><span class="hint">Or add a slot:</span><button class="btn ghost sm" data-addph="GER-Core|Course Selected from General Education Core Requirements">GER</button><button class="btn ghost sm" data-addph="MJE|Major Elective">Major elective</button><button class="btn ghost sm" data-addph="FRE|Free Elective">Free elective</button></div>
+<ul class="palist" id="palist"></ul><div class="mact"><button class="btn ghost" id="pacancel">Cancel</button></div></div></div>
 <div id="tmodal" class="modal"><div class="card cnf dcard"><h3>Which semester?</h3><p class="hint">This calendar covers more than one semester. Pick yours: its first and last day of classes fill in your semester, and its dates are added. Dates that have already passed come in marked as done.</p>
 <div class="dopts" id="topts"></div>
 <div class="mact"><button class="btn ghost" id="tcancel">Cancel</button><button class="btn" id="tdo">Use this semester</button></div></div></div>
@@ -1064,8 +1135,9 @@ $('#ssave').onclick=()=>{CFG={provider:$('#sprov').value,key:$('#skey').value.tr
 /* ---------- backup: export this page or the whole site; import detects what a file holds ---------- */
 const SCOPES={grades:{name:'Grades',sub:'Courses, weights, scores, professors and missed-exam make-ups',get:()=>({courses:S.courses,sel:S.sel}),set:d=>{S.courses=Array.isArray(d.courses)?d.courses:[];S.sel=d.sel;}},
   timetable:{name:'Timetable',sub:'Your class schedule, colours, names and display options',get:()=>({tt:S.tt||{}}),set:d=>{S.tt=d.tt||{};}},
-  tasks:{name:'Tasks',sub:'Your tasks, categories, semester, weeks off, academic calendar and finals',get:()=>({tasks:S.tasks||[],cats:S.cats||[],tstate:S.tstate||{},sem:S.sem||null,finals:S.finals||null}),set:d=>{S.tasks=d.tasks||[];mergeCats(d.cats);S.tstate=d.tstate||{};S.sem=d.sem||null;if(d.finals)S.finals=d.finals;else delete S.finals;}}};
-const viewScope=()=>({grades:'grades',tt:'timetable',tasks:'tasks'})[document.body.dataset.view]||null;
+  tasks:{name:'Tasks',sub:'Your tasks, categories, semester, weeks off, academic calendar and finals',get:()=>({tasks:S.tasks||[],cats:S.cats||[],tstate:S.tstate||{},sem:S.sem||null,finals:S.finals||null}),set:d=>{S.tasks=d.tasks||[];mergeCats(d.cats);S.tstate=d.tstate||{};S.sem=d.sem||null;if(d.finals)S.finals=d.finals;else delete S.finals;}},
+  planner:{name:'Planner',sub:'Your program, degree flowchart, completed and exempt courses, and GER list (shared by all semesters)',get:()=>({plan:S.plan||null}),set:d=>{if(d.plan)S.plan=d.plan;else delete S.plan;}}};
+const viewScope=()=>({grades:'grades',tt:'timetable',tasks:'tasks',plan:'planner'})[document.body.dataset.view]||null;
 /* three levels everywhere: this page · this semester · all semesters */
 const curSemName=()=>S.sem&&(S.sem.term||S.sem.year)?termNm(S):'this semester';
 function scopeOpts(box,name,verb,info){const sc=viewScope(),n=allTerms().length,o=(v,t,sub,dis)=>`<label class="dopt${dis?' dis':''}"><input type="radio" name="${name}" value="${v}" ${dis?'disabled':''}><span><b>${esc(t)}</b><small>${esc(sub)}</small></span></label>`;
@@ -1098,7 +1170,7 @@ function readBackup(v){if(!v||typeof v!=='object')return null;let scope,data=v;
   if(scope==='semester')return{kind:'semester',sem:data,name:termNm(data)};
   if(!data||!Array.isArray(data.courses))return null;const cur={};for(const k of SEMKEYS)if(data[k]!==undefined)cur[k]=data[k];cur.id=data.termId;cur.cats=data.cats;
   return{kind:'all',all:data,sem:cur,name:termNm(cur),n:1+(data.archive||[]).length};}
-const has={grades:d=>Array.isArray(d.courses),timetable:d=>d.tt&&typeof d.tt==='object',tasks:d=>Array.isArray(d.tasks)||!!d.sem||!!d.finals};
+const has={grades:d=>Array.isArray(d.courses),timetable:d=>d.tt&&typeof d.tt==='object',tasks:d=>Array.isArray(d.tasks)||!!d.sem||!!d.finals,planner:d=>!!d.plan};
 function mergeCats(c){if(!Array.isArray(c))return;S.cats=S.cats||[];for(const k of c)if(!S.cats.some(x=>x.id===k.id))S.cats.push(k);}
 $('#impf').onchange=async e=>{const f=e.target.files[0];e.target.value='';const tgt=impTarget||'all';impTarget=null;if(!f)return;let v;try{v=JSON.parse(await f.text());}catch{toast('That file isn’t a Course Manager backup');return;}
   const B=readBackup(v);if(!B){toast('That file isn’t a Course Manager backup');return;}const snap=JSON.stringify(S);let msg,done;
@@ -1119,7 +1191,7 @@ $('#impf').onchange=async e=>{const f=e.target.files[0];e.target.value='';const 
   else{if(B.kind!=='all'){toast('That file has one '+(B.kind==='semester'?'semester':'page')+'. Choose “This semester”'+(B.kind==='page'?' or “This page”':'')+' to import it.');return;}
     if(!await confirmBox('Replace all semesters?',`Everything in this browser is replaced by the file (${B.n} semester${B.n===1?'':'s'}).`,'Import'))return;
     S={...B.all,at:Date.now()};done='Backup imported';}
-  edit=false;fix();save();const target={grades:'#grades',timetable:'#timetable',tasks:'#tasks'}[tgt];if(target&&location.hash!==target)location.hash=target;else route();toast(done,snap);};
+  edit=false;fix();save();const target={grades:'#grades',timetable:'#timetable',tasks:'#tasks',planner:'#planner'}[tgt];if(target&&location.hash!==target)location.hash=target;else route();toast(done,snap);};
 
 new MutationObserver(()=>{for(const c of document.querySelectorAll('.stack td:not([data-l])')){let i=0,p=c;while(p=p.previousElementSibling)i++;c.dataset.l=c.closest('table').rows[0].cells[i]?.textContent||'';}}).observe(document.getElementById('panel'),{childList:true,subtree:true});
 
@@ -1138,12 +1210,12 @@ async function clearGrades(co){
   for(const c of scope)for(const k of c.comps){k.scores=k.scores.map(()=>'');delete k.miss;}
   render();save();toast(`Grades cleared for ${co.code||'course'}`,snap);
 }
-const ZC={grades:()=>{const n=S.courses.length,g=S.courses.reduce((a,c)=>a+c.comps.reduce((b,k)=>b+k.scores.filter(hasVal).length,0),0);return n?`${n} course${n===1?'':'s'} and ${g} score${g===1?'':'s'}`:'';},
+const ZC={planner:()=>{const p=S.plan;if(!p||!p.terms||!p.terms.length)return p&&p.ger?'your GER list':'';const n=p.terms.reduce((a,t)=>a+t.items.length,0);return`your degree plan (${n} courses)`+(p.ger?' and GER list':'');},grades:()=>{const n=S.courses.length,g=S.courses.reduce((a,c)=>a+c.comps.reduce((b,k)=>b+k.scores.filter(hasVal).length,0),0);return n?`${n} course${n===1?'':'s'} and ${g} score${g===1?'':'s'}`:'';},
   timetable:()=>{const n=(S.tt&&S.tt.slots||[]).length;return n?`${n} timetable class${n===1?'':'es'}`:'';},
   tasks:()=>{const n=(S.tasks||[]).length,c=(S.cats||[]).length,st=S.tstate&&Object.keys(S.tstate).length,sem=S.sem&&(S.sem.start||(S.sem.cal||[]).length);return[n&&`${n} task${n===1?'':'s'} you added`,st&&'task ticks and edits',sem&&'the semester and calendar',S.finals&&'your final exam schedules'].filter(Boolean).join(', ');}};
-const ZSUB={grades:'Courses, weights, scores, professors and make-ups',timetable:'Your class schedule, colours, names and display options',tasks:'Tasks you added, ticks, semester dates, academic calendar and final exam schedules. Tasks from syllabi stay while their courses do.'};
+const ZSUB={planner:'Your program, degree flowchart, completed and exempt courses, and GER list',grades:'Courses, weights, scores, professors and make-ups',timetable:'Your class schedule, colours, names and display options',tasks:'Tasks you added, ticks, semester dates, academic calendar and final exam schedules. Tasks from syllabi stay while their courses do.'};
 const ttPrefs=()=>{const o=S.tt||{},t={};for(const k of ['opts','order','view','h24','exp','colors'])if(o[k]!==undefined)t[k]=o[k];return t;};
-const zClear={grades:()=>{S.courses=[];S.sel=null;edit=false;},timetable:()=>{S.tt={};},tasks:()=>{S.tasks=[];S.tstate={};S.sem=S.sem&&(S.sem.term||S.sem.year)?{term:S.sem.term,year:S.sem.year,start:'',end:'',ov:{},cal:[]}:null;delete S.finals;},
+const zClear={planner:()=>{delete S.plan;},grades:()=>{S.courses=[];S.sel=null;edit=false;},timetable:()=>{S.tt={};},tasks:()=>{S.tasks=[];S.tstate={};S.sem=S.sem&&(S.sem.term||S.sem.year)?{term:S.sem.term,year:S.sem.year,start:'',end:'',ov:{},cal:[]}:null;delete S.finals;},
   sem:()=>{const t=ttPrefs();zClear.grades();zClear.tasks();S.tt=t;}};
 const zWhat=sc=>sc==='sem'?['grades','timetable','tasks'].map(k=>ZC[k]()).filter(Boolean).join('; '):sc==='all'?(()=>{const n=allTerms().length,cur=zWhat('sem');return n>1?`all ${n} semesters${cur?` (${curSemName()}: ${cur})`:''}`:cur;})():ZC[sc]();
 function openReset(){const sc=viewScope();scopeOpts('#zopts','zscope','reset',{page:sc?ZSUB[sc]+'. '+(ZC[sc]()?'Deletes '+ZC[sc]()+'.':'Nothing here yet.'):'',
@@ -1672,19 +1744,19 @@ Rules:
 - dates: every notable date or period. start/end as YYYY-MM-DD (end = start for one-day items). Keep the calendar's own wording for title.
 - type: "start" first day of classes, "end" last day of classes, "break" vacations/recess, "holiday" public holidays or university closed, "makeup" make-up/compensation days (say in the title which weekday's schedule is followed, if stated), "exam" exam periods, "deadline" add/drop/withdrawal/registration/grade deadlines, otherwise "event".
 - terms: one entry per semester or term the calendar covers (Fall, Spring, Summer, Winter), in order. term is one of Fall, Spring, Summer, Winter; year is the year the term is named for; start = first day of classes, end = last day of classes. Put each date in the term whose section it is listed under.`;
-async function askCal(input,name,onStatus,kind='calendar'){const pv=provider(),today=iso(today0()),fin=kind==='finals',local=t=>fin?{finals:finFromText(t),basic:true}:{local:calFromText(t),basic:true};
+async function askCal(input,name,onStatus,kind='calendar'){const pv=provider(),today=iso(today0()),fin=kind==='finals',local=t=>fin?{finals:finFromText(t),basic:true}:kind==='calendar'?{local:calFromText(t),basic:true}:{basic:true},WHAT={finals:'Reading the exam schedule…',calendar:'Reading the calendar…',plan:'Reading your program pages…',ger:'Reading the GER list…'},INS={finals:typeof FIN_INSTR!=='undefined'?FIN_INSTR:'',calendar:CAL_INSTR,plan:PLAN_INSTR,ger:GER_INSTR},LBL={finals:'Exam schedule',calendar:'Calendar',plan:'Catalog pages',ger:'GER course list'};
   if(pv==='relay'){try{const imgs=[];for(const im of input.images.slice(0,4)){const j=await toJpeg(im);if(/^image\/(jpeg|png|webp)$/.test(j.type))imgs.push({mime:j.type,data:await b64(j)});}
-      for(let a=0;a<2;a++){onStatus&&onStatus(fin?'Reading the exam schedule…':'Reading the calendar…');const ac=new AbortController(),kill=setTimeout(()=>ac.abort(),75000);let r,j;
+      for(let a=0;a<2;a++){onStatus&&onStatus(WHAT[kind]);const ac=new AbortController(),kill=setTimeout(()=>ac.abort(),kind==='plan'?110000:75000);let r,j;
         try{r=await fetch(RELAY,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({mode:kind,today,name,text:input.text.slice(0,80000),images:imgs}),signal:ac.signal});j=await r.json().catch(()=>({}));}catch(e){r={ok:false,status:e&&e.name==='AbortError'?504:0};j={};}finally{clearTimeout(kill);}
         if(r.ok&&j.calendar)return j.calendar;if(!(r.status>=500||r.status===429))break;await new Promise(res=>setTimeout(res,4000));}}catch{}
-    if(!input.text.trim())throw new Error('Reading a photo or scan needs the AI reader, which isn’t available right now.');return local(input.text);}
-  if(pv==='basic'){if(!input.text.trim())throw new Error('Photos and scans need an AI reader. Paste the text instead, or upload the .ics version.');return local(input.text);}
-  const msg=(fin?FIN_INSTR:CAL_INSTR)+`\nToday is ${today}.\n\nFile name: ${name}\n${fin?'Exam schedule':'Calendar'}:\n<<<\n${input.text.slice(0,80000)}\n>>>`;
+    if(!input.text.trim()&&kind!=='plan')throw new Error('Reading a photo or scan needs the AI reader, which isn’t available right now.');return local(input.text);}
+  if(pv==='basic'){if(!input.text.trim()&&kind!=='plan')throw new Error('Photos and scans need an AI reader. Paste the text instead, or upload the .ics version.');return local(input.text);}
+  const msg=INS[kind]+`\nToday is ${today}.\n\nFile name: ${name}\n${LBL[kind]}:\n<<<\n${input.text.slice(0,80000)}\n>>>`;
   if(pv==='gemini'){const parts=[{text:msg}];for(const im of input.images)parts.push({inline_data:{mime_type:im.type||'image/png',data:await b64(im)}});
     const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(CFG.model||DEF_MODEL.gemini)}:generateContent?key=${encodeURIComponent(CFG.key)}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{role:'user',parts}],generationConfig:{responseMimeType:'application/json'}})});
     const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error('Gemini: '+(j.error?.message||r.status));return parseJSON((j.candidates?.[0]?.content?.parts||[]).map(p=>p.text||'').join(''));}
   const content=[];for(const im of input.images)content.push({type:'image',source:{type:'base64',media_type:im.type||'image/png',data:await b64(im)}});content.push({type:'text',text:msg});
-  const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'content-type':'application/json','x-api-key':CFG.key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:CFG.model||DEF_MODEL.anthropic,max_tokens:8000,messages:[{role:'user',content}]})});
+  const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'content-type':'application/json','x-api-key':CFG.key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:CFG.model||DEF_MODEL.anthropic,max_tokens:kind==='plan'?12000:8000,messages:[{role:'user',content}]})});
   const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error('Claude API: '+(j.error?.message||r.status));return parseJSON((j.content||[]).map(c=>c.text||'').join(''));}
 function normDates(a){return(Array.isArray(a)?a:[]).map(x=>({id:rid(),title:tidyTitle(String(x.title||'')).slice(0,140),start:iso(pd(x.start)),end:iso(pd(x.end)||pd(x.start)),type:CTYPES[x.type]?x.type:classify(x.title)})).filter(x=>x.title&&x.start&&x.end).map(x=>x.end<x.start?{...x,end:x.start}:x).sort((a,b)=>a.start.localeCompare(b.start));}
 function calTerms(res,text){let terms;
@@ -2157,13 +2229,375 @@ $('#nsdo').onclick=()=>{const t=$('#nsterm').value,y=$('#nsyear').value.trim();i
   edit=false;tFilter='all';fix();save();location.hash='#home';route();toast(`${t} ${y} added`,snap);if(!c)setTimeout(openSem,250);};
 
 /* ---------- sections ---------- */
-const VIEWS={home:['#home','Home'],grades:['#grades','Grades'],tt:['#timetable','Timetable'],tasks:['#tasks','Tasks']};
-function route(){const h=location.hash,v=h==='#grades'?'grades':h==='#timetable'?'tt':h==='#tasks'?'tasks':'home';document.body.dataset.view=v;
+const VIEWS={home:['#home','Home'],grades:['#grades','Grades'],tt:['#timetable','Timetable'],tasks:['#tasks','Tasks'],plan:['#planner','Planner']};
+function route(){const h=location.hash,v=h==='#grades'?'grades':h==='#timetable'?'tt':h==='#tasks'?'tasks':h==='#planner'?'plan':'home';document.body.dataset.view=v;
   for(const k in VIEWS){$('#v-'+k).hidden=k!==v;$('#tab-'+k).setAttribute('aria-current',k===v?'page':'false');}
   $('#dropover').textContent=v==='tt'?'Drop your .ics schedule':'Drop syllabi to add them';document.title=VIEWS[v][1]+' · Course Manager';
-  closeColor();closeSemMenu();renderSemBtn();if(v==='tt')renderTT();else if(v==='tasks')renderTasks();else if(v==='home')renderHome();else render();}
+  closeColor();closeSemMenu();renderSemBtn();if(v==='tt')renderTT();else if(v==='tasks')renderTasks();else if(v==='home')renderHome();else if(v==='plan')renderPlanner2();else render();}
 addEventListener('hashchange',route);
 
+/* ================= PLANNER (degree flowchart) ================= */
+const PLAN_INSTR=`You read pages from a university catalog for ONE degree program (its degree requirements and/or its proposed sequence of study). Reply with ONLY a JSON object, no prose:
+{"name":"Bachelor of Science in Computer Engineering","abbr":"BSCoE","option":"","college":"College of Engineering","catalogYear":"2025–2026","credits":130,"built":false,
+ "terms":[{"year":1,"season":"Fall","courses":[{"code":"MTH 103","title":"Calculus I","credits":3}]}],
+ "electives":[{"group":"Major Electives","courses":[{"code":"COE 420","title":"Software Engineering","credits":3}]}],
+ "courses":[{"code":"COE 241","title":"Microcontrollers: Programming and Interfacing","credits":4,"prereq":"CMP 120, COE 221 and ELE 211","concurrent":""}]}
+Rules:
+- terms: the proposed/recommended sequence of study exactly as listed, in order. season is Fall, Spring or Summer; year is 1 to 5.
+- Placeholders keep their catalog code: "GER-Core" with the requirement as the title (e.g. "Arts and Literature"), "MJE" for major electives, "FRE" for free electives, "GER-SCI", "GER-COM" and so on. Alternatives such as "CHM 101 or BIO 101" go in one entry with that code.
+- If the pages have no sequence of study, build terms from the degree requirements in a sensible order (about 15–17 credits per Fall/Spring) and set "built" to true.
+- electives: every list of courses students choose from (major electives, concentration electives, and so on).
+- courses: every course whose description appears in the pages, with its prerequisites and its prerequisite-or-concurrent requirements copied as written.
+- Use numbers for credits.`;
+const GER_INSTR=`You read a university's list of general education (GER) courses offered in an upcoming semester. Reply with ONLY a JSON object, no prose:
+{"term":"Spring 2027","courses":[{"code":"ARA 101","title":"Arabic for Non-Native Speakers I","credits":3,"cats":["History and Culture of the Arab World"]}]}
+Rules: list every course. cats uses these names where they apply: "History and Culture of the Arab World", "Culture in a Critical Perspective", "Arts and Literature", "Human Interaction and Behavior", "Natural Sciences", "Communication", "Mathematics", "Statistics". A course can have several. term = the semester the list is for, if stated.`;
+const GERCATS=[['arab','History and Culture of the Arab World',/arab/i],['crit','Culture in a Critical Perspective',/critical/i],['arts','Arts and Literature',/arts?\s*(and|&)\s*lit/i],['human','Human Interaction and Behavior',/human\s*inter/i],['sci','Natural Sciences',/natural\s*sci|GER-SCI/i],['com','Communication',/communic|GER-COM/i],['mth','Mathematics',/mathem|GER-MTH/i],['sta','Statistics',/statist|GER-STA/i]];
+const gerKey=s=>{for(const[k,,re]of GERCATS)if(re.test(s||''))return k;return'';};
+const gerName=k=>(GERCATS.find(g=>g[0]===k)||[,''])[1];
+
+let CAT=null,catLoading=null,catErr='';
+const CAT_URL='catalog-data.json';
+function loadCatalog(){if(CAT)return Promise.resolve(CAT);if(catLoading)return catLoading;
+  catLoading=fetch(CAT_URL).then(r=>{if(!r.ok)throw new Error('HTTP '+r.status);return r.json();}).then(j=>{CAT=j;catErr='';return j;}).catch(e=>{catLoading=null;catErr=String(e&&e.message||e);throw e;});return catLoading;}
+function PL(){if(!S.plan||typeof S.plan!=='object')S.plan={};const p=S.plan;p.terms=p.terms||[];p.custom=p.custom||[];return p;}
+function courseDB(year){const p=PL(),key=year||p.year||'';CAT&&(CAT._db=CAT._db||{});
+  let d;if(CAT&&CAT._db[key])d=CAT._db[key];else{d=Object.assign({},CAT?CAT.courses:{});const df=CAT&&CAT.cdiff&&CAT.cdiff[key]||{};for(const k in df){if(df[k]===null)delete d[k];else d[k]=df[k];}if(CAT)CAT._db[key]=d;}
+  const cp=customProg();if(cp&&cp.courses){d=Object.assign({},d);for(const k in cp.courses)d[k]=Object.assign({},d[k]||{},cp.courses[k]);}
+  return d;}
+const catYears=()=>CAT?Object.keys(CAT.years).sort():[];
+function progsFor(y){const base=CAT&&CAT.years[y]?CAT.years[y].programs:[];return[...base,...PL().custom.filter(c=>c.year===y)];}
+const customProg=()=>{const p=PL();return p.prog&&String(p.prog).startsWith('ai-')?p.custom.find(c=>c.id===p.prog):null;};
+function curProg(){const p=PL();return customProg()||progsFor(p.year).find(x=>x.id===p.prog)||null;}
+const progLabel=pr=>pr?pr.name.replace(/^Bachelor of Science in /,'BS in ').replace(/^Bachelor of Arts in /,'BA in ').replace(/^Bachelor of /,'Bachelor of ')+(pr.sub?' · '+pr.sub.replace(/^(with a |Concentration: )/i,''):''):'';
+const SEAS=['Fall','Spring','Summer'],seasIx=s=>SEAS.indexOf(s);
+const REALC=/^[A-Z]{2,4} \d{3}[A-Z]?$/;
+const normC=c=>String(c||'').toUpperCase().replace(/\s+/g,' ').replace(/^([A-Z]{2,4})\s?(\d{3}[A-Z]?)$/,'$1 $2').trim();
+/* sorted columns */
+function pTerms(){return PL().terms.slice().sort((a,b)=>a.y-b.y||seasIx(a.s)-seasIx(b.s));}
+function termCal(t){const p=PL(),sy=+(p.start&&p.start.y)||new Date().getFullYear();return{s:t.s,y:t.s==='Fall'?sy+t.y-1:sy+t.y};}
+const termName=t=>{const c=termCal(t);return`${c.s} ${c.y}`;};
+function nowTerm(){const s=S.sem;if(s&&s.term&&s.year&&['Fall','Spring','Summer'].includes(s.term))return{s:s.term,y:+s.year};const d=today0(),m=d.getMonth();return{s:m<=4?'Spring':m<=6?'Summer':'Fall',y:d.getFullYear()};}
+const calKey=c=>c.y*10+seasIx(c.s)*(c.s==='Fall'?1:1)+(c.s==='Spring'?0:c.s==='Summer'?1:2);
+function termRel(t){const a=termCal(t),n=nowTerm(),ka=a.y*3+({Spring:0,Summer:1,Fall:2})[a.s],kn=n.y*3+({Spring:0,Summer:1,Fall:2})[n.s];return ka<kn?'past':ka===kn?'now':'future';}
+/* categories */
+const GENP={MTH:'math',STA:'math',QBA:'math',PHY:'sci',CHM:'sci',BIO:'sci',ENV:'sci',WRI:'wri'};
+function majorPrefixes(pr){const c={};if(!pr)return new Set();for(const t of pr.terms)for(const i of t.i){const m=String(i.c).match(/^([A-Z]{2,4}) \d/);if(m&&!GENP[m[1]]&&!['NGN','IEN','ENG','BUS','DES','UPA'].includes(m[1]))c[m[1]]=(c[m[1]]||0)+1;}
+  return new Set(Object.entries(c).sort((a,b)=>b[1]-a[1]).slice(0,4).filter(e=>e[1]>=2).map(e=>e[0]));}
+function pcatOf(x,mp){const c=String(x.pick||x.c||'').toUpperCase(),ph=String(x.c||'').toUpperCase();
+  if(/^GER/.test(ph))return'ger';if(/^(MJE|CNE|CNR)/.test(ph))return'mje';if(/^FRE/.test(ph))return'fre';
+  const p=(c.match(/^([A-Z]{2,4})/)||[])[1]||'';if(p==='ENG'&&/^ENG 20[34]/.test(c))return'wri';if(GENP[p])return GENP[p];if(mp.has(p))return'major';if(['NGN','IEN','BUS','DES'].includes(p))return'core';return'other';}
+const PCATN={major:'Major',core:'College core',math:'Mathematics',sci:'Sciences',wri:'Writing',ger:'General education',mje:'Major electives',fre:'Free electives',other:'Other'};
+/* requirement parsing: "CMP 120 or MCE 226L, COE 221, and ELE 211 or ELE 225; junior standing" */
+const STAND={'first-year':0,freshman:0,sophomore:30,junior:60,senior:90};
+/* ", or" at the top level separates whole alternatives: "PHY 102 and PHY 102L, or CMP 120" */
+const oneOf=s=>String(s).replace(/(?:any\s+)?one\s+of\s+([A-Z]{2,4} ?\d{3}[A-Z]?(?:\s*(?:,|or)\s*[A-Z]{2,4} ?\d{3}[A-Z]?)+)/gi,(m,l)=>l.replace(/\s*,\s*/g,' or '));
+const reqClauses=str=>str?oneOf(str).split(/[,;]\s*or\b/i).map(reqGroups).filter(c=>c.length):[];
+function reqGroups(str){if(!str)return[];return String(str).split(/;|,|\band\b/i).map(g=>g.trim()).filter(g=>g&&!/^(or)$/i.test(g)).map(g=>g.split(/\bor\b/i).map(a=>a.trim()).filter(Boolean).map(a=>{
+    if(/placement|score|\btest\b|consent|approval|permission|equivalent|instructor/i.test(a))return{x:a};const m=a.match(/\b([A-Z]{2,4})\s?(\d{3}[A-Z]?)\b/);if(m)return{c:m[1]+' '+m[2]};
+    const st=a.match(/(first-year|freshman|sophomore|junior|senior)(\s+II)?\s+standing/i);if(st)return{cr:STAND[st[1].toLowerCase()]+(st[2]?15:0),x:a};
+    const ch=a.match(/(\d+)\s+credit\s+hours/i);if(ch)return{cr:+ch[1],x:a};return{x:a};})).filter(g=>g.length);}
+/* one evaluation pass: where every course sits, what each needs, and the arrows */
+function planModel(){const p=PL(),db=courseDB(),cols=pTerms(),pr=curProg(),mp=majorPrefixes(pr),where={},edges=[],warn={};
+  const codesOf=x=>{const c=x.pick||x.c;return String(c).split(/\s+or\s+/i).map(normC).filter(z=>REALC.test(z));};
+  cols.forEach((t,k)=>t.items.forEach((x,r)=>{for(const c of codesOf(x))(where[c]=where[c]||[]).push({k,r,x});}));
+  const credBefore=[];let run=0;for(let k=0;k<cols.length;k++){credBefore[k]=run;for(const x of cols[k].items)if(x.st!=='exempt'||x.ecr)run+=+x.cr||0;}
+  const ok=(c,k,same)=>(where[c]||[]).some(w=>w.x.st==='done'||w.x.st==='exempt'||(same?w.k<=k:w.k<k));
+  cols.forEach((t,k)=>t.items.forEach((x,r)=>{const cs=codesOf(x);if(cs.length!==1)return;const d=db[cs[0]];if(!d)return;const miss=[];
+    const chk=(str,same)=>{const cl=reqClauses(str);if(!cl.length)return;
+      const evalC=c=>{const out={sat:true,miss:[],src:[]};for(const g of c){let sat=false,src=null;
+          for(const a of g){if(a.c){if(a.c===cs[0]){sat=true;continue;}const ws=(where[a.c]||[]).filter(w=>w.x!==x);if(ws.length&&!src)src=ws.slice().sort((u,v)=>v.k-u.k).find(w=>same?w.k<=k:w.k<k)||ws[0];if(ok(a.c,k,same))sat=true;}
+            else if(a.cr!=null){if(credBefore[k]>=a.cr)sat=true;}else sat=true;}
+          if(src)out.src.push(src);if(!sat){out.sat=false;out.miss.push(g.map(a=>a.c||a.x).join(' or '));}}return out;};
+      const R=cl.map(evalC),best=R.find(r=>r.sat)||R.slice().sort((a,b)=>b.src.length-a.src.length||a.miss.length-b.miss.length)[0];
+      for(const src of best.src)if(src.x!==x)edges.push({a:src,b:{k,r,x},kind:same?'c':'p'});
+      if(!best.sat&&x.st!=='done'&&x.st!=='exempt')miss.push(R.length>1?R.map(r=>r.miss.join(' and ')).join(' — or — '):best.miss.join('; '));};
+    chk(d.p,false);chk(d.pc,true);if(miss.length)warn[x.id]=miss;}));
+  const seen=new Set(),E=edges.filter(e=>{const key=e.a.x.id+'>'+e.b.x.id;if(seen.has(key)||e.a.k>e.b.k)return false;seen.add(key);return true;});
+  return{cols,db,edges:E,warn,where,mp,pr,credBefore};}
+function planTotals(M){let done=0,plan=0,now=0,ex=0;for(const t of M.cols)for(const x of t.items){const c=+x.cr||0;if(x.st==='done')done+=c;else if(x.st==='exempt'){if(x.ecr)ex+=c;}else if(x.st==='now')now+=c;else plan+=c;}
+  const req=M.pr?M.pr.credits:0;return{done,plan,now,ex,req,total:done+plan+now+ex};}
+
+/* ---------- render ---------- */
+const PB={W:150,H:70,G:14,GUT:48,HEAD:56,TOP:30};let pZoom=null,pLines=true,pHover=null;
+function renderPlanner2(){const v=$('#v-plan');if(!v)return;const p=PL();
+  if(!CAT&&!catErr){$('#pmain').innerHTML='<div class="ttempty"><p class="hint">Loading the course catalogs…</p></div>';loadCatalog().then(renderPlanner2,renderPlanner2);return;}
+  const pr=curProg();
+  if(!pr||!p.terms.length){$('#phead').innerHTML=`<div class="semline"><b>Degree planner</b><span class="wk">Plan your degree</span></div>`;renderPSide(null);
+    $('#pmain').innerHTML=`<div class="ttempty"><h2>Pick your program</h2><p>Choose your catalog year, college and major. Your program’s recommended sequence is laid out as a flowchart, with arrows for prerequisites. Then mark what you’ve done, move courses around, and add summers or extra years.</p>${catErr?`<p class="note warn">The built-in catalogs couldn’t be loaded (${esc(catErr)}). Make sure <b>catalog-data.json</b> is uploaded next to index.html, or upload your major’s catalog pages instead.</p>`:''}<div class="gempty"><button class="btn" data-pact="prog">Choose program</button><button class="btn ghost" data-pact="ai">Upload catalog pages</button></div></div>`;return;}
+  const M=planModel(),T=planTotals(M);
+  $('#phead').innerHTML=`<div class="semline"><b>${esc(p.year)} catalog</b><span class="wk">${esc(progLabel(pr))}</span><span class="hint">${fmt(T.done+T.ex)} of ${fmt(T.req||T.total)} credits done${T.now?` · ${fmt(T.now)} in progress`:''}${Object.keys(M.warn).length?` · <b class="perr">${Object.keys(M.warn).length} prerequisite issue${Object.keys(M.warn).length===1?'':'s'}</b>`:''}</span></div>`;
+  renderPSide(M,T);drawChart(M);}
+function boxHTML(x,M,col){const db=M.db,code=x.pick||x.c,cs=String(code).split(/\s+or\s+/i),d=cs.length===1?db[normC(code)]:null,cat=pcatOf(x,M.mp);
+  const isPh=!REALC.test(normC(x.c))&&!/\bor\b/i.test(x.c);const title=x.pick?(db[normC(x.pick)]?.t||x.pt||''):(d?d.t:x.t)||'';
+  const tag=isPh?(x.pick?`<em class="pph">${esc(x.c==='GER-Core'?'GER':x.c)}</em>`:''):'';
+  const w=M.warn[x.id];
+  return`<div class="pbox pc-${cat}${x.st?' st-'+x.st:''}${w?' warn':''}${isPh&&!x.pick?' ph':''}" data-pid="${x.id}" tabindex="0" role="button" aria-label="${esc(code+' '+title)}">
+    <b class="pcode">${esc(code)}${tag}</b><span class="ptitle">${esc(isPh&&!x.pick?(x.t||PCATN[cat]):title)}</span><span class="pcr">${x.cr!=null?fmt(x.cr)+' cr':''}${x.g?` · ${esc(x.g)}`:''}</span>
+    ${x.st==='done'?'<i class="pst" title="Completed">✓</i>':x.st==='exempt'?'<i class="pst ex" title="Exempt">E</i>':x.st==='now'?'<i class="pst now" title="In progress">●</i>':''}${w?`<i class="pwarn" title="${esc('Missing: '+w.join('; '))}">!</i>`:''}</div>`;}
+function drawChart(M){const cols=M.cols,{W,H,G,GUT,HEAD,TOP}=PB;const maxR=Math.max(4,...cols.map(c=>c.items.length+1));
+  const CW=cols.length*(W+GUT)+GUT/2,CH=TOP+HEAD+maxR*(H+G)+10;
+  const colX=k=>GUT/2+k*(W+GUT),rowY=r=>TOP+HEAD+r*(H+G);
+  let html='',yrs={};cols.forEach((t,k)=>{(yrs[t.y]=yrs[t.y]||[]).push(k);});
+  for(const y in yrs){const ks=yrs[y],x0=colX(ks[0]),x1=colX(ks[ks.length-1])+W,cr=ks.reduce((a,k)=>a+cols[k].items.reduce((s,x)=>s+(+x.cr||0),0),0);
+    html+=`<div class="pyr" style="left:${x0}px;width:${x1-x0}px"><b>${['First','Second','Third','Fourth','Fifth','Sixth','Seventh'][y-1]||'Year '+y} Year</b><span>${fmt(cr)} credit hours</span></div>`;}
+  cols.forEach((t,k)=>{const rel=termRel(t),cr=t.items.reduce((s,x)=>s+(+x.cr||0),0);
+    html+=`<div class="pcol${rel==='now'?' now':''}${t.s==='Summer'?' sum':''}" data-tid="${t.id}" style="left:${colX(k)-6}px;top:${TOP}px;width:${W+12}px;height:${CH-TOP}px"></div>
+      <div class="pch${rel==='now'?' now':''}" style="left:${colX(k)}px;top:${TOP+6}px;width:${W}px"><b>${esc(termName(t))}</b><span>${fmt(cr)} cr${rel==='now'?' · now':''}</span><button class="pcm" data-pact="colmenu" data-tid="${t.id}" aria-label="Options for ${esc(termName(t))}">⋯</button></div>`;
+    t.items.forEach((x,r)=>{html+=`<div class="pslot" style="left:${colX(k)}px;top:${rowY(r)}px;width:${W}px;height:${H}px">${boxHTML(x,M,t)}</div>`;});
+    html+=`<button class="padd" data-pact="add" data-tid="${t.id}" style="left:${colX(k)}px;top:${rowY(t.items.length)}px;width:${W}px">+ Add</button>`;});
+  /* arrows: right edge → lane in the gutter → (row channel) → lane before the target → target's left edge */
+  const lanes={},lane=(g,key)=>{const L=lanes[g]=lanes[g]||[];let i=L.indexOf(key);if(i<0){L.push(key);i=L.length-1;}return i;};
+  const laneX=(g,i)=>colX(g)+W+10+((i*7)%(GUT-18));
+  let paths='';for(const e of M.edges){const a=e.a,b=e.b,sx=colX(a.k)+W,sy=rowY(a.r)+H/2,tx=colX(b.k),ty=rowY(b.r)+H/2;let d;
+    if(a.k===b.k){const lx=colX(a.k)+W+8+((lane(a.k,'c'+a.x.id)*6)%(GUT-16));d=`M${sx} ${sy}H${lx}V${ty}H${sx+2}`;}
+    else{const l1=laneX(a.k,lane(a.k,a.x.id));
+      if(b.k===a.k+1)d=`M${sx} ${sy}H${l1}V${ty}H${tx-2}`;
+      else{const ch=rowY(b.r)-G/2,l2=colX(b.k)-GUT+10+((lane(b.k-1,'in'+b.x.id)*7)%(GUT-18));d=`M${sx} ${sy}H${l1}V${ch}H${l2}V${ty}H${tx-2}`;}}
+    paths+=`<path d="${roundPath(d)}" class="pe ${e.kind}" data-a="${a.x.id}" data-b="${b.x.id}"/>`;}
+  const svg=`<svg class="plines${pLines?'':' off'}" width="${CW}" height="${CH}" viewBox="0 0 ${CW} ${CH}"><defs><marker id="parr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L8 4L0 8z" class="pah"/></marker><marker id="parr2" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L8 4L0 8z" class="pah hi"/></marker></defs>${paths}</svg>`;
+  const wrap=$('#pmain');const avail=wrap.clientWidth||900,z=pZoom==null?Math.max(.8,Math.min(1,avail/CW)):pZoom;
+  wrap.innerHTML=`<div class="pzoom"><button class="ib" data-pact="zout" aria-label="Zoom out">−</button><button class="lnkbtn" data-pact="zfit">${Math.round(z*100)}%</button><button class="ib" data-pact="zin" aria-label="Zoom in">+</button><label class="ptog"><input type="checkbox" data-pact="lines" ${pLines?'checked':''}> Prerequisite lines</label></div>
+    <div class="pscroll"><div class="psize" style="width:${CW*z}px;height:${CH*z}px"><div class="pcanvas" style="width:${CW}px;height:${CH}px;transform:scale(${z})">${svg}${html}</div></div></div>`;}
+function roundPath(d){/* turn an orthogonal M/H/V path into one with small rounded corners */
+  const pts=[];let x=0,y=0;for(const m of d.matchAll(/([MHV])\s*(-?[\d.]+)(?:\s+(-?[\d.]+))?/g)){if(m[1]==='M'){x=+m[2];y=+m[3];}else if(m[1]==='H')x=+m[2];else y=+m[2];pts.push([x,y]);}
+  const P=pts.filter((q,i)=>i===0||q[0]!==pts[i-1][0]||q[1]!==pts[i-1][1]);if(P.length<3)return d;let s=`M${P[0][0]} ${P[0][1]}`;
+  for(let i=1;i<P.length-1;i++){const[a,b,c]=[P[i-1],P[i],P[i+1]],r=Math.min(6,Math.hypot(b[0]-a[0],b[1]-a[1])/2,Math.hypot(c[0]-b[0],c[1]-b[1])/2);
+    const u=[Math.sign(b[0]-a[0]),Math.sign(b[1]-a[1])],v=[Math.sign(c[0]-b[0]),Math.sign(c[1]-b[1])];s+=`L${b[0]-u[0]*r} ${b[1]-u[1]*r}Q${b[0]} ${b[1]} ${b[0]+v[0]*r} ${b[1]+v[1]*r}`;}
+  const L=P[P.length-1];return s+`L${L[0]} ${L[1]}`;}
+function renderPSide(M,T){const p=PL(),pr=M&&M.pr,g=p.ger;let h='';
+  if(pr){const req=T.req||T.total,pc=v=>Math.min(100,req?v/req*100:0);
+    h+=`<section class="pscard"><h3>Progress</h3><div class="pbar2"><i class="d" style="width:${pc(T.done+T.ex)}%"></i><i class="n" style="width:${pc(T.now)}%"></i><i class="p" style="width:${pc(T.plan)}%"></i></div>
+      <dl class="pstats"><div><dt>Completed</dt><dd>${fmt(T.done+T.ex)} cr</dd></div><div><dt>In progress</dt><dd>${fmt(T.now)} cr</dd></div><div><dt>Planned</dt><dd>${fmt(T.plan)} cr</dd></div><div><dt>Program</dt><dd>${fmt(req)} cr</dd></div></dl>
+      ${T.total<req?`<p class="hint perr">Your plan is ${fmt(req-T.total)} credits short of the program.</p>`:''}
+      <button class="btn ghost sm" data-pact="fromsem">Fill in from my semesters</button><button class="btn ghost sm" data-pact="pastdone">Mark past terms completed</button></section>`;
+    const wl=Object.entries(M.warn);if(wl.length)h+=`<section class="pscard"><h3>Prerequisite issues <span class="hcount">${wl.length}</span></h3><ul class="pwl">${wl.slice(0,8).map(([id,m])=>{const x=findItem(id);return`<li><button class="lnkbtn" data-pact="goto" data-pid="${id}">${esc(x?x.pick||x.c:'')}</button> needs ${esc(m.join('; '))}</li>`;}).join('')}</ul></section>`;}
+  h+=`<section class="pscard"><h3>GER courses offered</h3>${g&&g.list&&g.list.length?`<p class="hint">${esc(g.term||'Next semester')}: ${g.list.length} courses. They’re suggested first when you fill a GER slot.</p><div class="srow"><button class="btn ghost sm" data-pact="ger">Upload new list</button><button class="lnkbtn" data-pact="gerclear">Remove</button></div>`:`<p class="hint">Upload the list of GER courses offered next semester (PDF, Word, photo or text). Each GER slot then suggests courses that fit it.</p><button class="btn ghost sm" data-pact="ger">Upload GER list</button>`}<p class="hint" id="pgstatus"></p></section>`;
+  if(pr){const cats=new Set();for(const t of M.cols)for(const x of t.items)cats.add(pcatOf(x,M.mp));
+    h+=`<section class="pscard"><h3>Key</h3><ul class="pkey">${[...cats].map(c=>`<li><i class="pc-${c}"></i>${PCATN[c]}</li>`).join('')}<li><svg width="34" height="8"><path d="M1 4H30" class="pe p"/></svg>Prerequisite</li><li><svg width="34" height="8"><path d="M1 4H30" class="pe c"/></svg>Prerequisite or same term</li><li><i class="kst">✓</i>Completed</li><li><i class="kst ex">E</i>Exempt</li><li><i class="kst warn">!</i>Missing a prerequisite</li></ul></section>`;}
+  $('#pside').innerHTML=h;}
+function findItem(id){for(const t of PL().terms)for(const x of t.items)if(x.id===id)return x;return null;}
+const findTerm=id=>PL().terms.find(t=>t.id===id);
+const termOfItem=id=>PL().terms.find(t=>t.items.some(x=>x.id===id));
+
+/* ---------- build from a program ---------- */
+function planFromProg(pr,keep){const old={};if(keep)for(const t of PL().terms)for(const x of t.items){if(x.st||x.g)old[normC(x.pick||x.c)]={st:x.st,g:x.g,ecr:x.ecr};}
+  const ys=Math.max(4,...pr.terms.map(t=>t.y)),terms=[];
+  for(let y=1;y<=ys;y++)for(const s of SEAS){const src=pr.terms.filter(t=>t.y===y&&t.s===s);if(s==='Summer'&&!src.length)continue;
+    terms.push({id:rid(),y,s,items:src.flatMap(t=>t.i).map(x=>{const o={id:rid(),c:x.c,t:x.t,cr:x.cr==null?null:+x.cr};const k=old[normC(x.c)];if(k)Object.assign(o,k);return o;})});}
+  return terms;}
+function setProgram(year,id,start){const p=PL(),snap=JSON.stringify(S),pr=(id.startsWith('ai-')?p.custom.find(c=>c.id===id):progsFor(year).find(x=>x.id===id));if(!pr)return;
+  const keep=p.terms.length>0;p.year=year;p.prog=id;p.start=start;p.terms=planFromProg(pr,keep);save();renderPlanner2();toast(progLabel(pr)+' loaded',snap);}
+
+/* ---------- program picker ---------- */
+function openProg(){if(!CAT&&!catErr){loadCatalog().then(openProg,openProg);return;}const p=PL(),ys=catYears();
+  const sy=p.start||{s:'Fall',y:nowTerm().s==='Fall'?nowTerm().y:nowTerm().y-1};
+  $('#ppyear').innerHTML=ys.map(y=>`<option${y===(p.year||ys[ys.length-1])?' selected':''}>${esc(y)}</option>`).join('')+(PL().custom.some(c=>!ys.includes(c.year))?[...new Set(PL().custom.filter(c=>!ys.includes(c.year)).map(c=>c.year))].map(y=>`<option>${esc(y)}</option>`).join(''):'');
+  $('#ppsy').value=sy.y;$('#ppss').value=sy.s;ppFill(p.prog);$('#ppnote').textContent=catErr?'The built-in catalogs couldn’t be loaded. Upload your major’s pages below instead.':'';$('#ppmodal').classList.add('on');}
+function ppFill(sel){const y=$('#ppyear').value,ps=progsFor(y),cols=[...new Set(ps.map(x=>x.college||'Other'))].sort();
+  const cc=$('#ppcol').value&&cols.includes($('#ppcol').value)?$('#ppcol').value:(ps.find(x=>x.id===sel)||{}).college||cols[0];
+  $('#ppcol').innerHTML=cols.map(c=>`<option${c===cc?' selected':''}>${esc(c)}</option>`).join('');
+  const mine=ps.filter(x=>(x.college||'Other')===cc);$('#ppmaj').innerHTML=mine.map(x=>`<option value="${esc(x.id)}"${x.id===sel?' selected':''}>${esc(progLabel(x))}${x.id.startsWith('ai-')?' (from your pages)':''}</option>`).join('');ppInfo();}
+function ppInfo(){const pr=progsFor($('#ppyear').value).find(x=>x.id===$('#ppmaj').value);$('#ppinfo').textContent=pr?`${fmt(pr.credits)} credit hours · ${Math.max(...pr.terms.map(t=>t.y))} years in the recommended sequence${pr.page?` · page ${pr.page} of the catalog PDF`:''}`:'';}
+$('#ppyear').onchange=()=>ppFill(PL().prog);$('#ppcol').onchange=()=>ppFill();$('#ppmaj').onchange=ppInfo;
+$('#ppcancel').onclick=()=>$('#ppmodal').classList.remove('on');$('#ppmodal').addEventListener('click',e=>{if(e.target===$('#ppmodal'))$('#ppmodal').classList.remove('on');});
+$('#ppdo').onclick=async()=>{const y=$('#ppyear').value,id=$('#ppmaj').value,st={s:$('#ppss').value,y:+$('#ppsy').value||new Date().getFullYear()};if(!id)return;
+  const p=PL();if(p.terms.length&&(p.prog!==id||p.year!==y)&&!await confirmBox('Switch program?','Your flowchart is rebuilt from the new program. Courses you marked completed or exempt keep their status wherever the same course appears.','Switch'))return;
+  $('#ppmodal').classList.remove('on');if(p.prog===id&&p.year===y&&p.terms.length){const snap=JSON.stringify(S);p.start=st;save();renderPlanner2();toast('Start term updated',snap);return;}setProgram(y,id,st);};
+$('#ppai').onclick=()=>$('#ppfile').click();
+$('#ppfile').onchange=async e=>{const f=[...e.target.files];e.target.value='';if(!f.length)return;await importProgramPages(f);};
+
+/* ---------- AI / built-in reading of a major's catalog pages ---------- */
+function normProg(r,files,text){r=r||{};if(!r.catalogYear&&text){const m=String(text).match(/Catalog\s+(20\d\d)\s*[–-]\s*(20\d\d)/);if(m)r.catalogYear=m[1]+'–'+m[2];}const terms=(Array.isArray(r.terms)?r.terms:[]).map(t=>({y:Math.max(1,Math.min(7,+t.year||1)),s:SEAS.find(s=>s.toLowerCase()===String(t.season||'').toLowerCase())||'Fall',
+    i:(t.courses||t.items||[]).map(c=>({c:String(c.code||'').replace(/\s+/g,' ').trim()||'FRE',t:String(c.title||'').trim(),cr:c.credits==null||c.credits===''?null:+c.credits})).filter(c=>c.c)})).filter(t=>t.i.length);
+  const courses={};for(const c of(Array.isArray(r.courses)?r.courses:[])){const k=normC(c.code);if(!REALC.test(k))continue;courses[k]={t:String(c.title||''),c:String(c.credits??''),...(c.prereq?{p:String(c.prereq)}:{}),...(c.concurrent?{pc:String(c.concurrent)}:{})};}
+  const electives=(Array.isArray(r.electives)?r.electives:[]).map(g=>({group:String(g.group||'Electives'),courses:(g.courses||[]).map(c=>({c:normC(c.code),t:String(c.title||''),cr:+c.credits||null})).filter(c=>REALC.test(c.c))}));
+  const name=String(r.name||'My program').trim(),credits=terms.reduce((a,t)=>a+t.i.reduce((s,x)=>s+(+x.cr||0),0),0);
+  return{id:'ai-'+rid(),name,sub:String(r.option||'').trim(),abbr:String(r.abbr||''),college:String(r.college||'From my catalog pages').trim()||'From my catalog pages',year:String(r.catalogYear||PL().year||'My catalog').replace('-','–'),credits:+r.credits||credits,terms,courses,electives,built:!!r.built,files};}
+async function importProgramPages(files){const st=$('#ppnote');st.className='hint';let text='',items=[],images=[],page=0;
+  try{for(const f of files){st.textContent=`Reading ${f.name}…`;const inp=await readFile(f);text+=inp.text+'\n\n';images.push(...inp.images);for(const it of inp.items||[])items.push({...it,p:it.p+page});page+=1000;}
+    let pr=null,basic=false;const local=planFromItems(items);
+    try{const res=await askCal({text,images,items},files.map(f=>f.name).join(', '),t=>st.textContent=t,'plan');if(res&&!res.basic)pr=normProg(res,files.map(f=>f.name),text);}catch(err){if(!local)throw err;}
+    if((!pr||!pr.terms.length)&&local){pr=normProg(local,files.map(f=>f.name),text);basic=true;}
+    if(!pr||!pr.terms.length)throw new Error('No sequence of study or degree requirements were found on those pages.');
+    if(local&&pr.terms.length&&!basic){/* fill credits the AI left out from the page's own table */const lc={};for(const t of local.terms)for(const c of t.courses)lc[normC(c.code)]=c.credits;for(const t of pr.terms)for(const x of t.i)if(x.cr==null&&lc[normC(x.c)]!=null)x.cr=lc[normC(x.c)];}
+    const p=PL();p.custom=p.custom.filter(c=>!(c.name===pr.name&&c.sub===pr.sub&&c.year===pr.year));p.custom.push(pr);save();
+    if(![...$('#ppyear').options].some(o=>o.value===pr.year))$('#ppyear').insertAdjacentHTML('beforeend',`<option>${esc(pr.year)}</option>`);
+    $('#ppyear').value=pr.year;ppFill(pr.id);$('#ppcol').value=pr.college;ppFill(pr.id);
+    st.textContent=`Read ${progLabel(pr)}: ${pr.terms.reduce((a,t)=>a+t.i.length,0)} courses, ${fmt(pr.credits)} credits${pr.built?' (no sequence of study on those pages, so the order was suggested)':''}.${basic?' Read with the built-in reader, so check it.':''} Pick it above and press “Use this program”.`;}
+  catch(err){st.className='hint err';st.textContent=(err&&err.message)||'Couldn’t read those pages.';}}
+/* built-in: read a "Proposed Sequence of Study" table from PDF text positions */
+function planFromItems(items){if(!items||!items.length)return null;const words=[];
+  for(const it of items){const parts=String(it.s).split(/(\s+)/);let off=0;const L=it.s.length||1;for(const p of parts){if(p.trim())words.push({t:p,x0:it.x+it.w*off/L,x1:it.x+it.w*(off+p.length)/L,y:it.y,p:it.p});off+=p.length;}}
+  const YRS={FIRST:1,SECOND:2,THIRD:3,FOURTH:4,FIFTH:5},terms=[];let title='';
+  for(const pg of [...new Set(words.map(w=>w.p))]){const W=words.filter(w=>w.p===pg),heads=W.filter(w=>YRS[w.t]&&W.some(v=>v.t.startsWith('YEAR')&&Math.abs(v.y-w.y)<3&&v.x0>w.x0));if(!heads.length)continue;
+    const bt=W.filter(w=>w.y<Math.min(...heads.map(h=>h.y))-2).sort((a,b)=>a.y-b.y||a.x0-b.x0);const tl=lines(bt).map(l=>l.map(w=>w.t).join(' ')).filter(l=>/^Bachelor/.test(l));if(tl.length&&!title)title=tl[tl.length-1];
+    const mid=(Math.min(...W.map(w=>w.x0))+Math.max(...W.map(w=>w.x1)))/2;
+    for(const half of[0,1]){const HW=W.filter(w=>(w.x0<mid-5)===(half===0)),hs=heads.filter(h=>(h.x0<mid-5)===(half===0)).sort((a,b)=>a.y-b.y);
+      hs.forEach((h,hi)=>{const y0=h.y,y1=hi+1<hs.length?hs[hi+1].y:1e9,BW=HW.filter(w=>w.y>=y0-1&&w.y<y1-1);
+        const hc=BW.filter(w=>(w.t==='Course'||w.t==='Term')&&w.y<y0+30);if(!hc.length)return;const hy=Math.min(...hc.map(w=>w.y)),B0=BW.filter(w=>w.y<=hy+6&&w.y>y0+1);
+        const cw=B0.filter(w=>w.t==='Course').sort((a,b)=>a.x0-b.x0);if(!cw.length)return;let cx=cw[0].x0-8,tx=cw[1]?cw[1].x0:cw[0].x1+30;
+        const cr0=B0.filter(w=>/^(Credit|Hours)$/.test(w.t)),crx=cr0.length?Math.min(...cr0.map(w=>w.x0)):Math.max(...BW.map(w=>w.x1))-25;
+        const cd=BW.filter(w=>w.y>hy+6&&w.x0>=cx-3&&w.x0<cx+45&&/^([A-Z]{2,4}(-[A-Za-z]+)?|\d{3}[A-Z]?|or)$/.test(w.t));if(cd.length){const t2=Math.max(...cd.map(w=>w.x1))+2;if(t2>cx+10)tx=Math.min(tx,t2+8);}
+        const body=BW.filter(w=>w.y>Math.max(...B0.map(w=>w.y))+4),L=lines(body),rows=[],tots=[],tms=[];
+        for(const l of L){const tm=l.filter(w=>/^(Fall|Spring|Summer)$/.test(w.t)&&w.x0<cx+12);if(tm.length)tms.push([l[0].y,tm[0].t]);
+          const code=l.filter(w=>w.x0>=cx-3&&w.x0<tx-3&&!tm.includes(w)),ttl=l.filter(w=>w.x0>=tx-3&&w.x0<crx-8),cr=l.filter(w=>w.x0>=crx-8);
+          const tt=ttl.map(w=>w.t).join(' '),ct=cr.map(w=>w.t).join(' ');if(!code.length&&tt.trim()==='Total'){tots.push(l[0].y);continue;}
+          if(code.length)rows.push({y:l[0].y,code:code.map(w=>w.t).join(' '),title:tt,cr:ct});else if(tt||ct)rows.push({y:l[0].y,code:null,title:tt,cr:ct});}
+        if(tots.length){const lt=Math.max(...tots),sm=tms.some(([y,t])=>t==='Summer'&&y>lt-2);let prev=lt;const keep=[];for(const r of rows.filter(r=>r.y>lt).sort((a,b)=>a.y-b.y)){if(!sm||r.y-prev>16)break;keep.push(r);prev=r.y;}rows.splice(0,rows.length,...rows.filter(r=>r.y<=lt),...keep);}
+        const coded=rows.filter(r=>r.code).sort((a,b)=>a.y-b.y);for(const r of rows)if(!r.code&&coded.length){const n=coded.reduce((a,c)=>Math.abs(c.y-r.y)<Math.abs(a.y-r.y)?c:a);(n.ex=n.ex||[]).push([r.y,r.title]);if(r.cr&&!n.cr)n.cr=r.cr;}
+        const mg=[];for(const c of coded){const l=mg[mg.length-1];if(l&&(/\sor$/.test(l.code)||/^or\s/.test(c.code))){l.code=(l.code+' '+c.code).replace(/\sor\s+or\s/,' or ');(l.ex=l.ex||[]).push(...(c.ex||[]),[c.y,c.title]);l.cr=l.cr||c.cr;continue;}mg.push(c);}
+        const its=mg.map(c=>({y:c.y,code:c.code.replace(/\*/g,'').trim(),title:[...(c.ex||[]),[c.y,c.title]].sort((a,b)=>a[0]-b[0]).map(z=>z[1]).filter(Boolean).join(' '),cr:c.cr})).sort((a,b)=>a.y-b.y);
+        const blocks=[];let cur=[];const bd=tots.slice().sort((a,b)=>a-b);for(const it of its){while(bd.length&&it.y>bd[0]){bd.shift();if(cur.length){blocks.push(cur);cur=[];}}cur.push(it);}if(cur.length)blocks.push(cur);
+        let n=0;for(const b of blocks){const lo=b[0].y-12,hi=b[b.length-1].y+12,nm=tms.filter(([y])=>y>=lo&&y<=hi).map(z=>z[1]);
+          const s=nm[0]&&nm[0]!=='Summer'?nm[0]:(nm.includes('Summer')&&n>=2?'Summer':SEAS[Math.min(n,2)]);n++;
+          terms.push({year:YRS[h.t],season:s,courses:b.map(x=>({code:x.code.replace(/^([A-Z]{2,4})(\d{3})/,'$1 $2'),title:x.title,credits:+(String(x.cr).match(/\d+(\.\d+)?/)||[])[0]||null}))});}});}}
+  if(!terms.length)return null;terms.sort((a,b)=>a.year-b.year||seasIx(a.season)-seasIx(b.season));
+  return{name:title.replace(/\s*\([A-Za-z]+\)\s*$/,'')||'My program',terms,credits:terms.reduce((a,t)=>a+t.courses.reduce((s,c)=>s+(+c.credits||0),0),0)};
+  function lines(ws){const L=[];for(const w of ws.slice().sort((a,b)=>a.y-b.y||a.x0-b.x0)){const l=L.find(l=>Math.abs(l[0].y-w.y)<2.5);if(l)l.push(w);else L.push([w]);}for(const l of L)l.sort((a,b)=>a.x0-b.x0);return L.sort((a,b)=>a[0].y-b[0].y);}}
+
+/* ---------- GER offerings list ---------- */
+function gerFromText(text){const out=[];let cat='';const seen=new Set();
+  for(const raw of String(text).split(/\n/)){const l=raw.replace(/\s+/g,' ').trim();if(!l)continue;const k=gerKey(l);const codes=[...l.matchAll(/\b([A-Z]{2,4})\s?(\d{3}[A-Z]?)\b/g)];
+    if(k&&!codes.length){cat=k;continue;}
+    for(const m of codes){const code=m[1]+' '+m[2];if(seen.has(code+cat))continue;seen.add(code+cat);const after=l.slice(m.index+m[0].length).replace(/^[\s\-–:|]+/,'');const title=(after.match(/^[^|\t]*?(?=\s{2,}|\s\d\s|$)/)||[''])[0].trim();
+      const ex=out.find(o=>o.code===code);const cats=[...new Set([k||cat].filter(Boolean))];if(ex){for(const c of cats)if(!ex.cats.includes(c))ex.cats.push(c);}else out.push({code,title:title.slice(0,80),cats});}}
+  return out;}
+async function importGER(f){const st=$('#pgstatus');if(st){st.className='hint';st.textContent='Reading '+f.name+'…';}
+  try{const inp=await readFile(f);let list=[],term='',basic=false;
+    try{const r=await askCal(inp,f.name,t=>st&&(st.textContent=t),'ger');if(r&&!r.basic&&Array.isArray(r.courses)){term=String(r.term||'');list=r.courses.map(c=>({code:normC(c.code),title:String(c.title||''),cats:(c.cats||[]).map(gerKey).filter(Boolean)})).filter(c=>REALC.test(c.code));}}catch{}
+    if(!list.length&&inp.text.trim()){list=gerFromText(inp.text);basic=true;const m=inp.text.match(/\b(Fall|Spring|Summer)\s+(20\d\d)\b/);if(m)term=m[1]+' '+m[2];}
+    if(!list.length)throw new Error('No courses were found in that file.');
+    const snap=JSON.stringify(S);PL().ger={term:term||'Next semester',list,file:f.name,at:Date.now()};save();renderPlanner2();toast(`${list.length} GER courses added${basic?' (built-in reader, so check them)':''}`,snap);}
+  catch(err){const s2=$('#pgstatus');if(s2){s2.className='hint err';s2.textContent=(err&&err.message)||'Couldn’t read that file.';}}}
+
+/* ---------- course inspector ---------- */
+let PI=null;
+function openPItem(id){const x=findItem(id);if(!x)return;PI=id;const M=planModel(),t=termOfItem(id),db=M.db,code=normC(x.pick||x.c),d=db[code];
+  const isPh=!REALC.test(normC(x.c))&&!/\bor\b/i.test(x.c),alts=/\bor\b/i.test(x.c)?x.c.split(/\s+or\s+/i).map(normC):[];
+  const need=Object.values(M.edges).filter(e=>e.a.x.id===id).map(e=>e.b.x.pick||e.b.x.c);
+  $('#pititle').textContent=x.pick||x.c;
+  let h=`<p class="pisub">${esc(isPh&&!x.pick?(x.t||PCATN[pcatOf(x,M.mp)]):(d?d.t:x.t)||'')}${x.cr!=null?` · ${fmt(x.cr)} credit${x.cr==1?'':'s'}`:''} · ${esc(termName(t))}</p>`;
+  if(d&&d.p)h+=`<p class="pireq"><b>Prerequisites</b> ${esc(d.p)}</p>`;if(d&&d.pc)h+=`<p class="pireq"><b>Prerequisite or same term</b> ${esc(d.pc)}</p>`;
+  if(M.warn[id])h+=`<p class="note warn">Not met by ${esc(termName(t))}: ${esc(M.warn[id].join('; '))}</p>`;
+  if(need.length)h+=`<p class="pireq"><b>Needed for</b> ${esc([...new Set(need)].join(', '))}</p>`;
+  if(isPh||alts.length)h+=`<div class="pipick"><b>${alts.length?'Which one?':x.pick?'Chosen course':'Choose a course for this slot'}</b>${alts.length?`<div class="srow">${alts.map(a=>`<button class="btn ${x.pick===a?'':'ghost '}sm" data-pick="${a}">${esc(a)}</button>`).join('')}</div>`:`<div class="srow"><button class="btn ghost sm" data-pact="pick">${x.pick?'Change course':'Choose course'}</button>${x.pick?'<button class="lnkbtn" data-pick="">Clear</button>':''}</div>`}</div>`;
+  h+=`<div class="pist"><b>Status</b><div class="seg">${[['','Planned'],['now','In progress'],['done','Completed'],['exempt','Exempt']].map(([v,l])=>`<button class="${(x.st||'')===v?'on':''}" data-st="${v}">${l}</button>`).join('')}</div></div>`;
+  if(x.st==='done')h+=`<label class="pirow">Grade <select id="pigrade"><option value="">—</option>${['A','A-','B+','B','B-','C+','C','C-','D+','D','F','P','W'].map(g=>`<option${x.g===g?' selected':''}>${g}</option>`).join('')}</select></label>`;
+  if(x.st==='exempt')h+=`<label class="pirow chk"><input type="checkbox" id="piecr" ${x.ecr?'checked':''}> Counts toward my credits (transfer or AP credit)</label><p class="hint">Exempt courses count as done for prerequisites.</p>`;
+  h+=`<label class="pirow">Term <select id="pimove">${pTerms().map(o=>`<option value="${o.id}"${o.id===t.id?' selected':''}>${esc(termName(o))}</option>`).join('')}</select></label>`;
+  h+=`<label class="pirow">Credits <input id="picr" type="number" min="0" max="12" step="1" value="${x.cr??''}"></label>`;
+  $('#pibody').innerHTML=h;$('#pimodal').classList.add('on');}
+$('#piclose').onclick=()=>{$('#pimodal').classList.remove('on');PI=null;};$('#pimodal').addEventListener('click',e=>{if(e.target===$('#pimodal')){$('#pimodal').classList.remove('on');PI=null;}});
+$('#pidel').onclick=async()=>{const x=findItem(PI);if(!x)return;const snap=JSON.stringify(S),t=termOfItem(PI);t.items=t.items.filter(i=>i.id!==PI);$('#pimodal').classList.remove('on');save();renderPlanner2();toast(`${x.pick||x.c} removed from your plan`,snap);};
+$('#pibody').addEventListener('click',e=>{const x=findItem(PI);if(!x)return;const b=e.target.closest('[data-st],[data-pick],[data-pact]');if(!b)return;
+  if(b.dataset.st!=null){x.st=b.dataset.st||undefined;if(!x.st)delete x.st;if(x.st!=='done')delete x.g;if(x.st!=='exempt')delete x.ecr;save();renderPlanner2();openPItem(PI);}
+  else if(b.dataset.pick!=null){if(b.dataset.pick)x.pick=b.dataset.pick;else delete x.pick;const d=courseDB()[x.pick];if(d&&+d.c>=0&&x.pick&&!/\bor\b/.test(x.c))x.cr=+d.c||x.cr;save();renderPlanner2();openPItem(PI);}
+  else if(b.dataset.pact==='pick')openAdd(termOfItem(PI).id,PI);});
+$('#pibody').addEventListener('change',e=>{const x=findItem(PI);if(!x)return;
+  if(e.target.id==='pigrade'){x.g=e.target.value||undefined;if(!x.g)delete x.g;save();renderPlanner2();}
+  if(e.target.id==='piecr'){x.ecr=e.target.checked||undefined;if(!x.ecr)delete x.ecr;save();renderPlanner2();}
+  if(e.target.id==='picr'){const v=e.target.value.trim();x.cr=v===''?null:Math.max(0,+v||0);save();renderPlanner2();}
+  if(e.target.id==='pimove'){moveItem(PI,e.target.value);openPItem(PI);}});
+function moveItem(id,tid,idx){const from=termOfItem(id),to=findTerm(tid);if(!from||!to)return;const x=from.items.find(i=>i.id===id);from.items=from.items.filter(i=>i.id!==id);
+  if(idx==null||idx>to.items.length)to.items.push(x);else to.items.splice(idx,0,x);save();renderPlanner2();}
+
+/* ---------- add / choose course ---------- */
+let PA=null;
+function openAdd(tid,forId){PA={tid,forId};const x=forId?findItem(forId):null;$('#patitle').textContent=x?`Choose a course for ${x.c==='GER-Core'?'GER: '+(x.t||''):x.c}`:`Add to ${termName(findTerm(tid))}`;
+  $('#paq').value='';$('#paph').hidden=!!x;paList();$('#pamodal').classList.add('on');setTimeout(()=>$('#paq').focus(),0);}
+function paList(){const q=$('#paq').value.trim().toLowerCase(),db=courseDB(),p=PL(),x=PA&&PA.forId?findItem(PA.forId):null,M=planModel(),inPlan=new Set(Object.keys(M.where));
+  const ph=x?String(x.c).toUpperCase():'',gk=x&&/^GER/.test(ph)?gerKey(ph+' '+(x.t||'')):'',ger=p.ger&&p.ger.list||[];
+  let rows=[];
+  if(x&&/^GER/.test(ph)&&ger.length){rows=ger.filter(g=>!gk||g.cats.includes(gk)||(!g.cats.length)).map(g=>({c:g.code,t:g.title||db[g.code]?.t||'',cr:+(db[g.code]?.c)||3,tag:'Offered '+(p.ger.term||'next semester')+(g.cats.length?' · '+g.cats.map(gerName).join(', '):'')}));}
+  if(x&&/^(MJE|CNE|CNR)/.test(ph)){const cp=customProg(),el=cp&&cp.electives?cp.electives.flatMap(g=>g.courses.map(c=>({c:c.c,t:c.t||db[c.c]?.t||'',cr:c.cr||+db[c.c]?.c||3,tag:g.group}))):[];
+    rows=el.length?el:Object.keys(db).filter(k=>M.mp.has(k.split(' ')[0])&&+k.split(' ')[1].slice(0,3)>=300&&+k.split(' ')[1].slice(0,3)<500&&!inPlan.has(k)).map(k=>({c:k,t:db[k].t,cr:+db[k].c||3,tag:'Major subject'}));}
+  if(q){const all=Object.keys(db).map(k=>({c:k,t:db[k].t,cr:+db[k].c,tag:''}));const pool=[...rows,...all.filter(a=>!rows.some(r=>r.c===a.c))];rows=pool.filter(r=>r.c.toLowerCase().includes(q)||r.c.replace(' ','').toLowerCase().includes(q.replace(/\s/g,''))||(r.t||'').toLowerCase().includes(q));}
+  else if(!rows.length)rows=[];
+  rows=rows.slice(0,80);
+  $('#palist').innerHTML=rows.length?rows.map(r=>`<li><button data-addc="${esc(r.c)}"><b>${esc(r.c)}</b><span>${esc(r.t||'')}</span><small>${r.cr!=null&&!isNaN(r.cr)?fmt(r.cr)+' cr':''}${r.tag?` · ${esc(r.tag)}`:''}${inPlan.has(r.c)?' · already in your plan':''}</small></button></li>`).join(''):`<li class="hint">${q?'No courses match.':x&&/^GER/.test(ph)?'Upload next semester’s GER list for suggestions, or search any course above.':'Search by course code or title.'}</li>`;}
+$('#paq').addEventListener('input',paList);
+$('#pacancel').onclick=()=>$('#pamodal').classList.remove('on');$('#pamodal').addEventListener('click',e=>{if(e.target===$('#pamodal'))$('#pamodal').classList.remove('on');});
+$('#pamodal').addEventListener('click',e=>{const b=e.target.closest('[data-addc],[data-addph]');if(!b||!PA)return;const db=courseDB(),snap=JSON.stringify(S);
+  if(b.dataset.addc){const c=b.dataset.addc,d=db[c];
+    if(PA.forId){const x=findItem(PA.forId);x.pick=c;if(d&&d.c!==''&&!isNaN(+d.c))x.cr=+d.c;$('#pamodal').classList.remove('on');save();renderPlanner2();if($('#pimodal').classList.contains('on'))openPItem(PA.forId);toast(`${c} chosen`,snap);return;}
+    findTerm(PA.tid).items.push({id:rid(),c,t:d?d.t:'',cr:d&&!isNaN(+d.c)?+d.c:3});}
+  else{const[c,t]=b.dataset.addph.split('|');findTerm(PA.tid).items.push({id:rid(),c,t,cr:3});}
+  $('#pamodal').classList.remove('on');save();renderPlanner2();toast('Added',snap);});
+
+/* ---------- page actions ---------- */
+function openColMenu(tid,btn){document.querySelectorAll('.pmenu').forEach(m=>m.remove());const t=findTerm(tid),m=document.createElement('div');m.className='smenu pmenu';m.setAttribute('role','menu');
+  m.innerHTML=`<button class="sadd2 sset" data-cm="done">Mark all completed</button><button class="sadd2 sset" data-cm="now">Mark all in progress</button><button class="sadd2 sset" data-cm="plan">Mark all planned</button>${!t.items.length||t.s==='Summer'||t.y>4?`<button class="sadd2 sset" data-cm="del">Remove this term</button>`:''}`;
+  document.body.appendChild(m);const r=btn.getBoundingClientRect();m.style.left=Math.max(8,Math.min(innerWidth-m.offsetWidth-8,r.right-m.offsetWidth))+'px';m.style.top=(r.bottom+scrollY+4)+'px';
+  const off=e=>{if(!e.target.closest('.pmenu')){m.remove();document.removeEventListener('pointerdown',off,true);}};setTimeout(()=>document.addEventListener('pointerdown',off,true),0);
+  m.addEventListener('click',async e=>{const a=e.target.closest('[data-cm]');if(!a)return;m.remove();const snap=JSON.stringify(S);
+    if(a.dataset.cm==='del'){if(t.items.length&&!await confirmBox(`Remove ${termName(t)}?`,'Its courses are removed from your plan too.','Remove'))return;PL().terms=PL().terms.filter(x=>x!==t);}
+    else for(const x of t.items){if(a.dataset.cm==='plan'){delete x.st;delete x.g;}else if(x.st!=='exempt')x.st=a.dataset.cm;}
+    save();renderPlanner2();toast(`${termName(t)} updated`,snap);});}
+function addTerm(kind){const p=PL(),snap=JSON.stringify(S),ys=Math.max(4,...p.terms.map(t=>t.y));
+  if(kind==='year'){const y=ys+1;p.terms.push({id:rid(),y,s:'Fall',items:[]},{id:rid(),y,s:'Spring',items:[]});save();renderPlanner2();toast(`Year ${y} added`,snap);return;}
+  const y=+kind;if(p.terms.some(t=>t.y===y&&t.s==='Summer')){toast('That summer is already in your plan');return;}p.terms.push({id:rid(),y,s:'Summer',items:[]});save();renderPlanner2();toast(`Summer ${termCal({s:'Summer',y}).y} added`,snap);}
+function openAddTerm(btn){document.querySelectorAll('.pmenu').forEach(m=>m.remove());const p=PL(),ys=Math.max(4,...p.terms.map(t=>t.y)),m=document.createElement('div');m.className='smenu pmenu';
+  m.innerHTML=Array.from({length:ys},(_,i)=>i+1).filter(y=>!p.terms.some(t=>t.y===y&&t.s==='Summer')).map(y=>`<button class="sadd2 sset" data-at="${y}">Summer ${termCal({s:'Summer',y}).y} (after year ${y})</button>`).join('')+`<button class="sadd2" data-at="year">+ Add a year</button>`;
+  document.body.appendChild(m);const r=btn.getBoundingClientRect();m.style.left=Math.max(8,Math.min(innerWidth-m.offsetWidth-8,r.left))+'px';m.style.top=(r.bottom+scrollY+4)+'px';
+  const off=e=>{if(!e.target.closest('.pmenu')){m.remove();document.removeEventListener('pointerdown',off,true);}};setTimeout(()=>document.addEventListener('pointerdown',off,true),0);
+  m.addEventListener('click',e=>{const a=e.target.closest('[data-at]');if(!a)return;m.remove();addTerm(a.dataset.at);});}
+/* completed courses from the Grades tab's semesters */
+function fillFromSemesters(){const p=PL(),snap=JSON.stringify(S),db=courseDB();let n=0,added=0;const nt=nowTerm();
+  const sems=allTerms().filter(d=>d.sem&&d.sem.term&&d.sem.year);
+  for(const d of sems){const cal={s:d.sem.term,y:+d.sem.year},isNow=cal.s===nt.s&&cal.y===nt.y,ka=cal.y*3+({Spring:0,Summer:1,Fall:2})[cal.s]||0,kn=nt.y*3+({Spring:0,Summer:1,Fall:2})[nt.s];if(ka>kn)continue;
+    let col=pTerms().find(t=>{const c=termCal(t);return c.s===cal.s&&c.y===cal.y;});
+    if(!col&&cal.s==='Summer'){const sy=+(p.start&&p.start.y)||cal.y;const y=cal.y-sy;if(y>=1){col={id:rid(),y,s:'Summer',items:[]};p.terms.push(col);}}
+    for(const co of(d.courses||[])){if(co.isLab&&!REALC.test(normC(co.code)))continue;const code=normC(co.code);if(!REALC.test(code))continue;
+      let L=null;try{const pct=coursePct(co);L=pct!=null?letter(co,pct):null;if(L==='—')L=null;}catch{}
+      let x=null;for(const t of p.terms)for(const i of t.items){if(normC(i.pick||'')===code||normC(i.c)===code||String(i.c).split(/\s+or\s+/i).map(normC).includes(code))x=x||i;}
+      if(!x){const gk=(p.ger&&p.ger.list||[]).find(g=>g.code===code);const want=gk?/^GER/:/^(FRE|MJE)/;
+        for(const t of(col?[col,...p.terms]:p.terms))for(const i of t.items)if(!x&&!i.pick&&!i.st&&want.test(String(i.c))&&(!gk||!gk.cats.length||gk.cats.includes(gerKey(i.c+' '+(i.t||'')))||!gerKey(i.c+' '+(i.t||''))))x=i;
+        if(x)x.pick=code;}
+      if(!x){if(!col)continue;x={id:rid(),c:code,t:db[code]?.t||co.name||'',cr:+co.credits||+db[code]?.c||3};col.items.push(x);added++;}
+      if(col){const from=termOfItem(x.id);if(from&&from!==col){from.items=from.items.filter(i=>i!==x);col.items.push(x);}}
+      x.st=isNow?'now':'done';if(L&&!isNow&&!x.g)x.g=L;if(!x.g)delete x.g;n++;}}
+  if(!n){toast(sems.length?'None of your semesters’ courses matched this plan':'Add your semesters on the Grades tab first');return;}
+  save();renderPlanner2();toast(`${n} course${n===1?'':'s'} filled in from your semesters${added?` (${added} added)`:''}`,snap);}
+function markPastDone(){const snap=JSON.stringify(S);let n=0;for(const t of pTerms()){const r=termRel(t);if(r==='past')for(const x of t.items)if(!x.st){x.st='done';n++;}if(r==='now')for(const x of t.items)if(!x.st){x.st='now';n++;}}
+  if(!n){toast('Nothing to mark');return;}save();renderPlanner2();toast(`${n} course${n===1?'':'s'} marked`,snap);}
+$('#v-plan').addEventListener('click',e=>{const b=e.target.closest('[data-pact]');if(!b)return;const a=b.dataset.pact;
+  if(a==='prog')openProg();else if(a==='ai'){openProg();}else if(a==='add')openAdd(b.dataset.tid);else if(a==='colmenu')openColMenu(b.dataset.tid,b);
+  else if(a==='addterm')openAddTerm(b);else if(a==='fromsem')fillFromSemesters();else if(a==='pastdone')markPastDone();
+  else if(a==='ger')$('#pgfile').click();else if(a==='gerclear'){const snap=JSON.stringify(S);delete PL().ger;save();renderPlanner2();toast('GER list removed',snap);}
+  else if(a==='zin'||a==='zout'){const cur=pZoom??(parseFloat((document.querySelector('.pcanvas')||{}).style?.transform?.match(/[\d.]+/)?.[0])||1);pZoom=Math.max(.4,Math.min(1.6,cur+(a==='zin'?.1:-.1)));renderPlanner2();}
+  else if(a==='zfit'){pZoom=null;renderPlanner2();}
+  else if(a==='goto'){const el=document.querySelector(`.pbox[data-pid="${b.dataset.pid}"]`);if(el){el.scrollIntoView({block:'center',inline:'center',behavior:'smooth'});el.classList.add('flash');setTimeout(()=>el.classList.remove('flash'),1400);}}});
+$('#v-plan').addEventListener('change',e=>{if(e.target.dataset.pact==='lines'){pLines=e.target.checked;document.querySelector('.plines')?.classList.toggle('off',!pLines);}});
+$('#pgfile').onchange=e=>{const f=e.target.files[0];e.target.value='';if(f)importGER(f);};
+/* hover: light up a course's chain */
+$('#v-plan').addEventListener('pointerover',e=>{if(e.pointerType!=='mouse')return;const b=e.target.closest('.pbox');const id=b&&b.dataset.pid;if(id===pHover)return;pHover=id;const svg=document.querySelector('.plines');if(!svg)return;
+  svg.classList.toggle('focus',!!id);for(const p of svg.querySelectorAll('.pe'))p.classList.toggle('hi',!!id&&(p.dataset.a===id||p.dataset.b===id));
+  document.querySelectorAll('.pbox.rel').forEach(x=>x.classList.remove('rel'));if(id)for(const p of svg.querySelectorAll('.pe.hi'))for(const k of[p.dataset.a,p.dataset.b])document.querySelector(`.pbox[data-pid="${k}"]`)?.classList.add('rel');});
+/* drag a course to another term; a plain click opens it */
+let PD=null;
+$('#v-plan').addEventListener('pointerdown',e=>{const b=e.target.closest('.pbox');if(!b||e.button>0)return;PD={b,id:b.dataset.pid,x:e.clientX,y:e.clientY,on:false,pid:e.pointerId,touch:e.pointerType!=='mouse'};
+  if(PD.touch)PD.timer=setTimeout(()=>{if(PD&&!PD.on)pdStart();},350);});
+function pdStart(){PD.on=true;const r=PD.b.getBoundingClientRect();PD.ghost=PD.b.cloneNode(true);PD.ghost.classList.add('pghost');Object.assign(PD.ghost.style,{width:r.width+'px',height:r.height+'px',left:r.left+'px',top:r.top+'px'});PD.ox=PD.x-r.left;PD.oy=PD.y-r.top;document.body.appendChild(PD.ghost);PD.b.classList.add('pdrag');}
+addEventListener('pointermove',e=>{if(!PD||e.pointerId!==PD.pid)return;const d=Math.hypot(e.clientX-PD.x,e.clientY-PD.y);
+  if(!PD.on){if(PD.touch){if(d>10){clearTimeout(PD.timer);PD=null;}return;}if(d<6)return;pdStart();}
+  e.preventDefault();PD.ghost.style.left=e.clientX-PD.ox+'px';PD.ghost.style.top=e.clientY-PD.oy+'px';
+  const col=[...document.querySelectorAll('.pcol')].find(c=>{const r=c.getBoundingClientRect();return e.clientX>=r.left&&e.clientX<=r.right&&e.clientY>=r.top-40&&e.clientY<=r.bottom;});
+  document.querySelectorAll('.pcol.drop').forEach(c=>c!==col&&c.classList.remove('drop'));if(col)col.classList.add('drop');PD.col=col;},{passive:false});
+document.addEventListener('touchmove',e=>{if(PD&&PD.on)e.preventDefault();},{passive:false});
+const pdEnd=e=>{if(!PD||(e&&e.pointerId!==PD.pid))return;clearTimeout(PD.timer);const d=PD;PD=null;
+  if(!d.on){if(e&&e.type==='pointerup')openPItem(d.id);return;}
+  d.ghost.remove();d.b.classList.remove('pdrag');document.querySelectorAll('.pcol.drop').forEach(c=>c.classList.remove('drop'));
+  if(d.col){const tid=d.col.dataset.tid,cv=document.querySelector('.pcanvas'),z=parseFloat((cv.style.transform.match(/[\d.]+/)||[1])[0]),top=d.col.getBoundingClientRect().top;
+    const idx=Math.max(0,Math.floor(((e.clientY-top)/z-PB.HEAD)/(PB.H+PB.G)));const snap=JSON.stringify(S);const from=termOfItem(d.id);
+    if(from&&(from.id!==tid||true)){moveItem(d.id,tid,idx);toast('Moved to '+termName(findTerm(tid)),snap);}}};
+addEventListener('pointerup',pdEnd);addEventListener('pointercancel',e=>{if(PD&&PD.on){PD.ghost.remove();PD.b.classList.remove('pdrag');}PD=null;});
+$('#v-plan').addEventListener('keydown',e=>{const b=e.target.closest('.pbox');if(b&&(e.key==='Enter'||e.key===' ')){e.preventDefault();openPItem(b.dataset.pid);}});
+
+/* used by the self-check page: lint every built-in program's flowchart */
+window.cmPlanCheck=async()=>{await loadCatalog();const keep=S.plan,out=[];for(const y of catYears())for(const pr of progsFor(y)){S.plan={year:y,prog:pr.id,start:{s:'Fall',y:2025},terms:planFromProg(pr,false),custom:[]};const M=planModel();
+  const w=Object.entries(M.warn).map(([id,m])=>findItem(id).c+': '+m.join('; '));const nodb=[];for(const t of M.cols)for(const x of t.items){const c=normC(x.c);if(REALC.test(c)&&!M.db[c])nodb.push(c);}
+  if(w.length||nodb.length)out.push(y+' '+pr.id+' | '+w.join(' | ')+(nodb.length?' | not in catalog: '+nodb.join(','):''));}S.plan=keep;return out;};
 /* ---------- sign in with Google + sync (Firebase), only when FIREBASE_CONFIG is filled in ---------- */
 const FBV='10.12.2',FBU=n=>`https://www.gstatic.com/firebasejs/${FBV}/firebase-${n}.js`;
 const SYNC_DEV=(()=>{try{let d=localStorage.getItem('cm-device');if(!d){d=Math.random().toString(36).slice(2,10);localStorage.setItem('cm-device',d);}return d;}catch{return'x';}})();
