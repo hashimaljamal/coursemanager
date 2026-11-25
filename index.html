@@ -2320,10 +2320,10 @@ $('#nsdo').onclick=()=>{const t=$('#nsterm').value,y=$('#nsyear').value.trim();i
 
 /* ---------- sections ---------- */
 const VIEWS={home:['#home','Home'],grades:['#grades','Grades'],tt:['#timetable','Timetable'],tasks:['#tasks','Tasks'],plan:['#plan','Plan']};
-function route(){const h=location.hash,v=h==='#grades'?'grades':h==='#timetable'?'tt':h==='#tasks'?'tasks':h==='#plan'||h==='#planner'?'plan':'home';document.body.dataset.view=v;
+function route(){const h=location.hash,v=h==='#grades'?'grades':h==='#timetable'?'tt':h==='#tasks'?'tasks':h==='#plan'||h==='#planner'?'plan':'home';const prevV=document.body.dataset.view;document.body.dataset.view=v;
   for(const k in VIEWS){$('#v-'+k).hidden=k!==v;$('#tab-'+k).setAttribute('aria-current',k===v?'page':'false');}
   $('#dropover').textContent=v==='tt'?'Drop your .ics schedule':'Drop syllabi to add them';document.title=VIEWS[v][1]+' · Course Manager';
-  closeColor();closeSemMenu();renderSemBtn();if(v==='tt')renderTT();else if(v==='tasks')renderTasks();else if(v==='home')renderHome();else if(v==='plan')renderPlanner2();else render();}
+  closeColor();closeSemMenu();renderSemBtn();if(v==='tt')renderTT();else if(v==='tasks')renderTasks();else if(v==='home')renderHome();else if(v==='plan'){if(prevV!=='plan')pScrollHome=true;renderPlanner2();}else render();}
 addEventListener('hashchange',route);
 
 /* ================= PLANNER (degree flowchart) ================= */
@@ -2684,6 +2684,7 @@ function boxHTML(x,M,col){const db=M.db,code=x.pick||x.c,cs=String(code).split(/
   return`<div class="pbox ${dcol?'':'pc-ph'}${x.st?' st-'+x.st:''}${x.reg?' st-reg':''}${sp?' sup':''}${w?' warn':''}${isPh&&!x.pick?' ph':''}"${dcol?` style="--pc:${dcol}"`:''} data-pid="${x.id}" tabindex="0" role="button" aria-label="${esc(code+' '+title)}">
     <b class="pcode">${esc(code)}${tag}</b><span class="ptitle">${esc(isPh&&!x.pick?(x.t||PCATN[cat]):title)}</span><span class="pcr">${x.cr!=null?fmt(x.cr)+' cr':''}${x.g?` · ${esc(x.g)}`:''}${x.reg?' · registered':''}${sp?' · retaken':''}</span>
     ${x.st==='done'?'<i class="pst" title="Completed">✓</i>':x.st==='tr'?'<i class="pst ex" title="Transfer credit">TR</i>':x.st==='fail'?'<i class="pst fl" title="Failed, credits not counted">F</i>':x.st==='now'?'<i class="pst now" title="In progress">●</i>':''}${w?`<i class="pwarn" title="${esc('Missing: '+w.join('; '))}">!</i>`:''}</div>`;}
+let pScrollHome=true;
 function drawChart(M){const cols=M.cols,{W,H,HEAD,TOP}=PB,STEP=6;const maxR=Math.max(4,...cols.map(c=>c.items.length+1));
   /* every line gets its own vertical lane in a gutter, so no two lines run on top of each other */
   const lanes={},need=(g,key,sort)=>{const L=lanes[g]=lanes[g]||[];let o=L.find(l=>l.key===key);if(!o){o={key,sort};L.push(o);}return o;};
@@ -2729,9 +2730,12 @@ function drawChart(M){const cols=M.cols,{W,H,HEAD,TOP}=PB,STEP=6;const maxR=Math
     for(const s of L)paths+=`<path class="pe stub" data-a="${s.x.id}" data-b="${b.x.id}"/>`;
     chips+=`<div class="pstubs" style="left:${colX(b.k)-cw}px;top:${rowY(b.r)+3}px;width:${cw-4}px">${show.map(s=>`<button class="pstub${['done','tr'].includes(b.x.st)?' dn':''}" data-pact="goto" data-pid="${s.x.id}" data-a="${s.x.id}" data-b="${b.x.id}" title="${esc((s.x.pick||s.x.c)+' is a prerequisite for '+(b.x.pick||b.x.c)+' ('+termName(cols[s.k])+')')}">${esc(s.x.pick||s.x.c)} ›</button>`).join('')}${L.length>show.length?`<button class="pstub" data-pact="goto" data-pid="${b.x.id}">+${L.length-show.length} more</button>`:''}</div>`;}
   const svg=`<svg class="plines${pLines?'':' off'}" width="${CW}" height="${CH}" viewBox="0 0 ${CW} ${CH}"><defs><marker id="parr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L8 4L0 8z" class="pah"/></marker><marker id="parr2" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L8 4L0 8z" class="pah hi"/></marker></defs>${paths}</svg>`;
-  const wrap=$('#pmain');const avail=wrap.clientWidth||900,z=pZoom==null?Math.max(.8,Math.min(1,avail/CW)):pZoom;
+  const wrap=$('#pmain'),old=wrap.querySelector('.pscroll'),keep=old?[old.scrollLeft,old.scrollTop]:null;const avail=wrap.clientWidth||900,z=pZoom==null?Math.max(.8,Math.min(1,avail/CW)):pZoom;
   wrap.innerHTML=`<div class="pzoom"><button class="ib" data-pact="zout" aria-label="Zoom out">−</button><button class="lnkbtn" data-pact="zfit">${Math.round(z*100)}%</button><button class="ib" data-pact="zin" aria-label="Zoom in">+</button><button class="lnkbtn ptidy" data-pact="tidy" title="Reorder courses within each semester so fewer lines cross">Tidy lines</button><label class="ptog"><input type="checkbox" data-pact="lines" ${pLines?'checked':''}> Prerequisite lines</label></div>
-    <div class="pscroll"><div class="psize" style="width:${CW*z}px;height:${CH*z}px"><div class="pcanvas${pLines?'':' nolines'}" style="width:${CW}px;height:${CH}px;transform:scale(${z})">${svg}${html}${chips}</div></div></div>`;}
+    <div class="pscroll"><div class="psize" style="width:${CW*z}px;height:${CH*z}px"><div class="pcanvas${pLines?'':' nolines'}" style="width:${CW}px;height:${CH}px;transform:scale(${z})">${svg}${html}${chips}</div></div></div>`;
+  /* opening the Plan tab puts your current semester at the left edge; later redraws keep your scroll */
+  const sc=wrap.querySelector('.pscroll');if(pScrollHome||!keep){pScrollHome=false;const nk=ckey(nowTerm());let k=cols.findIndex(t=>!isX(t)&&termRel(t)==='now');if(k<0)k=cols.findIndex(t=>!isX(t)&&ckey(termCal(t))>nk);if(k>0)sc.scrollLeft=Math.max(0,(colX(k)-14)*z);}
+  else{sc.scrollLeft=keep[0];sc.scrollTop=keep[1];}}
 function roundPath(d){/* turn an orthogonal M/H/V path into one with small rounded corners */
   const pts=[];let x=0,y=0;for(const m of d.matchAll(/([MHV])\s*(-?[\d.]+)(?:\s+(-?[\d.]+))?/g)){if(m[1]==='M'){x=+m[2];y=+m[3];}else if(m[1]==='H')x=+m[2];else y=+m[2];pts.push([x,y]);}
   const P=pts.filter((q,i)=>i===0||q[0]!==pts[i-1][0]||q[1]!==pts[i-1][1]);if(P.length<3)return d;let s=`M${P[0][0]} ${P[0][1]}`;
