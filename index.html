@@ -112,6 +112,8 @@ aside h2{font-size:12px;color:var(--mute);margin:0 0 6px;font-weight:600}
 .side-note{font-size:12px;color:var(--mute);margin:8px 0 0}
 .side-note button{border:0;background:none;padding:0;text-decoration:underline;color:var(--ink);font-size:12px}
 .profw{position:relative;display:inline-block}
+.cleft{display:flex;align-items:center;gap:6px 10px;flex-wrap:wrap;margin:10px 0 2px;font-size:14px}.cleft>b{font-size:22px;font-weight:900;font-stretch:112%;font-variant-numeric:tabular-nums;line-height:1}.cleft em{font-style:normal;color:var(--mute)}.cleft span{color:var(--ink)}.cleft.done{color:var(--mute)}
+.clbar{flex:1 1 160px;max-width:260px;height:6px;border-radius:99px;background:var(--soft);overflow:hidden;display:block;border:1px solid var(--line)}.clbar>i{display:block;height:100%;background:var(--ink);border-radius:99px}
 .csub{display:flex;flex-wrap:wrap;align-items:center;gap:2px 0;margin:2px 0 0;color:var(--mute);font-size:14px}.cs{display:inline-flex;align-items:center}.cs+.cs::before{content:'·';margin:0 7px}
 .prof{border:0;background:var(--soft);padding:2px 6px 2px 8px;margin:0 2px;border-radius:6px;font-size:14px;font-weight:600;color:var(--ink);display:inline-flex;align-items:center;gap:3px;min-height:28px}
 .prof svg{width:12px;height:12px;fill:none;stroke:currentColor;stroke-width:1.6;transition:transform .15s}
@@ -815,6 +817,22 @@ const wsum=co=>co.comps.reduce((a,k)=>a+(+k.weight||0),0);
 
 /* ---------- rendering ---------- */
 function render(){renderSide();renderPanel();}
+/* classes left: every meeting of a course's timetable classes (its linked lab included) from now to the last day of classes, skipping breaks and holidays */
+let CLM=null,CLK='';
+function classesLeftMap(){const T0=today0(),now=new Date(),nowM=now.getHours()*60+now.getMinutes(),s=SEM(),lc=lastClassDay(),slots=TT().slots||[];
+  const key=[iso(T0),nowM,slots.length,JSON.stringify(s&&s.cal||[]).length,s&&s.start,lc&&+lc,S.courses.length].join('|');if(CLM&&CLK===key)return CLM;
+  const out={};CLM=out;CLK=key;if(!lc||!slots.length)return out;const st=s&&pd(s.start);
+  const host=sl=>{const g=gradeFor(sl.ckey,nm(sl).code);if(!g)return null;if(g.isLab){const L=linkedBy(g.id);if(L)return L.co;}return g;};
+  for(let d=st&&st<T0?new Date(st):new Date(T0);d<=lc;d=addD(d,1)){const past=d<T0,today=!past&&dDiff(T0,d)===0;
+    for(const sl of classOn(d)){const g=host(sl);if(!g)continue;const o=out[g.id]=out[g.id]||{left:0,total:0,types:{},last:null,started:!!(st&&st<=T0)};o.total++;
+      if(past||(today&&sl.end<=nowM))continue;o.left++;const ty=String(nm(sl).type||'class').toLowerCase();o.types[ty]=(o.types[ty]||0)+1;o.last=d;}}
+  return out;}
+const plTy=(t,n)=>n===1?t:/s$/.test(t)?t:t+'s';
+function classesLeftHTML(co){const o=classesLeftMap()[co.id];if(!o)return'';const T0=today0(),lc=lastClassDay();
+  if(!o.left)return`<div class="cleft done"><b>0</b><span>classes left — that’s the last of them${lc&&lc<T0?'':' this semester'}.</span></div>`;
+  const ty=Object.entries(o.types).sort((a,b)=>b[1]-a[1]),parts=ty.length>1?ty.map(([t,n])=>`${n} ${plTy(t,n)}`).join(' · '):'';
+  const pct=o.started&&o.total?Math.round((o.total-o.left)/o.total*100):null;
+  return`<div class="cleft"><b>${o.left}</b><span>class${o.left===1?'':'es'} left${parts?` <em>(${esc(parts)})</em>`:''}${o.last?` · last one ${esc(fmtD(o.last))}`:''}</span>${pct!=null?`<i class="clbar" title="${pct}% of this course’s classes are behind you"><i style="width:${pct}%"></i></i>`:''}</div>`;}
 function renderSide(){
   const list=S.courses.filter(c=>!(c.isLab&&linkedBy(c.id)));
   const sm=semester();
@@ -822,7 +840,7 @@ function renderSide(){
   $('#gpacard').innerHTML=`<span>Semester GPA</span>${sm.gpa==null?'<b class="nil">No grades yet</b>':`<b>${fmt2(sm.gpa)}</b>`}<small>${sm.n?`${sm.n} course${sm.n===1?'':'s'} · ${fmt(sm.cr)} credits`:'Enter scores to see it'}</small>${cg?`<div class="gpacg"><span>Projected CGPA</span><b>${g2(cg.cg)}</b><small>Now ${g2(cg.prior)} over ${fmt(cg.h)} credits</small></div>`:''}`;
   $('#gpacard').classList.toggle('sel',S.sel==='gpa');$('#gpacard').hidden=!list.length;
   document.querySelector('.wrap').classList.toggle('nocourses',!list.length);
-  $('#side').innerHTML=list.map(c=>{const p=coursePct(c),inc=c.comps.map(k=>labOf(c,k)).filter(Boolean);return`<button class="ci ${(S.sel===c.id||inc.some(l=>l.id===S.sel))?'sel':''}" data-sel="${c.id}" data-rid="${c.id}" style="--cc:${courseColor(c)}"><b><i class="cdot" aria-hidden="true"></i>${esc(c.code||'Untitled')}</b><em>${p==null?'':esc(letter(c,p))}</em><small>${p==null?'No grades yet':fmt(p)+'%'}${inc.length?' · incl. '+inc.map(l=>esc(l.code)).join(', '):''}</small></button>`}).join('')||'<p class="hint">No courses yet.</p>';
+  $('#side').innerHTML=list.map(c=>{const p=coursePct(c),inc=c.comps.map(k=>labOf(c,k)).filter(Boolean);return`<button class="ci ${(S.sel===c.id||inc.some(l=>l.id===S.sel))?'sel':''}" data-sel="${c.id}" data-rid="${c.id}" style="--cc:${courseColor(c)}"><b><i class="cdot" aria-hidden="true"></i>${esc(c.code||'Untitled')}</b><em>${p==null?'':esc(letter(c,p))}</em><small>${p==null?'No grades yet':fmt(p)+'%'}${inc.length?' · incl. '+inc.map(l=>esc(l.code)).join(', '):''}${(()=>{const o=classesLeftMap()[c.id];return o?` · ${o.left} class${o.left===1?'':'es'} left`:'';})()}</small></button>`}).join('')||'<p class="hint">No courses yet.</p>';
   $('#snote').innerHTML=S.courses.some(c=>c.sample)?'These are sample courses. They’re replaced as soon as your first syllabus is read. <button data-act="clearsamples">Clear them now</button>':'';
 }
 function compHTML(co,k,top){
@@ -877,7 +895,7 @@ function renderPanel(){
   if(S.sel==='gpa'){renderGPA();return;}
   const co=byId(S.sel);
   if(!co){$('#panel').innerHTML='<div class="ttempty"><h2>Add your courses</h2><p>Upload your syllabi (PDF, Word, photos or text) and a grade calculator is built for each course, with its own weights and grade boundaries. You can also paste the text or set a course up by hand.</p><div class="gempty"><button class="btn" data-act="pickfiles">Upload syllabi</button><button class="btn ghost" data-act="addmanual">Add by hand</button></div></div>';return;}
-  $('#panel').innerHTML=`<div class="chead"><div><h2><button class="sw hsw" data-act="color" data-ck="${esc(co.code||co.id)}" style="background:${courseColor(co)}" aria-label="Course colour" title="Change colour (also used in Timetable)"></button>${esc(co.code||'Untitled course')}</h2><div class="csub">${[co.title?esc(co.title):'',profHTML(co),co.isLab?'Lab':'',`${fmt(creditsOf(co))} credit${creditsOf(co)===1?'':'s'}`,co.noGpa?'not in GPA':''].filter(Boolean).map(x=>`<span class="cs">${x}</span>`).join('')}</div></div><div class="cacts"><button class="btn ghost sm" data-act="cleargrades" data-co="${co.id}" ${courseHasData(co)?'':'hidden'}>Clear grades</button><button class="btn ${edit?'':'ghost'} sm" data-act="edit">${edit?'Done editing':'Edit structure'}</button></div></div>${(()=>{const n=notes(co);return n?`<div class="notes">${n}</div>`:'';})()}<div id="res"></div>${co.comps.length?`<div class="comps">${co.comps.map(k=>compHTML(co,k,true)).join('')}</div>`:'<p class="hint">No graded parts yet. Use Edit structure to add some.</p>'}${edit?editHTML(co):''}`;
+  $('#panel').innerHTML=`<div class="chead"><div><h2><button class="sw hsw" data-act="color" data-ck="${esc(co.code||co.id)}" style="background:${courseColor(co)}" aria-label="Course colour" title="Change colour (also used in Timetable)"></button>${esc(co.code||'Untitled course')}</h2><div class="csub">${[co.title?esc(co.title):'',profHTML(co),co.isLab?'Lab':'',`${fmt(creditsOf(co))} credit${creditsOf(co)===1?'':'s'}`,co.noGpa?'not in GPA':''].filter(Boolean).map(x=>`<span class="cs">${x}</span>`).join('')}</div></div><div class="cacts"><button class="btn ghost sm" data-act="cleargrades" data-co="${co.id}" ${courseHasData(co)?'':'hidden'}>Clear grades</button><button class="btn ${edit?'':'ghost'} sm" data-act="edit">${edit?'Done editing':'Edit structure'}</button></div></div>${classesLeftHTML(co)}${(()=>{const n=notes(co);return n?`<div class="notes">${n}</div>`:'';})()}<div id="res"></div>${co.comps.length?`<div class="comps">${co.comps.map(k=>compHTML(co,k,true)).join('')}</div>`:'<p class="hint">No graded parts yet. Use Edit structure to add some.</p>'}${edit?editHTML(co):''}`;
   numbers();
 }
 function renderGPA(){
