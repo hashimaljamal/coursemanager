@@ -388,7 +388,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 .ilg li>span{display:grid;min-width:0}.ilg b{font-size:13.5px}.ilg small{font-size:12px;color:var(--mute)}.ilg select{max-width:52%;min-width:0;font-size:13px;min-height:34px;padding:0 8px}.ilo summary{font-size:13px;font-weight:700;cursor:pointer;padding:6px 0;color:var(--mute)}
 .upil{display:grid;grid-template-columns:30px 1fr auto;gap:12px;align-items:start;height:auto;min-height:0;width:100%;text-align:left;font:inherit;color:var(--ink);background:none;border:1.5px dashed var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;margin:0}
 .upil:hover,.upil:focus-visible{border-color:var(--ink);background:var(--soft);outline:0}.upil>span:nth-child(2){display:grid;gap:2px}.upil b{font-size:15px}.upil small{color:var(--mute);font-size:12.5px;line-height:1.35}.upil em{align-self:center;font-style:normal;font-weight:800;font-size:13px;white-space:nowrap}.upil.on{border-style:solid;border-color:var(--ink)}.upil .upi{grid-row:auto}.upil.on .upi{background:var(--ink);color:var(--bg)}
-.tlink{font-weight:700;color:var(--ink)}
+.tlink{font-weight:700;color:var(--ink)}.ildiag{margin:12px 0 0;font-size:12px}.ildiag .hint{font-size:12px}
 .upcard{max-width:640px}.upgrid{display:grid;gap:10px;margin:14px 0 6px}
 .upbox{display:grid;grid-template-columns:30px 1fr;gap:2px 12px;align-items:start;border:1.5px dashed var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;transition:border-color .15s,background .15s}
 .upbox:hover,.upbox:focus-visible,.upbox.drag{border-color:var(--ink);background:var(--soft);outline:0}.upbox.has{border-style:solid;border-color:var(--ink)}
@@ -2195,44 +2195,68 @@ function ilCourses(){const out=[],seen=new Set();const add=(code,title,co)=>{cod
 const ilCodeRe=code=>{const m=normC(code).match(/^([A-Z]{2,4}) (\d{3})([A-Z]?)$/);if(!m)return null;const subj=[m[1],RENAMED[m[1]],RENAMED_BACK[m[1]]].filter(Boolean).join('|');
   return new RegExp(`(?<![A-Z])(?:${subj})[\\s_.\\-]*${m[2]}${m[3]?m[3]:'(?![0-9])'}`,'i');};
 const IL_SEC=/^(?:[\s_.\-]*(?:sec(?:tion)?\.?\s*|[._\-]\s*)(L?\d{1,2}|[A-Z]\d{1,2})(?![0-9]))/i;
-/* which of your courses (and which iLearn course of it) an item belongs to */
-function ilGroup(text,summary,cs){
-  for(const c of cs){const re=ilCodeRe(c.code);if(!re)continue;const m=re.exec(text);if(!m)continue;let code=c.code,after=text.slice(m.index+m[0].length,m.index+m[0].length+30),lab=/L$/.test(code);
-    /* "CHM 101L" or "CHM 101 Lab" when you only have the lecture: it's the lab of that course */
-    if(!lab&&/^L(?![a-z])|^[\s\-_.:]*(?:lab|laboratory)\b/i.test(after)){lab=true;after=after.replace(/^L|^[\s\-_.:]*(?:lab|laboratory)/i,'');const lc=cs.find(x=>normCode(x.code)===normCode(code)+'L');if(lc)code=lc.code;}
-    const sm=after.match(IL_SEC),sec=sm?sm[1].toUpperCase():'',name=lab&&!/L$/.test(code)?code+'L':code;
-    return{key:'c:'+normCode(name)+(sec?'#'+sec:''),code,sec,label:name+(sec?` · section ${sec}`:' · all sections')};}
-  for(const c of cs){if(c.title&&c.title.length>5&&text.toLowerCase().includes(c.title.toLowerCase()))return{key:'c:'+normCode(c.code)+'#t',code:c.code,sec:'',label:`${c.code} · “${c.title}”`};}
-  const g=text.match(/(?<![A-Z])([A-Z]{3,4})[\s_.\-]?(\d{3})(L?)(?![0-9])/);if(g){const code=`${g[1]} ${g[2]}${g[3]}`;return{key:'o:'+normCode(code),code:'',label:code+' (not this semester)'};}
-  const bb=text.match(/_(\d{3,})_1\b/);if(bb)return{key:'b:'+bb[1],code:'',label:'iLearn course '+bb[1]};
-  return{key:'x',code:'',label:'Items without a course'};}
-function ilTitle(sum,code){let t=String(sum||'').replace(/\\n/g,' ').replace(/\\([,;\\])/g,'$1');
-  if(code){const re=ilCodeRe(code);if(re){t=t.replace(new RegExp(re.source+'(?:'+IL_SEC.source.slice(1)+')?[^\\s,;:)\\]]*','i'),' ');}}
-  t=t.replace(/\[\s*\]|\(\s*\)/g,' ').replace(/^\s*(?:due:?\s*)/i,'').replace(/\s*[-–:|]\s*$|^\s*[-–:|]\s*/g,'').replace(/\s{2,}/g,' ').trim();return t||String(sum||'Item').trim();}
+/* which iLearn course an item comes from. Fields that name the course are read first, the description last
+   (descriptions often mention other courses, e.g. prerequisites). A course code like MTH 103, MTH103.03, MTH-103-L51 or
+   202620_MTH_103_03 is found anywhere; a term like "Fall 2026" or "FA26" tells old courses apart from this semester's. */
+const IL_CODE=/(?<![A-Z0-9])([A-Z]{3,4})[\s_.\-]{0,2}(\d{3})(L?)(?![0-9])/g;
+const IL_TERM=/\b(fall|spring|summer|fa|sp|su)[\s_\-]?(?:20)?(\d{2})\b/i;
+function ilGroup(fields,cs,known){
+  let hit=null;
+  for(const f of fields){if(!f)continue;IL_CODE.lastIndex=0;let m;while((m=IL_CODE.exec(f))){const subj=m[1].toUpperCase(),c={subj,code:`${subj} ${m[2]}`,lab:!!m[3],f,i:m.index+m[0].length};
+      if(known.has(subj)||known.has(RENAMED[subj]||'')||known.has(RENAMED_BACK[subj]||'')){hit=c;break;}if(!hit)hit={...c,weak:1};}
+    if(hit&&!hit.weak)break;}
+  const all=fields.join(' | '),tm=all.match(IL_TERM),term=tm?({f:'Fall',fa:'Fall',s:'Spring',sp:'Spring',su:'Summer'}[tm[1].toLowerCase().slice(0,2)]||{fall:'Fall',spring:'Spring',summer:'Summer'}[tm[1].toLowerCase()]||'')+' 20'+tm[2]:'';
+  if(!hit){const bb=all.match(/_(\d{3,})_1\b/);if(bb)return{key:'b:'+bb[1],code:'',label:'iLearn course '+bb[1],term};return{key:'x',code:'',label:'Items without a course',term};}
+  let after=hit.f.slice(hit.i,hit.i+30),lab=hit.lab;
+  if(!lab&&/^[\s\-_.:]*(?:lab|laboratory)\b/i.test(after)){lab=true;after=after.replace(/^[\s\-_.:]*(?:lab|laboratory)/i,'');}
+  const sm=after.match(IL_SEC),sec=sm?sm[1].toUpperCase():'';if(sec&&/^L/.test(sec))lab=true;
+  const name=normC(hit.code+(lab?'L':''));
+  /* your course for it: the lab course if you have one, otherwise the lecture */
+  const mine=cs.find(c=>normCode(c.code)===normCode(name)||normCode(altCode(c.code))===normCode(name))||(lab?cs.find(c=>normCode(c.code)===normCode(hit.code)||normCode(altCode(c.code))===normCode(hit.code)):null);
+  return{key:'c:'+normCode(name)+(sec?'#'+sec:'')+(term?'@'+term.replace(' ',''):''),code:mine?mine.code:name,own:!mine,term,label:name+(sec?` · section ${sec}`:' · all sections')+(term?` · ${term}`:'')};}
+function ilTitle(sum){let t=String(sum||'').replace(/\\n/g,' ').replace(/\\([,;\\])/g,'$1');const orig=t.trim();
+  t=t.replace(new RegExp(IL_CODE.source+'(?:'+IL_SEC.source.slice(1)+')?(?:[._\\-][A-Z]{2}\\d{2})?','g'),' ').replace(new RegExp(IL_TERM.source,'gi'),' ');
+  t=t.replace(/\[\s*\]|\(\s*\)|\{\s*\}/g,' ').replace(/^\s*(?:due:?\s*)/i,'').replace(/(\s*[-–|:,]\s*){2,}/g,' - ').replace(/^[\s\-–|:,]+|[\s\-–|:,]+$/g,'').replace(/\s{2,}/g,' ').trim();return t||orig||'Item';}
 const ilKind=t=>/final|midterm|exam|test\b/i.test(t)?'exam':/quiz/i.test(t)?'quiz':/lab/i.test(t)?'lab':/project/i.test(t)?'project':/assign|homework|\bhw\b|report|essay|submission|problem set/i.test(t)?'assignment':'other';
 /* turn a feed into stored items; remember what's new or moved since the last sync */
 function ilIngest(txt){const evs=parseICS(txt);if(!/BEGIN:VCALENDAR/i.test(txt))throw new Error('That link didn’t return a calendar.');
-  const L=IL(),cs=ilCourses(),T0=today0(),lo=addD(T0,-160),hi=addD(T0,220),grp={},ev=[];
+  const L=IL(),cs=ilCourses(),T0=today0(),lo=addD(T0,-160),hi=addD(T0,220),grp={},ev=[],[w0,w1]=ilWindow(),known=ilSubjects(cs);ilRaw=txt;
   const val=p=>p?String(p.val).replace(/\\n/gi,' ').replace(/\\([,;\\])/g,'$1'):'';
   for(const e of evs){if(e.RRULE)continue;const st=icsTime(e.DTSTART)||icsTime(e.DUE);if(!st)continue;
     let date=st.date;if(st.allDay){const m=String(e.DTSTART&&e.DTSTART.val||'').match(/^(\d{4})(\d{2})(\d{2})/);if(!m)continue;date=new Date(+m[1],m[2]-1,+m[3]);}
     if(date<lo||date>hi)continue;
-    const extra=Object.keys(e).filter(k=>/^X-/.test(k)).map(k=>val(e[k])),text=[val(e.SUMMARY),val(e.CATEGORIES),val(e.LOCATION),val(e.DESCRIPTION).slice(0,600),val(e.URL),...extra].join(' | ');
-    const g=ilGroup(text,val(e.SUMMARY),cs);grp[g.key]=grp[g.key]||{label:g.label,code:g.code,n:0};grp[g.key].n++;
+    const extra=Object.keys(e).filter(k=>/^X-/.test(k)).map(k=>val(e[k])),fields=[...extra,val(e.CATEGORIES),val(e.LOCATION),val(e.SUMMARY),decodeURIComponent(val(e.URL)).replace(/[?&]\w*(?:token|key|sig)\w*=[^&]*/gi,''),val(e.DESCRIPTION).slice(0,400)];
+    const g=ilGroup(fields,cs,known);const G=grp[g.key]=grp[g.key]||{label:g.label,code:g.code,own:g.own||undefined,term:g.term||undefined,n:0,inSem:0};G.n++;if(date>=w0&&date<=w1)G.inSem++;
     const url=(val(e.URL).match(/^https?:\/\/\S+/)||[''])[0];
-    ev.push({u:String(e.UID?e.UID.val:'')||(iso(date)+'|'+val(e.SUMMARY)),t:ilTitle(val(e.SUMMARY),g.code),d:iso(date),tm:st.allDay?'':String(Math.floor(st.min/60)).padStart(2,'0')+':'+String(st.min%60).padStart(2,'0'),g:g.key,...(url?{url}:{})});}
+    ev.push({u:String(e.UID?e.UID.val:'')||(iso(date)+'|'+val(e.SUMMARY)),t:ilTitle(val(e.SUMMARY)),d:iso(date),tm:st.allDay?'':String(Math.floor(st.min/60)).padStart(2,'0')+':'+String(st.min%60).padStart(2,'0'),g:g.key,...(url?{url}:{})});}
   const prev=new Map(L.ev.map(x=>[x.u,x])),first=!L.ev.length,now=Date.now();let nNew=0,nMoved=0;
   if(!first)for(const x of ev){const p=prev.get(x.u);if(!p){L.chg[x.u]={k:'new',at:now};nNew++;}else if(p.d!==x.d||p.tm!==x.tm){L.chg[x.u]={k:'moved',from:p.d,ft:p.tm,at:now};nMoved++;}}
   for(const u in L.chg)if(now-L.chg[u].at>5*864e5)delete L.chg[u];
+  /* this semester's iLearn courses: the term in their name matches, or (with no term) they have something due during this semester */
+  const cur=ilTermName();for(const k in grp){const G=grp[k];G.cur=G.code?(G.term?G.term===cur:G.inSem>0):false;}
   L.ev=ev;L.grp=grp;L.at=now;return{n:ev.length,nNew,nMoved};}
+let ilRaw='';
+/* a summary of how the feed names things, for fixing the course matching: no link, long ids masked */
+async function ilDiag(){try{const L=IL();if(!ilRaw&&L.url)ilRaw=await ilFetch(L.url);const evs=parseICS(ilRaw),mask=v=>String(v).replace(/https?:\/\/[^\s]+/g,u=>u.replace(/[A-Za-z0-9_\-]{16,}/g,'•••')).replace(/\\n/g,' ').slice(0,160);
+    const lines=[`iLearn feed: ${evs.length} events · term ${ilTermName()} · courses on the site: ${ilCourses().map(c=>c.code).join(', ')}`];
+    for(const e of evs.slice(-40)){const o=[];for(const k of Object.keys(e)){if(/^(DTSTAMP|SEQUENCE|CREATED|LAST-MODIFIED|TRANSP|STATUS)$/.test(k))continue;o.push(k+'='+mask(k==='UID'?String(e[k].val).replace(/[A-Za-z0-9]{12,}/g,'•••'):e[k].val));}lines.push(o.join(' | '));}
+    lines.push('Groups: '+Object.entries(L.grp).map(([k,g])=>`${k} → ${g.label} (${g.n}, ${g.cur?'this semester':'other'})`).join('; '));
+    const txt=lines.join('\n');try{await navigator.clipboard.writeText(txt);toast('Copied. Paste it in a message to the site’s maker.');}catch{const w=window.open('','_blank');if(w){w.document.body.innerText=txt;}else toast('Couldn’t copy. Your browser blocked it.');}}
+  catch(e){toast('Couldn’t read your iLearn calendar: '+(e.message||e));}}
+function ilWindow(){const s=SEM(),lc=lastClassDay(),T0=today0(),st=s&&pd(s.start),en=(s&&pd(s.end))||lc;
+  return[st?addD(st,-10):addD(T0,-100),en?addD(en,21):addD(T0,100)];}
+function ilTermName(){const n=nowTerm();return n.s+' '+n.y;}
+function ilSubjects(cs){const k=new Set(cs.map(c=>c.code.split(' ')[0]));try{const db=CAT&&CAT.courses;if(db)for(const c in db)k.add(c.split(' ')[0]);}catch{}
+  for(const sub of['ACC','ARA','ARC','BIO','BIS','BME','BUS','CHE','CHM','CMP','COE','CVE','DES','ECO','EGM','ELE','ENG','ESM','FIN','HIS','INE','INS','IDE','LAW','MAT','MCE','MCM','MDC','MGT','MKT','MTH','MUS','NGN','PHI','PHY','POL','PSY','SOC','STA','UPA','WRI','EWE','ITM','BLW','GEO','NGI'])k.add(sub);return k;}
+
 /* the course an iLearn course is mapped to: your choice, or the automatic match */
-function ilTarget(key){const L=IL(),m=L.map[key];if(m!==undefined)return m;const g=L.grp[key];return g&&g.code?g.code:'skip';}
+function ilTarget(key){const L=IL(),m=L.map[key];if(m!==undefined)return m;const g=L.grp[key];return g&&g.cur&&g.code?g.code:'skip';}
 function ilTasks(syl){if(!ilOn())return[];const L=IL(),cs=ilCourses(),s=SEM(),lc=lastClassDay();
   const st=s&&pd(s.start)?addD(pd(s.start),-14):addD(today0(),-120),en=addD((s&&pd(s.end))||lc||addD(today0(),120),21);
   const tok=t=>{const m=String(t).toLowerCase().match(/(quiz|assignment|homework|hw|lab|project|midterm|exam|test|report|presentation|essay)\s*(?:no\.?|#)?\s*(\d+)/);return m?(m[1]==='hw'?'homework':m[1])+m[2]:'';};
   const out=[],seen=new Set();
   for(const x of L.ev){const code=ilTarget(x.g);if(!code||code==='skip')continue;const d=pd(x.d);if(d<st||d>en)continue;
-    const c=cs.find(z=>normCode(z.code)===normCode(code));if(!c)continue;const k=normCode(code)+'|'+normT(x.t)+'|'+x.d;if(seen.has(k))continue;seen.add(k);
+    const c=cs.find(z=>normCode(z.code)===normCode(code))||{code,co:null};const k=normCode(code)+'|'+normT(x.t)+'|'+x.d;if(seen.has(k))continue;seen.add(k);
     const co=c.co||null,ch=L.chg[x.u];
     out.push({key:'i:'+x.u,title:x.t,courseId:co?co.id:null,tag:co?'':c.code,date:x.d,time:x.tm||undefined,kind:ilKind(x.t),source:'ilearn',ilearn:1,url:x.url,tok:tok(x.t),
       note:'iLearn'+(ch?ch.k==='new'?' · new':` · moved from ${fmtD(pd(ch.from))}`:'')});}
@@ -2255,11 +2279,11 @@ function ilPaint(){const m=$('#ilmodal');if(!m||!m.classList.contains('on'))retu
   $('#ilguide').open=!on;$('#ilgo').textContent=on&&L.url?'Save link':'Connect';$('#ilurl').value=$('#ilurl').value||L.url||'';
   $('#ilmsg').className='ilmsg'+(ilErr?' err':'');$('#ilmsg').textContent=ilBusy?'Fetching your iLearn calendar…':ilErr;
   if(!on){$('#ilstate').innerHTML='';return;}
-  const cs=ilCourses(),keys=Object.keys(L.grp).sort((a,b)=>(L.grp[a].code?0:1)-(L.grp[b].code?0:1)||L.grp[a].label.localeCompare(L.grp[b].label)),cur=keys.filter(k=>L.grp[k].code),oth=keys.filter(k=>!L.grp[k].code);
-  const sel=k=>`<select data-ilmap="${esc(k)}" aria-label="Course for ${esc(L.grp[k].label)}"><option value="skip">Don’t import</option>${cs.map(c=>`<option value="${esc(c.code)}"${ilTarget(k)===c.code?' selected':''}>${esc(c.code)}${c.title?' · '+esc(c.title):''}</option>`).join('')}</select>`;
+  const cs=ilCourses(),keys=Object.keys(L.grp).sort((a,b)=>(L.grp[a].cur?0:1)-(L.grp[b].cur?0:1)||L.grp[a].label.localeCompare(L.grp[b].label)),cur=keys.filter(k=>L.grp[k].cur||(L.map[k]&&L.map[k]!=='skip')),oth=keys.filter(k=>!cur.includes(k));
+  const sel=k=>`<select data-ilmap="${esc(k)}" aria-label="Course for ${esc(L.grp[k].label)}"><option value="skip">Don’t import</option>${cs.map(c=>`<option value="${esc(c.code)}"${ilTarget(k)===c.code?' selected':''}>${esc(c.code)}${c.title?' · '+esc(c.title):''}</option>`).join('')}${L.grp[k].code&&!cs.some(c=>normCode(c.code)===normCode(L.grp[k].code))?`<option value="${esc(L.grp[k].code)}"${ilTarget(k)===L.grp[k].code?' selected':''}>${esc(L.grp[k].code)} (on its own)</option>`:''}</select>`;
   const row=k=>`<li><span><b>${esc(L.grp[k].label)}</b><small>${L.grp[k].n} item${L.grp[k].n===1?'':'s'}</small></span>${sel(k)}</li>`;
   $('#ilstate').innerHTML=`<div class="ilstat"><span class="ildot"></span><span><b>Connected</b> · ${L.file?'from a calendar file':'synced '+(L.at?ago(L.at):'never')} · ${ilCount()} due date${ilCount()===1?'':'s'} this semester</span>${L.url?`<button class="btn ghost sm" data-il="sync"${ilBusy?' disabled':''}>Sync now</button>`:''}<button class="btn ghost sm danger-ghost" data-il="off">Disconnect</button></div>
-    ${keys.length?`<h4>iLearn courses</h4><p class="hint">Each class can have an iLearn course for everyone taking it and one for your section, and labs have their own. All the ones that match your courses this semester are used.</p><ul class="ilg">${cur.map(row).join('')||'<li class="hint">None of the iLearn courses match your courses this semester. Pick one below, or add your courses first.</li>'}</ul>${oth.length?`<details class="ilo"><summary>Other iLearn courses (${oth.length})</summary><ul class="ilg">${oth.map(row).join('')}</ul></details>`:''}`:'<p class="hint">Nothing dated in your iLearn calendar yet.</p>'}`;}
+    ${keys.length?`<h4>iLearn courses</h4><p class="hint">Each class can have an iLearn course for everyone taking it and one for your section, and labs have their own. All the ones that match your courses this semester are used.</p><ul class="ilg">${cur.map(row).join('')||'<li class="hint">Couldn’t tell which iLearn courses are this semester’s. Pick a course for them below, and tap “Copy details for troubleshooting” to send to the site’s maker.</li>'}</ul>${oth.length?`<details class="ilo"><summary>Other iLearn courses (${oth.length})</summary><ul class="ilg">${oth.map(row).join('')}</ul></details>`:''}`:'<p class="hint">Nothing dated in your iLearn calendar yet.</p>'}${L.url||ilRaw?'<p class="ildiag"><button class="lnkbtn" data-il="diag">Copy details for troubleshooting</button> <span class="hint">If courses aren’t sorted right. It copies how your iLearn calendar names courses and items, without your link.</span></p>':''}`;}
 function openIL(){ilErr='';$('#ilurl').value=(S.ilearn&&S.ilearn.url)||'';$('#ilmodal').classList.add('on');ilPaint();setTimeout(()=>(ilOn()?$('#ilclose'):$('#ilurl')).focus({preventScroll:true}),0);}
 $('#ilgo').onclick=async()=>{const u=ilFix($('#ilurl').value);if(!/^https:\/\/[^\s]+$/i.test(u)){ilErr='Paste the calendar link from iLearn. It starts with https:// (or webcal://).';ilPaint();return;}
   const L=IL(),had=L.url;L.url=u;$('#ilurl').value=u;delete L.file;if(had!==u){L.ev=[];L.chg={};}await ilSync();if(ilErr&&!had){delete L.url;}save();ilPaint();};
@@ -2269,6 +2293,7 @@ $('#ilfilef').addEventListener('change',async e=>{const f=e.target.files[0];e.ta
 $('#ilmodal').addEventListener('change',e=>{const s=e.target.closest('[data-ilmap]');if(!s)return;IL().map[s.dataset.ilmap]=s.value;save();ilPaint();if(document.body.dataset.view==='tasks')renderTasks();});
 $('#ilmodal').addEventListener('click',e=>{if(e.target===$('#ilmodal')){$('#ilmodal').classList.remove('on');return;}const b=e.target.closest('[data-il]');if(!b)return;
   if(b.dataset.il==='sync')ilSync();
+  if(b.dataset.il==='diag')ilDiag();
   if(b.dataset.il==='off'){const snap=JSON.stringify(S);delete S.ilearn;save();ilErr='';$('#ilurl').value='';ilPaint();renderTasks();toast('iLearn disconnected.',snap);}});
 $('#ilclose').onclick=()=>{$('#ilmodal').classList.remove('on');const v=document.body.dataset.view;if(v==='tasks')renderTasks();else if(v==='home')renderHome();};
 $('#kil').onclick=openIL;
