@@ -2199,6 +2199,15 @@ const IL_SEC=/^(?:[\s_.\-]*(?:sec(?:tion)?\.?\s*|[._\-]\s*)(L?\d{1,2}|[A-Z]\d{1,
    (descriptions often mention other courses, e.g. prerequisites). A course code like MTH 103, MTH103.03, MTH-103-L51 or
    202620_MTH_103_03 is found anywhere; a term like "Fall 2026" or "FA26" tells old courses apart from this semester's. */
 const IL_CODE=/(?<![A-Z0-9])([A-Z]{3,4})[\s_.\-]{0,2}(\d{3})(L?)(?![0-9])/g;
+const ilNorm=t=>' '+String(t||'').toLowerCase().replace(/&/g,' and ').replace(/[^a-z0-9]+/g,' ').trim()+' ';
+let ilTitles=null,ilTitlesKey='';
+function ilStripName(t,g,cs){if(!/#n/.test(g.key))return t;const x=(ilTitleList(cs)).filter(x=>normCode(x.code)===normCode(g.code));for(const y of x){const re=new RegExp(y.n.trim().split(' ').map(w=>w==='and'?'(?:and|&)':w).join('[\\W_]+'),'i');if(re.test(t)){const r=t.replace(re,' ').replace(/^[\s\-–|:,]+|[\s\-–|:,]+$/g,'').replace(/\s{2,}/g,' ').trim();return r||t;}}return t;}
+function ilTitleList(cs){const key=cs.map(c=>c.code).join()+'|'+!!CAT;if(ilTitles&&ilTitlesKey===key)return ilTitles;const out=[],seen=new Set();
+  const add=(code,t)=>{const n=ilNorm(t);if(n.length<8||seen.has(n))return;seen.add(n);out.push({code:normC(code),n});};
+  for(const c of cs)if(c.title)add(c.code,c.title);try{if(CAT&&CAT.courses)for(const k in CAT.courses){const d=CAT.courses[k];if(d&&d.t)add(k,d.t);}}catch{}
+  out.sort((a,b)=>b.n.length-a.n.length);ilTitles=out;ilTitlesKey=key;return out;}
+function ilTitleHit(fields,cs){const L=ilTitleList(cs),mineN=new Set(cs.map(c=>normCode(c.code)));
+  for(const f of fields){if(!f)continue;const n=ilNorm(f);let best=null;for(const x of L)if(n.includes(x.n)){if(mineN.has(normCode(x.code)))return x.code;if(!best)best=x.code;}if(best)return best;}return null;}
 const IL_TERM=/\b(fall|spring|summer|fa|sp|su)[\s_\-]?(?:20)?(\d{2})\b/i;
 function ilGroup(fields,cs,known){
   let hit=null;
@@ -2206,6 +2215,8 @@ function ilGroup(fields,cs,known){
       if(known.has(subj)||known.has(RENAMED[subj]||'')||known.has(RENAMED_BACK[subj]||'')){hit=c;break;}if(!hit)hit={...c,weak:1};}
     if(hit&&!hit.weak)break;}
   const all=fields.join(' | '),tm=all.match(IL_TERM),term=tm?({f:'Fall',fa:'Fall',s:'Spring',sp:'Spring',su:'Summer'}[tm[1].toLowerCase().slice(0,2)]||{fall:'Fall',spring:'Spring',summer:'Summer'}[tm[1].toLowerCase()]||'')+' 20'+tm[2]:'';
+  /* no code anywhere: look for a course's name instead (yours first, then every course in the catalog) */
+  if(!hit){const t=ilTitleHit(fields,cs);if(t){const mine=cs.find(c=>normCode(c.code)===normCode(t));return{key:'c:'+normCode(t)+'#n'+(term?'@'+term.replace(' ',''):''),code:mine?mine.code:t,own:!mine,term,label:`${t} · by course name`+(term?` · ${term}`:'')};}}
   if(!hit){const bb=all.match(/_(\d{3,})_1\b/);if(bb)return{key:'b:'+bb[1],code:'',label:'iLearn course '+bb[1],term};return{key:'x',code:'',label:'Items without a course',term};}
   let after=hit.f.slice(hit.i,hit.i+30),lab=hit.lab;
   if(!lab&&/^[\s\-_.:]*(?:lab|laboratory)\b/i.test(after)){lab=true;after=after.replace(/^[\s\-_.:]*(?:lab|laboratory)/i,'');}
@@ -2228,7 +2239,7 @@ function ilIngest(txt){const evs=parseICS(txt);if(!/BEGIN:VCALENDAR/i.test(txt))
     const extra=Object.keys(e).filter(k=>/^X-/.test(k)).map(k=>val(e[k])),fields=[...extra,val(e.CATEGORIES),val(e.LOCATION),val(e.SUMMARY),decodeURIComponent(val(e.URL)).replace(/[?&]\w*(?:token|key|sig)\w*=[^&]*/gi,''),val(e.DESCRIPTION).slice(0,400)];
     const g=ilGroup(fields,cs,known);const G=grp[g.key]=grp[g.key]||{label:g.label,code:g.code,own:g.own||undefined,term:g.term||undefined,n:0,inSem:0};G.n++;if(date>=w0&&date<=w1)G.inSem++;
     const url=(val(e.URL).match(/^https?:\/\/\S+/)||[''])[0];
-    ev.push({u:String(e.UID?e.UID.val:'')||(iso(date)+'|'+val(e.SUMMARY)),t:ilTitle(val(e.SUMMARY)),d:iso(date),tm:st.allDay?'':String(Math.floor(st.min/60)).padStart(2,'0')+':'+String(st.min%60).padStart(2,'0'),g:g.key,...(url?{url}:{})});}
+    ev.push({u:String(e.UID?e.UID.val:'')||(iso(date)+'|'+val(e.SUMMARY)),t:ilStripName(ilTitle(val(e.SUMMARY)),g,cs),d:iso(date),tm:st.allDay?'':String(Math.floor(st.min/60)).padStart(2,'0')+':'+String(st.min%60).padStart(2,'0'),g:g.key,...(url?{url}:{})});}
   const prev=new Map(L.ev.map(x=>[x.u,x])),first=!L.ev.length,now=Date.now();let nNew=0,nMoved=0;
   if(!first)for(const x of ev){const p=prev.get(x.u);if(!p){L.chg[x.u]={k:'new',at:now};nNew++;}else if(p.d!==x.d||p.tm!==x.tm){L.chg[x.u]={k:'moved',from:p.d,ft:p.tm,at:now};nMoved++;}}
   for(const u in L.chg)if(now-L.chg[u].at>5*864e5)delete L.chg[u];
@@ -2269,7 +2280,7 @@ async function ilFetch(url){const r=await fetch(RELAY_URL+'?ical='+encodeURIComp
   if(/"service"\s*:/.test(txt))throw new Error('Your relay needs updating to fetch iLearn calendars. Paste the new worker.js into Cloudflare, or upload a calendar file instead.');return txt;}
 const ilFix=u=>String(u||'').trim().replace(/^(?:webcals?|http):\/\//i,'https://');
 async function ilSync(opt={}){const L=IL();if(!L.url||ilBusy)return;ilBusy=true;ilErr='';ilPaint();
-  try{const r=ilIngest(await ilFetch(L.url));save();if(!opt.quiet||r.nNew||r.nMoved)toast(`iLearn synced: ${ilCount()} due date${ilCount()===1?'':'s'} this semester${r.nNew?` · ${r.nNew} new`:''}${r.nMoved?` · ${r.nMoved} moved`:''}.`);}
+  try{const raw=await ilFetch(L.url);try{await loadCatalog();}catch{}const r=ilIngest(raw);save();if(!opt.quiet||r.nNew||r.nMoved)toast(`iLearn synced: ${ilCount()} due date${ilCount()===1?'':'s'} this semester${r.nNew?` · ${r.nNew} new`:''}${r.nMoved?` · ${r.nMoved} moved`:''}.`);}
   catch(e){ilErr=String(e.message||e);L.fail=Date.now();if(!opt.quiet)toast('iLearn: '+ilErr);}
   finally{ilBusy=false;ilPaint();const v=document.body.dataset.view;if(v==='tasks')renderTasks();else if(v==='home')renderHome();}}
 const ilCount=()=>{try{return ilTasks(null).length;}catch{return 0;}};
@@ -2289,7 +2300,7 @@ $('#ilgo').onclick=async()=>{const u=ilFix($('#ilurl').value);if(!/^https:\/\/[^
   const L=IL(),had=L.url;L.url=u;$('#ilurl').value=u;delete L.file;if(had!==u){L.ev=[];L.chg={};}await ilSync();if(ilErr&&!had){delete L.url;}save();ilPaint();};
 $('#ilurl').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();$('#ilgo').click();}});
 $('#ilfileb').onclick=()=>$('#ilfilef').click();
-$('#ilfilef').addEventListener('change',async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;try{const L=IL();if(!L.url)L.file=f.name;const r=ilIngest(await f.text());ilErr='';save();toast(`Added ${ilCount()} iLearn due date${ilCount()===1?'':'s'} for this semester.`);}catch(er){ilErr=String(er.message||er);}ilPaint();renderTasks();});
+$('#ilfilef').addEventListener('change',async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;try{try{await loadCatalog();}catch{}const L=IL();if(!L.url)L.file=f.name;const r=ilIngest(await f.text());ilErr='';save();toast(`Added ${ilCount()} iLearn due date${ilCount()===1?'':'s'} for this semester.`);}catch(er){ilErr=String(er.message||er);}ilPaint();renderTasks();});
 $('#ilmodal').addEventListener('change',e=>{const s=e.target.closest('[data-ilmap]');if(!s)return;IL().map[s.dataset.ilmap]=s.value;save();ilPaint();if(document.body.dataset.view==='tasks')renderTasks();});
 $('#ilmodal').addEventListener('click',e=>{if(e.target===$('#ilmodal')){$('#ilmodal').classList.remove('on');return;}const b=e.target.closest('[data-il]');if(!b)return;
   if(b.dataset.il==='sync')ilSync();
