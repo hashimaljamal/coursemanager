@@ -401,8 +401,8 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 /* "Hashim’s" sits in the space above the lowercase "ourse", right after the tall C. Everything is in proportion to the title size
    (Archivo 800 at 112% width: the C is .83em wide, lowercase tops sit .34em below the top of the line), so it holds at every window size */
 .btitle{position:relative;min-width:0;font-size:clamp(22px,2.4vw,30px);padding-top:.27em}.btitle h1{font-size:1em!important}
-/* right edge lines up with the end of "Course" (3.95em of the title = 7.18em at this size) */
-.bpre{position:absolute;font-size:.55em;left:7.18em;transform:translateX(-100%);top:.02em;font-weight:800;color:var(--mute);line-height:1;letter-spacing:.01em;white-space:nowrap}
+/* spans "ourse": starts at the o (.833em of the title) and, at the font's widest stretch, ends with the e (3.95em) */
+.bpre{position:absolute;font-size:.55em;left:1.515em;top:.02em;font-weight:800;font-stretch:125%;color:var(--mute);line-height:1;letter-spacing:0;white-space:nowrap}
 .brand{grid-area:title;display:flex;align-items:center;gap:4px 12px;flex-wrap:wrap;min-width:0}
 .semsw{display:inline-flex;align-items:center;gap:4px;border:1px solid var(--line);background:var(--soft);color:var(--ink);border-radius:99px;padding:4px 8px 4px 11px;font:inherit;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;min-height:30px;max-width:100%}
 .semsw:hover{border-color:var(--ink)}.semsw svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}.semsw span{overflow:hidden;text-overflow:ellipsis}
