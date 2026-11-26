@@ -388,7 +388,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 .ilg li>span{display:grid;min-width:0}.ilg b{font-size:13.5px}.ilg small{font-size:12px;color:var(--mute)}.ilg select{max-width:52%;min-width:0;font-size:13px;min-height:34px;padding:0 8px}.ilo summary{font-size:13px;font-weight:700;cursor:pointer;padding:6px 0;color:var(--mute)}
 .upil{display:grid;grid-template-columns:30px 1fr auto;gap:12px;align-items:start;height:auto;min-height:0;width:100%;text-align:left;font:inherit;color:var(--ink);background:none;border:1.5px dashed var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;margin:0}
 .upil:hover,.upil:focus-visible{border-color:var(--ink);background:var(--soft);outline:0}.upil>span:nth-child(2){display:grid;gap:2px}.upil b{font-size:15px}.upil small{color:var(--mute);font-size:12.5px;line-height:1.35}.upil em{align-self:center;font-style:normal;font-weight:800;font-size:13px;white-space:nowrap}.upil.on{border-style:solid;border-color:var(--ink)}.upil .upi{grid-row:auto}.upil.on .upi{background:var(--ink);color:var(--bg)}
-.tlink{font-weight:700;color:var(--ink)}.ildiag{margin:12px 0 0;font-size:12px}.ildiag .hint{font-size:12px}
+.tlink{font-weight:700;color:var(--ink)}.ilcnt{text-transform:none;letter-spacing:0;font-weight:600;color:var(--red);margin-left:6px}.ilsort{max-height:340px;overflow:auto;padding-right:4px}.ilsort em{font-style:normal}.ilsort .ilq{color:var(--red);font-weight:700}.ilsort select{max-width:44%}.ildiag{margin:12px 0 0;font-size:12px}.ildiag .hint{font-size:12px}
 .upcard{max-width:640px}.upgrid{display:grid;gap:10px;margin:14px 0 6px}
 .upbox{display:grid;grid-template-columns:30px 1fr;gap:2px 12px;align-items:start;border:1.5px dashed var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;transition:border-color .15s,background .15s}
 .upbox:hover,.upbox:focus-visible,.upbox.drag{border-color:var(--ink);background:var(--soft);outline:0}.upbox.has{border-style:solid;border-color:var(--ink)}
@@ -2185,7 +2185,7 @@ let tFilter='all',tShowDone=false,tShowCal=true,tLaterOpen=false,tOverOpen=false
    and due dates from this semester's courses become tasks. Professors often run two iLearn courses per class (one for everyone
    taking it, one per section) and labs do the same, so items from every iLearn course that matches one of your courses are merged. */
 const IL_FRESH=30*60000;let ilBusy=false,ilErr='';
-function IL(){if(!S.ilearn||typeof S.ilearn!=='object')S.ilearn={};const L=S.ilearn;L.ev=L.ev||[];L.map=L.map||{};L.grp=L.grp||{};L.chg=L.chg||{};return L;}
+function IL(){if(!S.ilearn||typeof S.ilearn!=='object')S.ilearn={};const L=S.ilearn;L.ev=L.ev||[];L.map=L.map||{};L.grp=L.grp||{};L.chg=L.chg||{};L.pick=L.pick||{};return L;}
 const ilOn=()=>!!(S.ilearn&&(S.ilearn.url||S.ilearn.file));
 /* this semester's courses: syllabi plus timetable classes, labs included */
 function ilCourses(){const out=[],seen=new Set();const add=(code,title,co)=>{code=normC(code);if(!code||!/^[A-Z]{2,4} \d{3}/.test(code)||seen.has(normCode(code)))return;seen.add(normCode(code));out.push({code,title:title||'',co:co||null});};
@@ -2261,18 +2261,41 @@ function ilSubjects(cs){const k=new Set(cs.map(c=>c.code.split(' ')[0]));try{con
   for(const sub of['ACC','ARA','ARC','BIO','BIS','BME','BUS','CHE','CHM','CMP','COE','CVE','DES','ECO','EGM','ELE','ENG','ESM','FIN','HIS','INE','INS','IDE','LAW','MAT','MCE','MCM','MDC','MGT','MKT','MTH','MUS','NGN','PHI','PHY','POL','PSY','SOC','STA','UPA','WRI','EWE','ITM','BLW','GEO','NGI'])k.add(sub);return k;}
 
 /* the course an iLearn course is mapped to: your choice, or the automatic match */
-function ilTarget(key){const L=IL(),m=L.map[key];if(m!==undefined)return m;const g=L.grp[key];return g&&g.cur&&g.code?g.code:'skip';}
-function ilTasks(syl){if(!ilOn())return[];const L=IL(),cs=ilCourses(),s=SEM(),lc=lastClassDay();
-  const st=s&&pd(s.start)?addD(pd(s.start),-14):addD(today0(),-120),en=addD((s&&pd(s.end))||lc||addD(today0(),120),21);
-  const tok=t=>{const m=String(t).toLowerCase().match(/(quiz|assignment|homework|hw|lab|project|midterm|exam|test|report|presentation|essay)\s*(?:no\.?|#)?\s*(\d+)/);return m?(m[1]==='hw'?'homework':m[1])+m[2]:'';};
+/* the course an iLearn course is mapped to: your choice, or the automatic match. Items that iLearn doesn't label with a
+   course at all (common: Blackboard's feed only carries the item's name and date) are sorted one by one, see ilGuess */
+function ilTarget(key){const L=IL(),m=L.map[key];if(m!==undefined)return m;const g=L.grp[key];if(g&&g.code)return g.cur?g.code:'skip';return'auto';}
+const IL_NOISE=/\b(letter grade|course grade|weighted total|overall grade|running total|grade of out|final grade|total points?)\b/i;
+const ilTok=t=>{const m=String(t).toLowerCase().replace(/(\D)(\d)/g,'$1 $2').match(/\b(quiz|assignment|homework|hw|lab|project|midterm|exam|test|report|presentation|essay|unit|chapter|ch|week|session|activity|problem set|ps)\s*(?:no\.?|#)?\s*(\d+)/);return m?({hw:'homework',ch:'chapter',ps:'problem set'}[m[1]]||m[1])+m[2]:'';};
+/* "Lab 3 Submission" and "Lab 4 Submission" follow the same pattern: sorting one sorts the rest */
+const ilPat=t=>String(t).toLowerCase().replace(/\d+/g,' ').replace(/\b(and|&|of|the|a|an|no|f\d\d|fa|sp|su)\b/g,' ').replace(/[^a-z]+/g,' ').trim();
+const IL_TYPES=['lab','quiz','midterm','exam','project','participation','assignment','homework','unit','chapter','activity','dictation','presentation','report','essay','reading','discussion','journal','reflection','test','tutorial','recitation','workshop','problem set'];
+/* best guess at which of this semester's courses an item belongs to, with the reason */
+function ilGuess(x,cs,syl,learned){const L=IL();if(L.pick[x.u]!==undefined)return L.pick[x.u]?{code:L.pick[x.u],why:'you'}:null;
+  const pat=ilPat(x.t);if(pat&&learned[pat])return{code:learned[pat],why:'pattern'};
+  const d=pd(x.d),tm=x.tm?+x.tm.slice(0,2)*60+ +x.tm.slice(3,5):null,codes=cs.map(c=>c.code),uniq=a=>[...new Set(a)];
+  /* in-class quizzes and exams are due at class time: the course that meets then */
+  if(tm!=null&&tm<23*60+30){try{const at=uniq(classOn(d).filter(sl=>tm>=sl.start-15&&tm<=sl.end+15).map(sl=>normC(nm(sl).code)).filter(c=>codes.some(z=>normCode(z)===normCode(c))));if(at.length===1)return{code:at[0],why:'class time'};}catch{}}
+  /* the same item in a syllabus around the same date (Quiz 2, Lab 5, Unit 4…) */
+  const tk=ilTok(x.t);if(tk&&syl){const hit=uniq(syl.filter(y=>y.courseId&&y.date&&ilTok(y.title)===tk&&Math.abs(dDiff(pd(y.date),d))<=5).map(y=>{const c=byId(y.courseId);return c?normC(c.code):'';}).filter(Boolean));if(hit.length===1)return{code:hit[0],why:'syllabus'};}
+  /* a kind of work only one of your courses has (participation, dictation, labs…) */
+  const ty=IL_TYPES.find(w=>new RegExp('\\b'+w).test(x.t.toLowerCase()));
+  if(ty){const has=uniq(cs.filter(c=>{if(ty==='lab'&&/L$/.test(c.code))return true;const co=c.co;if(!co)return false;return co.comps.some(k=>new RegExp('\\b'+ty).test(String(k.name).toLowerCase())||(ty==='lab'&&k.kind==='lab'))||(co.sched||[]).some(it=>new RegExp('\\b'+ty).test(String(it.title).toLowerCase()));}).map(c=>c.code));
+    if(has.length===1)return{code:has[0],why:'kind'};}
+  return null;}
+function ilTasks(syl){if(!ilOn())return[];const L=IL(),cs=ilCourses(),s=SEM(),lc=lastClassDay();L.pick=L.pick||{};
+  const st=s&&pd(s.start)?addD(pd(s.start),-7):addD(today0(),-120),en=addD((s&&pd(s.end))||lc||addD(today0(),120),21);
+  /* patterns you've sorted by hand, used for their siblings (a pattern sorted into two courses is ignored) */
+  const learned={},byU=new Map(L.ev.map(x=>[x.u,x]));for(const u in L.pick){const x=byU.get(u),c=L.pick[u];if(!x||!c)continue;const p=ilPat(x.t);if(!p)continue;learned[p]=learned[p]===undefined||learned[p]===c?c:'';}
+  for(const p in learned)if(!learned[p])delete learned[p];
   const out=[],seen=new Set();
-  for(const x of L.ev){const code=ilTarget(x.g);if(!code||code==='skip')continue;const d=pd(x.d);if(d<st||d>en)continue;
-    const c=cs.find(z=>normCode(z.code)===normCode(code))||{code,co:null};const k=normCode(code)+'|'+normT(x.t)+'|'+x.d;if(seen.has(k))continue;seen.add(k);
-    const co=c.co||null,ch=L.chg[x.u];
-    out.push({key:'i:'+x.u,title:x.t,courseId:co?co.id:null,tag:co?'':c.code,date:x.d,time:x.tm||undefined,kind:ilKind(x.t),source:'ilearn',ilearn:1,url:x.url,tok:tok(x.t),
-      note:'iLearn'+(ch?ch.k==='new'?' · new':` · moved from ${fmtD(pd(ch.from))}`:'')});}
+  for(const x of L.ev){if(L.pick[x.u]==='-')continue;const tgt=ilTarget(x.g);if(tgt==='skip')continue;const d=pd(x.d);if(d<st||d>en||IL_NOISE.test(x.t))continue;
+    let code=tgt,why='';if(tgt==='auto'){const gs=ilGuess(x,cs,syl,learned);code=gs?gs.code:'';why=gs?gs.why:'none';}
+    const c=code?(cs.find(z=>normCode(z.code)===normCode(code))||{code,co:null}):null;const k=(code?normCode(code):'?')+'|'+normT(x.t)+'|'+x.d;if(seen.has(k))continue;seen.add(k);
+    const co=c&&c.co||null,ch=L.chg[x.u];
+    out.push({key:'i:'+x.u,u:x.u,title:x.t,courseId:co?co.id:null,tag:co?'':c?c.code:'iLearn',date:x.d,time:x.tm||undefined,kind:ilKind(x.t),source:'ilearn',ilearn:1,url:x.url,tok:ilTok(x.t),why,
+      note:'iLearn'+(why==='none'?' · which course?':why&&why!=='you'?' · course guessed':'')+(ch?ch.k==='new'?' · new':` · moved from ${fmtD(pd(ch.from))}`:'')});}
   /* drop a syllabus task when iLearn has the same item (e.g. Quiz 4) within a week of it: iLearn's date and time win */
-  if(syl){const drop=new Set();for(const t of out){if(!t.tok)continue;for(const y of syl)if(!y.manual&&y.courseId&&y.courseId===t.courseId&&y.date&&tok(y.title)===t.tok&&Math.abs(dDiff(pd(y.date),pd(t.date)))<=7){drop.add(y.key);if((S.tstate[y.key]||{}).done&&!(S.tstate[t.key]||{}).done)S.tstate[t.key]=Object.assign(S.tstate[t.key]||{},{done:true});}}
+  if(syl){const drop=new Set();for(const t of out){if(!t.tok||!t.courseId)continue;for(const y of syl)if(!y.manual&&y.courseId===t.courseId&&y.date&&ilTok(y.title)===t.tok&&Math.abs(dDiff(pd(y.date),pd(t.date)))<=7){drop.add(y.key);if((S.tstate[y.key]||{}).done&&!(S.tstate[t.key]||{}).done)S.tstate[t.key]=Object.assign(S.tstate[t.key]||{},{done:true});}}
     for(let i=syl.length-1;i>=0;i--)if(drop.has(syl[i].key))syl.splice(i,1);}
   return out;}
 async function ilFetch(url){const r=await fetch(RELAY_URL+'?ical='+encodeURIComponent(url),{cache:'no-store'});const txt=await r.text();
@@ -2283,32 +2306,40 @@ async function ilSync(opt={}){const L=IL();if(!L.url||ilBusy)return;ilBusy=true;
   try{const raw=await ilFetch(L.url);try{await loadCatalog();}catch{}const r=ilIngest(raw);save();if(!opt.quiet||r.nNew||r.nMoved)toast(`iLearn synced: ${ilCount()} due date${ilCount()===1?'':'s'} this semester${r.nNew?` · ${r.nNew} new`:''}${r.nMoved?` · ${r.nMoved} moved`:''}.`);}
   catch(e){ilErr=String(e.message||e);L.fail=Date.now();if(!opt.quiet)toast('iLearn: '+ilErr);}
   finally{ilBusy=false;ilPaint();const v=document.body.dataset.view;if(v==='tasks')renderTasks();else if(v==='home')renderHome();}}
-const ilCount=()=>{try{return ilTasks(null).length;}catch{return 0;}};
+const ilCount=()=>{try{return allTasks().filter(t=>t.ilearn).length;}catch{return 0;}};
 function ilAuto(){const L=S.ilearn;if(!L||!L.url||ilBusy)return;const last=Math.max(L.at||0,L.fail||0);if(Date.now()-last>IL_FRESH)ilSync({quiet:true});}
 const ago=t=>{const m=Math.round((Date.now()-t)/60000);return m<1?'just now':m<60?m+' min ago':m<1440?Math.round(m/60)+' h ago':fmtD(new Date(t));};
 function ilPaint(){const m=$('#ilmodal');if(!m||!m.classList.contains('on'))return;const L=IL(),on=ilOn();
   $('#ilguide').open=!on;$('#ilgo').textContent=on&&L.url?'Save link':'Connect';$('#ilurl').value=$('#ilurl').value||L.url||'';
   $('#ilmsg').className='ilmsg'+(ilErr?' err':'');$('#ilmsg').textContent=ilBusy?'Fetching your iLearn calendar…':ilErr;
   if(!on){$('#ilstate').innerHTML='';return;}
-  const cs=ilCourses(),keys=Object.keys(L.grp).sort((a,b)=>(L.grp[a].cur?0:1)-(L.grp[b].cur?0:1)||L.grp[a].label.localeCompare(L.grp[b].label)),cur=keys.filter(k=>L.grp[k].cur||(L.map[k]&&L.map[k]!=='skip')),oth=keys.filter(k=>!cur.includes(k));
-  const sel=k=>`<select data-ilmap="${esc(k)}" aria-label="Course for ${esc(L.grp[k].label)}"><option value="skip">Don’t import</option>${cs.map(c=>`<option value="${esc(c.code)}"${ilTarget(k)===c.code?' selected':''}>${esc(c.code)}${c.title?' · '+esc(c.title):''}</option>`).join('')}${L.grp[k].code&&!cs.some(c=>normCode(c.code)===normCode(L.grp[k].code))?`<option value="${esc(L.grp[k].code)}"${ilTarget(k)===L.grp[k].code?' selected':''}>${esc(L.grp[k].code)} (on its own)</option>`:''}</select>`;
+  const cs=ilCourses(),keys=Object.keys(L.grp).sort((a,b)=>(L.grp[a].cur?0:1)-(L.grp[b].cur?0:1)||L.grp[a].label.localeCompare(L.grp[b].label)),cur=keys.filter(k=>L.grp[k].cur||(!L.grp[k].code&&ilTarget(k)!=='skip')||(L.map[k]&&L.map[k]!=='skip')),oth=keys.filter(k=>!cur.includes(k));
+  const sel=k=>`<select data-ilmap="${esc(k)}" aria-label="Course for ${esc(L.grp[k].label)}">${L.grp[k].code?'':`<option value="auto"${ilTarget(k)==='auto'?' selected':''}>Sort item by item</option>`}<option value="skip"${ilTarget(k)==='skip'?' selected':''}>Don’t import</option>${cs.map(c=>`<option value="${esc(c.code)}"${ilTarget(k)===c.code?' selected':''}>${esc(c.code)}${c.title?' · '+esc(c.title):''}</option>`).join('')}${L.grp[k].code&&!cs.some(c=>normCode(c.code)===normCode(L.grp[k].code))?`<option value="${esc(L.grp[k].code)}"${ilTarget(k)===L.grp[k].code?' selected':''}>${esc(L.grp[k].code)} (on its own)</option>`:''}</select>`;
   const row=k=>`<li><span><b>${esc(L.grp[k].label)}</b><small>${L.grp[k].n} item${L.grp[k].n===1?'':'s'}</small></span>${sel(k)}</li>`;
   $('#ilstate').innerHTML=`<div class="ilstat"><span class="ildot"></span><span><b>Connected</b> · ${L.file?'from a calendar file':'synced '+(L.at?ago(L.at):'never')} · ${ilCount()} due date${ilCount()===1?'':'s'} this semester</span>${L.url?`<button class="btn ghost sm" data-il="sync"${ilBusy?' disabled':''}>Sync now</button>`:''}<button class="btn ghost sm danger-ghost" data-il="off">Disconnect</button></div>
-    ${keys.length?`<h4>iLearn courses</h4><p class="hint">Each class can have an iLearn course for everyone taking it and one for your section, and labs have their own. All the ones that match your courses this semester are used.</p><ul class="ilg">${cur.map(row).join('')||'<li class="hint">Couldn’t tell which iLearn courses are this semester’s. Pick a course for them below, and tap “Copy details for troubleshooting” to send to the site’s maker.</li>'}</ul>${oth.length?`<details class="ilo"><summary>Other iLearn courses (${oth.length})</summary><ul class="ilg">${oth.map(row).join('')}</ul></details>`:''}`:'<p class="hint">Nothing dated in your iLearn calendar yet.</p>'}${L.url||ilRaw?'<p class="ildiag"><button class="lnkbtn" data-il="diag">Copy details for troubleshooting</button> <span class="hint">If courses aren’t sorted right. It copies how your iLearn calendar names courses and items, without your link.</span></p>':''}`;}
+    ${keys.length?`<h4>iLearn courses</h4><p class="hint">Each class can have an iLearn course for everyone taking it and one for your section, and labs have their own. All the ones that match your courses this semester are used.</p><ul class="ilg">${cur.map(row).join('')||'<li class="hint">Couldn’t tell which iLearn courses are this semester’s. Pick a course for them below, and tap “Copy details for troubleshooting” to send to the site’s maker.</li>'}</ul>${oth.length?`<details class="ilo"><summary>Other iLearn courses (${oth.length})</summary><ul class="ilg">${oth.map(row).join('')}</ul></details>`:''}`:'<p class="hint">Nothing dated in your iLearn calendar yet.</p>'}${ilSortHTML(cs)}${L.url||ilRaw?'<p class="ildiag"><button class="lnkbtn" data-il="diag">Copy details for troubleshooting</button> <span class="hint">If courses aren’t sorted right. It copies how your iLearn calendar names courses and items, without your link.</span></p>':''}`;}
+/* this semester's items whose course was guessed or isn't known: pick it once, and items named the same way follow */
+const IL_WHY={none:'Which course?','class time':'Guessed: due during its class','syllabus':'Guessed: same item in the syllabus',kind:'Guessed: only course with this kind of work',pattern:'Like items you sorted'};
+function ilSortHTML(cs){const it=allTasks().filter(t=>t.ilearn&&t.why&&t.why!=='you').sort((a,b)=>(a.why==='none'?0:1)-(b.why==='none'?0:1)||a.date.localeCompare(b.date));if(!it.length)return'';
+  const nNone=it.filter(t=>t.why==='none').length,nG=it.length-nNone,code=t=>{const c=t.courseId?byId(t.courseId):null;return c?normC(c.code):t.tag!=='iLearn'?t.tag:'';};
+  return`<h4>Items to sort <span class="ilcnt">${nNone?nNone+' need a course':''}${nNone&&nG?' · ':''}${nG?nG+' guessed':''}</span></h4><p class="hint">iLearn often doesn’t say which course an item is from, so the site guesses from your timetable and syllabi. Pick the course once and items named the same way (Lab 1, Lab 2…) follow.${nG?' <button class="lnkbtn" data-il="okall">Keep all guesses</button>':''}</p>
+    <ul class="ilg ilsort">${it.slice(0,120).map(t=>`<li><span><b>${esc(t.title)}</b><small>${esc(fmtD(pd(t.date)))}${t.time?' · '+esc(fmtClock(toMin(t.time),TT().h24)+(TT().h24?'':' '+ampm(toMin(t.time)))):''} · <em class="${t.why==='none'?'ilq':''}">${esc(IL_WHY[t.why]||'')}</em></small></span><select data-ilpick="${esc(t.u)}" aria-label="Course for ${esc(t.title)}"><option value="">${t.why==='none'?'Which course?':'Not sure'}</option>${cs.map(c=>`<option value="${esc(c.code)}"${code(t)&&normCode(code(t))===normCode(c.code)?' selected':''}>${esc(c.code)}</option>`).join('')}<option value="-">Not for this semester · hide</option></select></li>`).join('')}</ul>`;}
 function openIL(){ilErr='';$('#ilurl').value=(S.ilearn&&S.ilearn.url)||'';$('#ilmodal').classList.add('on');ilPaint();setTimeout(()=>(ilOn()?$('#ilclose'):$('#ilurl')).focus({preventScroll:true}),0);}
 $('#ilgo').onclick=async()=>{const u=ilFix($('#ilurl').value);if(!/^https:\/\/[^\s]+$/i.test(u)){ilErr='Paste the calendar link from iLearn. It starts with https:// (or webcal://).';ilPaint();return;}
   const L=IL(),had=L.url;L.url=u;$('#ilurl').value=u;delete L.file;if(had!==u){L.ev=[];L.chg={};}await ilSync();if(ilErr&&!had){delete L.url;}save();ilPaint();};
 $('#ilurl').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();$('#ilgo').click();}});
 $('#ilfileb').onclick=()=>$('#ilfilef').click();
 $('#ilfilef').addEventListener('change',async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;try{try{await loadCatalog();}catch{}const L=IL();if(!L.url)L.file=f.name;const r=ilIngest(await f.text());ilErr='';save();toast(`Added ${ilCount()} iLearn due date${ilCount()===1?'':'s'} for this semester.`);}catch(er){ilErr=String(er.message||er);}ilPaint();renderTasks();});
-$('#ilmodal').addEventListener('change',e=>{const s=e.target.closest('[data-ilmap]');if(!s)return;IL().map[s.dataset.ilmap]=s.value;save();ilPaint();if(document.body.dataset.view==='tasks')renderTasks();});
+$('#ilmodal').addEventListener('change',e=>{const pk=e.target.closest('[data-ilpick]');if(pk){const L=IL();if(pk.value)L.pick[pk.dataset.ilpick]=pk.value;else delete L.pick[pk.dataset.ilpick];save();const sc=$('#ilstate .ilsort'),top=sc?sc.scrollTop:0;ilPaint();const sc2=$('#ilstate .ilsort');if(sc2)sc2.scrollTop=top;if(document.body.dataset.view==='tasks')renderTasks();return;}const s=e.target.closest('[data-ilmap]');if(!s)return;IL().map[s.dataset.ilmap]=s.value;save();ilPaint();if(document.body.dataset.view==='tasks')renderTasks();});
 $('#ilmodal').addEventListener('click',e=>{if(e.target===$('#ilmodal')){$('#ilmodal').classList.remove('on');return;}const b=e.target.closest('[data-il]');if(!b)return;
   if(b.dataset.il==='sync')ilSync();
   if(b.dataset.il==='diag')ilDiag();
+  if(b.dataset.il==='okall'){const L=IL();for(const t of allTasks())if(t.ilearn&&t.why&&t.why!=='none'&&t.why!=='you'){const c=t.courseId?byId(t.courseId):null;const code=c?normC(c.code):t.tag;if(code&&code!=='iLearn')L.pick[t.u]=code;}save();ilPaint();if(document.body.dataset.view==='tasks')renderTasks();}
   if(b.dataset.il==='off'){const snap=JSON.stringify(S);delete S.ilearn;save();ilErr='';$('#ilurl').value='';ilPaint();renderTasks();toast('iLearn disconnected.',snap);}});
 $('#ilclose').onclick=()=>{$('#ilmodal').classList.remove('on');const v=document.body.dataset.view;if(v==='tasks')renderTasks();else if(v==='home')renderHome();};
 $('#kil').onclick=openIL;
 function renderTasks(){TS();const s=SEM(),all=allTasks(),wi=weekInfo();
+  {const n=all.filter(t=>t.ilearn&&t.why==='none').length;$('#kil').textContent=n?`iLearn · ${n} to sort`:'iLearn';}
   const courses=S.courses.filter(c=>!(c.isLab&&linkedBy(c.id))||all.some(t=>t.courseId===c.id));
   const chip=(id,label,color,n)=>`<button class="fchip${tFilter===id?' on':''}" data-tf="${esc(id)}"${color?` style="--tc:${color}"`:''}>${color?'<i class="cdot"></i>':''}${esc(label)}${n?`<b>${n}</b>`:''}</button>`;
   const open=t=>!t.done;
