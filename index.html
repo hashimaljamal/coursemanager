@@ -376,6 +376,19 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 .mday{border-top:1px solid var(--line);margin-top:8px;padding-top:8px}.mday h4{margin:0 0 4px;font-size:13px;font-weight:800}.mday ul{list-style:none;margin:0;padding:0;display:grid;gap:6px}
 .mi{display:grid;grid-template-columns:12px 1fr;gap:8px;align-items:start;font-size:13px}.mi b{display:block;font-weight:700;line-height:1.25}.mi small{color:var(--mute);font-size:12px}.mi .cdot{background:var(--tc);margin-top:5px}.mi.done b{text-decoration:line-through;color:var(--mute)}
 .mflag{width:9px;height:9px;border-radius:2px;transform:rotate(45deg);margin-top:5px;background:#8a8a8a}.mflag.ct-break,.mflag.ct-holiday{background:#16a34a}.mflag.ct-makeup{background:#d97706}.mflag.ct-deadline{background:var(--red)}.mflag.ct-exam{background:#7c3aed}.mflag.ct-start,.mflag.ct-end{background:var(--ink)}
+.ilcard{max-width:600px;width:100%;max-height:92vh;overflow:auto}
+.ilguide{border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin:10px 0 12px}.ilguide summary{font-weight:800;font-size:14px;cursor:pointer}
+.ilsteps{list-style:none;counter-reset:il;margin:10px 0 4px;padding:0;display:grid;gap:9px}.ilsteps li{counter-increment:il;display:grid;grid-template-columns:26px 1fr;gap:1px 10px;font-size:14px}
+.ilsteps li::before{content:counter(il);grid-row:1/3;width:24px;height:24px;border-radius:99px;background:var(--ink);color:var(--bg);font-size:12px;font-weight:800;display:grid;place-items:center}
+.ilsteps span{color:var(--mute);font-size:13px;line-height:1.4}.ilsteps a{color:var(--ink);font-weight:700}.ilsteps code{font-size:12px;background:var(--soft);padding:0 4px;border-radius:4px}.ilold{margin:8px 0 2px!important;font-size:12.5px!important}
+.illbl{display:grid;gap:4px;font-size:13px;font-weight:700}.illbl input{font-weight:400}.ilmsg{margin:6px 0 0!important;font-size:13px!important}.ilmsg:empty{display:none}.ilmsg.err{color:var(--red)!important}.ilpriv{font-size:12px!important;margin:6px 0 10px!important}
+.ilstat{display:flex;align-items:center;gap:8px;flex-wrap:wrap;border:1px solid var(--line);border-radius:12px;padding:9px 12px;font-size:13.5px}.ilstat>span:nth-child(2){flex:1;min-width:180px}.ildot{width:9px;height:9px;border-radius:99px;background:#16a34a;flex:none}
+#ilstate h4{margin:14px 0 2px;font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--mute)}#ilstate>.hint{margin:2px 0 8px!important;font-size:12.5px!important}
+.ilg{list-style:none;margin:0 0 4px;padding:0;display:grid}.ilg li{display:flex;align-items:center;gap:10px;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--line)}.ilg li:last-child{border-bottom:0}
+.ilg li>span{display:grid;min-width:0}.ilg b{font-size:13.5px}.ilg small{font-size:12px;color:var(--mute)}.ilg select{max-width:52%;min-width:0;font-size:13px;min-height:34px;padding:0 8px}.ilo summary{font-size:13px;font-weight:700;cursor:pointer;padding:6px 0;color:var(--mute)}
+.upil{display:grid;grid-template-columns:30px 1fr auto;gap:12px;align-items:start;height:auto;min-height:0;width:100%;text-align:left;font:inherit;color:var(--ink);background:none;border:1.5px dashed var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;margin:0}
+.upil:hover,.upil:focus-visible{border-color:var(--ink);background:var(--soft);outline:0}.upil>span:nth-child(2){display:grid;gap:2px}.upil b{font-size:15px}.upil small{color:var(--mute);font-size:12.5px;line-height:1.35}.upil em{align-self:center;font-style:normal;font-weight:800;font-size:13px;white-space:nowrap}.upil.on{border-style:solid;border-color:var(--ink)}.upil .upi{grid-row:auto}.upil.on .upi{background:var(--ink);color:var(--bg)}
+.tlink{font-weight:700;color:var(--ink)}
 .upcard{max-width:640px}.upgrid{display:grid;gap:10px;margin:14px 0 6px}
 .upbox{display:grid;grid-template-columns:30px 1fr;gap:2px 12px;align-items:start;border:1.5px dashed var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;transition:border-color .15s,background .15s}
 .upbox:hover,.upbox:focus-visible,.upbox.drag{border-color:var(--ink);background:var(--soft);outline:0}.upbox.has{border-style:solid;border-color:var(--ink)}
@@ -659,6 +672,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 <section id="v-tasks" hidden><div class="pbar"><div class="pleft" id="khead"></div>
   <div class="acts">
     <button class="btn" id="ktaskadd">Add task</button>
+    <button class="btn ghost" id="kil" title="Bring due dates in from iLearn">iLearn</button>
     <button class="btn ghost" id="kfin">Finals</button>
     <button class="btn ghost" id="ksem">Semester</button>
   </div>
@@ -752,6 +766,8 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 <div class="upbox" data-up="syl" tabindex="0" role="button"><span class="upi" aria-hidden="true">1</span><b>Syllabi</b><small>PDF, Word, photos or text. Builds your grade calculators and adds exam and assignment dates to Tasks.</small><span class="upf" id="upsyl"></span></div>
 <div class="upbox" data-up="ics" tabindex="0" role="button"><span class="upi" aria-hidden="true">2</span><b>Class schedule (.ics)</b><small>Exported from your student portal. Builds your timetable and the class countdown.</small><span class="upf" id="upics"></span></div>
 <div class="upbox" data-up="cal" tabindex="0" role="button"><span class="upi" aria-hidden="true">3</span><b>University academic calendar</b><small>PDF, Word, photo or .ics. Sets your semester dates, breaks, holidays and make-up days.</small><span class="upf" id="upcal"></span></div>
+
+<button class="upil" id="upil" type="button"><span class="upi" aria-hidden="true">4</span><span><b>iLearn due dates</b><small>Link your iLearn calendar once and assignment, quiz and exam dates from this semester’s courses come in on their own.</small></span><em id="upilst">Connect →</em></button>
 </div>
 <input type="file" id="upsylf" multiple hidden accept=".pdf,.docx,.txt,.md,.rtf,.html,.htm,image/*"><input type="file" id="upicsf" hidden accept=".ics,text/calendar"><input type="file" id="upcalf" hidden accept=".ics,text/calendar,.pdf,.docx,.txt,.md,.html,.htm,image/*">
 <div class="mact upact"><button class="lnkbtn" id="upsem">Set semester dates by hand</button><span class="sp"></span><button class="btn ghost" id="upcancel">Cancel</button><button class="btn" id="updo" disabled>Upload</button></div></div></div>
@@ -768,6 +784,23 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 <button class="btn ghost sm" id="ppai">Upload catalog pages</button></details>
 <p class="hint" id="ppnote"></p>
 <div class="mact"><button class="btn ghost" id="ppcancel">Cancel</button><button class="btn" id="ppdo">Use this program</button></div></div></div>
+<div id="ilmodal" class="modal"><div class="card cnf ilcard" role="dialog" aria-modal="true" aria-labelledby="iltitle"><h3 id="iltitle">Connect iLearn</h3>
+<p class="hint">Bring due dates from iLearn into Tasks. Only this semester’s courses are used: the iLearn course for everyone taking a class, your section’s course, and the same for labs.</p>
+<details id="ilguide" class="ilguide" open><summary>How to get your iLearn calendar link</summary>
+<ol class="ilsteps">
+<li><b>Sign in to iLearn</b><span>Go to <a href="https://ilearn.aus.edu" target="_blank" rel="noopener">ilearn.aus.edu</a>.</span></li>
+<li><b>Open Calendar</b><span>From the main menu on the left, not from inside a course.</span></li>
+<li><b>Open Calendar settings</b><span>The gear button at the top right of the calendar.</span></li>
+<li><b>Choose Share calendar</b><span>In the ⋯ menu next to the “Calendar settings” heading, then copy the link it shows. It usually ends in <code>.ics</code>.</span></li>
+<li><b>Paste it below</b><span>The site checks it again whenever you open it, so new and moved due dates show up on their own.</span></li>
+</ol>
+<p class="hint ilold">Older iLearn layout? Open <b>Calendar</b> and click <b>Get External Calendar Link</b> instead.</p></details>
+<label class="illbl">Calendar link<input id="ilurl" type="url" autocomplete="off" spellcheck="false" placeholder="https://ilearn.aus.edu/…/learn.ics"></label>
+<p class="ilmsg" id="ilmsg" role="status"></p>
+<p class="hint ilpriv">Keep this link private. Anyone with it can see your iLearn deadlines, but not your grades or password.</p>
+<div id="ilstate"></div>
+<input type="file" id="ilfilef" hidden accept=".ics,text/calendar">
+<div class="mact"><button class="lnkbtn" id="ilfileb">Upload a calendar file instead</button><span class="sp"></span><button class="btn ghost" id="ilclose">Close</button><button class="btn" id="ilgo">Connect</button></div></div></div>
 <div id="hwmodal" class="modal"><div class="card cnf hwcard" role="dialog" aria-modal="true" aria-labelledby="hwmt"><h3 id="hwmt">Add a widget</h3><p class="hint">Widgets land in the emptiest spot. Move and resize them however you like.</p><div class="hwlist" id="hwlist"></div><div class="mact"><button class="btn ghost" id="hwclose">Cancel</button></div></div></div>
 <div id="ccmodal" class="modal"><div class="card cnf dcard cccard" role="dialog" aria-modal="true" aria-labelledby="cccode"><div id="ccbody"></div>
 <div class="mact"><button class="btn ghost" id="cctt">Open timetable</button><span class="sp"></span><button class="btn" id="ccclose">Close</button></div></div></div>
@@ -2131,6 +2164,7 @@ function allTasks(){TS();const out=[],ws=semWeeks();
   const fins=finalTasks(),finCo=new Set(fins.map(f=>f.courseId).filter(Boolean));
   if(finCo.size)for(let i=out.length-1;i>=0;i--){const t=out[i];if(finCo.has(t.courseId)&&/final/i.test(t.title)&&(t.kind==='exam'||/exam/i.test(t.title)))out.splice(i,1);}
   out.push(...fins);
+  {const il=ilTasks(out);out.push(...il);}
   for(const m of S.tasks)out.push({...m,key:'m:'+m.id,manual:true});
   return out.filter(t=>!(S.tstate[t.key]||{}).hidden).map(t=>({...t,done:t.manual?!!t.done:!!(S.tstate[t.key]||{}).done}));}
 const catOf=id=>(S.cats||[]).find(c=>c.id===id);
@@ -2139,13 +2173,105 @@ const taskTag=t=>{if(t.courseId){const c=byId(t.courseId);return c?c.code||'Cour
 function taskWhen(t){if(!t.date)return t.weekNo?`Week ${t.weekNo}`:'No date';const d=pd(t.date);if(t.approx)return`During week ${t.weekNo}`;if(t.time&&t.end){const a=toMin(t.time),b=toMin(t.end);return relDay(d)+' · '+fmtRangeM(a,b);}return relDay(d)+(t.time?' · '+fmtClock(+t.time.split(':')[0]*60+ +t.time.split(':')[1],TT().h24)+(TT().h24?'':' '+ampm(+t.time.split(':')[0]*60)):'');}
 function taskRow(t,compact){const d=pd(t.date),over=d&&!t.done&&d<today0();
   return`<li class="task${t.done?' done':''}${over?' over':''}" style="--tc:${taskColor(t)}"><label class="tchk"><input type="checkbox" data-task="${esc(t.key)}" ${t.done?'checked':''} aria-label="Done: ${esc(t.title)}"></label>
-    <span class="tbody"><span class="ttl">${esc(t.title)}</span><span class="tmeta"><i class="cdot"></i>${esc(taskTag(t)||'Task')}<span class="twhen">${esc(taskWhen(t))}</span>${t.note?`<span class="tnote">${esc(t.note)}</span>`:''}</span></span>
+    <span class="tbody"><span class="ttl">${esc(t.title)}</span><span class="tmeta"><i class="cdot"></i>${esc(taskTag(t)||'Task')}<span class="twhen">${esc(taskWhen(t))}</span>${t.note?`<span class="tnote">${esc(t.note)}</span>`:''}${t.url?`<a class="tlink" href="${esc(t.url)}" target="_blank" rel="noopener">Open in iLearn</a>`:''}</span></span>
     ${compact?'':`<button class="ib" data-act="tedit" data-key="${esc(t.key)}" title="Edit" aria-label="Edit ${esc(t.title)}"><svg viewBox="0 0 16 16"><path d="M11 2.5l2.5 2.5L6 12.5H3.5V10z"/></svg></button><button class="ib" data-act="tdel" data-key="${esc(t.key)}" title="Delete" aria-label="Delete ${esc(t.title)}"><svg viewBox="0 0 16 16"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>`}</li>`;}
 function calRow(c){const a=pd(c.start),b=pd(c.end),dn=calDone(c);return`<li class="crow ct-${c.type}${dn?' done':''}"><label class="tchk"><input type="checkbox" data-cal="${esc(c.id)}" ${dn?'checked':''} aria-label="Done: ${esc(c.title)}"></label><span class="cflag" aria-hidden="true"></span><span class="tbody"><span class="ttl">${esc(c.title)}</span><span class="tmeta">${esc(CTYPES[c.type]||'Event')}<span class="twhen">${esc(fmtRangeD(a,b))}</span>${isBreak(c)?'<span class="tnote">Not counted in week numbers</span>':''}</span></span></li>`;}
 function toggleTask(key,done){TS();if(key.startsWith('m:')){const m=S.tasks.find(x=>'m:'+x.id===key);if(m)m.done=done;}else{S.tstate[key]=Object.assign(S.tstate[key]||{},{done});}save();}
 
 /* ---- Tasks page ---- */
 let tFilter='all',tShowDone=false,tShowCal=true,tLaterOpen=false,tOverOpen=false;
+/* ================= iLEARN (Blackboard) CALENDAR FEED =================
+   The student pastes their iLearn "Share calendar" link once. It's fetched through the relay (Blackboard sends no CORS headers),
+   and due dates from this semester's courses become tasks. Professors often run two iLearn courses per class (one for everyone
+   taking it, one per section) and labs do the same, so items from every iLearn course that matches one of your courses are merged. */
+const IL_FRESH=30*60000;let ilBusy=false,ilErr='';
+function IL(){if(!S.ilearn||typeof S.ilearn!=='object')S.ilearn={};const L=S.ilearn;L.ev=L.ev||[];L.map=L.map||{};L.grp=L.grp||{};L.chg=L.chg||{};return L;}
+const ilOn=()=>!!(S.ilearn&&(S.ilearn.url||S.ilearn.file));
+/* this semester's courses: syllabi plus timetable classes, labs included */
+function ilCourses(){const out=[],seen=new Set();const add=(code,title,co)=>{code=normC(code);if(!code||!/^[A-Z]{2,4} \d{3}/.test(code)||seen.has(normCode(code)))return;seen.add(normCode(code));out.push({code,title:title||'',co:co||null});};
+  for(const c of S.courses)if(c.code)add(c.code,c.title,c);
+  for(const sl of TT().slots||[]){const n=nm(sl);if(n.code)add(n.code,n.name,gradeFor(sl.ckey,n.code));}
+  return out.sort((a,b)=>b.code.length-a.code.length);}
+const ilCodeRe=code=>{const m=normC(code).match(/^([A-Z]{2,4}) (\d{3})([A-Z]?)$/);if(!m)return null;const subj=[m[1],RENAMED[m[1]],RENAMED_BACK[m[1]]].filter(Boolean).join('|');
+  return new RegExp(`(?<![A-Z])(?:${subj})[\\s_.\\-]*${m[2]}${m[3]?m[3]:'(?![0-9])'}`,'i');};
+const IL_SEC=/^(?:[\s_.\-]*(?:sec(?:tion)?\.?\s*|[._\-]\s*)(L?\d{1,2}|[A-Z]\d{1,2})(?![0-9]))/i;
+/* which of your courses (and which iLearn course of it) an item belongs to */
+function ilGroup(text,summary,cs){
+  for(const c of cs){const re=ilCodeRe(c.code);if(!re)continue;const m=re.exec(text);if(!m)continue;let code=c.code,after=text.slice(m.index+m[0].length,m.index+m[0].length+30),lab=/L$/.test(code);
+    /* "CHM 101L" or "CHM 101 Lab" when you only have the lecture: it's the lab of that course */
+    if(!lab&&/^L(?![a-z])|^[\s\-_.:]*(?:lab|laboratory)\b/i.test(after)){lab=true;after=after.replace(/^L|^[\s\-_.:]*(?:lab|laboratory)/i,'');const lc=cs.find(x=>normCode(x.code)===normCode(code)+'L');if(lc)code=lc.code;}
+    const sm=after.match(IL_SEC),sec=sm?sm[1].toUpperCase():'',name=lab&&!/L$/.test(code)?code+'L':code;
+    return{key:'c:'+normCode(name)+(sec?'#'+sec:''),code,sec,label:name+(sec?` · section ${sec}`:' · all sections')};}
+  for(const c of cs){if(c.title&&c.title.length>5&&text.toLowerCase().includes(c.title.toLowerCase()))return{key:'c:'+normCode(c.code)+'#t',code:c.code,sec:'',label:`${c.code} · “${c.title}”`};}
+  const g=text.match(/(?<![A-Z])([A-Z]{3,4})[\s_.\-]?(\d{3})(L?)(?![0-9])/);if(g){const code=`${g[1]} ${g[2]}${g[3]}`;return{key:'o:'+normCode(code),code:'',label:code+' (not this semester)'};}
+  const bb=text.match(/_(\d{3,})_1\b/);if(bb)return{key:'b:'+bb[1],code:'',label:'iLearn course '+bb[1]};
+  return{key:'x',code:'',label:'Items without a course'};}
+function ilTitle(sum,code){let t=String(sum||'').replace(/\\n/g,' ').replace(/\\([,;\\])/g,'$1');
+  if(code){const re=ilCodeRe(code);if(re){t=t.replace(new RegExp(re.source+'(?:'+IL_SEC.source.slice(1)+')?[^\\s,;:)\\]]*','i'),' ');}}
+  t=t.replace(/\[\s*\]|\(\s*\)/g,' ').replace(/^\s*(?:due:?\s*)/i,'').replace(/\s*[-–:|]\s*$|^\s*[-–:|]\s*/g,'').replace(/\s{2,}/g,' ').trim();return t||String(sum||'Item').trim();}
+const ilKind=t=>/final|midterm|exam|test\b/i.test(t)?'exam':/quiz/i.test(t)?'quiz':/lab/i.test(t)?'lab':/project/i.test(t)?'project':/assign|homework|\bhw\b|report|essay|submission|problem set/i.test(t)?'assignment':'other';
+/* turn a feed into stored items; remember what's new or moved since the last sync */
+function ilIngest(txt){const evs=parseICS(txt);if(!/BEGIN:VCALENDAR/i.test(txt))throw new Error('That link didn’t return a calendar.');
+  const L=IL(),cs=ilCourses(),T0=today0(),lo=addD(T0,-160),hi=addD(T0,220),grp={},ev=[];
+  const val=p=>p?String(p.val).replace(/\\n/gi,' ').replace(/\\([,;\\])/g,'$1'):'';
+  for(const e of evs){if(e.RRULE)continue;const st=icsTime(e.DTSTART)||icsTime(e.DUE);if(!st)continue;
+    let date=st.date;if(st.allDay){const m=String(e.DTSTART&&e.DTSTART.val||'').match(/^(\d{4})(\d{2})(\d{2})/);if(!m)continue;date=new Date(+m[1],m[2]-1,+m[3]);}
+    if(date<lo||date>hi)continue;
+    const extra=Object.keys(e).filter(k=>/^X-/.test(k)).map(k=>val(e[k])),text=[val(e.SUMMARY),val(e.CATEGORIES),val(e.LOCATION),val(e.DESCRIPTION).slice(0,600),val(e.URL),...extra].join(' | ');
+    const g=ilGroup(text,val(e.SUMMARY),cs);grp[g.key]=grp[g.key]||{label:g.label,code:g.code,n:0};grp[g.key].n++;
+    const url=(val(e.URL).match(/^https?:\/\/\S+/)||[''])[0];
+    ev.push({u:String(e.UID?e.UID.val:'')||(iso(date)+'|'+val(e.SUMMARY)),t:ilTitle(val(e.SUMMARY),g.code),d:iso(date),tm:st.allDay?'':String(Math.floor(st.min/60)).padStart(2,'0')+':'+String(st.min%60).padStart(2,'0'),g:g.key,...(url?{url}:{})});}
+  const prev=new Map(L.ev.map(x=>[x.u,x])),first=!L.ev.length,now=Date.now();let nNew=0,nMoved=0;
+  if(!first)for(const x of ev){const p=prev.get(x.u);if(!p){L.chg[x.u]={k:'new',at:now};nNew++;}else if(p.d!==x.d||p.tm!==x.tm){L.chg[x.u]={k:'moved',from:p.d,ft:p.tm,at:now};nMoved++;}}
+  for(const u in L.chg)if(now-L.chg[u].at>5*864e5)delete L.chg[u];
+  L.ev=ev;L.grp=grp;L.at=now;return{n:ev.length,nNew,nMoved};}
+/* the course an iLearn course is mapped to: your choice, or the automatic match */
+function ilTarget(key){const L=IL(),m=L.map[key];if(m!==undefined)return m;const g=L.grp[key];return g&&g.code?g.code:'skip';}
+function ilTasks(syl){if(!ilOn())return[];const L=IL(),cs=ilCourses(),s=SEM(),lc=lastClassDay();
+  const st=s&&pd(s.start)?addD(pd(s.start),-14):addD(today0(),-120),en=addD((s&&pd(s.end))||lc||addD(today0(),120),21);
+  const tok=t=>{const m=String(t).toLowerCase().match(/(quiz|assignment|homework|hw|lab|project|midterm|exam|test|report|presentation|essay)\s*(?:no\.?|#)?\s*(\d+)/);return m?(m[1]==='hw'?'homework':m[1])+m[2]:'';};
+  const out=[],seen=new Set();
+  for(const x of L.ev){const code=ilTarget(x.g);if(!code||code==='skip')continue;const d=pd(x.d);if(d<st||d>en)continue;
+    const c=cs.find(z=>normCode(z.code)===normCode(code));if(!c)continue;const k=normCode(code)+'|'+normT(x.t)+'|'+x.d;if(seen.has(k))continue;seen.add(k);
+    const co=c.co||null,ch=L.chg[x.u];
+    out.push({key:'i:'+x.u,title:x.t,courseId:co?co.id:null,tag:co?'':c.code,date:x.d,time:x.tm||undefined,kind:ilKind(x.t),source:'ilearn',ilearn:1,url:x.url,tok:tok(x.t),
+      note:'iLearn'+(ch?ch.k==='new'?' · new':` · moved from ${fmtD(pd(ch.from))}`:'')});}
+  /* drop a syllabus task when iLearn has the same item (e.g. Quiz 4) within a week of it: iLearn's date and time win */
+  if(syl){const drop=new Set();for(const t of out){if(!t.tok)continue;for(const y of syl)if(!y.manual&&y.courseId&&y.courseId===t.courseId&&y.date&&tok(y.title)===t.tok&&Math.abs(dDiff(pd(y.date),pd(t.date)))<=7){drop.add(y.key);if((S.tstate[y.key]||{}).done&&!(S.tstate[t.key]||{}).done)S.tstate[t.key]=Object.assign(S.tstate[t.key]||{},{done:true});}}
+    for(let i=syl.length-1;i>=0;i--)if(drop.has(syl[i].key))syl.splice(i,1);}
+  return out;}
+async function ilFetch(url){const r=await fetch(RELAY_URL+'?ical='+encodeURIComponent(url),{cache:'no-store'});const txt=await r.text();
+  if(!r.ok){let m='';try{m=JSON.parse(txt).error;}catch{}throw new Error(m||(r.status===200?'':'The relay couldn’t fetch it (HTTP '+r.status+').'));}
+  if(/"service"\s*:/.test(txt))throw new Error('Your relay needs updating to fetch iLearn calendars. Paste the new worker.js into Cloudflare, or upload a calendar file instead.');return txt;}
+const ilFix=u=>String(u||'').trim().replace(/^(?:webcals?|http):\/\//i,'https://');
+async function ilSync(opt={}){const L=IL();if(!L.url||ilBusy)return;ilBusy=true;ilErr='';ilPaint();
+  try{const r=ilIngest(await ilFetch(L.url));save();if(!opt.quiet||r.nNew||r.nMoved)toast(`iLearn synced: ${ilCount()} due date${ilCount()===1?'':'s'} this semester${r.nNew?` · ${r.nNew} new`:''}${r.nMoved?` · ${r.nMoved} moved`:''}.`);}
+  catch(e){ilErr=String(e.message||e);L.fail=Date.now();if(!opt.quiet)toast('iLearn: '+ilErr);}
+  finally{ilBusy=false;ilPaint();const v=document.body.dataset.view;if(v==='tasks')renderTasks();else if(v==='home')renderHome();}}
+const ilCount=()=>{try{return ilTasks(null).length;}catch{return 0;}};
+function ilAuto(){const L=S.ilearn;if(!L||!L.url||ilBusy)return;const last=Math.max(L.at||0,L.fail||0);if(Date.now()-last>IL_FRESH)ilSync({quiet:true});}
+const ago=t=>{const m=Math.round((Date.now()-t)/60000);return m<1?'just now':m<60?m+' min ago':m<1440?Math.round(m/60)+' h ago':fmtD(new Date(t));};
+function ilPaint(){const m=$('#ilmodal');if(!m||!m.classList.contains('on'))return;const L=IL(),on=ilOn();
+  $('#ilguide').open=!on;$('#ilgo').textContent=on&&L.url?'Save link':'Connect';$('#ilurl').value=$('#ilurl').value||L.url||'';
+  $('#ilmsg').className='ilmsg'+(ilErr?' err':'');$('#ilmsg').textContent=ilBusy?'Fetching your iLearn calendar…':ilErr;
+  if(!on){$('#ilstate').innerHTML='';return;}
+  const cs=ilCourses(),keys=Object.keys(L.grp).sort((a,b)=>(L.grp[a].code?0:1)-(L.grp[b].code?0:1)||L.grp[a].label.localeCompare(L.grp[b].label)),cur=keys.filter(k=>L.grp[k].code),oth=keys.filter(k=>!L.grp[k].code);
+  const sel=k=>`<select data-ilmap="${esc(k)}" aria-label="Course for ${esc(L.grp[k].label)}"><option value="skip">Don’t import</option>${cs.map(c=>`<option value="${esc(c.code)}"${ilTarget(k)===c.code?' selected':''}>${esc(c.code)}${c.title?' · '+esc(c.title):''}</option>`).join('')}</select>`;
+  const row=k=>`<li><span><b>${esc(L.grp[k].label)}</b><small>${L.grp[k].n} item${L.grp[k].n===1?'':'s'}</small></span>${sel(k)}</li>`;
+  $('#ilstate').innerHTML=`<div class="ilstat"><span class="ildot"></span><span><b>Connected</b> · ${L.file?'from a calendar file':'synced '+(L.at?ago(L.at):'never')} · ${ilCount()} due date${ilCount()===1?'':'s'} this semester</span>${L.url?`<button class="btn ghost sm" data-il="sync"${ilBusy?' disabled':''}>Sync now</button>`:''}<button class="btn ghost sm danger-ghost" data-il="off">Disconnect</button></div>
+    ${keys.length?`<h4>iLearn courses</h4><p class="hint">Each class can have an iLearn course for everyone taking it and one for your section, and labs have their own. All the ones that match your courses this semester are used.</p><ul class="ilg">${cur.map(row).join('')||'<li class="hint">None of the iLearn courses match your courses this semester. Pick one below, or add your courses first.</li>'}</ul>${oth.length?`<details class="ilo"><summary>Other iLearn courses (${oth.length})</summary><ul class="ilg">${oth.map(row).join('')}</ul></details>`:''}`:'<p class="hint">Nothing dated in your iLearn calendar yet.</p>'}`;}
+function openIL(){ilErr='';$('#ilurl').value=(S.ilearn&&S.ilearn.url)||'';$('#ilmodal').classList.add('on');ilPaint();setTimeout(()=>(ilOn()?$('#ilclose'):$('#ilurl')).focus({preventScroll:true}),0);}
+$('#ilgo').onclick=async()=>{const u=ilFix($('#ilurl').value);if(!/^https:\/\/[^\s]+$/i.test(u)){ilErr='Paste the calendar link from iLearn. It starts with https:// (or webcal://).';ilPaint();return;}
+  const L=IL(),had=L.url;L.url=u;$('#ilurl').value=u;delete L.file;if(had!==u){L.ev=[];L.chg={};}await ilSync();if(ilErr&&!had){delete L.url;}save();ilPaint();};
+$('#ilurl').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();$('#ilgo').click();}});
+$('#ilfileb').onclick=()=>$('#ilfilef').click();
+$('#ilfilef').addEventListener('change',async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;try{const L=IL();if(!L.url)L.file=f.name;const r=ilIngest(await f.text());ilErr='';save();toast(`Added ${ilCount()} iLearn due date${ilCount()===1?'':'s'} for this semester.`);}catch(er){ilErr=String(er.message||er);}ilPaint();renderTasks();});
+$('#ilmodal').addEventListener('change',e=>{const s=e.target.closest('[data-ilmap]');if(!s)return;IL().map[s.dataset.ilmap]=s.value;save();ilPaint();if(document.body.dataset.view==='tasks')renderTasks();});
+$('#ilmodal').addEventListener('click',e=>{if(e.target===$('#ilmodal')){$('#ilmodal').classList.remove('on');return;}const b=e.target.closest('[data-il]');if(!b)return;
+  if(b.dataset.il==='sync')ilSync();
+  if(b.dataset.il==='off'){const snap=JSON.stringify(S);delete S.ilearn;save();ilErr='';$('#ilurl').value='';ilPaint();renderTasks();toast('iLearn disconnected.',snap);}});
+$('#ilclose').onclick=()=>{$('#ilmodal').classList.remove('on');const v=document.body.dataset.view;if(v==='tasks')renderTasks();else if(v==='home')renderHome();};
+$('#kil').onclick=openIL;
 function renderTasks(){TS();const s=SEM(),all=allTasks(),wi=weekInfo();
   const courses=S.courses.filter(c=>!(c.isLab&&linkedBy(c.id))||all.some(t=>t.courseId===c.id));
   const chip=(id,label,color,n)=>`<button class="fchip${tFilter===id?' on':''}" data-tf="${esc(id)}"${color?` style="--tc:${color}"`:''}>${color?'<i class="cdot"></i>':''}${esc(label)}${n?`<b>${n}</b>`:''}</button>`;
@@ -2322,7 +2448,7 @@ function upShow(){const T=TT(),cs=S.courses.filter(c=>!c.isLab).length,cal=S.sem
   $('#upcal').innerHTML=line(UP.cal?[UP.cal]:null,cal?`Already added: ${cal} dates for ${semName()||'this semester'}`:'');
   for(const b of document.querySelectorAll('.upbox'))b.classList.toggle('has',b.dataset.up==='syl'?UP.syl.length>0:!!UP[b.dataset.up]);
   $('#updo').disabled=!(UP.syl.length||UP.ics||UP.cal);}
-function openUpload(){UP.syl=[];UP.ics=null;UP.cal=null;upShow();$('#upmodal').classList.add('on');}
+function openUpload(){UP.syl=[];UP.ics=null;UP.cal=null;upShow();$('#upilst').textContent=ilOn()?'Connected · Manage':'Connect →';$('#upil').classList.toggle('on',ilOn());$('#upmodal').classList.add('on');}
 const upInput={syl:'#upsylf',ics:'#upicsf',cal:'#upcalf'};
 function upTake(kind,files){files=[...files];if(!files.length)return;if(kind==='syl'){const ics=files.filter(f=>/\.ics$/i.test(f.name));if(ics.length&&!UP.ics)UP.ics=ics[0];UP.syl.push(...files.filter(f=>!/\.ics$/i.test(f.name)));}else UP[kind]=files[0];upShow();}
 for(const b of document.querySelectorAll('.upbox')){const k=b.dataset.up;
@@ -2332,6 +2458,7 @@ for(const b of document.querySelectorAll('.upbox')){const k=b.dataset.up;
   b.addEventListener('drop',e=>{e.preventDefault();e.stopPropagation();b.classList.remove('drag');$('#dropover').classList.remove('on');upTake(k,e.dataTransfer.files||[]);});}
 for(const k in upInput)$(upInput[k]).addEventListener('change',e=>{upTake(k,e.target.files);e.target.value='';});
 $('#upcancel').onclick=()=>$('#upmodal').classList.remove('on');$('#upmodal').addEventListener('click',e=>{if(e.target===$('#upmodal'))$('#upmodal').classList.remove('on');});
+$('#upil').onclick=()=>{$('#upmodal').classList.remove('on');openIL();};
 $('#upsem').onclick=()=>{$('#upmodal').classList.remove('on');openSem();};
 $('#updo').onclick=async()=>{const syl=UP.syl,ics=UP.ics,calf=UP.cal;$('#upmodal').classList.remove('on');UP.syl=[];UP.ics=null;UP.cal=null;
   if(ics)await importICS(ics,{stay:true});
@@ -3388,7 +3515,7 @@ $('#acct').onclick=async()=>{if(!FB)return;if(!ACC){const p=new FB.au.GoogleAuth
 
 /* ---------- start ---------- */
 try{const v=JSON.parse(localStorage.getItem(KEY)||'null');if(v&&Array.isArray(v.courses))S=v;}catch{}
-fix();route();
+fix();route();setTimeout(ilAuto,1200);addEventListener('focus',ilAuto);
 readerLabel();initSync();
 }
 </script>
