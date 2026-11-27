@@ -2208,19 +2208,23 @@ function ilTitleList(cs){const key=cs.map(c=>c.code).join()+'|'+!!CAT;if(ilTitle
   out.sort((a,b)=>b.n.length-a.n.length);ilTitles=out;ilTitlesKey=key;return out;}
 function ilTitleHit(fields,cs){const L=ilTitleList(cs),mineN=new Set(cs.map(c=>normCode(c.code)));
   for(const f of fields){if(!f)continue;const n=ilNorm(f);let best=null;for(const x of L)if(n.includes(x.n)){if(mineN.has(normCode(x.code)))return x.code;if(!best)best=x.code;}if(best)return best;}return null;}
+/* "Fall 2026", "FA26", or AUS's own "F26" / "S25" / "SU26" (as in CMP305_10208_F26: …(F26 Sec03)) */
+const IL_TERM2=/(?<![A-Za-z0-9])(SU|SUM|FA|SP|F|S|U)(\d{2})(?![0-9])/;
+function ilTermOf(t){const m=String(t).match(IL_TERM);if(m){const k=m[1].toLowerCase();const n={fall:'Fall',fa:'Fall',spring:'Spring',sp:'Spring',summer:'Summer',su:'Summer'}[k];if(n)return n+' 20'+m[2];}
+  const a=String(t).match(IL_TERM2);if(a){const n={F:'Fall',FA:'Fall',S:'Spring',SP:'Spring',SU:'Summer',SUM:'Summer',U:'Summer'}[a[1]];if(n)return n+' 20'+a[2];}return'';}
 const IL_TERM=/\b(fall|spring|summer|fa|sp|su)[\s_\-]?(?:20)?(\d{2})\b/i;
 function ilGroup(fields,cs,known){
   let hit=null;
   for(const f of fields){if(!f)continue;IL_CODE.lastIndex=0;let m;while((m=IL_CODE.exec(f))){const subj=m[1].toUpperCase(),c={subj,code:`${subj} ${m[2]}`,lab:!!m[3],f,i:m.index+m[0].length};
       if(known.has(subj)||known.has(RENAMED[subj]||'')||known.has(RENAMED_BACK[subj]||'')){hit=c;break;}if(!hit)hit={...c,weak:1};}
     if(hit&&!hit.weak)break;}
-  const all=fields.join(' | '),tm=all.match(IL_TERM),term=tm?({f:'Fall',fa:'Fall',s:'Spring',sp:'Spring',su:'Summer'}[tm[1].toLowerCase().slice(0,2)]||{fall:'Fall',spring:'Spring',summer:'Summer'}[tm[1].toLowerCase()]||'')+' 20'+tm[2]:'';
+  const all=fields.join(' | '),term=ilTermOf(all);
   /* no code anywhere: look for a course's name instead (yours first, then every course in the catalog) */
   if(!hit){const t=ilTitleHit(fields,cs);if(t){const mine=cs.find(c=>normCode(c.code)===normCode(t));return{key:'c:'+normCode(t)+'#n'+(term?'@'+term.replace(' ',''):''),code:mine?mine.code:t,own:!mine,term,label:`${t} · by course name`+(term?` · ${term}`:'')};}}
   if(!hit){const bb=all.match(/_(\d{3,})_1\b/);if(bb)return{key:'b:'+bb[1],code:'',label:'iLearn course '+bb[1],term};return{key:'x',code:'',label:'Items without a course',term};}
   let after=hit.f.slice(hit.i,hit.i+30),lab=hit.lab;
   if(!lab&&/^[\s\-_.:]*(?:lab|laboratory)\b/i.test(after)){lab=true;after=after.replace(/^[\s\-_.:]*(?:lab|laboratory)/i,'');}
-  const sm=after.match(IL_SEC),sec=sm?sm[1].toUpperCase():'';if(sec&&/^L/.test(sec))lab=true;
+  const sx=fields.join(' | ').match(/\bSec(?:tion)?\.?\s*0*([A-Z]?\d{1,3})\b/i),sm=sx?null:after.match(IL_SEC),sec=sx?sx[1].toUpperCase().padStart(2,'0'):sm?sm[1].toUpperCase():'';if(sec&&/^L/.test(sec))lab=true;
   const name=normC(hit.code+(lab?'L':''));
   /* your course for it: the lab course if you have one, otherwise the lecture */
   const mine=cs.find(c=>normCode(c.code)===normCode(name)||normCode(altCode(c.code))===normCode(name))||(lab?cs.find(c=>normCode(c.code)===normCode(hit.code)||normCode(altCode(c.code))===normCode(hit.code)):null);
@@ -2292,12 +2296,13 @@ function ilExt(d){if(!d||typeof d!=='object')return;const L0=S.ilearn&&S.ilearn.
   if(L0&&L0.at===d.at&&!!L0.login===!!d.login)return;
   const L=IL(),cs=ilCourses(),known=ilSubjects(cs),c={},m={},i={},T0=today0(),lo=addD(T0,-160),hi=addD(T0,220);
   for(const co of d.courses||[]){const g=ilGroup([co.courseId,co.name,co.term].filter(Boolean),cs,known);c[co.id]={code:g.code||'',name:String(co.name||'').slice(0,90),term:g.term||co.term||''};}
-  for(const n in d.items||{}){const it=d.items[n];if(!it||!c[it.c])continue;m[n]=it.c;const dt=it.d?new Date(it.d):null;if(dt&&!isNaN(dt)&&dt>=lo&&dt<=hi)i[n]={t:String(it.t||'').slice(0,120),d:it.d};}
+  for(const n in d.items||{}){const it=d.items[n];if(!it||!c[it.c]||it.k==='OfficeHours')continue;m[n]=it.c;const dt=it.d?new Date(it.d):null;if(dt&&!isNaN(dt)&&dt>=lo&&dt<=hi)i[n]={t:String(it.t||'').slice(0,120),d:it.d};}
   /* the helper checks every couple of minutes: only save and redraw when something actually changed */
   if(L0&&!!L0.login===!!d.login&&JSON.stringify([L0.c,L0.m,L0.i])===JSON.stringify([c,m,i])){L0.at=d.at||L0.at;ilPaint();return;}
   L.ext={at:d.at||0,login:!!d.login,user:d.user||'',c,m,i,seen:Date.now()};save();
   const v=document.body.dataset.view;if(v==='tasks')renderTasks();else if(v==='home'&&!(HD&&HD.on))renderHome();ilPaint();}
 /* the exact course for a calendar item, from the helper */
+function ilExtName(x){const E=S.ilearn&&S.ilearn.ext;if(!E)return'';const cid=E.m[ilNum(x.u)];const c=cid&&E.c[cid];return c&&!c.code?c.name.replace(/\s*\([^)]*\)\s*$/,'').slice(0,40):'';}
 function ilExtCode(x){const E=S.ilearn&&S.ilearn.ext;if(!E)return'';const cid=E.m[ilNum(x.u)];const c=cid&&E.c[cid];return c&&c.code?c.code:'';}
 /* items the helper knows about that the calendar link doesn't have (or every item, if only the helper is set up) */
 function ilAllEv(){const L=IL(),E=L.ext;if(!E||!E.i)return L.ev;const have=new Set(L.ev.map(x=>ilNum(x.u)).filter(Boolean)),out=L.ev.slice();
@@ -2321,10 +2326,10 @@ function ilTasks(syl){if(!ilOn())return[];const L=IL(),cs=ilCourses(),s=SEM(),lc
   for(const p in learned)if(!learned[p])delete learned[p];
   const out=[],seen=new Set();
   for(const x of ilAllEv()){if(L.pick[x.u]==='-')continue;const ex=L.pick[x.u]===undefined?ilExtCode(x):'';const tgt=ex?'exact':ilTarget(x.g);if(tgt==='skip')continue;const d=pd(x.d);if(d<st||d>en||IL_NOISE.test(x.t))continue;
-    let code=tgt,why='';if(tgt==='exact')code=ex;else if(tgt==='auto'){const gs=ilGuess(x,cs,syl,learned);code=gs?gs.code:'';why=gs?gs.why:'none';}
+    let code=tgt,why='',other='';if(tgt==='exact')code=ex;else if(tgt==='auto'){const gs=ilGuess(x,cs,syl,learned);code=gs?gs.code:'';why=gs?gs.why:'none';if(!gs&&L.pick[x.u]===undefined){other=ilExtName(x);if(other)why='';}}
     const c=code?(cs.find(z=>normCode(z.code)===normCode(code))||{code,co:null}):null;const k=(code?normCode(code):'?')+'|'+normT(x.t)+'|'+x.d;if(seen.has(k))continue;seen.add(k);
     const co=c&&c.co||null,ch=L.chg[x.u];
-    out.push({key:'i:'+x.u,u:x.u,title:x.t,courseId:co?co.id:null,tag:co?'':c?c.code:'iLearn',date:x.d,time:x.tm||undefined,kind:ilKind(x.t),source:'ilearn',ilearn:1,url:x.url,tok:ilTok(x.t),why,autoDone:dDiff(d,today0())>1,
+    out.push({key:'i:'+x.u,u:x.u,title:x.t,courseId:co?co.id:null,tag:co?'':c?c.code:other||'iLearn',date:x.d,time:x.tm||undefined,kind:ilKind(x.t),source:'ilearn',ilearn:1,url:x.url,tok:ilTok(x.t),why,autoDone:dDiff(d,today0())>1,
       note:'iLearn'+(why==='none'?' · which course?':why&&why!=='you'?' · course guessed':'')+(ch?ch.k==='new'?' · new':` · moved from ${fmtD(pd(ch.from))}`:'')});}
   /* drop a syllabus task when iLearn has the same item (e.g. Quiz 4) within a week of it: iLearn's date and time win */
   if(syl){const drop=new Set();for(const t of out){if(!t.tok||!t.courseId)continue;for(const y of syl)if(!y.manual&&y.courseId===t.courseId&&y.date&&ilTok(y.title)===t.tok&&Math.abs(dDiff(pd(y.date),pd(t.date)))<=7){drop.add(y.key);if((S.tstate[y.key]||{}).done&&!(S.tstate[t.key]||{}).done)S.tstate[t.key]=Object.assign(S.tstate[t.key]||{},{done:true});}}
