@@ -225,6 +225,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 .scroll{overflow-x:auto}
 
 /* dialogs + toast */
+.mx{float:right;position:sticky;top:0;z-index:2;width:32px;height:32px;margin:-8px -8px 0 10px;padding:0;border:0;border-radius:50%;background:var(--bg);color:var(--mute);display:grid;place-items:center;cursor:pointer}.mx:hover{background:var(--soft);color:var(--ink)}.mx svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
 .modal{position:fixed;inset:0;background:rgb(0 0 0/.45);display:none;place-items:center;padding:16px;z-index:30}
 .modal.on{display:grid}
 .modal .card{background:var(--bg);width:min(620px,100%);max-height:calc(100dvh - 32px);overflow:auto;padding:18px;border-radius:14px;box-shadow:0 20px 60px rgb(0 0 0/.3)}
@@ -4006,6 +4007,9 @@ $('#nftest').onclick=async()=>{const dev=nfDev(),b=$('#nftest');b.disabled=true;
     else{await nfShow({id:'test:'+Date.now(),at:Date.now(),title:'Notifications are on',body:'This is how your Course Manager reminders will look.',url:'./#home',tag:'cm-test'});}}
   catch(e){toast(String(e.message||e));}finally{b.disabled=false;}};
 
+/* a close button on every pop-up: same as pressing Escape (cancels, never saves) */
+document.querySelectorAll('.modal>.card').forEach(c=>c.insertAdjacentHTML('afterbegin','<button type="button" class="mx" aria-label="Close" title="Close"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>'));
+document.addEventListener('click',e=>{if(e.target.closest('.modal .mx'))document.dispatchEvent(new KeyboardEvent('keydown',{key:'Escape',bubbles:true}));});
 /* ---------- start ---------- */
 try{const v=JSON.parse(localStorage.getItem(KEY)||'null');if(v&&Array.isArray(v.courses))S=v;}catch{}
 fix();route();setTimeout(ilAuto,1200);addEventListener('focus',ilAuto);
