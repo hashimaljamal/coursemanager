@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>iLearn helper · Course Manager</title>
+<meta name="description" content="A small Chrome and Edge extension that brings your iLearn due dates, grades and announcements into Course Manager.">
+<script>try{var t=localStorage.getItem('sgc-theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t;}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:light;--bg:#fff;--ink:#111;--mute:#686868;--soft:#f3f3f3;--line:#dcdcdc;--red:#d70029;--ok:#16a34a}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){color-scheme:dark;--bg:#0f0f10;--ink:#f1f1f1;--mute:#a3a3a3;--soft:#1c1c1e;--line:#333336;--red:#ff4d5e;--ok:#22c55e}}
+:root[data-theme=dark]{color-scheme:dark;--bg:#0f0f10;--ink:#f1f1f1;--mute:#a3a3a3;--soft:#1c1c1e;--line:#333336;--red:#ff4d5e;--ok:#22c55e}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Archivo,system-ui,sans-serif;line-height:1.5;-webkit-font-smoothing:antialiased}
+.wrap{max-width:760px;margin:0 auto;padding:22px 20px 60px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:2px solid var(--ink);padding-bottom:12px}
+.brand{font-weight:900;font-stretch:115%;font-size:20px;color:var(--ink);text-decoration:none}.brand span{color:var(--red);font-size:11px;letter-spacing:.3em;text-transform:uppercase;display:block;line-height:1;font-stretch:125%;font-weight:700}
+.back{color:var(--ink);font-weight:700;font-size:14px;text-decoration:none;border:1.5px solid var(--ink);border-radius:10px;padding:7px 12px}.back:hover{background:var(--soft)}
+h1{font-size:clamp(30px,6vw,44px);font-weight:900;font-stretch:115%;line-height:1.05;margin:30px 0 10px}
+.lead{font-size:17px;color:var(--mute);margin:0 0 20px;max-width:620px}
+.dl{display:flex;align-items:center;gap:14px;flex-wrap:wrap;border:1.5px solid var(--ink);border-radius:14px;padding:16px 18px;margin:6px 0 26px}
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--ink);color:var(--bg);font-weight:800;font-size:15px;border-radius:10px;padding:11px 18px;text-decoration:none;border:0}
+.btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.dl small{color:var(--mute);font-size:13px}
+h2{font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--mute);margin:28px 0 10px}
+.feat{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin:0;padding:0;list-style:none}
+.feat li{border:1px solid var(--line);border-radius:12px;padding:12px 14px}.feat b{display:block;font-size:15px}.feat span{font-size:13.5px;color:var(--mute)}
+ol.steps{list-style:none;counter-reset:s;margin:0;padding:0;display:grid;gap:14px}
+ol.steps li{counter-increment:s;display:grid;grid-template-columns:34px 1fr;gap:2px 14px}
+ol.steps li::before{content:counter(s);grid-row:1/4;width:32px;height:32px;border-radius:99px;background:var(--ink);color:var(--bg);font-weight:900;display:grid;place-items:center}
+ol.steps b{font-size:16px}ol.steps p{margin:0;color:var(--mute);font-size:14.5px}
+code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;background:var(--soft);border:1px solid var(--line);border-radius:6px;padding:1px 6px;color:var(--ink)}
+.copy{border:1px solid var(--line);background:var(--soft);color:var(--ink);border-radius:6px;font:inherit;font-size:12px;font-weight:700;padding:2px 8px;margin-left:6px;cursor:pointer}
+.note{border-left:3px solid var(--red);padding:2px 0 2px 12px;font-size:14px;color:var(--mute);margin:10px 0}
+.qa{display:grid;gap:8px}.qa details{border:1px solid var(--line);border-radius:12px;padding:10px 14px}.qa summary{font-weight:700;cursor:pointer}.qa p{margin:8px 0 2px;color:var(--mute);font-size:14.5px}
+.status{display:none;align-items:center;gap:8px;border:1.5px solid var(--ok);color:var(--ok);border-radius:12px;padding:10px 14px;font-weight:700;margin:0 0 20px}.status i{width:9px;height:9px;border-radius:99px;background:var(--ok)}
+.status.on{display:flex}
+a{color:var(--ink)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><a class="brand" href="./"><span>Course Manager</span>iLearn helper</a><a class="back" href="./#tasks">Back to the site</a></div>
+
+  <h1>Bring iLearn into Course Manager</h1>
+  <p class="lead">A small browser extension that reads your iLearn due dates, grades and announcements with your own login, and sorts each one into the right course for you.</p>
+  <div class="status" id="st"><i></i><span>The iLearn helper is installed in this browser.</span></div>
+
+  <div class="dl">
+    <a class="btn" href="ilearn-helper.zip" download><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v10M5.5 8.5L10 13l4.5-4.5M4 16.5h12"/></svg>Download the helper</a>
+    <small id="ver">For Chrome or Edge on a computer · free · about 10 KB</small>
+  </div>
+
+  <h2>What it does</h2>
+  <ul class="feat">
+    <li><b>Due dates, sorted</b><span>Every iLearn deadline lands in Tasks under its exact course, with no picking.</span></li>
+    <li><b>Grades</b><span>New grades show on Home and can be added to your grade calculator in one tap.</span></li>
+    <li><b>Announcements</b><span>Every announcement from your courses, newest first, by course.</span></li>
+    <li><b>Course links</b><span>One-tap links to each course’s iLearn page, for your section and for everyone.</span></li>
+  </ul>
+
+  <h2>Install it (about a minute)</h2>
+  <ol class="steps">
+    <li><b>Download and unzip</b><p>Use the button above, then unzip the file (Windows: right-click → Extract All; Mac: double-click). You’ll get a folder called <code>ilearn-helper</code>. Put it somewhere it can stay, like Documents: the browser loads the helper from that folder.</p></li>
+    <li><b>Open your extensions page</b><p>Type <code>chrome://extensions</code><button class="copy" data-c="chrome://extensions">Copy</button> into the address bar (Edge: <code>edge://extensions</code><button class="copy" data-c="edge://extensions">Copy</button>) and press Enter.</p></li>
+    <li><b>Turn on Developer mode</b><p>The switch is at the top right in Chrome, and on the left in Edge. This only lets you add extensions from a folder.</p></li>
+    <li><b>Click “Load unpacked”</b><p>Choose the <code>ilearn-helper</code> folder (the one with <code>manifest.json</code> inside, not a folder around it). “Course Manager · iLearn helper” appears in the list. Pin it from the puzzle-piece menu if you like.</p></li>
+    <li><b>Log in to iLearn</b><p>Open <a href="https://ilearn.aus.edu" target="_blank" rel="noopener">ilearn.aus.edu</a> in the same browser and sign in.</p></li>
+    <li><b>Open Course Manager</b><p>Reload <a href="./">the site</a>. Within a minute or two, Tasks → iLearn says <b>Automatic sorting is on</b>, and your calendar link is filled in for you.</p></li>
+  </ol>
+  <p class="note">Only courses on your timetable or with a syllabus in Course Manager are used. Dropped courses, older terms and advising spaces are left out.</p>
+
+  <h2>Updating</h2>
+  <ol class="steps">
+    <li><b>Download the new zip</b><p>Unzip it over your old <code>ilearn-helper</code> folder, replacing the files.</p></li>
+    <li><b>Reload it</b><p>On <code>chrome://extensions</code>, press the ↻ button on the helper’s card.</p></li>
+  </ol>
+
+  <h2>Questions</h2>
+  <div class="qa">
+    <details><summary>Is it safe? What can it see?</summary><p>It only works on ilearn.aus.edu and on Course Manager. It reads your courses, calendar, grades, feedback and announcements, using the login your browser already has. It never sees your password, never submits or changes anything on iLearn, and only sends what it reads to your own copy of Course Manager.</p></details>
+    <details><summary>Why isn’t it on the Chrome Web Store?</summary><p>Installing from a folder is free and works the same. The only difference is that updates aren’t automatic: download the new zip and press reload.</p></details>
+    <details><summary>How often does it check?</summary><p>Due dates every couple of minutes, and grades and announcements every 30 minutes. It also checks within a few minutes whenever you’re on iLearn, so something you just submitted shows up quickly.</p></details>
+    <details><summary>It shows a red “!” on its icon</summary><p>iLearn logged you out. Log in again at ilearn.aus.edu and it carries on, including anything you missed.</p></details>
+    <details><summary>Does it work on my phone?</summary><p>No. Browser extensions need Chrome or Edge on a computer. If you’re signed in to Course Manager, what the helper finds syncs to your phone too.</p></details>
+    <details><summary>Chrome warns about developer-mode extensions</summary><p>That’s normal for anything installed from a folder. You can keep it, or switch it off any time from chrome://extensions.</p></details>
+  </div>
+</div>
+<script>
+/* the helper marks this site's pages when it's installed */
+setTimeout(()=>{const v=document.documentElement.dataset.cmIlearnHelper;if(v){const s=document.getElementById('st');s.classList.add('on');s.querySelector('span').textContent='The iLearn helper (version '+v+') is installed in this browser.';}},400);
+for(const b of document.querySelectorAll('.copy'))b.onclick=async()=>{try{await navigator.clipboard.writeText(b.dataset.c);b.textContent='Copied';setTimeout(()=>b.textContent='Copy',1500);}catch{}};
+</script>
+</body>
+</html>
