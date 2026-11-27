@@ -225,7 +225,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 .scroll{overflow-x:auto}
 
 /* dialogs + toast */
-.mx{float:right;position:sticky;top:0;z-index:2;width:32px;height:32px;margin:-8px -8px 0 10px;padding:0;border:0;border-radius:50%;background:var(--bg);color:var(--mute);display:grid;place-items:center;cursor:pointer}.mx:hover{background:var(--soft);color:var(--ink)}.mx svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+.mx{float:right;position:sticky;top:0;z-index:3;width:32px;height:32px;margin:-8px -8px 0 10px;padding:0;border:0;border-radius:50%;background:var(--bg);color:var(--mute);display:grid;place-items:center;cursor:pointer}.mx:hover{background:var(--soft);color:var(--ink)}.mx svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
 .modal{position:fixed;inset:0;background:rgb(0 0 0/.45);display:none;place-items:center;padding:16px;z-index:30}
 .modal.on{display:grid}
 .modal .card{background:var(--bg);width:min(620px,100%);max-height:calc(100dvh - 32px);overflow:auto;padding:18px;border-radius:14px;box-shadow:0 20px 60px rgb(0 0 0/.3)}
@@ -402,6 +402,14 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 .cotn{display:flex;align-items:center;gap:4px;font-size:12.5px;font-weight:700;color:var(--mute);flex:none}.cotn svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;transition:transform .15s}.cotasks[open] .cotn svg{transform:rotate(180deg)}
 .cotasks .tasks{border-top:1px solid var(--line)}
 @media(max-width:600px){.cotl{display:none}}
+.bmnav{display:flex;justify-content:flex-end;align-items:center;gap:6px;margin:-34px 40px 8px 0;min-height:30px}
+.bmgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px;margin-bottom:10px}.bmh{font-size:11px;font-weight:700;color:var(--mute);text-align:center;padding:2px 0}
+.bmc{display:flex;flex-direction:column;align-items:stretch;gap:2px;min-height:76px;padding:4px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit;text-align:left;cursor:pointer;min-width:0;overflow:hidden}
+.bmc.blank{border:0;background:none;cursor:default}.bmc:hover{border-color:var(--mute)}.bmc.past{opacity:.6}.bmc.off{background:color-mix(in srgb,#16a34a 9%,var(--bg))}.bmc.sel{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink);opacity:1}
+.bmd{font-size:12.5px;font-weight:700;line-height:1;padding:2px 2px 3px}.bmc.today .bmd{align-self:flex-start;background:var(--ink);color:var(--bg);border-radius:99px;padding:3px 6px}
+.bmp{font-size:10.5px;line-height:1.25;font-weight:600;padding:1px 4px;border-radius:4px;background:color-mix(in srgb,var(--c) 16%,transparent);border-left:3px solid var(--c);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.bmp.dn{text-decoration:line-through;opacity:.6}.bmm{font-size:10px;color:var(--mute);font-weight:700;padding-left:2px}
+.bmsel{margin:0 0 6px!important;text-align:right}
+@media(max-width:600px){.bmc{min-height:52px;padding:3px 2px;align-items:center}.bmp{font-size:0;height:4px;width:80%;padding:0;border:0;background:var(--c);border-radius:2px}.bmm{font-size:9px;padding:0}.bmc.today .bmd{padding:2px 5px}}
 .wanchips{position:sticky;top:-1px;background:var(--card,var(--bg));z-index:2;padding:4px 0 8px;margin-bottom:4px}
 .htitle{background:none;border:0;font:inherit;width:100%;text-align:left;cursor:pointer}
 .nfcard{max-width:520px;width:100%;max-height:92vh;overflow:auto}.nfcard>h3{margin:0 0 10px}.nfok b{color:var(--ink)}.nfsh{width:14px;height:14px;vertical-align:-2px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
@@ -2885,7 +2893,7 @@ function renderHome(){if(HD&&HD.on)return;TS();const s=SEM(),T0=today0(),all=all
   tmPaintAll();hwFit();hwObserve();}
 $('#v-home').addEventListener('click',e=>{const fb=e.target.closest('[data-fold]');if(fb){const id=fb.dataset.fold,c=fb.closest('.hcard'),shut=!c.classList.contains('shut');hShut[id]=shut;if(!shut)delete hShut[id];try{localStorage.setItem('cm-home-fold',JSON.stringify(hShut));}catch{}
   c.classList.toggle('shut',shut);c.querySelector('.hbody').hidden=shut;fb.setAttribute('aria-expanded',String(!shut));fb.setAttribute('aria-label',(shut?'Expand ':'Collapse ')+c.querySelector('h3').textContent);hwFit();return;}
-  const wi=e.target.closest('[data-winfo]');if(wi){const w=wi.closest('.hw');if(w){if(w.dataset.t==='ilnews')wAnF=anF;const it=hwItems().find(o=>o.id===w.dataset.w);openWInfo(w.dataset.t,it||{id:w.dataset.w});}return;}
+  const wi=e.target.closest('[data-winfo]');if(wi){const w=wi.closest('.hw');if(w){if(w.dataset.t==='ilnews')wAnF=anF;if(w.dataset.t==='ilgrades')wGrF='all';const it=hwItems().find(o=>o.id===w.dataset.w);openWInfo(w.dataset.t,it||{id:w.dataset.w});}return;}
   const rm=e.target.closest('[data-hw=rm]');if(rm){hwRemove(rm.closest('.hw').dataset.w);return;}
   const tmb=e.target.closest('[data-tm]');if(tmb){tmAct(tmb.dataset.tm);return;}
   const ilv=e.target.closest('[data-ilv]');if(ilv){openILView(ilv.dataset.ilv);return;}
@@ -2936,7 +2944,7 @@ $('#hgrid').addEventListener('keydown',e=>{const c=e.target.closest('.hwcover');
 /* notes */
 let noteT=null;
 /* ---- widget details: clicking a widget's title opens a pop-up with everything behind it ---- */
-let wAnF='all';
+let wAnF='all',wGrF='all',wMonSel='';
 const WGO={classes:['#timetable','Open timetable'],tasks:['#tasks','Open Tasks'],dates:['#tasks','Open Tasks'],courses:['#courses','Open Courses'],gpa:['#courses','Open Courses'],left:['#courses','Open Courses'],finals:['#tasks','Open Tasks'],degree:['#plan','Open Plan'],week:['#tasks','Open Tasks'],ilgrades:['#courses','Open Courses'],month:['#tasks','Open Tasks'],sem:['#tasks','Open Tasks']};
 const wTm=m=>fmtClock(m,TT().h24)+(TT().h24?'':' '+ampm(m));
 const wSec=(h,body)=>`<section class="wisec"><h4>${h}</h4>${body}</section>`;
@@ -2977,18 +2985,29 @@ function wiContent(t,it){const T0=today0(),s=SEM(),all=allTasks(),lcd=lastClassD
     return{title:T0.getDay()===6||T0.getDay()===0?'Next week':'This week',html:h};}
   case'note':return{title:'Notes',html:`<textarea class="hnote wibig" data-note="${esc(it.id)}" aria-label="Notes">${esc((S.home&&S.home.notes||{})[it.id]||'')}</textarea><p class="hint">Saved as you type.</p>`};
   case'timer':{const n=TM.day===iso(T0)?TM.n:0;return{title:'Focus timer',html:wKV([['Now',esc(TM.mode==='f'?'Focus':'Break')+(TM.run?' · running':'')],['Time left',mmss(tmLeft())],['Lengths',`${TM.f} min focus · ${TM.b} min break`],['Today',`${n} focus session${n===1?'':'s'}`]])+`<div class="wichips">${[[25,5],[50,10],[15,3]].map(([f,b])=>`<button class="fchip${TM.f===f?' on':''}" data-tmset="${f},${b}">${f} / ${b} min</button>`).join('')}</div><p class="hint">The timer keeps going while you use other tabs of the site, and beeps at the end of each session.</p>`};}
-  case'ilgrades':{const G=ilGrades();if(!G.length)return{title:'iLearn grades',html:empty('No iLearn grades yet. Install the iLearn helper from Tasks → iLearn.')};const by={};for(const x of G)(by[x.code]=by[x.code]||[]).push(x);
-    return{title:'iLearn grades',html:Object.entries(by).sort().map(([code,a])=>{const w=a.filter(x=>x.p),avg=w.length?Math.round(w.reduce((s,x)=>s+x.sc,0)/w.reduce((s,x)=>s+x.p,0)*1000)/10:null;
-      return wSec(`${esc(code)} <span>${a.length} grade${a.length===1?'':'s'}${avg!=null?` · ${avg}% of points so far`:''}</span>`,`<ul class="igw">${a.map(x=>`<li><button class="ilrow" data-ilv="g:${esc(x.n)}" style="--cc:${x.co?courseColor(x.co):'#8a8a8a'}"><i class="cdot"></i><span class="hcb"><b>${esc(x.t||'Grade')}</b><span>${esc(ilKindOf(x.c))}${x.at?' · '+esc(ilAgo(x.at)):''}</span></span><span class="igs"><b>${esc(ilScore(x))}</b>${ilPct(x)!=null?`<small>${ilPct(x)}%</small>`:''}</span><span></span></button></li>`).join('')}</ul>`);}).join('')};}
+  case'ilgrades':{const G=ilGrades();if(!G.length)return{title:'iLearn grades',html:empty('No iLearn grades yet. Install the iLearn helper from Tasks → iLearn.')};
+    const codes=[...new Set(G.map(x=>x.code))].sort(),f=codes.includes(wGrF)?wGrF:'all',L=f==='all'?G:G.filter(x=>x.code===f),col=c=>{const x=G.find(y=>y.code===c&&y.co);return x?courseColor(x.co):'#8a8a8a';};
+    const w=L.filter(x=>x.p),avg=w.length?Math.round(w.reduce((a,x)=>a+x.sc,0)/w.reduce((a,x)=>a+x.p,0)*1000)/10:null;
+    return{title:'iLearn grades',sub:`${L.length} grade${L.length===1?'':'s'}${f==='all'?' in your courses':' in '+f}${f!=='all'&&avg!=null?` · ${avg}% of points so far`:''} · newest first`,
+      html:`<div class="anchips wanchips">${['all',...codes].map(c=>`<button class="fchip${c===f?' on':''}" data-wgrf="${esc(c)}"${c==='all'?'':` style="--tc:${col(c)}"`}>${c==='all'?'All':`<i class="cdot"></i>${esc(c)}`}<b>${c==='all'?G.length:G.filter(x=>x.code===c).length}</b></button>`).join('')}</div>
+      <ul class="igw">${L.map(x=>`<li><button class="ilrow" data-ilv="g:${esc(x.n)}" style="--cc:${col(x.code)}"><i class="cdot"></i><span class="hcb"><b>${esc(x.t||'Grade')}</b><span>${esc([f==='all'?x.code:'',ilKindOf(x.c),x.at?ilAgo(x.at):''].filter(Boolean).join(' · '))}</span></span><span class="igs"><b>${esc(ilScore(x))}</b>${ilPct(x)!=null?`<small>${ilPct(x)}%</small>`:''}</span><span></span></button></li>`).join('')}</ul>`};}
   case'ilnews':{const E=S.ilearn&&S.ilearn.ext;const A=E?Object.entries(E.an||{}).filter(([id,a])=>ilMine(a.c)).map(([id,a])=>({id,...a,code:E.c[a.c].code||E.c[a.c].name})).sort((a,b)=>(b.d||'').localeCompare(a.d||'')):[];
     if(!A.length)return{title:'Announcements',html:empty('No announcements yet. Install the iLearn helper from Tasks → iLearn.')};
     const codes=[...new Set(A.map(a=>a.code))].sort(),f=codes.includes(wAnF)?wAnF:'all',L=f==='all'?A:A.filter(a=>a.code===f),col=code=>{const co=ilSite(code);return co?courseColor(co):'#8a8a8a';};
     return{title:'Announcements',sub:`${L.length} announcement${L.length===1?'':'s'}${f==='all'?' in your courses':' in '+f} · newest first`,html:`<div class="anchips wanchips">${['all',...codes].map(c=>`<button class="fchip${c===f?' on':''}" data-wanf="${esc(c)}"${c==='all'?'':` style="--tc:${col(c)}"`}>${c==='all'?'All':`<i class="cdot"></i>${esc(c)}`}<b>${c==='all'?A.length:A.filter(a=>a.code===c).length}</b></button>`).join('')}</div>
       <ul class="anw">${L.map(x=>`<li><button class="ilrow" data-ilv="a:${esc(x.id)}" style="--cc:${col(x.code)}"><span class="anh"><i class="cdot"></i><b>${esc(x.code)}</b>${ilKindOf(x.c)?`<small>${esc(ilKindOf(x.c))}</small>`:''}<small>· ${esc(ilAgo(x.d))}</small></span><b class="ant">${esc(x.t)}</b>${x.b?`<span class="anb">${esc(x.b.replace(/\s+/g,' ').slice(0,220))}</span>`:''}</button></li>`).join('')}</ul>`};}
-  case'month':{const mon=hMon||new Date(T0.getFullYear(),T0.getMonth(),1),y=mon.getFullYear(),m=mon.getMonth(),days=new Date(y,m+1,0).getDate(),cal=s?s.cal||[]:[];let h='';
-    for(let d=1;d<=days;d++){const dt=new Date(y,m,d),k=iso(dt),ev=cal.filter(c=>k>=c.start&&k<=(c.end||c.start)&&(c.start===k||d===1)),tk=all.filter(t=>t.date===k);if(!ev.length&&!tk.length)continue;
-      h+=wSec(`${DAYN[dt.getDay()]} ${d}${k===iso(T0)?' · Today':''}`,`<ul class="tasks">${ev.map(calRow).join('')}${tk.map(t=>taskRow(t,true)).join('')}</ul>`);}
-    return{title:['January','February','March','April','May','June','July','August','September','October','November','December'][m]+' '+y,html:h||empty('Nothing this month.')};}
+  case'month':{const mon=hMon||new Date(T0.getFullYear(),T0.getMonth(),1),y=mon.getFullYear(),m=mon.getMonth(),days=new Date(y,m+1,0).getDate(),lead=(new Date(y,m,1).getDay()+6)%7,cal=s?s.cal||[]:[],tk=all.filter(t=>t.date);
+    const byDay=k=>({c:cal.filter(c=>k>=c.start&&k<=(c.end||c.start)),t:tk.filter(t=>t.date===k)}),inM=k=>k&&k.slice(0,7)===iso(mon).slice(0,7),sel=inM(wMonSel)?wMonSel:'';
+    let g=['Mo','Tu','We','Th','Fr','Sa','Su'].map(d=>`<span class="bmh">${d}</span>`).join('');for(let i=0;i<lead;i++)g+='<span class="bmc blank"></span>';
+    for(let d=1;d<=days;d++){const dt=new Date(y,m,d),k=iso(dt),it=byDay(k),off=it.c.some(c=>c.type==='break'||c.type==='holiday');
+      const pills=[...it.c.filter(c=>c.start===k||d===1||dt.getDay()===1).map(c=>[CTCOL[c.type]||'#8a8a8a',c.title,calDone(c)]),...it.t.map(t=>[t.final?'var(--red)':taskColor(t),[taskTag(t),t.title].filter(Boolean).join(' '),t.done])];
+      g+=`<button class="bmc${k===iso(T0)?' today':''}${k===sel?' sel':''}${dt<T0?' past':''}${off?' off':''}" data-wmd="${k}" aria-label="${esc(fmtD(dt))}${pills.length?`, ${pills.length} item${pills.length===1?'':'s'}`:''}"><span class="bmd">${d}</span>${pills.slice(0,3).map(p=>`<span class="bmp${p[2]?' dn':''}" style="--c:${p[0]}">${esc(p[1])}</span>`).join('')}${pills.length>3?`<span class="bmm">+${pills.length-3}</span>`:''}</button>`;}
+    let h='';const day=k=>{const dt=pd(k),it=byDay(k);return it.c.length||it.t.length?wSec(`${DAYN[dt.getDay()]} ${dt.getDate()}${k===iso(T0)?' · Today':''}`,`<ul class="tasks">${it.c.map(calRow).join('')}${it.t.map(t=>taskRow(t,true)).join('')}</ul>`):'';};
+    if(sel)h=day(sel)||wSec(`${DAYN[pd(sel).getDay()]} ${pd(sel).getDate()}`,`<p class="hint">Nothing on this day.</p>`);
+    else for(let d=1;d<=days;d++){const k=iso(new Date(y,m,d)),it=byDay(k);if(it.c.some(c=>c.start===k||d===1)||it.t.length)h+=wSec(`${DAYN[new Date(y,m,d).getDay()]} ${d}${k===iso(T0)?' · Today':''}`,`<ul class="tasks">${it.c.filter(c=>c.start===k||d===1).map(calRow).join('')}${it.t.map(t=>taskRow(t,true)).join('')}</ul>`);}
+    return{title:['January','February','March','April','May','June','July','August','September','October','November','December'][m]+' '+y,
+      html:`<div class="bmnav"><button class="ib" data-wmon="-1" aria-label="Previous month"><svg viewBox="0 0 16 16"><path d="M10 3L5 8l5 5"/></svg></button>${y!==T0.getFullYear()||m!==T0.getMonth()?'<button class="lnkbtn" data-wmon="0">Today</button>':''}<button class="ib" data-wmon="1" aria-label="Next month"><svg viewBox="0 0 16 16"><path d="M6 3l5 5-5 5"/></svg></button></div>
+      <div class="bmgrid">${g}</div>${sel?`<p class="bmsel"><button class="lnkbtn" data-wmd="${sel}">Show the whole month</button></p>`:''}${h||empty('Nothing this month.')}`};}
   }
   return{title:HWT[t]?HWT[t].n:'',html:''};}
 function openWInfo(t,it){const c=wiContent(t,it),go=WGO[t];$('#wititle').textContent=c.title;$('#wisub').textContent=c.sub||'';$('#wisub').hidden=!c.sub;$('#wibody').innerHTML=c.html;
@@ -2997,6 +3016,9 @@ $('#wiclose').onclick=()=>$('#wimodal').classList.remove('on');$('#wigo').onclic
 $('#wimodal').addEventListener('click',e=>{if(e.target===$('#wimodal')){$('#wimodal').classList.remove('on');return;}
   const o=e.target.closest('[data-wopen]');if(o){$('#wimodal').classList.remove('on');openGrades(o.dataset.wopen);return;}
   const v=e.target.closest('[data-ilv]');if(v){$('#wimodal').classList.remove('on');openILView(v.dataset.ilv);return;}
+  const gf=e.target.closest('[data-wgrf]');if(gf){wGrF=gf.dataset.wgrf;openWInfo('ilgrades',null);return;}
+  const md=e.target.closest('[data-wmd]');if(md){wMonSel=wMonSel===md.dataset.wmd?'':md.dataset.wmd;const st=$('#wimodal .wicard').scrollTop;openWInfo('month',null);$('#wimodal .wicard').scrollTop=st;return;}
+  const mn=e.target.closest('[data-wmon]');if(mn){const v=+mn.dataset.wmon,bm=hMon||today0();hMon=v?new Date(bm.getFullYear(),bm.getMonth()+v,1):null;wMonSel='';renderHome();openWInfo('month',null);return;}
   const wf=e.target.closest('[data-wanf]');if(wf){wAnF=wf.dataset.wanf;const st=$('#wimodal .wicard').scrollTop;openWInfo('ilnews',null);return;}
   const ts=e.target.closest('[data-tmset]');if(ts){const[f,b]=ts.dataset.tmset.split(',').map(Number);TM.f=f;TM.b=b;if(!TM.run)TM.left=0;tmSave();tmPaintAll();const m=$('#wimodal');openWInfo('timer',null);}});
 $('#wimodal').addEventListener('input',e=>{const t=e.target.closest('textarea[data-note]');if(!t)return;S.home=S.home||{v:1};S.home.notes=Object.assign({},S.home.notes||{},{[t.dataset.note]:t.value});clearTimeout(noteT);noteT=setTimeout(()=>{save();if(document.body.dataset.view==='home')renderHome();},400);});
