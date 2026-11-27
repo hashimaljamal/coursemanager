@@ -428,6 +428,8 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
  body[data-view=sched] .upfab{display:none}.hhero>.hup{display:none!important}
  .shell{padding-bottom:76px}#toast{left:16px;right:84px;transform:translateY(140px);justify-content:space-between}#toast.on{transform:none}}
 .confetti{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:80}
+.tasteps{margin:12px 0 10px;padding:0;list-style:none;counter-reset:ta;display:grid;gap:12px}.tasteps>li{counter-increment:ta;display:grid;grid-template-columns:28px 1fr;gap:2px 10px;font-size:14px}.tasteps>li::before{content:counter(ta);grid-row:span 4;width:24px;height:24px;border-radius:50%;background:var(--ink);color:var(--bg);display:grid;place-items:center;font-weight:800;font-size:13px}.tasteps>li>span{color:var(--mute);line-height:1.5;font-size:13.5px}.tasteps a{color:var(--ink);font-weight:700}.tasteps>li>span b{color:var(--ink)}
+.tadl{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 2px}.tadone{min-height:30px!important;font-size:13.5px!important}.tacard{max-height:92vh;overflow:auto}
 .nfcard{max-width:520px;width:100%;max-height:92vh;overflow:auto}.nfcard>h3{margin:0 0 10px}.nfok b{color:var(--ink)}.nfsh{width:14px;height:14px;vertical-align:-2px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
 .nfdev{display:flex;align-items:center;gap:10px;flex-wrap:wrap;border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;margin:0 0 4px}.nfdev p{margin:0!important;flex:1 1 220px;color:var(--ink)!important;font-weight:600}.nfdev.st-push{border-color:var(--ink)}.nfdev.st-denied p,.nfdev.st-none p,.nfdev.st-ios p{font-weight:500;color:var(--mute)!important}
 .nfh{margin:14px 0 2px;font-size:13px;text-transform:uppercase;letter-spacing:.04em;color:var(--mute)}.nfopts{margin:6px 0!important;gap:6px!important}.nfopt{padding:9px 12px!important;align-items:center!important;flex-wrap:wrap}.nfopt>span{flex:1 1 180px}.nfopt select{flex:none;min-height:34px;max-width:100%}@media(max-width:600px){.nfopt select{margin-left:29px}}
@@ -764,7 +766,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
   <div class="pbar"><div class="pleft tthead" id="tthead"></div>
   <div class="acts">
     <button class="btn" id="icspick" title="Upload your schedule as an .ics calendar file">Upload .ics</button>
-    <button class="btn ghost" id="ttexp" title="Save the timetable as an image">Export image</button>
+    <button class="btn ghost" id="ttexpm" title="Save as an image or send to the Class Timetable app">Export</button><button class="btn ghost" id="ttexp" hidden>Export image</button>
   </div>
 </div>
   <div class="ttwrap"><div class="ttside" id="ttside"></div><div class="ttmain"><div id="ttgrid"></div></div></div>
@@ -867,6 +869,18 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 <button class="dopt" id="pltrans"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 10.5V2.5M4.5 6 8 2.5 11.5 6M2.5 10.5v3h11v-3"/></svg><span><b>Upload your transcript</b><small>PDF or photo. Marks the courses you’ve finished, with grades.</small></span><em class="chst" id="pltransst"></em></button>
 <button class="dopt" id="plger"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 3.5h10M3 8h10M3 12.5h6"/></svg><span><b>Upload a GER list</b><small>Optional. The GER courses offered next semester, so each GER slot can suggest courses that fit.</small></span><em class="chst" id="plgerst"></em></button>
 </div><p class="hint" id="ptstatus2" hidden></p><div class="mact"><button class="btn ghost" data-chclose>Close</button></div></div></div>
+<div id="txmodal" class="modal"><div class="card cnf" role="dialog" aria-modal="true" aria-labelledby="txtitle"><h3 id="txtitle">Export timetable</h3><div class="dopts chopts">
+<button class="dopt" id="txim"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M2.5 3h11v10h-11zM2.5 11l3.5-3.5 3 3 2-2 2.5 2.5"/><circle cx="10.5" cy="5.8" r="1"/></svg><span><b>Image</b><small>A picture of your week to save or share.</small></span></button>
+<button class="dopt" id="txapp"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 1.5h7v13h-7zM7 12.5h2"/></svg><span><b>Class Timetable app</b><small>A file for the Class Timetable app on iPhone or Android, with or without your tasks.</small></span></button>
+</div><div class="mact"><button class="btn ghost" data-chclose>Cancel</button></div></div></div>
+<div id="tamodal" class="modal"><div class="card cnf tacard" role="dialog" aria-modal="true" aria-labelledby="tatitle"><h3 id="tatitle">Send to Class Timetable</h3><p class="hint">Class Timetable is a free timetable app with widgets, an Apple Watch app and class reminders.</p>
+<ol class="tasteps">
+<li><b>Install the app on your phone</b><span>It’s free. <a href="https://itunes.apple.com/app/id425121147?mt=8" target="_blank" rel="noopener">App Store (iPhone)</a> · <a href="https://play.google.com/store/apps/details?id=com.icemediacreative.timetable" target="_blank" rel="noopener">Google Play (Android)</a></span></li>
+<li><b>Download the file</b><span id="tainfo"></span><div class="tadl"><button class="btn" id="tadl1">Timetable only</button><button class="btn ghost" id="tadl2">Timetable + tasks</button></div><label class="chk tadone"><input type="checkbox" id="tadone"> Include finished tasks</label></li>
+<li><b>Open it in the app</b><span><b>iPhone:</b> tap the download (or find it in Files → Downloads), tap the share button, then pick <b>Timetable</b>.<br><b>Android:</b> open the file from your notifications or Downloads and choose <b>Class Timetable</b>.<br><b>On a computer?</b> Send the file to your phone first (AirDrop, email or a chat with yourself), then open it there.</span></li>
+</ol>
+<p class="hint">Each class shows its course code and room, in the same colours as here. Tasks are filed under their course. If you already use the app, importing may replace what’s in it, so export a copy from the app first.</p>
+<div class="mact"><button class="btn ghost" data-chclose>Done</button></div></div></div>
 <div id="bkmodal" class="modal"><div class="card cnf" role="dialog" aria-modal="true" aria-labelledby="bktitle"><h3 id="bktitle">Backup</h3><p class="hint">Save your data to a file, or load it back from one.</p><div class="dopts bkopts">
 <button class="dopt" id="expbtn"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 10V2M4.5 5.5 8 2l3.5 3.5M2.5 11v2.5h11V11"/></svg><span><b>Export a backup</b><small>Download a file with your courses, grades, timetable and tasks. Choose this semester or all of them.</small></span></button>
 <button class="dopt" id="impbtn"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2v8M4.5 6.5 8 10l3.5-3.5M2.5 11v2.5h11V11"/></svg><span><b>Import a backup</b><small>Load a backup file. You choose what it replaces before anything changes.</small></span></button>
@@ -1761,7 +1775,7 @@ function ttTick(){if(document.body.dataset.view!=='tt'){clearInterval(ttTickI);t
 let ttTickI=null;
 function renderTT(){TTM=ttMarks();clearTimeout(ttMarkT);clearInterval(ttTickI);ttTickI=setInterval(ttTick,30000);setTimeout(ttTick,0);if(TTM.at){const ms=Math.min(TTM.at-Date.now()+1500,2**31-1);if(ms>0)ttMarkT=setTimeout(()=>{if(document.body.dataset.view==='tt')renderTT();},ms);}
   const t=TT(),vis=ttVisible(),courses=ttCourses(),f=ttFlags();
-  document.querySelector('#ttexp').disabled=!vis.length;$('#icspick').hidden=true;$('#v-tt .pbar>.acts').hidden=!t.slots.length;
+  document.querySelector('#ttexp').disabled=!vis.length;$('#ttexpm').disabled=!vis.length;$('#icspick').hidden=true;$('#v-tt .pbar>.acts').hidden=!t.slots.length;
   if(!t.slots.length){
     $('#ttside').innerHTML='';$('#tthead').innerHTML='';
     $('#ttgrid').innerHTML=`<div class="ttempty"><h2>Add your class schedule</h2><p>Upload the <b>.ics</b> calendar file of your schedule. Most student portals offer it as “Export to calendar”, “Download iCal” or “Add to Google/Outlook calendar”. You can also drop the file anywhere on this page.</p><button class="btn" data-act="icsup">Upload .ics</button><p class="hint">Your schedule stays in this browser, and it’s included in Export backup.</p></div>`;
@@ -4070,6 +4084,43 @@ $('#nftest').onclick=async()=>{const dev=nfDev(),b=$('#nftest');b.disabled=true;
 /* a close button on every pop-up: same as pressing Escape (cancels, never saves) */
 document.querySelectorAll('.modal>.card').forEach(c=>c.insertAdjacentHTML('afterbegin','<button type="button" class="mx" aria-label="Close" title="Close"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>'));
 document.addEventListener('click',e=>{if(e.target.closest('.modal .mx'))document.dispatchEvent(new KeyboardEvent('keydown',{key:'Escape',bubbles:true}));});
+/* ---- export for the Class Timetable app (a zipped Apple plist, same as the app's own .timetable files) ---- */
+const xmlE=v=>String(v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+function plistOf(v,ind){const t='\t'.repeat(ind);if(Array.isArray(v))return v.length?`${t}<array>\n${v.map(x=>plistOf(x,ind+1)).join('')}${t}</array>\n`:`${t}<array/>\n`;
+  if(v&&v.$date)return`${t}<date>${v.$date}</date>\n`;if(v&&v.$real!=null)return`${t}<real>${v.$real}</real>\n`;
+  if(v&&typeof v==='object')return`${t}<dict>\n${Object.keys(v).map(k=>`${t}\t<key>${xmlE(k)}</key>\n${plistOf(v[k],ind+1)}`).join('')}${t}</dict>\n`;
+  if(typeof v==='boolean')return`${t}<${v}/>\n`;if(typeof v==='number')return`${t}<integer>${Math.round(v)}</integer>\n`;return`${t}<string>${xmlE(v)}</string>\n`;}
+let CRCT=null;const crc32=b=>{if(!CRCT){CRCT=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;CRCT[n]=c>>>0;}}let c=0xFFFFFFFF;for(let i=0;i<b.length;i++)c=CRCT[(c^b[i])&255]^(c>>>8);return(c^0xFFFFFFFF)>>>0;};
+function zip1(name,data){const nm=new TextEncoder().encode(name),crc=crc32(data),n=data.length,d=new Date(),dt=((d.getFullYear()-1980)<<9)|((d.getMonth()+1)<<5)|d.getDate(),tm=(d.getHours()<<11)|(d.getMinutes()<<5)|(d.getSeconds()>>1);
+  const loc=new DataView(new ArrayBuffer(30)),cen=new DataView(new ArrayBuffer(46)),end=new DataView(new ArrayBuffer(22));
+  [[0,0x04034b50,4],[4,20,2],[6,0,2],[8,0,2],[10,tm,2],[12,dt,2],[14,crc,4],[18,n,4],[22,n,4],[26,nm.length,2],[28,0,2]].forEach(([o,v,z])=>z===4?loc.setUint32(o,v,true):loc.setUint16(o,v,true));
+  [[0,0x02014b50,4],[4,20,2],[6,20,2],[8,0,2],[10,0,2],[12,tm,2],[14,dt,2],[16,crc,4],[20,n,4],[24,n,4],[28,nm.length,2],[30,0,2],[32,0,2],[34,0,2],[36,0,2],[38,0,4],[42,0,4]].forEach(([o,v,z])=>z===4?cen.setUint32(o,v,true):cen.setUint16(o,v,true));
+  const cOff=30+nm.length+n;[[0,0x06054b50,4],[4,0,2],[6,0,2],[8,1,2],[10,1,2],[12,46+nm.length,4],[16,cOff,4],[20,0,2]].forEach(([o,v,z])=>z===4?end.setUint32(o,v,true):end.setUint16(o,v,true));
+  return new Blob([loc.buffer,nm,data,cen.buffer,nm,end.buffer],{type:'application/octet-stream'});}
+const rgb01=c=>{const x=document.createElement('canvas').getContext('2d');x.fillStyle='#888';x.fillStyle=c;const h=x.fillStyle;const m=h.match(/^#(..)(..)(..)$/);return m?[1,2,3].map(i=>({$real:+(parseInt(m[i],16)/255).toFixed(4)})):[{$real:.5},{$real:.5},{$real:.5}];};
+const ttaUUID=k=>{let a=0x811c9dc5,b=0x12345678;for(const ch of String(k)){a=Math.imul(a^ch.charCodeAt(0),16777619)>>>0;b=Math.imul(b^ch.charCodeAt(0),2246822519)>>>0;}const h=(a.toString(16).padStart(8,'0')+b.toString(16).padStart(8,'0')).repeat(2).toUpperCase();return`${h.slice(0,8)}-${h.slice(8,12)}-${h.slice(12,16)}-${h.slice(16,20)}-${h.slice(20,32)}`;};
+function ttaData(withTasks,done){const vis=ttVisible(),title={},used=new Set(),colors={},week=[];
+  for(const x of vis){if(title[x.ckey])continue;const n=nm(x);let t=(n.code||n.name||'Class').trim();if(used.has(t))t+=isLabSlot(x)?' Lab':' ('+x.ckey.slice(-4)+')';used.add(t);title[x.ckey]=t;colors[t]=rgb01(ttColor(x.ckey));}
+  for(const x of vis){const n=nm(x);week.push({dayNum:(x.day+6)%7,endTime:{$real:x.end*60},...(n.room?{info:n.room}:{}),time:{$real:x.start*60},title:title[x.ckey],weekNum:0});}
+  const out={Settings:{ColorSettings:colors,NumberOfWeeks:1,WeekendDaysAreActive:vis.some(x=>x.day===0||x.day===6)}};
+  if(withTasks){const byCode={};for(const lab of [false,true])for(const x of vis){if(isLabSlot(x)!==lab)continue;const k=normCode(nm(x).code||'');if(k&&!byCode[k])byCode[k]=title[x.ckey];}
+    const cats=[],tasks=[];const cat=t=>{const co=t.courseId?byId(t.courseId):null,c=co?byCode[normCode(co.code||'')]||co.code:taskTag(t);if(c&&!cats.includes(c))cats.push(c);return c;};
+    for(const t of allTasks()){if(!t.date||(t.done&&!done))continue;const d=pd(t.date);if(!d)continue;const tm=t.time?toMin(t.time):null,at=new Date(d.getFullYear(),d.getMonth(),d.getDate(),0,tm!=null?tm:0);
+      const c=cat(t),info=t.source==='finals'||t.manual?String(t.note||'').trim():'';
+      tasks.push({...(c?{category:c}:{}),dueDate:{$date:at.toISOString().replace(/\.\d+Z$/,'Z')},enableTime:tm!=null?1:0,...(info?{info}:{}),isCompleted:t.done?1:0,taskID:ttaUUID(t.key),title:t.title});}
+    out.TaskCategories=cats.map((c,i)=>({displayIndex:i,title:c}));out.TaskEvents=tasks;}
+  out.WeekEvents=week;return out;}
+function ttaFile(withTasks){const d=ttaData(withTasks,$('#tadone').checked),xml=`<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">\n<plist version="1.0">\n${plistOf(d,0)}</plist>\n`;
+  const blob=zip1('Events.xml',new TextEncoder().encode(xml)),u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download=`${(semName()||'Course Manager').replace(/[^\w ]+/g,'').trim()}${withTasks?' with tasks':''}.timetable`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);
+  toast(withTasks?`Timetable and ${d.TaskEvents.length} task${d.TaskEvents.length===1?'':'s'} saved. Now open it in the app.`:'Timetable saved. Now open it in the app.');return d;}
+function ttaInfo(){const vis=ttVisible(),n=new Set(vis.map(x=>x.ckey)).size;let all=[];try{all=allTasks().filter(t=>t.date);}catch{}const open=all.filter(t=>!t.done).length,dn=all.length-open,inc=$('#tadone').checked;
+  $('#tainfo').textContent=`Your timetable has ${n} course${n===1?'':'s'} and ${vis.length} weekly class${vis.length===1?'':'es'}. With tasks, it also brings ${inc?all.length:open} dated task${(inc?all.length:open)===1?'':'s'}${!inc&&dn?` (plus ${dn} finished, if you tick the box)`:''}.`;}
+$('#ttexpm').onclick=()=>{if(!ttVisible().length){toast('Upload a schedule first');return;}$('#txmodal').classList.add('on');setTimeout(()=>$('#txim').focus({preventScroll:true}),0);};
+$('#txim').onclick=()=>{$('#txmodal').classList.remove('on');openExport();};
+$('#txapp').onclick=()=>{$('#txmodal').classList.remove('on');ttaInfo();$('#tamodal').classList.add('on');$('#tamodal .tacard').scrollTop=0;};
+$('#tadone').onchange=ttaInfo;$('#tadl1').onclick=()=>ttaFile(false);$('#tadl2').onclick=()=>ttaFile(true);
+for(const id of ['#txmodal','#tamodal'])$(id).addEventListener('click',e=>{if(e.target===$(id))$(id).classList.remove('on');});
+window.CMTTA={ttaData,plistOf};
 /* phones: one floating Upload button (bigger and labelled until you've set things up) */
 function fabPaint(){const b=$('#upfab');if(b)b.classList.toggle('big',!upDone());}
 $('#upfab').onclick=openUpload;setTimeout(fabPaint,0);
