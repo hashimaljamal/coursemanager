@@ -388,7 +388,16 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 .ilg li>span{display:grid;min-width:0}.ilg b{font-size:13.5px}.ilg small{font-size:12px;color:var(--mute)}.ilg select{max-width:52%;min-width:0;font-size:13px;min-height:34px;padding:0 8px}.ilo summary{font-size:13px;font-weight:700;cursor:pointer;padding:6px 0;color:var(--mute)}
 .upil{display:grid;grid-template-columns:30px 1fr auto;gap:12px;align-items:start;height:auto;min-height:0;width:100%;text-align:left;font:inherit;color:var(--ink);background:none;border:1.5px dashed var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;margin:0}
 .upil:hover,.upil:focus-visible{border-color:var(--ink);background:var(--soft);outline:0}.upil>span:nth-child(2){display:grid;gap:2px}.upil b{font-size:15px}.upil small{color:var(--mute);font-size:12.5px;line-height:1.35}.upil em{align-self:center;font-style:normal;font-weight:800;font-size:13px;white-space:nowrap}.upil.on{border-style:solid;border-color:var(--ink)}.upil .upi{grid-row:auto}.upil.on .upi{background:var(--ink);color:var(--bg)}
-.tlink{font-weight:700;color:var(--ink)}.htitle{background:none;border:0;font:inherit;width:100%;text-align:left;cursor:pointer}
+.tlink{font-weight:700;color:var(--ink)}.cotasks{margin:10px 0 0;border:1px solid var(--line);border-radius:12px;padding:0 12px}.cotasks[open]{padding-bottom:6px}
+.cotasks summary{display:flex;align-items:center;gap:12px;padding:9px 0;cursor:pointer;list-style:none;min-width:0}.cotasks summary::-webkit-details-marker{display:none}
+.cotl{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--mute);flex:none}.cotp{display:flex;align-items:center;gap:8px;flex:1;min-width:0}.cotp .cdot{background:var(--tc);flex:none}
+.cotb{display:grid;min-width:0}.cotb b{font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.cotb small{font-size:12px;color:var(--mute)}
+.cotp em{font-style:normal;font-size:11.5px;font-weight:800;border-radius:99px;padding:2px 8px;background:var(--soft);white-space:nowrap;flex:none}.cotp em.soon{background:color-mix(in srgb,#f59e0b 22%,transparent)}.cotp em.late{background:var(--red);color:#fff}
+.cotn{display:flex;align-items:center;gap:4px;font-size:12.5px;font-weight:700;color:var(--mute);flex:none}.cotn svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2;transition:transform .15s}.cotasks[open] .cotn svg{transform:rotate(180deg)}
+.cotasks .tasks{border-top:1px solid var(--line)}
+@media(max-width:600px){.cotl{display:none}}
+.wanchips{position:sticky;top:-1px;background:var(--card,var(--bg));z-index:2;padding:4px 0 8px;margin-bottom:4px}
+.htitle{background:none;border:0;font:inherit;width:100%;text-align:left;cursor:pointer}
 .wicard{max-width:640px;width:100%;max-height:90vh;overflow:auto}.wicard>h3{margin:0}#wisub{margin:2px 0 0!important}#wibody{margin:10px 0 14px}#wigo{text-decoration:none;display:inline-grid;place-items:center}
 .wisec{border-top:1px solid var(--line);padding-top:10px;margin-top:12px}.wisec:first-child{border-top:0;margin-top:0;padding-top:0}.wisec h4{margin:0 0 6px;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--mute)}.wisec h4 span{text-transform:none;letter-spacing:0;font-weight:600;margin-left:4px}
 .wilist{list-style:none;margin:0;padding:0;display:grid}.wilist>li{border-bottom:1px solid var(--line);padding:8px 0}.wilist>li:last-child{border-bottom:0}
@@ -670,7 +679,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 <div class="shell">
 <header class="top">
   <div class="brand"><div class="btitle"><span class="bpre">Hashim’s</span><h1>Course Manager</h1></div><div class="brow"><button class="semsw" id="semsw" aria-haspopup="menu" aria-expanded="false"><span id="semswl">Semester</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg></button><button class="acct" id="acct" hidden aria-haspopup="menu"></button></div></div>
-  <nav class="tabs" aria-label="Sections"><a href="#home" id="tab-home">Home</a><a href="#grades" id="tab-grades">Grades</a><a href="#timetable" id="tab-tt">Timetable</a><a href="#tasks" id="tab-tasks">Tasks</a><a href="#plan" id="tab-plan">Plan</a><a href="#scheduler" id="tab-sched" hidden>Scheduler</a></nav>
+  <nav class="tabs" aria-label="Sections"><a href="#home" id="tab-home">Home</a><a href="#courses" id="tab-grades">Courses</a><a href="#timetable" id="tab-tt">Timetable</a><a href="#tasks" id="tab-tasks">Tasks</a><a href="#plan" id="tab-plan">Plan</a><a href="#scheduler" id="tab-sched" hidden>Scheduler</a></nav>
   <div class="dacts">
     <button class="btn ghost sm dbtn" id="impbtn" title="Import a backup file"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2v8M4.5 6.5 8 10l3.5-3.5M2.5 11v2.5h11V11"/></svg><span>Import</span></button>
     <button class="btn ghost sm dbtn" id="expbtn" title="Export a backup file"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 10V2M4.5 5.5 8 2l3.5 3.5M2.5 11v2.5h11V11"/></svg><span>Export</span></button>
@@ -685,7 +694,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
   <input type="file" id="impf" accept=".json,application/json" hidden>
   <input type="file" id="calfile" hidden accept=".ics,text/calendar,.pdf,.docx,.txt,.md,.html,.htm,image/*">
 </header>
-<section id="v-home" hidden><div class="pbar hhero" id="hhero"></div><div class="hebar" id="hebar" hidden><span class="hebt"><b>Customize Home</b><span class="hint">Drag a widget to move it and drag its corner to resize. Double-click the corner for automatic height.</span></span><button class="btn ghost sm" data-act="hwadd">+ Add widget</button><button class="btn ghost sm" data-act="hwreset">Reset layout</button><button class="btn sm" data-act="hedit">Done</button></div><div class="hgrid" id="hgrid"></div></section>
+<section id="v-home" hidden><div class="pbar hhero" id="hhero"></div><div class="hebar" id="hebar" hidden><span class="hebt"><b>Customize Home</b><span class="hint">Drag a widget to move it and drag its corner to resize. Double-click the corner for automatic height. Phones and computers have separate layouts.</span></span><button class="btn ghost sm" data-act="hwadd">+ Add widget</button><button class="btn ghost sm" data-act="hwreset">Reset layout</button><button class="btn sm" data-act="hedit">Done</button></div><div class="hgrid" id="hgrid"></div></section>
 <section id="v-sched" hidden><div class="sframewrap" id="sframewrap"></div></section>
 <section id="v-plan" hidden><div class="pbar"><div class="pleft" id="phead"></div>
   <div class="acts">
@@ -753,7 +762,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 <p class="hint" id="snotep"></p>
 <div class="mact"><button class="btn ghost" id="scancel">Cancel</button><button class="btn" id="ssave">Save</button></div></div></div>
 <div id="cmodal" class="modal" role="alertdialog" aria-modal="true" aria-labelledby="ctitle" aria-describedby="cmsg"><div class="card cnf"><h3 id="ctitle"></h3><p id="cmsg"></p><div class="mact"><button class="btn ghost" id="cno">Cancel</button><button class="btn danger" id="cyes"></button></div></div></div>
-<div id="rmodal" class="modal"><div class="card cnf redit"><h3>Edit course</h3><p class="hint">Changes apply to every class of this course. Leave a box blank to keep what the calendar says.</p><div class="grid2 rgrid"><label>Course number<input id="r-code" autocomplete="off"></label><label>Course name<input id="r-name" autocomplete="off"></label><label>Room<input id="r-room" autocomplete="off"></label><label>Class type<input id="r-type" autocomplete="off"></label><label>Section<input id="r-section" autocomplete="off"></label><label>Instructor<input id="r-instructor" autocomplete="off"></label><label class="rlink">Linked course in Grades<select id="rlink"></select></label></div><div class="mact"><button class="btn ghost" id="rreset">Reset to calendar</button><span style="flex:1"></span><button class="btn ghost" id="rcancel">Cancel</button><button class="btn" id="rsave">Save</button></div></div></div>
+<div id="rmodal" class="modal"><div class="card cnf redit"><h3>Edit course</h3><p class="hint">Changes apply to every class of this course. Leave a box blank to keep what the calendar says.</p><div class="grid2 rgrid"><label>Course number<input id="r-code" autocomplete="off"></label><label>Course name<input id="r-name" autocomplete="off"></label><label>Room<input id="r-room" autocomplete="off"></label><label>Class type<input id="r-type" autocomplete="off"></label><label>Section<input id="r-section" autocomplete="off"></label><label>Instructor<input id="r-instructor" autocomplete="off"></label><label class="rlink">Linked course<select id="rlink"></select></label></div><div class="mact"><button class="btn ghost" id="rreset">Reset to calendar</button><span style="flex:1"></span><button class="btn ghost" id="rcancel">Cancel</button><button class="btn" id="rsave">Save</button></div></div></div>
 <div id="xmodal" class="modal"><div class="card xcard"><div class="xprev"><canvas id="xcanvas" aria-label="Timetable image preview"></canvas><p class="hint" id="xdim"></p></div>
 <div class="xctl"><h3>Export image</h3>
 <label class="xl">Size<select id="xsize"></select></label>
@@ -1025,7 +1034,7 @@ function renderPanel(){
   if(S.sel==='gpa'){renderGPA();return;}
   const co=byId(S.sel);
   if(!co){$('#panel').innerHTML='<div class="ttempty"><h2>Add your courses</h2><p>Upload your syllabi (PDF, Word, photos or text) and a grade calculator is built for each course, with its own weights and grade boundaries. You can also paste the text or set a course up by hand.</p><div class="gempty"><button class="btn" data-act="pickfiles">Upload syllabi</button><button class="btn ghost" data-act="addmanual">Add by hand</button></div></div>';return;}
-  $('#panel').innerHTML=`<div class="chead"><div><h2><button class="sw hsw" data-act="color" data-ck="${esc(co.code||co.id)}" style="background:${courseColor(co)}" aria-label="Course colour" title="Change colour (also used in Timetable)"></button>${esc(co.code||'Untitled course')}</h2><div class="csub">${[co.title?esc(co.title):'',profHTML(co),co.isLab?'Lab':'',`${fmt(creditsOf(co))} credit${creditsOf(co)===1?'':'s'}`,co.noGpa?'not in GPA':''].filter(Boolean).map(x=>`<span class="cs">${x}</span>`).join('')}</div>${ilLinksHTML(co)}</div><div class="cacts"><button class="btn ghost sm" data-act="cleargrades" data-co="${co.id}" ${courseHasData(co)?'':'hidden'}>Clear grades</button><button class="btn ${edit?'':'ghost'} sm" data-act="edit">${edit?'Done editing':'Edit structure'}</button></div></div>${classesLeftHTML(co)}${(()=>{const n=notes(co);return n?`<div class="notes">${n}</div>`:'';})()}<div id="res"></div>${co.comps.length?`<div class="comps">${co.comps.map(k=>compHTML(co,k,true)).join('')}</div>`:'<p class="hint">No graded parts yet. Use Edit structure to add some.</p>'}${edit?editHTML(co):''}`;
+  $('#panel').innerHTML=`<div class="chead"><div><h2><button class="sw hsw" data-act="color" data-ck="${esc(co.code||co.id)}" style="background:${courseColor(co)}" aria-label="Course colour" title="Change colour (also used in Timetable)"></button>${esc(co.code||'Untitled course')}</h2><div class="csub">${[co.title?esc(co.title):'',profHTML(co),co.isLab?'Lab':'',`${fmt(creditsOf(co))} credit${creditsOf(co)===1?'':'s'}`,co.noGpa?'not in GPA':''].filter(Boolean).map(x=>`<span class="cs">${x}</span>`).join('')}</div>${ilLinksHTML(co)}${coTasksHTML(co)}</div><div class="cacts"><button class="btn ghost sm" data-act="cleargrades" data-co="${co.id}" ${courseHasData(co)?'':'hidden'}>Clear grades</button><button class="btn ${edit?'':'ghost'} sm" data-act="edit">${edit?'Done editing':'Edit structure'}</button></div></div>${classesLeftHTML(co)}${(()=>{const n=notes(co);return n?`<div class="notes">${n}</div>`:'';})()}<div id="res"></div>${co.comps.length?`<div class="comps">${co.comps.map(k=>compHTML(co,k,true)).join('')}</div>`:'<p class="hint">No graded parts yet. Use Edit structure to add some.</p>'}${edit?editHTML(co):''}`;
   numbers();
   setTimeout(()=>ilGradePrompt(byId(S.sel)),0);
 }
@@ -1167,7 +1176,7 @@ async function readFile(f){
   if(n.endsWith('.doc'))throw new Error('Old .doc files can’t be read. Save it as PDF or .docx.');
   let t=await f.text();if(/\.html?$/.test(n))t=new DOMParser().parseFromString(t,'text/html').body.textContent;return{text:t,images:[]};
 }
-function handle(files){const ics=files.filter(f=>/\.ics$/i.test(f.name)||f.type==='text/calendar');if(ics.length)importICS(ics[0]);const rest=files.filter(f=>!ics.includes(f));if(rest.length&&(document.body.dataset.view==='home'||document.body.dataset.view==='tasks'))location.hash='#grades';for(const f of rest)runJob(f.name,()=>readFile(f));}
+function handle(files){const ics=files.filter(f=>/\.ics$/i.test(f.name)||f.type==='text/calendar');if(ics.length)importICS(ics[0]);const rest=files.filter(f=>!ics.includes(f));if(rest.length&&(document.body.dataset.view==='home'||document.body.dataset.view==='tasks'))location.hash='#courses';for(const f of rest)runJob(f.name,()=>readFile(f));}
 
 const INSTR=`You read university course syllabi and extract their grading scheme. Reply with ONLY a JSON object, no prose:
 {"courses":[{"code":"CHEM 101","title":"General Chemistry I","isLab":false,
@@ -1372,7 +1381,7 @@ const openSettings=()=>{$('#sprov').value=(CFG.provider==='site'&&!RELAY)?'basic
 $('#setbtn').onclick=openSettings;$('#sprov').onchange=sUI;$('#scancel').onclick=()=>sm.classList.remove('on');
 $('#ssave').onclick=()=>{CFG={provider:$('#sprov').value,key:$('#skey').value.trim(),model:$('#smod').value.trim()};try{localStorage.setItem(SKEY,JSON.stringify(CFG));}catch{}sm.classList.remove('on');readerLabel();toast((CFG.provider==='gemini'||CFG.provider==='anthropic')&&!CFG.key?'No key entered, so '+NAMES[provider()]+' stays on':'Reading settings saved');};
 /* ---------- backup: export this page or the whole site; import detects what a file holds ---------- */
-const SCOPES={grades:{name:'Grades',sub:'Courses, weights, scores, professors and missed-exam make-ups',get:()=>({courses:S.courses,sel:S.sel}),set:d=>{S.courses=Array.isArray(d.courses)?d.courses:[];S.sel=d.sel;}},
+const SCOPES={grades:{name:'Courses',sub:'Courses, weights, scores, professors and missed-exam make-ups',get:()=>({courses:S.courses,sel:S.sel}),set:d=>{S.courses=Array.isArray(d.courses)?d.courses:[];S.sel=d.sel;}},
   timetable:{name:'Timetable',sub:'Your class schedule, colours, names and display options',get:()=>({tt:S.tt||{}}),set:d=>{S.tt=d.tt||{};}},
   tasks:{name:'Tasks',sub:'Your tasks, categories, semester, weeks off, academic calendar and finals',get:()=>({tasks:S.tasks||[],cats:S.cats||[],tstate:S.tstate||{},sem:S.sem||null,finals:S.finals||null}),set:d=>{S.tasks=d.tasks||[];mergeCats(d.cats);S.tstate=d.tstate||{};S.sem=d.sem||null;if(d.finals)S.finals=d.finals;else delete S.finals;}},
   planner:{name:'Plan',sub:'Your program, degree flowchart, completed, failed and transfer courses, grades, and GER list (shared by all semesters)',get:()=>({plan:S.plan||null}),set:d=>{if(d.plan)S.plan=d.plan;else delete S.plan;}}};
@@ -1430,7 +1439,7 @@ $('#impf').onchange=async e=>{const f=e.target.files[0];e.target.value='';const 
   else{if(B.kind!=='all'){toast('That file has one '+(B.kind==='semester'?'semester':'page')+'. Choose “This semester”'+(B.kind==='page'?' or “This page”':'')+' to import it.');return;}
     if(!await confirmBox('Replace all semesters?',`Everything in this browser is replaced by the file (${B.n} semester${B.n===1?'':'s'}).`,'Import'))return;
     S={...B.all,at:Date.now()};done='Backup imported';}
-  edit=false;fix();save();const target={grades:'#grades',timetable:'#timetable',tasks:'#tasks',planner:'#plan'}[tgt];if(target&&location.hash!==target)location.hash=target;else route();toast(done,snap);};
+  edit=false;fix();save();const target={grades:'#courses',timetable:'#timetable',tasks:'#tasks',planner:'#plan'}[tgt];if(target&&location.hash!==target)location.hash=target;else route();toast(done,snap);};
 
 new MutationObserver(()=>{for(const c of document.querySelectorAll('.stack td:not([data-l])')){let i=0,p=c;while(p=p.previousElementSibling)i++;c.dataset.l=c.closest('table').rows[0].cells[i]?.textContent||'';}}).observe(document.getElementById('panel'),{childList:true,subtree:true});
 
@@ -1460,14 +1469,14 @@ const zWhat=sc=>sc==='sem'?['grades','timetable','tasks'].map(k=>ZC[k]()).filter
 function openReset(){const sc=viewScope();scopeOpts('#zopts','zscope','reset',{page:sc?ZSUB[sc]+'. '+(ZC[sc]()?'Deletes '+ZC[sc]()+'.':'Nothing here yet.'):'',
   sem:`Empties ${curSemName()}: grades, timetable, tasks, calendar and finals. It stays in the semester menu.`,all:`Deletes every semester${allTerms().length>1?` (${allTerms().length})`:''}. Your light/dark setting stays.`});
   /* on Home, "this page" is the widget layout */
-  if(document.body.dataset.view==='home'){const lab=$('#zopts .dopt');const custom=!!(S.home&&Array.isArray(S.home.items));
-    lab.outerHTML=`<label class="dopt"><input type="radio" name="zscope" value="homelayout"><span><b>This page: Home layout</b><small>${custom?'Puts the widgets back where they started, at their original sizes. Your notes and everything else stay.':'Your Home page already has its original layout.'}</small></span></label>`;
+  if(document.body.dataset.view==='home'){const lab=$('#zopts .dopt');const custom=hwCustom(),w=hwWhich();
+    lab.outerHTML=`<label class="dopt"><input type="radio" name="zscope" value="homelayout"><span><b>This page: Home layout (${w})</b><small>${custom?`Puts the widgets back where they started on ${w==='phone'?'phones':'computers'}, at their original sizes. The ${w==='phone'?'computer':'phone'} layout, your notes and everything else stay.`:'Your Home page already has its original layout on this '+w+'.'}</small></span></label>`;
     document.querySelector('input[name=zscope][value=homelayout]').checked=true;}
   $('#zmodal').classList.add('on');setTimeout(()=>$('#zcancel').focus(),0);}
 $('#rstbtn').onclick=openReset;$('#zcancel').onclick=()=>$('#zmodal').classList.remove('on');
 $('#zmodal').addEventListener('click',e=>{if(e.target===$('#zmodal'))$('#zmodal').classList.remove('on');});
 $('#zdo').onclick=async()=>{const sc=pickedScope('zscope');$('#zmodal').classList.remove('on');
-  if(sc==='homelayout'){if(!(S.home&&Array.isArray(S.home.items))){toast('Home already has its original layout');return;}const snap=JSON.stringify(S);S.home=Object.assign({},S.home);delete S.home.items;hEdit=false;save();renderHome();toast('Home layout reset',snap);return;}
+  if(sc==='homelayout'){if(!hwCustom()){toast('Home already has its original layout');return;}const snap=JSON.stringify(S);hwResetLayout();hEdit=false;save();renderHome();toast(`Home layout reset on this ${hwWhich()}`,snap);return;}
   const what=zWhat(sc);
   if(!what){toast('There’s nothing to reset');return;}
   const title=sc==='all'?'Reset all semesters?':sc==='sem'?`Reset ${curSemName()}?`:`Reset ${SCOPES[sc].name.toLowerCase()}?`;
@@ -1712,7 +1721,7 @@ function renderTT(){TTM=ttMarks();clearTimeout(ttMarkT);clearInterval(ttTickI);t
      ${f.hasPast?`<label class="chk"><input type="checkbox" data-tt="past" ${t.past?'checked':''}> Include past terms</label>`:''}
      ${f.hasOne?`<label class="chk"><input type="checkbox" data-tt="oneoff" ${t.oneoff?'checked':''}> Include one-time events (exams)</label>`:''}</details>
    <details class="tsec" data-sec="c"${secOpen('c')}><summary>Courses and colours</summary><ul class="tcl">${courses.map(c=>{const n=nm(slotOf(c.ckey)),g=gradeFor(c.ckey,n.code),hid=!!t.hidden[c.ckey];
-     return`<li class="${hid?'off':''}">${sw(c)}<div class="tcn"><b>${esc(n.code||n.name)}</b>${n.code&&n.name?`<small>${esc(n.name)}</small>`:''}${g?`<button class="lnkbtn" data-act="ttopen" data-id="${g.id}">Grades</button>`:''}</div>
+     return`<li class="${hid?'off':''}">${sw(c)}<div class="tcn"><b>${esc(n.code||n.name)}</b>${n.code&&n.name?`<small>${esc(n.name)}</small>`:''}${g?`<button class="lnkbtn" data-act="ttopen" data-id="${g.id}">Course</button>`:''}</div>
        <button class="ib" data-act="ttedit" data-ck="${esc(c.ckey)}" title="Edit course" aria-label="Edit ${esc(n.code||n.name)}"><svg viewBox="0 0 16 16"><path d="M11 2.5l2.5 2.5L6 12.5H3.5V10z"/></svg></button>
        <button class="ib" data-act="tthide" data-ck="${esc(c.ckey)}" title="${hid?'Show':'Hide'}" aria-label="${hid?'Show':'Hide'} ${esc(n.code||n.name)}" aria-pressed="${hid}">${hid?'<svg viewBox="0 0 16 16"><path d="M2 2l12 12M6.5 6.6A2 2 0 0 0 9.4 9.5M4 4.6C2.8 5.5 2 7 2 8c1.2 2.4 3.4 4 6 4 1 0 2-.3 2.8-.7M7 4.1c.3 0 .7-.1 1-.1 2.6 0 4.8 1.6 6 4-.4.8-1 1.6-1.6 2.2"/></svg>':'<svg viewBox="0 0 16 16"><path d="M2 8c1.2-2.4 3.4-4 6-4s4.8 1.6 6 4c-1.2 2.4-3.4 4-6 4S3.2 10.4 2 8z"/><circle cx="8" cy="8" r="2"/></svg>'}</button></li>`;}).join('')}</ul></details>
    <div class="tbtns"><button class="btn ghost sm" data-act="icsup">Replace .ics</button><button class="btn sm danger-ghost" data-act="ttremove">Remove timetable</button></div>`;
@@ -1766,9 +1775,9 @@ V.addEventListener('click',async e=>{const b=e.target.closest('[data-tt],[data-a
   else if(act==='ttedit'){openRename(b.dataset.ck);}
   else if(act==='ttremove'){if(await confirmBox('Remove timetable?','This removes your class schedule from this browser. Your grades stay.','Remove timetable')){const snap=JSON.stringify(S);t.slots=[];save();renderTT();toast('Timetable removed',snap);}}
 });
-function openGrades(id){S.sel=id;edit=false;save();location.hash='#grades';render();scrollTo({top:0});}
+function openGrades(id){S.sel=id;edit=false;save();location.hash='#courses';render();scrollTo({top:0});}
 function showSlot(s){const n=nm(s);
-  confirmInfo(`${n.code||''} ${n.name||''}`.trim()||s.summary,[[DAYN[s.day],fmtRange(s.start,s.end,TT().h24)],['Room',s.room],['Class type',s.type],['Section',s.section],['Instructor',s.instructor]],'There’s no matching course in Grades yet. Add its syllabus there and clicking this class will open it.');}
+  confirmInfo(`${n.code||''} ${n.name||''}`.trim()||s.summary,[[DAYN[s.day],fmtRange(s.start,s.end,TT().h24)],['Room',s.room],['Class type',s.type],['Section',s.section],['Instructor',s.instructor]],'There’s no matching course on the Courses tab yet. Add its syllabus there and clicking this class will open it.');}
 function confirmInfo(title,rows,note){const m=$('#cmodal');$('#ctitle').textContent=title;
   $('#cmsg').innerHTML=`<span class="irows">${rows.filter(r=>r[1]).map(r=>`<span><b>${esc(r[0])}</b> ${esc(r[1])}</span>`).join('')}</span><span class="inote">${esc(note)}</span>`;
   $('#cyes').hidden=true;$('#cno').textContent='Close';m.classList.add('on');
@@ -2171,7 +2180,7 @@ function fillFin(){const F=S.finals,r=myFinals(),T0=today0();$('#fnclear').hidde
     if(r.skip.length)h+=`<h4>Not added</h4><ul class="fnlist skip">${r.skip.map(x=>`<li><b>${esc(x.code)}</b><small>${esc(x.why)}</small></li>`).join('')}</ul>`;
     if(F.slots.length&&!TT().slots.length)h+='<p class="note warn">The regular schedule works from your class times. Upload your timetable (.ics) on the Timetable page and your other finals will show up here.</p>';
     if(F.makeup)h+=`<p class="hint">Make-up exams: ${esc(fmtD(pd(F.makeup)))}.</p>`;}
-  else if(!S.courses.length&&!TT().slots.length)h+='<p class="note warn">Add your courses (Grades) or your timetable first, so your finals can be picked out of the schedule.</p>';
+  else if(!S.courses.length&&!TT().slots.length)h+='<p class="note warn">Add your courses (Courses tab) or your timetable first, so your finals can be picked out of the schedule.</p>';
   $('#fnres').innerHTML=h;}
 function openFin(){fillFin();$('#fnstatus').textContent='';$('#fnstatus').className='hint';$('#fnmodal').classList.add('on');}
 $('#kfin').onclick=openFin;$('#fnclose').onclick=()=>$('#fnmodal').classList.remove('on');
@@ -2424,6 +2433,13 @@ $('#igadd').onclick=()=>{const snap=JSON.stringify(S),L=IL();let n=0;for(const s
   $('#igmodal').classList.remove('on');save();render();toast(n?`Added ${n} grade${n===1?'':'s'} from iLearn.`:'Left out of your grades.',snap);};
 $('#iglater').onclick=()=>$('#igmodal').classList.remove('on');$('#igmodal').addEventListener('click',e=>{if(e.target===$('#igmodal'))$('#igmodal').classList.remove('on');});
 /* links to each of your iLearn courses: the one for everyone taking it and your section's, plus the lab's when it's part of the course */
+/* the course's upcoming work, most urgent first: the first one shows, the rest drop down */
+const coOpen={};
+function coTasksHTML(co){const T0=today0(),ids=new Set([co.id,...S.courses.filter(c=>{const l=c.isLab&&linkedBy(c.id);return l&&l.co&&l.co.id===co.id;}).map(c=>c.id)]);
+  const list=allTasks().filter(t=>!t.done&&t.date&&t.courseId&&ids.has(t.courseId)).sort((a,b)=>a.date.localeCompare(b.date)||(a.time||'').localeCompare(b.time||''));if(!list.length)return'';
+  const f=list[0],n=dDiff(T0,pd(f.date)),rel=n<0?`${-n} day${n===-1?'':'s'} overdue`:n===0?'Today':n===1?'Tomorrow':`In ${n} days`;
+  return`<details class="cotasks" data-cot="${co.id}"${coOpen[co.id]?' open':''}><summary><span class="cotl">Upcoming</span><span class="cotp" style="--tc:${f.final?'var(--red)':taskColor(f)}"><i class="cdot"></i><span class="cotb"><b>${esc(f.title)}</b><small>${esc(taskWhen(f))}</small></span><em class="${n<0?'late':n<=2?'soon':''}">${rel}</em></span><span class="cotn">${list.length>1?`+${list.length-1} more`:'Details'}<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg></span></summary><ul class="tasks">${list.map(t=>taskRow(t,true)).join('')}</ul></details>`;}
+document.addEventListener('toggle',e=>{const d=e.target;if(d.classList&&d.classList.contains('cotasks'))coOpen[d.dataset.cot]=d.open;},true);
 function ilLinksHTML(co){const E=S.ilearn&&S.ilearn.ext;if(!E||!E.c||!co||!co.code)return'';const cur=ilTermName();
   const mk=code=>Object.entries(E.c).filter(([id,c])=>c.rc&&normCode(c.rc)===normCode(code)&&(!c.term||c.term===cur)).map(([id,c])=>{const sec=(c.name.match(/Sec(?:tion)?\s*0*(\d+)/i)||[])[1];return{id,kind:/all\s*students/i.test(c.name)?'All students':sec?'Section '+sec.padStart(2,'0'):'Course'};}).sort((a,b)=>(a.kind==='All students'?0:1)-(b.kind==='All students'?0:1));
   const own=mk(co.code),lab=!co.isLab&&!/L$/.test(normC(co.code))&&co.comps.some(k=>k.kind==='lab')?mk(normC(co.code)+'L'):[];if(!own.length&&!lab.length)return'';
@@ -2432,9 +2448,10 @@ function ilLinksHTML(co){const E=S.ilearn&&S.ilearn.ext;if(!E||!E.c||!co||!co.co
 /* the two Home widgets go on the page by themselves the first time the helper brings grades or announcements */
 function ilAutoWidgets(){const E=S.ilearn&&S.ilearn.ext;if(!E)return;
   /* added the first time by an earlier version at a larger size: shrink them, unless you've resized them since */
-  if(S.home&&S.home.ilAuto===1){const items=hwItems().map(o=>({...o}));for(const o of items)if((o.t==='ilgrades'||o.t==='ilnews')&&o.w===9&&!o.h){o.w=6;o.h=340;}hwSave(items);S.home.ilAuto=2;save();return;}
+  const keys=['items',...(S.home&&Array.isArray(S.home.mItems)?['mItems']:[])];
+  if(S.home&&S.home.ilAuto===1){for(const k of keys){const items=hwItemsOf(k);for(const o of items)if(IL_W.has(o.t)&&o.w===9&&!o.h){o.w=6;o.h=340;}hwSave(items,k);}S.home.ilAuto=2;save();return;}
   if(S.home&&S.home.ilAuto)return;if(!Object.keys(E.g||{}).length&&!Object.keys(E.an||{}).length)return;
-  const items=hwItems().map(o=>({...o}));if(!items.some(o=>o.t==='ilgrades'))items.push({id:'ilgrades',t:'ilgrades',w:6,h:340,x:1});if(!items.some(o=>o.t==='ilnews'))items.push({id:'ilnews',t:'ilnews',w:6,h:340,x:1});hwSave(items);S.home.ilAuto=2;save();}
+  for(const k of keys){const items=hwItemsOf(k);if(!items.some(o=>o.t==='ilgrades'))items.push({id:'ilgrades',t:'ilgrades',w:6,h:340,x:1});if(!items.some(o=>o.t==='ilnews'))items.push({id:'ilnews',t:'ilnews',w:6,h:340,x:1});hwSave(items,k);}S.home=S.home||{};S.home.ilAuto=2;save();}
 const ilAgo=iso=>{const d=new Date(iso);if(isNaN(d))return'';const n=dDiff(new Date(d.getFullYear(),d.getMonth(),d.getDate()),today0());return n===0?'Today':n===1?'Yesterday':n<7?n+' days ago':fmtD(d);};
 let anF=(()=>{try{return localStorage.getItem('cm-news-f')||'all';}catch{return'all';}})();
 function wILGrades(it){const E=S.ilearn&&S.ilearn.ext;const L=IL();
@@ -2715,7 +2732,7 @@ $('#upsem').onclick=()=>{$('#upmodal').classList.remove('on');openSem();};
 $('#updo').onclick=async()=>{const syl=UP.syl,ics=UP.ics,calf=UP.cal;$('#upmodal').classList.remove('on');UP.syl=[];UP.ics=null;UP.cal=null;
   if(ics)await importICS(ics,{stay:true});
   if(calf)await importCalendar(calf);
-  if(syl.length){for(const f of syl)runJob(f.name,()=>readFile(f));location.hash='#grades';toast(`Reading ${syl.length} syllab${syl.length===1?'us':'i'}…`);}
+  if(syl.length){for(const f of syl)runJob(f.name,()=>readFile(f));location.hash='#courses';toast(`Reading ${syl.length} syllab${syl.length===1?'us':'i'}…`);}
   else renderPlanner();};
 
 /* ---- home widgets: a 24-column grid; each widget has a column (x), a width (w, in 24ths) and an optional fixed height (h) ---- */
@@ -2737,8 +2754,19 @@ const HWT={
   ilgrades:{n:'iLearn grades',d:'Grades as they’re posted on iLearn, newest first. Tap one for the details. Needs the iLearn helper.',w:6,h:340,i:'<path d="M4 16V9M10 16V4M16 16v-6"/><path d="M3 18h14"/>'},
   ilnews:{n:'Announcements',d:'Your courses’ iLearn announcements, newest first, with a filter for each course. Tap one to read it. Needs the iLearn helper.',w:6,h:340,i:'<path d="M3 8v4h3l6 4V4L6 8z"/><path d="M15 7.5c1 .8 1 4.2 0 5"/>'},
   timer:{n:'Focus timer',d:'A focus and break timer (25/5, 50/10 or 15/3) that keeps going while you use the site.',w:6,i:'<circle cx="10" cy="11" r="6.5"/><path d="M10 7.5V11l2 1.5M8 2h4"/>'}};
-const hwItems=()=>{const h=S.home;return h&&Array.isArray(h.items)?h.items.filter(i=>HWT[i.t]):HW_DEF.map(o=>({...o}));};
-function hwSave(items){S.home=Object.assign({},S.home||{},{v:1,items:items.map(({id,t,w,x,h})=>h?{id,t,w,x,h}:{id,t,w,x})});save();}
+/* phones (≤700px) and computers keep separate layouts. A phone starts from the computer layout until it's customized itself.
+   iLearn widgets only show (and can only be added) once iLearn is set up; hidden ones stay in the layout for later. */
+const IL_W=new Set(['ilgrades','ilnews']);
+const hwKey=()=>hwMode()==='p'?'mItems':'items';
+const hwItemsOf=k=>{const h=S.home||{},a=Array.isArray(h[k])?h[k]:k==='mItems'&&Array.isArray(h.items)?h.items:null;return(a||HW_DEF).filter(i=>HWT[i.t]).map(o=>({...o}));};
+const hwItems=()=>{const on=ilOn();return hwItemsOf(hwKey()).filter(i=>on||!IL_W.has(i.t));};
+const hwPack=items=>items.map(({id,t,w,x,h})=>h?{id,t,w,x,h}:{id,t,w,x});
+function hwSave(items,key){const k=key||hwKey(),hidden=ilOn()?[]:hwItemsOf(k).filter(i=>IL_W.has(i.t)&&!items.some(x=>x.id===i.id));S.home=Object.assign({},S.home||{},{v:1,[k]:hwPack(items.concat(hidden))});save();}
+const hwSameDef=a=>JSON.stringify(hwPack(a))===JSON.stringify(hwPack(HW_DEF));
+const hwCustom=()=>{const h=S.home||{};return hwKey()==='mItems'?(Array.isArray(h.mItems)?!hwSameDef(h.mItems):Array.isArray(h.items)):Array.isArray(h.items);};
+function hwResetLayout(){S.home=Object.assign({},S.home||{});if(hwKey()==='mItems')S.home.mItems=HW_DEF.map(o=>({...o}));else delete S.home.items;}
+const hwWhich=()=>hwMode()==='p'?'phone':'computer';
+matchMedia('(max-width:700px)').addEventListener('change',()=>{if(document.body.dataset.view==='home'){HD=null;renderHome();}});
 const hwMode=()=>matchMedia('(max-width:700px)').matches?'p':matchMedia('(max-width:1000px)').matches?'t':'d';
 /* tablets: with narrow widgets on the page they keep a side column (like the default page); otherwise widgets go half or full width */
 let hwNarrow=true;
@@ -2774,7 +2802,7 @@ function hwAdd(t){const items=hwItems().map(o=>({...o})),d=HWT[t],w=d.w,id=d.mul
   items.push({id,t,w,x,...(d.h?{h:d.h}:{})});hwSave(items);renderHome();const el=g.querySelector(`.hw[data-w="${id}"]`);if(el){el.classList.add('hwnew');el.scrollIntoView({block:'nearest',behavior:'smooth'});setTimeout(()=>el.classList.remove('hwnew'),1600);}}
 function hwRemove(id){const snap=JSON.stringify(S),items=hwItems().filter(o=>o.id!==id),it=hwItems().find(o=>o.id===id);if(S.home&&S.home.notes&&S.home.notes[id]!=null){S.home.notes=Object.assign({},S.home.notes);delete S.home.notes[id];}
   hwSave(items);renderHome();toast(`Removed ${it?HWT[it.t].n:'widget'}.`,snap);}
-function hwGallery(){const have=new Set(hwItems().map(i=>i.t));$('#hwlist').innerHTML=Object.entries(HWT).map(([t,d])=>{const on=have.has(t)&&!d.multi;return`<button class="hwopt" data-add="${t}"${on?' disabled':''}><span class="hwic"><svg viewBox="0 0 20 20" aria-hidden="true">${d.i}</svg></span><span class="hwot"><b>${esc(d.n)}</b><small>${esc(d.d)}</small></span><em>${on?'Added':d.multi&&have.has(t)?'Add another':'Add'}</em></button>`;}).join('');}
+function hwGallery(){const have=new Set(hwItems().map(i=>i.t));$('#hwlist').innerHTML=Object.entries(HWT).filter(([t])=>ilOn()||!IL_W.has(t)).map(([t,d])=>{const on=have.has(t)&&!d.multi;return`<button class="hwopt" data-add="${t}"${on?' disabled':''}><span class="hwic"><svg viewBox="0 0 20 20" aria-hidden="true">${d.i}</svg></span><span class="hwot"><b>${esc(d.n)}</b><small>${esc(d.d)}</small></span><em>${on?'Added':d.multi&&have.has(t)?'Add another':'Add'}</em></button>`;}).join('');}
 function openHwGallery(){hwGallery();$('#hwmodal').classList.add('on');setTimeout(()=>{const b=$('#hwlist button:not([disabled])');if(b)b.focus({preventScroll:true});},0);}
 $('#hwlist').addEventListener('click',e=>{const b=e.target.closest('[data-add]');if(b&&!b.disabled){$('#hwmodal').classList.remove('on');hwAdd(b.dataset.add);}});
 $('#hwclose').onclick=()=>$('#hwmodal').classList.remove('on');$('#hwmodal').addEventListener('click',e=>{if(e.target===$('#hwmodal'))$('#hwmodal').classList.remove('on');});
@@ -2791,7 +2819,7 @@ function renderHome(){if(HD&&HD.on)return;TS();const s=SEM(),T0=today0(),all=all
   const cust=`<button class="btn ghost hcust${hEdit?' on':''}" data-act="hedit" aria-pressed="${hEdit}" title="Customize Home: move, resize, add and remove widgets"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2.5" y="2.5" width="6" height="8" rx="1.5"/><rect x="11.5" y="2.5" width="6" height="4.5" rx="1.5"/><rect x="11.5" y="10" width="6" height="7.5" rx="1.5"/><rect x="2.5" y="13.5" width="6" height="4" rx="1.5"/></svg><span>${hEdit?'Done':'Customize'}</span></button>`;
   $('#hhero').innerHTML=(s?`<div><span class="hsem">${esc(semName())}</span><h2>${esc(weekLine())}</h2><span class="hint">${esc(fmtD(T0))}</span></div><button class="btn hup" data-act="upload">Upload</button>${cdh}`
     :`<div><span class="hsem">${esc(fmtD(T0))}</span><h2>Welcome</h2><span class="hint">Upload your syllabi, class schedule and academic calendar to get started.</span></div><button class="btn hup" data-act="upload">Upload</button>${cdh}`)+cust;
-  $('#hebar').hidden=!hEdit;
+  $('#hebar').hidden=!hEdit;if(hEdit)$('#hebar .hebt b').textContent=`Customize Home · ${hwWhich()} layout`;
   const clsRow=x=>{const n=nm(x),g=gradeFor(x.ckey,n.code),live=todayCls.includes(x)&&nowMin>=x.start&&nowMin<x.end;return`<li class="hcls${live?' now':''}${g?' linked':''}" ${g?`data-hopen="${g.id}" tabindex="0" role="link"`:''}><span class="hct">${esc(fmtClock(x.start,TT().h24))}<small>${esc(fmtClock(x.end,TT().h24))}</small></span><span class="tlb" style="background:${ttColor(x.ckey)}"></span><span class="hcb"><b>${esc(n.code||n.name)}</b><span>${esc([n.name&&n.code?n.name:'',x.room].filter(Boolean).join(' · '))}</span></span>${live?'<em>Now</em>':''}</li>`;};
   const empty=(msg,btn)=>`<p class="hint hempty">${msg}</p>${btn||''}`,upBtn=l=>`<button class="btn ghost sm" data-act="upload">${l}</button>`;
   const W={
@@ -2801,9 +2829,9 @@ function renderHome(){if(HD&&HD.on)return;TS();const s=SEM(),T0=today0(),all=all
       return hwCard('#timetable',todayCls.length?'Today’s classes':nextLbl?`Next classes · ${nextLbl}`:'Next classes',null,vis.length&&(todayCls.length||nextCls.length)?`<ul class="hclasses">${(todayCls.length?todayCls:nextCls).map(clsRow).join('')}</ul>${todayCls.length?'':'<p class="hint">No classes today.</p>'}`:empty(vis.length?'No more classes this semester.':'Upload your .ics schedule to see your classes here.',vis.length?'':upBtn('Upload')),it.id);},
     tasks:it=>hwCard('#tasks','Tasks',due.length||null,`${overdue.length?`<a class="hover" href="#tasks"><b>${overdue.length} overdue</b><span>Review →</span></a>`:''}${due.length?`<ul class="tasks">${due.slice(0,6).map(t=>taskRow(t,true)).join('')}</ul>${due.length>6?`<a class="hmore" href="#tasks">${due.length-6} more due this week</a>`:''}`:empty(`Nothing due in the next 7 days.${undated.length?` ${undated.length} task${undated.length>1?'s have':' has'} no date.`:''}`,'<button class="btn ghost sm" data-act="tadd">Add a task</button>')}`,it.id),
     dates:it=>{const cal=s?(s.cal||[]).filter(c=>!calDone(c)).slice(0,6):[];return hwCard('#tasks','Coming up',null,cal.length?`<ul class="tasks">${cal.map(calRow).join('')}</ul>`:empty(s?'Upload your academic calendar to see breaks, holidays, deadlines and make-up days here.':'Set up your semester, then add your academic calendar to see notable dates here.',upBtn('Upload calendar')),it.id);},
-    courses:it=>hwCard('#grades','Courses',null,gc.length?`<div class="hgpa"><span>Semester GPA</span><b class="${sm.gpa==null?'nil':''}">${sm.gpa==null?'No grades yet':fmt2(sm.gpa)}</b></div><ul class="hcourses reord">${gc.map(c=>{const p=coursePct(c);return`<li data-hopen="${c.id}" data-rid="${c.id}" tabindex="0" role="link" style="--cc:${courseColor(c)}"><i class="cdot"></i><span class="hcb"><b>${esc(c.code||'Course')}</b><span>${esc(c.title||'')}</span></span><span class="hg">${p==null?'<span class="nil">–</span>':`${fmt(p)}%<em>${esc(letter(c,p))}</em>`}</span></li>`;}).join('')}</ul>`:empty('Upload a syllabus to start tracking grades.',upBtn('Upload syllabi')),it.id),
-    gpa:it=>{const cg=projCGPA(sm);return hwCard('#grades','GPA',null,gc.length||cg?`<div class="wstats"><div class="wstat"><span>Semester GPA</span><b class="${sm.gpa==null?'nil':''}">${sm.gpa==null?'–':fmt2(sm.gpa)}</b><small>${sm.n?`${sm.n} course${sm.n===1?'':'s'} · ${fmt(sm.cr)} credits`:'Enter scores to see it'}</small></div><div class="wstat"><span>${cg?'Projected CGPA':'CGPA'}</span><b class="${cg?'':'nil'}">${cg?g2(cg.cg):'–'}</b><small>${cg?`Now ${g2(cg.prior)} over ${fmt(cg.h)} credits`:'Import your transcript in Plan to see it'}</small></div></div>`:empty('Upload a syllabus to start tracking grades.',upBtn('Upload syllabi')),it.id);},
-    left:it=>{const L=classesLeftMap(),rows=gc.filter(c=>L[c.id]);return hwCard('#grades','Classes left',null,rows.length?`<ul class="wleft">${rows.map(c=>{const o=L[c.id],pct=o.total?Math.round((o.total-o.left)/o.total*100):0;return`<li data-hopen="${c.id}" tabindex="0" role="link" style="--cc:${courseColor(c)}" title="${o.last?esc('Last one '+fmtD(o.last)):''}"><i class="cdot"></i><b>${esc(c.code||'Course')}</b><span class="wln"><b>${o.left}</b> left</span><i class="wbar"><i style="width:${pct}%"></i></i></li>`;}).join('')}</ul>`:empty(TT().slots.length?'Add your academic calendar so the last day of classes is known.':'Upload your .ics class schedule to count the classes you have left.',upBtn('Upload')),it.id);},
+    courses:it=>hwCard('#courses','Courses',null,gc.length?`<div class="hgpa"><span>Semester GPA</span><b class="${sm.gpa==null?'nil':''}">${sm.gpa==null?'No grades yet':fmt2(sm.gpa)}</b></div><ul class="hcourses reord">${gc.map(c=>{const p=coursePct(c);return`<li data-hopen="${c.id}" data-rid="${c.id}" tabindex="0" role="link" style="--cc:${courseColor(c)}"><i class="cdot"></i><span class="hcb"><b>${esc(c.code||'Course')}</b><span>${esc(c.title||'')}</span></span><span class="hg">${p==null?'<span class="nil">–</span>':`${fmt(p)}%<em>${esc(letter(c,p))}</em>`}</span></li>`;}).join('')}</ul>`:empty('Upload a syllabus to start tracking grades.',upBtn('Upload syllabi')),it.id),
+    gpa:it=>{const cg=projCGPA(sm);return hwCard('#courses','GPA',null,gc.length||cg?`<div class="wstats"><div class="wstat"><span>Semester GPA</span><b class="${sm.gpa==null?'nil':''}">${sm.gpa==null?'–':fmt2(sm.gpa)}</b><small>${sm.n?`${sm.n} course${sm.n===1?'':'s'} · ${fmt(sm.cr)} credits`:'Enter scores to see it'}</small></div><div class="wstat"><span>${cg?'Projected CGPA':'CGPA'}</span><b class="${cg?'':'nil'}">${cg?g2(cg.cg):'–'}</b><small>${cg?`Now ${g2(cg.prior)} over ${fmt(cg.h)} credits`:'Import your transcript in Plan to see it'}</small></div></div>`:empty('Upload a syllabus to start tracking grades.',upBtn('Upload syllabi')),it.id);},
+    left:it=>{const L=classesLeftMap(),rows=gc.filter(c=>L[c.id]);return hwCard('#courses','Classes left',null,rows.length?`<ul class="wleft">${rows.map(c=>{const o=L[c.id],pct=o.total?Math.round((o.total-o.left)/o.total*100):0;return`<li data-hopen="${c.id}" tabindex="0" role="link" style="--cc:${courseColor(c)}" title="${o.last?esc('Last one '+fmtD(o.last)):''}"><i class="cdot"></i><b>${esc(c.code||'Course')}</b><span class="wln"><b>${o.left}</b> left</span><i class="wbar"><i style="width:${pct}%"></i></i></li>`;}).join('')}</ul>`:empty(TT().slots.length?'Add your academic calendar so the last day of classes is known.':'Upload your .ics class schedule to count the classes you have left.',upBtn('Upload')),it.id);},
     sem:it=>{if(!s)return hwCard(null,'Semester progress',null,empty('Set up your semester to see your progress.','<button class="btn ghost sm" data-act="semopen">Set up semester</button>'),it.id);
       const st=pd(s.start),end=lcd||pd(s.end),tot=st&&end?Math.max(1,dDiff(st,end)+1):0,gone=tot?Math.max(0,Math.min(tot,dDiff(st,T0))):0,pct=tot?Math.round(gone/tot*100):0;
       const wl=semWeeks().filter(w=>!w.off&&w.a>T0&&(!lcd||w.a<=lcd)).length;
@@ -2834,13 +2862,13 @@ function renderHome(){if(HD&&HD.on)return;TS();const s=SEM(),T0=today0(),all=all
   tmPaintAll();hwFit();hwObserve();}
 $('#v-home').addEventListener('click',e=>{const fb=e.target.closest('[data-fold]');if(fb){const id=fb.dataset.fold,c=fb.closest('.hcard'),shut=!c.classList.contains('shut');hShut[id]=shut;if(!shut)delete hShut[id];try{localStorage.setItem('cm-home-fold',JSON.stringify(hShut));}catch{}
   c.classList.toggle('shut',shut);c.querySelector('.hbody').hidden=shut;fb.setAttribute('aria-expanded',String(!shut));fb.setAttribute('aria-label',(shut?'Expand ':'Collapse ')+c.querySelector('h3').textContent);hwFit();return;}
-  const wi=e.target.closest('[data-winfo]');if(wi){const w=wi.closest('.hw');if(w){const it=hwItems().find(o=>o.id===w.dataset.w);openWInfo(w.dataset.t,it||{id:w.dataset.w});}return;}
+  const wi=e.target.closest('[data-winfo]');if(wi){const w=wi.closest('.hw');if(w){if(w.dataset.t==='ilnews')wAnF=anF;const it=hwItems().find(o=>o.id===w.dataset.w);openWInfo(w.dataset.t,it||{id:w.dataset.w});}return;}
   const rm=e.target.closest('[data-hw=rm]');if(rm){hwRemove(rm.closest('.hw').dataset.w);return;}
   const tmb=e.target.closest('[data-tm]');if(tmb){tmAct(tmb.dataset.tm);return;}
   const ilv=e.target.closest('[data-ilv]');if(ilv){openILView(ilv.dataset.ilv);return;}
   const anb=e.target.closest('[data-anf]');if(anb){anF=anb.dataset.anf;try{localStorage.setItem('cm-news-f',anF);}catch{}renderHome();return;}
   const o=e.target.closest('[data-hopen]');if(o){openGrades(o.dataset.hopen);return;}const b=e.target.closest('[data-act]');if(!b)return;const a=b.dataset.act;if(a==='semopen')openSem();if(a==='ccopen')openCC();if(a==='tadd')openTask(null);if(a==='upload')openUpload();
-  if(a==='hedit')hwSetEdit(!hEdit);if(a==='hwadd')openHwGallery();if(a==='hwreset'){const snap=JSON.stringify(S);S.home=Object.assign({},S.home||{});delete S.home.items;save();renderHome();toast('Home layout reset.',snap);}
+  if(a==='hedit')hwSetEdit(!hEdit);if(a==='hwadd')openHwGallery();if(a==='hwreset'){const snap=JSON.stringify(S);hwResetLayout();save();renderHome();toast(`Home layout reset on this ${hwWhich()}.`,snap);}
   const refocus=sel=>{const f=$('#hgrid '+sel);if(f)f.focus({preventScroll:true});};
   if(a==='mprev'||a==='mnext'){const bm=hMon||today0();hMon=new Date(bm.getFullYear(),bm.getMonth()+(a==='mprev'?-1:1),1);renderHome();refocus(`[data-act=${a}]`);}if(a==='mtoday'){hMon=null;hSel=null;renderHome();refocus('[data-act=minfo]');}if(a==='minfo'){const w=b.closest('.hw');openWInfo('month',w?{id:w.dataset.w}:null);}
   if(a==='mday'){hSel=b.dataset.d;renderHome();refocus(`[data-d="${hSel}"]`);}});
@@ -2885,7 +2913,8 @@ $('#hgrid').addEventListener('keydown',e=>{const c=e.target.closest('.hwcover');
 /* notes */
 let noteT=null;
 /* ---- widget details: clicking a widget's title opens a pop-up with everything behind it ---- */
-const WGO={classes:['#timetable','Open timetable'],tasks:['#tasks','Open Tasks'],dates:['#tasks','Open Tasks'],courses:['#grades','Open Grades'],gpa:['#grades','Open Grades'],left:['#grades','Open Grades'],finals:['#tasks','Open Tasks'],degree:['#plan','Open Plan'],week:['#tasks','Open Tasks'],ilgrades:['#grades','Open Grades'],month:['#tasks','Open Tasks'],sem:['#tasks','Open Tasks']};
+let wAnF='all';
+const WGO={classes:['#timetable','Open timetable'],tasks:['#tasks','Open Tasks'],dates:['#tasks','Open Tasks'],courses:['#courses','Open Courses'],gpa:['#courses','Open Courses'],left:['#courses','Open Courses'],finals:['#tasks','Open Tasks'],degree:['#plan','Open Plan'],week:['#tasks','Open Tasks'],ilgrades:['#courses','Open Courses'],month:['#tasks','Open Tasks'],sem:['#tasks','Open Tasks']};
 const wTm=m=>fmtClock(m,TT().h24)+(TT().h24?'':' '+ampm(m));
 const wSec=(h,body)=>`<section class="wisec"><h4>${h}</h4>${body}</section>`;
 const wKV=rows=>`<dl class="ccrows wikv">${rows.filter(r=>r&&r[1]!==''&&r[1]!=null).map(([k,v])=>`<div><dt>${k}</dt><dd>${v}</dd></div>`).join('')}</dl>`;
@@ -2929,8 +2958,10 @@ function wiContent(t,it){const T0=today0(),s=SEM(),all=allTasks(),lcd=lastClassD
     return{title:'iLearn grades',html:Object.entries(by).sort().map(([code,a])=>{const w=a.filter(x=>x.p),avg=w.length?Math.round(w.reduce((s,x)=>s+x.sc,0)/w.reduce((s,x)=>s+x.p,0)*1000)/10:null;
       return wSec(`${esc(code)} <span>${a.length} grade${a.length===1?'':'s'}${avg!=null?` · ${avg}% of points so far`:''}</span>`,`<ul class="igw">${a.map(x=>`<li><button class="ilrow" data-ilv="g:${esc(x.n)}" style="--cc:${x.co?courseColor(x.co):'#8a8a8a'}"><i class="cdot"></i><span class="hcb"><b>${esc(x.t||'Grade')}</b><span>${esc(ilKindOf(x.c))}${x.at?' · '+esc(ilAgo(x.at)):''}</span></span><span class="igs"><b>${esc(ilScore(x))}</b>${ilPct(x)!=null?`<small>${ilPct(x)}%</small>`:''}</span><span></span></button></li>`).join('')}</ul>`);}).join('')};}
   case'ilnews':{const E=S.ilearn&&S.ilearn.ext;const A=E?Object.entries(E.an||{}).filter(([id,a])=>ilMine(a.c)).map(([id,a])=>({id,...a,code:E.c[a.c].code||E.c[a.c].name})).sort((a,b)=>(b.d||'').localeCompare(a.d||'')):[];
-    if(!A.length)return{title:'Announcements',html:empty('No announcements yet. Install the iLearn helper from Tasks → iLearn.')};const by={};for(const a of A)(by[a.code]=by[a.code]||[]).push(a);
-    return{title:'Announcements',html:Object.entries(by).sort().map(([code,a])=>wSec(`${esc(code)} <span>${a.length}</span>`,`<ul class="anw">${a.map(x=>`<li><button class="ilrow" data-ilv="a:${esc(x.id)}"><span class="anh"><b>${esc(ilKindOf(x.c))}</b><small>${esc(ilAgo(x.d))}</small></span><b class="ant">${esc(x.t)}</b>${x.b?`<span class="anb">${esc(x.b.replace(/\s+/g,' ').slice(0,200))}</span>`:''}</button></li>`).join('')}</ul>`)).join('')};}
+    if(!A.length)return{title:'Announcements',html:empty('No announcements yet. Install the iLearn helper from Tasks → iLearn.')};
+    const codes=[...new Set(A.map(a=>a.code))].sort(),f=codes.includes(wAnF)?wAnF:'all',L=f==='all'?A:A.filter(a=>a.code===f),col=code=>{const co=ilSite(code);return co?courseColor(co):'#8a8a8a';};
+    return{title:'Announcements',sub:`${L.length} announcement${L.length===1?'':'s'}${f==='all'?' in your courses':' in '+f} · newest first`,html:`<div class="anchips wanchips">${['all',...codes].map(c=>`<button class="fchip${c===f?' on':''}" data-wanf="${esc(c)}"${c==='all'?'':` style="--tc:${col(c)}"`}>${c==='all'?'All':`<i class="cdot"></i>${esc(c)}`}<b>${c==='all'?A.length:A.filter(a=>a.code===c).length}</b></button>`).join('')}</div>
+      <ul class="anw">${L.map(x=>`<li><button class="ilrow" data-ilv="a:${esc(x.id)}" style="--cc:${col(x.code)}"><span class="anh"><i class="cdot"></i><b>${esc(x.code)}</b>${ilKindOf(x.c)?`<small>${esc(ilKindOf(x.c))}</small>`:''}<small>· ${esc(ilAgo(x.d))}</small></span><b class="ant">${esc(x.t)}</b>${x.b?`<span class="anb">${esc(x.b.replace(/\s+/g,' ').slice(0,220))}</span>`:''}</button></li>`).join('')}</ul>`};}
   case'month':{const mon=hMon||new Date(T0.getFullYear(),T0.getMonth(),1),y=mon.getFullYear(),m=mon.getMonth(),days=new Date(y,m+1,0).getDate(),cal=s?s.cal||[]:[];let h='';
     for(let d=1;d<=days;d++){const dt=new Date(y,m,d),k=iso(dt),ev=cal.filter(c=>k>=c.start&&k<=(c.end||c.start)&&(c.start===k||d===1)),tk=all.filter(t=>t.date===k);if(!ev.length&&!tk.length)continue;
       h+=wSec(`${DAYN[dt.getDay()]} ${d}${k===iso(T0)?' · Today':''}`,`<ul class="tasks">${ev.map(calRow).join('')}${tk.map(t=>taskRow(t,true)).join('')}</ul>`);}
@@ -2943,6 +2974,7 @@ $('#wiclose').onclick=()=>$('#wimodal').classList.remove('on');$('#wigo').onclic
 $('#wimodal').addEventListener('click',e=>{if(e.target===$('#wimodal')){$('#wimodal').classList.remove('on');return;}
   const o=e.target.closest('[data-wopen]');if(o){$('#wimodal').classList.remove('on');openGrades(o.dataset.wopen);return;}
   const v=e.target.closest('[data-ilv]');if(v){$('#wimodal').classList.remove('on');openILView(v.dataset.ilv);return;}
+  const wf=e.target.closest('[data-wanf]');if(wf){wAnF=wf.dataset.wanf;const st=$('#wimodal .wicard').scrollTop;openWInfo('ilnews',null);return;}
   const ts=e.target.closest('[data-tmset]');if(ts){const[f,b]=ts.dataset.tmset.split(',').map(Number);TM.f=f;TM.b=b;if(!TM.run)TM.left=0;tmSave();tmPaintAll();const m=$('#wimodal');openWInfo('timer',null);}});
 $('#wimodal').addEventListener('input',e=>{const t=e.target.closest('textarea[data-note]');if(!t)return;S.home=S.home||{v:1};S.home.notes=Object.assign({},S.home.notes||{},{[t.dataset.note]:t.value});clearTimeout(noteT);noteT=setTimeout(()=>{save();if(document.body.dataset.view==='home')renderHome();},400);});
 $('#hgrid').addEventListener('input',e=>{const t=e.target.closest('textarea[data-note]');if(!t)return;S.home=S.home||{v:1};S.home.notes=Object.assign({},S.home.notes||{},{[t.dataset.note]:t.value});clearTimeout(noteT);noteT=setTimeout(save,400);});
@@ -3046,8 +3078,8 @@ $('#sframewrap').addEventListener('click',e=>{if(e.target.id==='srecheck'){$('#s
 $('#sreload').onclick=()=>{schedLoaded=false;Promise.resolve(schedCheck(true)).then(()=>renderSched());};
 $('#sinvbtn').onclick=()=>{const on=$('#sinvbtn').getAttribute('aria-pressed')!=='true';try{localStorage.setItem('cm-sinv',on?'1':'0');}catch{}schedTheme();};
 schedCheck();document.addEventListener('visibilitychange',()=>{if(!document.hidden)schedCheck();});
-const VIEWS={home:['#home','Home'],grades:['#grades','Grades'],tt:['#timetable','Timetable'],tasks:['#tasks','Tasks'],plan:['#plan','Plan'],sched:['#scheduler','Scheduler']};
-function route(){const h=location.hash,v=h==='#grades'?'grades':h==='#timetable'?'tt':h==='#tasks'?'tasks':h==='#plan'||h==='#planner'?'plan':h==='#scheduler'?'sched':'home';const prevV=document.body.dataset.view;document.body.dataset.view=v;
+const VIEWS={home:['#home','Home'],grades:['#courses','Courses'],tt:['#timetable','Timetable'],tasks:['#tasks','Tasks'],plan:['#plan','Plan'],sched:['#scheduler','Scheduler']};
+function route(){const h=location.hash,v=h==='#courses'||h==='#grades'?'grades':h==='#timetable'?'tt':h==='#tasks'?'tasks':h==='#plan'||h==='#planner'?'plan':h==='#scheduler'?'sched':'home';const prevV=document.body.dataset.view;document.body.dataset.view=v;
   for(const k in VIEWS){$('#v-'+k).hidden=k!==v;$('#tab-'+k).setAttribute('aria-current',k===v?'page':'false');}
   $('#dropover').textContent=v==='tt'?'Drop your .ics schedule':'Drop syllabi to add them';document.title=VIEWS[v][1]+' · Course Manager';
   closeColor();closeSemMenu();renderSemBtn();if(v==='tt')renderTT();else if(v==='tasks')renderTasks();else if(v==='home')renderHome();else if(v==='plan'){if(prevV!=='plan')pScrollHome=true;renderPlanner2();}else if(v==='sched')renderSched();else render();}
@@ -3711,7 +3743,7 @@ function fillFromSemesters(){const p=PL(),snap=JSON.stringify(S),db=courseDB();l
       if(!x){if(!col)continue;x={id:rid(),c:code,t:db[code]?.t||co.name||'',cr:+co.credits||+db[code]?.c||3};col.items.push(x);added++;}
       if(col){const from=termOfItem(x.id);if(from&&from!==col){from.items=from.items.filter(i=>i!==x);col.items.push(x);}}
       x.st=isNow?'now':'done';if(L&&!isNow&&!x.g)x.g=L;if(!x.g)delete x.g;n++;}}
-  if(!n){toast(sems.length?'None of your semesters’ courses matched this plan':'Add your semesters on the Grades tab first');return;}
+  if(!n){toast(sems.length?'None of your semesters’ courses matched this plan':'Add your semesters on the Courses tab first');return;}
   save();renderPlanner2();toast(`${n} course${n===1?'':'s'} filled in from your semesters${added?` (${added} added)`:''}`,snap);}
 function markPastDone(){const snap=JSON.stringify(S);let n=0;for(const t of pTerms()){const r=termRel(t);if(r==='past')for(const x of t.items)if(!x.st){x.st='done';n++;}if(r==='now')for(const x of t.items)if(!x.st){x.st='now';n++;}}
   if(!n){toast('Nothing to mark');return;}save();renderPlanner2();toast(`${n} course${n===1?'':'s'} marked`,snap);}
