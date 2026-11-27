@@ -388,7 +388,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 .ilg li>span{display:grid;min-width:0}.ilg b{font-size:13.5px}.ilg small{font-size:12px;color:var(--mute)}.ilg select{max-width:52%;min-width:0;font-size:13px;min-height:34px;padding:0 8px}.ilo summary{font-size:13px;font-weight:700;cursor:pointer;padding:6px 0;color:var(--mute)}
 .upil{display:grid;grid-template-columns:30px 1fr auto;gap:12px;align-items:start;height:auto;min-height:0;width:100%;text-align:left;font:inherit;color:var(--ink);background:none;border:1.5px dashed var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;margin:0}
 .upil:hover,.upil:focus-visible{border-color:var(--ink);background:var(--soft);outline:0}.upil>span:nth-child(2){display:grid;gap:2px}.upil b{font-size:15px}.upil small{color:var(--mute);font-size:12.5px;line-height:1.35}.upil em{align-self:center;font-style:normal;font-weight:800;font-size:13px;white-space:nowrap}.upil.on{border-style:solid;border-color:var(--ink)}.upil .upi{grid-row:auto}.upil.on .upi{background:var(--ink);color:var(--bg)}
-.tlink{font-weight:700;color:var(--ink)}.ilcnt{text-transform:none;letter-spacing:0;font-weight:600;color:var(--red);margin-left:6px}.ilsort{max-height:340px;overflow:auto;padding-right:4px}.ilsort em{font-style:normal}.ilsort .ilq{color:var(--red);font-weight:700}.ilsort select{max-width:44%}.ildiag{margin:12px 0 0;font-size:12px}.ildiag .hint{font-size:12px}
+.tlink{font-weight:700;color:var(--ink)}.ilhelp{display:grid;gap:3px;border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin:0 0 10px;font-size:13px}.ilhelp>b,.ilhelp summary b{font-size:13.5px}.ilhelp span{color:var(--mute);line-height:1.4}.ilhelp a{color:var(--ink);font-weight:700}.ilhelp.ok{border-color:#16a34a}.ilhelp.ok>b{color:#16a34a}.ilhelp.bad{border-color:var(--red)}.ilhelp.bad>b{color:var(--red)}.ilget summary{display:grid;gap:3px;cursor:pointer;list-style:none}.ilget summary::-webkit-details-marker{display:none}.ilget summary b::after{content:' ›';color:var(--mute)}.ilget[open] summary b::after{content:' ⌄'}.ilget .ilsteps{margin-top:8px}.ilcnt{text-transform:none;letter-spacing:0;font-weight:600;color:var(--red);margin-left:6px}.ilsort{max-height:340px;overflow:auto;padding-right:4px}.ilsort em{font-style:normal}.ilsort .ilq{color:var(--red);font-weight:700}.ilsort select{max-width:44%}.ildiag{margin:12px 0 0;font-size:12px}.ildiag .hint{font-size:12px}
 .upcard{max-width:640px}.upgrid{display:grid;gap:10px;margin:14px 0 6px}
 .upbox{display:grid;grid-template-columns:30px 1fr;gap:2px 12px;align-items:start;border:1.5px dashed var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;transition:border-color .15s,background .15s}
 .upbox:hover,.upbox:focus-visible,.upbox.drag{border-color:var(--ink);background:var(--soft);outline:0}.upbox.has{border-style:solid;border-color:var(--ink)}
@@ -2166,7 +2166,7 @@ function allTasks(){TS();const out=[],ws=semWeeks();
   out.push(...fins);
   {const il=ilTasks(out);out.push(...il);}
   for(const m of S.tasks)out.push({...m,key:'m:'+m.id,manual:true});
-  return out.filter(t=>!(S.tstate[t.key]||{}).hidden).map(t=>({...t,done:t.manual?!!t.done:!!(S.tstate[t.key]||{}).done}));}
+  return out.filter(t=>!(S.tstate[t.key]||{}).hidden).map(t=>({...t,done:t.manual?!!t.done:((S.tstate[t.key]||{}).done??!!t.autoDone)}));}
 const catOf=id=>(S.cats||[]).find(c=>c.id===id);
 const taskColor=t=>{if(t.courseId){const c=byId(t.courseId);if(c)return courseColor(c);}if(t.tag)return colorFor(t.tag);const k=catOf(t.catId);return k?k.color:'#8a8a8a';};
 const taskTag=t=>{if(t.courseId){const c=byId(t.courseId);return c?c.code||'Course':'';}if(t.tag)return t.tag;const k=catOf(t.catId);return k?k.name:'';};
@@ -2186,7 +2186,7 @@ let tFilter='all',tShowDone=false,tShowCal=true,tLaterOpen=false,tOverOpen=false
    taking it, one per section) and labs do the same, so items from every iLearn course that matches one of your courses are merged. */
 const IL_FRESH=30*60000;let ilBusy=false,ilErr='';
 function IL(){if(!S.ilearn||typeof S.ilearn!=='object')S.ilearn={};const L=S.ilearn;L.ev=L.ev||[];L.map=L.map||{};L.grp=L.grp||{};L.chg=L.chg||{};L.pick=L.pick||{};return L;}
-const ilOn=()=>!!(S.ilearn&&(S.ilearn.url||S.ilearn.file));
+const ilOn=()=>!!(S.ilearn&&(S.ilearn.url||S.ilearn.file||S.ilearn.ext&&S.ilearn.ext.at));
 /* this semester's courses: syllabi plus timetable classes, labs included */
 function ilCourses(){const out=[],seen=new Set();const add=(code,title,co)=>{code=normC(code);if(!code||!/^[A-Z]{2,4} \d{3}/.test(code)||seen.has(normCode(code)))return;seen.add(normCode(code));out.push({code,title:title||'',co:co||null});};
   for(const c of S.courses)if(c.code)add(c.code,c.title,c);
@@ -2282,17 +2282,47 @@ function ilGuess(x,cs,syl,learned){const L=IL();if(L.pick[x.u]!==undefined)retur
   if(ty){const has=uniq(cs.filter(c=>{if(ty==='lab'&&/L$/.test(c.code))return true;const co=c.co;if(!co)return false;return co.comps.some(k=>new RegExp('\\b'+ty).test(String(k.name).toLowerCase())||(ty==='lab'&&k.kind==='lab'))||(co.sched||[]).some(it=>new RegExp('\\b'+ty).test(String(it.title).toLowerCase()));}).map(c=>c.code));
     if(has.length===1)return{code:has[0],why:'kind'};}
   return null;}
+/* ---- iLearn helper (browser extension): it reads, with the student's own iLearn login, which course each dated item belongs to.
+   Blackboard ids match the calendar link's UIDs (…GradableItem-_1136491_1), so every item gets its exact course. ---- */
+const ilHelper=()=>document.documentElement.dataset.cmIlearnHelper||'';
+const ilNum=u=>{const m=String(u||'').match(/_(\d+)_1\b/g);return m?m[m.length-1].match(/\d+/)[0]:'';};
+function ilPing(){if(ilHelper())window.postMessage({cmIlearnPing:1},location.origin);}
+window.addEventListener('message',e=>{if(e.source!==window||!e.data||!e.data.cmIlearn)return;ilExt(e.data.cmIlearn);});
+function ilExt(d){if(!d||typeof d!=='object')return;const L0=S.ilearn&&S.ilearn.ext;
+  if(L0&&L0.at===d.at&&!!L0.login===!!d.login)return;
+  const L=IL(),cs=ilCourses(),known=ilSubjects(cs),c={},m={},i={},T0=today0(),lo=addD(T0,-160),hi=addD(T0,220);
+  for(const co of d.courses||[]){const g=ilGroup([co.courseId,co.name,co.term].filter(Boolean),cs,known);c[co.id]={code:g.code||'',name:String(co.name||'').slice(0,90),term:g.term||co.term||''};}
+  for(const n in d.items||{}){const it=d.items[n];if(!it||!c[it.c])continue;m[n]=it.c;const dt=it.d?new Date(it.d):null;if(dt&&!isNaN(dt)&&dt>=lo&&dt<=hi)i[n]={t:String(it.t||'').slice(0,120),d:it.d};}
+  L.ext={at:d.at||0,login:!!d.login,user:d.user||'',c,m,i,seen:Date.now()};save();
+  const v=document.body.dataset.view;if(v==='tasks')renderTasks();else if(v==='home'&&!(HD&&HD.on))renderHome();ilPaint();}
+/* the exact course for a calendar item, from the helper */
+function ilExtCode(x){const E=S.ilearn&&S.ilearn.ext;if(!E)return'';const cid=E.m[ilNum(x.u)];const c=cid&&E.c[cid];return c&&c.code?c.code:'';}
+/* items the helper knows about that the calendar link doesn't have (or every item, if only the helper is set up) */
+function ilAllEv(){const L=IL(),E=L.ext;if(!E||!E.i)return L.ev;const have=new Set(L.ev.map(x=>ilNum(x.u)).filter(Boolean)),out=L.ev.slice();
+  for(const n in E.i){if(have.has(n))continue;const it=E.i[n],dt=new Date(it.d);if(isNaN(dt))continue;
+    out.push({u:'bb:_'+n+'_1',t:ilTitle(it.t),d:iso(new Date(dt.getFullYear(),dt.getMonth(),dt.getDate())),tm:String(dt.getHours()).padStart(2,'0')+':'+String(dt.getMinutes()).padStart(2,'0'),g:'ext'});}
+  return out;}
+function ilHelperHTML(){const E=S.ilearn&&S.ilearn.ext,h=ilHelper();
+  if(h&&E&&E.login)return`<div class="ilhelp bad"><b>Log in to iLearn</b><span>The iLearn helper can’t read your courses until you log in again. New items are guessed until then. <a href="https://ilearn.aus.edu" target="_blank" rel="noopener">Open iLearn</a></span></div>`;
+  if(h&&E&&E.at)return`<div class="ilhelp ok"><b>Automatic sorting is on</b><span>The iLearn helper checked ${esc(ago(E.at))}: ${Object.keys(E.m).length} items in ${Object.keys(E.c).length} iLearn courses, each with its exact course.</span></div>`;
+  if(h)return`<div class="ilhelp"><b>iLearn helper installed</b><span>Waiting for its first check. Make sure you’re logged in to <a href="https://ilearn.aus.edu" target="_blank" rel="noopener">iLearn</a> in this browser.</span></div>`;
+  return`<details class="ilhelp ilget"><summary><b>Sort every item automatically</b><span>Add the iLearn helper to Chrome or Edge on a computer. It uses your iLearn login to tell which course each item is from, so nothing needs sorting by hand.</span></summary>
+    <ol class="ilsteps"><li><b>Download the helper</b><span><a href="ilearn-helper.zip" download>ilearn-helper.zip</a>, then unzip it.</span></li>
+    <li><b>Open your extensions page</b><span>Type <code>chrome://extensions</code> (or <code>edge://extensions</code>) in the address bar.</span></li>
+    <li><b>Turn on Developer mode</b><span>The switch at the top right (Edge: on the left).</span></li>
+    <li><b>Click Load unpacked</b><span>Choose the unzipped <code>ilearn-helper</code> folder. Keep the folder where it is.</span></li>
+    <li><b>Come back here</b><span>Reload this page. As long as you’re logged in to iLearn in this browser, it checks every hour. It only reads your courses and calendar.</span></li></ol></details>`;}
 function ilTasks(syl){if(!ilOn())return[];const L=IL(),cs=ilCourses(),s=SEM(),lc=lastClassDay();L.pick=L.pick||{};
   const st=s&&pd(s.start)?addD(pd(s.start),-7):addD(today0(),-120),en=addD((s&&pd(s.end))||lc||addD(today0(),120),21);
   /* patterns you've sorted by hand, used for their siblings (a pattern sorted into two courses is ignored) */
-  const learned={},byU=new Map(L.ev.map(x=>[x.u,x]));for(const u in L.pick){const x=byU.get(u),c=L.pick[u];if(!x||!c)continue;const p=ilPat(x.t);if(!p)continue;learned[p]=learned[p]===undefined||learned[p]===c?c:'';}
+  const learned={},byU=new Map(ilAllEv().map(x=>[x.u,x]));for(const u in L.pick){const x=byU.get(u),c=L.pick[u];if(!x||!c)continue;const p=ilPat(x.t);if(!p)continue;learned[p]=learned[p]===undefined||learned[p]===c?c:'';}
   for(const p in learned)if(!learned[p])delete learned[p];
   const out=[],seen=new Set();
-  for(const x of L.ev){if(L.pick[x.u]==='-')continue;const tgt=ilTarget(x.g);if(tgt==='skip')continue;const d=pd(x.d);if(d<st||d>en||IL_NOISE.test(x.t))continue;
-    let code=tgt,why='';if(tgt==='auto'){const gs=ilGuess(x,cs,syl,learned);code=gs?gs.code:'';why=gs?gs.why:'none';}
+  for(const x of ilAllEv()){if(L.pick[x.u]==='-')continue;const ex=L.pick[x.u]===undefined?ilExtCode(x):'';const tgt=ex?'exact':ilTarget(x.g);if(tgt==='skip')continue;const d=pd(x.d);if(d<st||d>en||IL_NOISE.test(x.t))continue;
+    let code=tgt,why='';if(tgt==='exact')code=ex;else if(tgt==='auto'){const gs=ilGuess(x,cs,syl,learned);code=gs?gs.code:'';why=gs?gs.why:'none';}
     const c=code?(cs.find(z=>normCode(z.code)===normCode(code))||{code,co:null}):null;const k=(code?normCode(code):'?')+'|'+normT(x.t)+'|'+x.d;if(seen.has(k))continue;seen.add(k);
     const co=c&&c.co||null,ch=L.chg[x.u];
-    out.push({key:'i:'+x.u,u:x.u,title:x.t,courseId:co?co.id:null,tag:co?'':c?c.code:'iLearn',date:x.d,time:x.tm||undefined,kind:ilKind(x.t),source:'ilearn',ilearn:1,url:x.url,tok:ilTok(x.t),why,
+    out.push({key:'i:'+x.u,u:x.u,title:x.t,courseId:co?co.id:null,tag:co?'':c?c.code:'iLearn',date:x.d,time:x.tm||undefined,kind:ilKind(x.t),source:'ilearn',ilearn:1,url:x.url,tok:ilTok(x.t),why,autoDone:dDiff(d,today0())>1,
       note:'iLearn'+(why==='none'?' · which course?':why&&why!=='you'?' · course guessed':'')+(ch?ch.k==='new'?' · new':` · moved from ${fmtD(pd(ch.from))}`:'')});}
   /* drop a syllabus task when iLearn has the same item (e.g. Quiz 4) within a week of it: iLearn's date and time win */
   if(syl){const drop=new Set();for(const t of out){if(!t.tok||!t.courseId)continue;for(const y of syl)if(!y.manual&&y.courseId===t.courseId&&y.date&&ilTok(y.title)===t.tok&&Math.abs(dDiff(pd(y.date),pd(t.date)))<=7){drop.add(y.key);if((S.tstate[y.key]||{}).done&&!(S.tstate[t.key]||{}).done)S.tstate[t.key]=Object.assign(S.tstate[t.key]||{},{done:true});}}
@@ -2307,24 +2337,24 @@ async function ilSync(opt={}){const L=IL();if(!L.url||ilBusy)return;ilBusy=true;
   catch(e){ilErr=String(e.message||e);L.fail=Date.now();if(!opt.quiet)toast('iLearn: '+ilErr);}
   finally{ilBusy=false;ilPaint();const v=document.body.dataset.view;if(v==='tasks')renderTasks();else if(v==='home')renderHome();}}
 const ilCount=()=>{try{return allTasks().filter(t=>t.ilearn).length;}catch{return 0;}};
-function ilAuto(){const L=S.ilearn;if(!L||!L.url||ilBusy)return;const last=Math.max(L.at||0,L.fail||0);if(Date.now()-last>IL_FRESH)ilSync({quiet:true});}
+function ilAuto(){ilPing();const L=S.ilearn;if(!L||!L.url||ilBusy)return;const last=Math.max(L.at||0,L.fail||0);if(Date.now()-last>IL_FRESH)ilSync({quiet:true});}
 const ago=t=>{const m=Math.round((Date.now()-t)/60000);return m<1?'just now':m<60?m+' min ago':m<1440?Math.round(m/60)+' h ago':fmtD(new Date(t));};
 function ilPaint(){const m=$('#ilmodal');if(!m||!m.classList.contains('on'))return;const L=IL(),on=ilOn();
   $('#ilguide').open=!on;$('#ilgo').textContent=on&&L.url?'Save link':'Connect';$('#ilurl').value=$('#ilurl').value||L.url||'';
   $('#ilmsg').className='ilmsg'+(ilErr?' err':'');$('#ilmsg').textContent=ilBusy?'Fetching your iLearn calendar…':ilErr;
-  if(!on){$('#ilstate').innerHTML='';return;}
+  if(!on){$('#ilstate').innerHTML=ilHelperHTML();return;}
   const cs=ilCourses(),keys=Object.keys(L.grp).sort((a,b)=>(L.grp[a].cur?0:1)-(L.grp[b].cur?0:1)||L.grp[a].label.localeCompare(L.grp[b].label)),cur=keys.filter(k=>L.grp[k].cur||(!L.grp[k].code&&ilTarget(k)!=='skip')||(L.map[k]&&L.map[k]!=='skip')),oth=keys.filter(k=>!cur.includes(k));
   const sel=k=>`<select data-ilmap="${esc(k)}" aria-label="Course for ${esc(L.grp[k].label)}">${L.grp[k].code?'':`<option value="auto"${ilTarget(k)==='auto'?' selected':''}>Sort item by item</option>`}<option value="skip"${ilTarget(k)==='skip'?' selected':''}>Don’t import</option>${cs.map(c=>`<option value="${esc(c.code)}"${ilTarget(k)===c.code?' selected':''}>${esc(c.code)}${c.title?' · '+esc(c.title):''}</option>`).join('')}${L.grp[k].code&&!cs.some(c=>normCode(c.code)===normCode(L.grp[k].code))?`<option value="${esc(L.grp[k].code)}"${ilTarget(k)===L.grp[k].code?' selected':''}>${esc(L.grp[k].code)} (on its own)</option>`:''}</select>`;
   const row=k=>`<li><span><b>${esc(L.grp[k].label)}</b><small>${L.grp[k].n} item${L.grp[k].n===1?'':'s'}</small></span>${sel(k)}</li>`;
-  $('#ilstate').innerHTML=`<div class="ilstat"><span class="ildot"></span><span><b>Connected</b> · ${L.file?'from a calendar file':'synced '+(L.at?ago(L.at):'never')} · ${ilCount()} due date${ilCount()===1?'':'s'} this semester</span>${L.url?`<button class="btn ghost sm" data-il="sync"${ilBusy?' disabled':''}>Sync now</button>`:''}<button class="btn ghost sm danger-ghost" data-il="off">Disconnect</button></div>
+  $('#ilstate').innerHTML=ilHelperHTML()+`<div class="ilstat"><span class="ildot"></span><span><b>Connected</b> · ${L.url?'synced '+(L.at?ago(L.at):'never'):L.file?'from a calendar file':'through the iLearn helper only'} · ${ilCount()} due date${ilCount()===1?'':'s'} this semester</span>${L.url?`<button class="btn ghost sm" data-il="sync"${ilBusy?' disabled':''}>Sync now</button>`:''}<button class="btn ghost sm danger-ghost" data-il="off">Disconnect</button></div>
     ${keys.length?`<h4>iLearn courses</h4><p class="hint">Each class can have an iLearn course for everyone taking it and one for your section, and labs have their own. All the ones that match your courses this semester are used.</p><ul class="ilg">${cur.map(row).join('')||'<li class="hint">Couldn’t tell which iLearn courses are this semester’s. Pick a course for them below, and tap “Copy details for troubleshooting” to send to the site’s maker.</li>'}</ul>${oth.length?`<details class="ilo"><summary>Other iLearn courses (${oth.length})</summary><ul class="ilg">${oth.map(row).join('')}</ul></details>`:''}`:'<p class="hint">Nothing dated in your iLearn calendar yet.</p>'}${ilSortHTML(cs)}${L.url||ilRaw?'<p class="ildiag"><button class="lnkbtn" data-il="diag">Copy details for troubleshooting</button> <span class="hint">If courses aren’t sorted right. It copies how your iLearn calendar names courses and items, without your link.</span></p>':''}`;}
 /* this semester's items whose course was guessed or isn't known: pick it once, and items named the same way follow */
 const IL_WHY={none:'Which course?','class time':'Guessed: due during its class','syllabus':'Guessed: same item in the syllabus',kind:'Guessed: only course with this kind of work',pattern:'Like items you sorted'};
-function ilSortHTML(cs){const it=allTasks().filter(t=>t.ilearn&&t.why&&t.why!=='you').sort((a,b)=>(a.why==='none'?0:1)-(b.why==='none'?0:1)||a.date.localeCompare(b.date));if(!it.length)return'';
+function ilSortHTML(cs){const it=allTasks().filter(t=>t.ilearn&&t.why&&t.why!=='you'&&!t.autoDone).sort((a,b)=>(a.why==='none'?0:1)-(b.why==='none'?0:1)||a.date.localeCompare(b.date));if(!it.length)return'';
   const nNone=it.filter(t=>t.why==='none').length,nG=it.length-nNone,code=t=>{const c=t.courseId?byId(t.courseId):null;return c?normC(c.code):t.tag!=='iLearn'?t.tag:'';};
   return`<h4>Items to sort <span class="ilcnt">${nNone?nNone+' need a course':''}${nNone&&nG?' · ':''}${nG?nG+' guessed':''}</span></h4><p class="hint">iLearn often doesn’t say which course an item is from, so the site guesses from your timetable and syllabi. Pick the course once and items named the same way (Lab 1, Lab 2…) follow.${nG?' <button class="lnkbtn" data-il="okall">Keep all guesses</button>':''}</p>
     <ul class="ilg ilsort">${it.slice(0,120).map(t=>`<li><span><b>${esc(t.title)}</b><small>${esc(fmtD(pd(t.date)))}${t.time?' · '+esc(fmtClock(toMin(t.time),TT().h24)+(TT().h24?'':' '+ampm(toMin(t.time)))):''} · <em class="${t.why==='none'?'ilq':''}">${esc(IL_WHY[t.why]||'')}</em></small></span><select data-ilpick="${esc(t.u)}" aria-label="Course for ${esc(t.title)}"><option value="">${t.why==='none'?'Which course?':'Not sure'}</option>${cs.map(c=>`<option value="${esc(c.code)}"${code(t)&&normCode(code(t))===normCode(c.code)?' selected':''}>${esc(c.code)}</option>`).join('')}<option value="-">Not for this semester · hide</option></select></li>`).join('')}</ul>`;}
-function openIL(){ilErr='';$('#ilurl').value=(S.ilearn&&S.ilearn.url)||'';$('#ilmodal').classList.add('on');ilPaint();setTimeout(()=>(ilOn()?$('#ilclose'):$('#ilurl')).focus({preventScroll:true}),0);}
+function openIL(){ilPing();ilErr='';$('#ilurl').value=(S.ilearn&&S.ilearn.url)||'';$('#ilmodal').classList.add('on');ilPaint();setTimeout(()=>(ilOn()?$('#ilclose'):$('#ilurl')).focus({preventScroll:true}),0);}
 $('#ilgo').onclick=async()=>{const u=ilFix($('#ilurl').value);if(!/^https:\/\/[^\s]+$/i.test(u)){ilErr='Paste the calendar link from iLearn. It starts with https:// (or webcal://).';ilPaint();return;}
   const L=IL(),had=L.url;L.url=u;$('#ilurl').value=u;delete L.file;if(had!==u){L.ev=[];L.chg={};}await ilSync();if(ilErr&&!had){delete L.url;}save();ilPaint();};
 $('#ilurl').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();$('#ilgo').click();}});
