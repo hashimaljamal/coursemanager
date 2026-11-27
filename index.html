@@ -315,7 +315,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 .hwnone{grid-column:1/-1;grid-row:span 30;display:grid;place-items:center;align-content:center;gap:10px;border:1.5px dashed var(--line);border-radius:14px;padding:40px}
 .hhero>.hcust{order:2;margin-left:auto;display:inline-flex;align-items:center;gap:7px}.hhero>.hcds~.hcust{margin-left:0}.hcust svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.7}.hcust.on{background:var(--ink);color:var(--bg)}
 @media(max-width:1100px){.hcust span{display:none}.hhero>.hcust{padding:0 10px}}
-@media(max-width:600px){.hhero{position:relative}.hhero>div:first-child{padding-right:44px}.hhero>.hcust{position:absolute;right:0;top:12px;min-height:34px;width:36px;padding:0;justify-content:center}}
+@media(max-width:600px){.hhero>div:first-child{flex:1 1 0!important;min-width:calc(100% - 52px)}.hhero>.hcust{order:1;align-self:flex-start;margin:0 0 0 auto!important;min-height:36px;width:36px;padding:0;justify-content:center;flex:none}}
 .hebar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;position:sticky;top:0;z-index:8;background:var(--bg);border-bottom:1px solid var(--line);padding:10px 0}.hebar[hidden]{display:none}
 .hebt{flex:1 1 300px;display:grid;gap:1px;min-width:0}.hebt b{font-size:14px}.hebt .hint{font-size:12.5px;margin:0}
 .hwcover{position:absolute;inset:0;z-index:3;border-radius:14px;cursor:grab;outline:1.5px dashed color-mix(in srgb,var(--ink) 30%,transparent);outline-offset:3px;touch-action:auto}
