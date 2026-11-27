@@ -2293,6 +2293,8 @@ function ilExt(d){if(!d||typeof d!=='object')return;const L0=S.ilearn&&S.ilearn.
   const L=IL(),cs=ilCourses(),known=ilSubjects(cs),c={},m={},i={},T0=today0(),lo=addD(T0,-160),hi=addD(T0,220);
   for(const co of d.courses||[]){const g=ilGroup([co.courseId,co.name,co.term].filter(Boolean),cs,known);c[co.id]={code:g.code||'',name:String(co.name||'').slice(0,90),term:g.term||co.term||''};}
   for(const n in d.items||{}){const it=d.items[n];if(!it||!c[it.c])continue;m[n]=it.c;const dt=it.d?new Date(it.d):null;if(dt&&!isNaN(dt)&&dt>=lo&&dt<=hi)i[n]={t:String(it.t||'').slice(0,120),d:it.d};}
+  /* the helper checks every couple of minutes: only save and redraw when something actually changed */
+  if(L0&&!!L0.login===!!d.login&&JSON.stringify([L0.c,L0.m,L0.i])===JSON.stringify([c,m,i])){L0.at=d.at||L0.at;ilPaint();return;}
   L.ext={at:d.at||0,login:!!d.login,user:d.user||'',c,m,i,seen:Date.now()};save();
   const v=document.body.dataset.view;if(v==='tasks')renderTasks();else if(v==='home'&&!(HD&&HD.on))renderHome();ilPaint();}
 /* the exact course for a calendar item, from the helper */
@@ -2311,7 +2313,7 @@ function ilHelperHTML(){const E=S.ilearn&&S.ilearn.ext,h=ilHelper();
     <li><b>Open your extensions page</b><span>Type <code>chrome://extensions</code> (or <code>edge://extensions</code>) in the address bar.</span></li>
     <li><b>Turn on Developer mode</b><span>The switch at the top right (Edge: on the left).</span></li>
     <li><b>Click Load unpacked</b><span>Choose the unzipped <code>ilearn-helper</code> folder. Keep the folder where it is.</span></li>
-    <li><b>Come back here</b><span>Reload this page. As long as you’re logged in to iLearn in this browser, it checks every hour. It only reads your courses and calendar.</span></li></ol></details>`;}
+    <li><b>Come back here</b><span>Reload this page. As long as you’re logged in to iLearn in this browser, it checks every couple of minutes. It only reads your courses and calendar.</span></li></ol></details>`;}
 function ilTasks(syl){if(!ilOn())return[];const L=IL(),cs=ilCourses(),s=SEM(),lc=lastClassDay();L.pick=L.pick||{};
   const st=s&&pd(s.start)?addD(pd(s.start),-7):addD(today0(),-120),en=addD((s&&pd(s.end))||lc||addD(today0(),120),21);
   /* patterns you've sorted by hand, used for their siblings (a pattern sorted into two courses is ignored) */
