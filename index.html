@@ -2294,15 +2294,17 @@ function ilPing(){if(ilHelper())window.postMessage({cmIlearnPing:1},location.ori
 window.addEventListener('message',e=>{if(e.source!==window||!e.data||!e.data.cmIlearn)return;ilExt(e.data.cmIlearn);});
 function ilExt(d){if(!d||typeof d!=='object')return;const L0=S.ilearn&&S.ilearn.ext;
   if(L0&&L0.at===d.at&&!!L0.login===!!d.login)return;
-  const L=IL(),cs=ilCourses(),known=ilSubjects(cs),c={},m={},i={},T0=today0(),lo=addD(T0,-160),hi=addD(T0,220);
+  const L=IL(),cs=ilCourses(),known=ilSubjects(cs),c={},m={},i={},st={},T0=today0(),lo=addD(T0,-160),hi=addD(T0,220);
   for(const co of d.courses||[]){const g=ilGroup([co.courseId,co.name,co.term].filter(Boolean),cs,known);c[co.id]={code:g.code||'',name:String(co.name||'').slice(0,90),term:g.term||co.term||''};}
-  for(const n in d.items||{}){const it=d.items[n];if(!it||!c[it.c]||it.k==='OfficeHours')continue;m[n]=it.c;const dt=it.d?new Date(it.d):null;if(dt&&!isNaN(dt)&&dt>=lo&&dt<=hi)i[n]={t:String(it.t||'').slice(0,120),d:it.d};}
+  for(const n in d.items||{}){const it=d.items[n];if(!it||!c[it.c]||it.k==='OfficeHours')continue;m[n]=it.c;if(it.s)st[n]=String(it.s).slice(0,20);const dt=it.d?new Date(it.d):null;if(dt&&!isNaN(dt)&&dt>=lo&&dt<=hi)i[n]={t:String(it.t||'').slice(0,120),d:it.d};}
   /* the helper checks every couple of minutes: only save and redraw when something actually changed */
-  if(L0&&!!L0.login===!!d.login&&JSON.stringify([L0.c,L0.m,L0.i])===JSON.stringify([c,m,i])){L0.at=d.at||L0.at;ilPaint();return;}
-  L.ext={at:d.at||0,login:!!d.login,user:d.user||'',c,m,i,seen:Date.now()};save();
+  if(L0&&!!L0.login===!!d.login&&JSON.stringify([L0.c,L0.m,L0.i,L0.st||{}])===JSON.stringify([c,m,i,st])){L0.at=d.at||L0.at;ilPaint();return;}
+  L.ext={at:d.at||0,login:!!d.login,user:d.user||'',c,m,i,st,seen:Date.now()};save();
   const v=document.body.dataset.view;if(v==='tasks')renderTasks();else if(v==='home'&&!(HD&&HD.on))renderHome();ilPaint();}
 /* the exact course for a calendar item, from the helper */
 /* which iLearn course an item is from, per the helper */
+/* submitted or graded on iLearn (from the helper): counts as done, even before the due date */
+function ilSub(x){const E=S.ilearn&&S.ilearn.ext;const v=E&&E.st&&E.st[ilNum(x.u)];return!v?'':/needs ?grading|submitted/i.test(v)?'submitted':/graded|completed|exempt/i.test(v)?'graded':'';}
 function ilExtInfo(x){const E=S.ilearn&&S.ilearn.ext;if(!E)return null;const cid=E.m[ilNum(x.u)];const c=cid&&E.c[cid];return c?{cid,...c}:null;}
 /* only courses you're taking: the ones on your timetable or with a syllabus here (or, if the site has none yet, this term's iLearn courses).
    Anything else (dropped courses, old terms, advising and support spaces) is left out unless you switch it on in the iLearn pop-up. */
@@ -2341,8 +2343,8 @@ function ilTasks(syl){if(!ilOn())return[];const L=IL(),cs=ilCourses(),s=SEM(),lc
     let code=tgt,why='',other='';if(tgt==='exact')code=ex;else if(tgt==='other'){code='';other=ei.name.replace(/\s*\([^)]*\)\s*$/,'').slice(0,40)||'iLearn';}else if(tgt==='auto'){const gs=ilGuess(x,cs,syl,learned);code=gs?gs.code:'';why=gs?gs.why:'none';if(!gs&&L.pick[x.u]===undefined){other=ilExtName(x);if(other)why='';}}
     const c=code?(cs.find(z=>normCode(z.code)===normCode(code))||{code,co:null}):null;const k=(code?normCode(code):'?')+'|'+normT(x.t)+'|'+x.d;if(seen.has(k))continue;seen.add(k);
     const co=c&&c.co||null,ch=L.chg[x.u];
-    out.push({key:'i:'+x.u,u:x.u,title:x.t,courseId:co?co.id:null,tag:co?'':c?c.code:other||'iLearn',date:x.d,time:x.tm||undefined,kind:ilKind(x.t),source:'ilearn',ilearn:1,url:x.url,tok:ilTok(x.t),why,autoDone:dDiff(d,today0())>1,
-      note:'iLearn'+(why==='none'?' · which course?':why&&why!=='you'?' · course guessed':'')+(ch?ch.k==='new'?' · new':` · moved from ${fmtD(pd(ch.from))}`:'')});}
+    out.push({key:'i:'+x.u,u:x.u,title:x.t,courseId:co?co.id:null,tag:co?'':c?c.code:other||'iLearn',date:x.d,time:x.tm||undefined,kind:ilKind(x.t),source:'ilearn',ilearn:1,url:x.url,tok:ilTok(x.t),why,sub:ilSub(x),autoDone:!!ilSub(x)||dDiff(d,today0())>1,
+      note:'iLearn'+(ilSub(x)?' · '+ilSub(x):'')+(why==='none'?' · which course?':why&&why!=='you'?' · course guessed':'')+(ch?ch.k==='new'?' · new':` · moved from ${fmtD(pd(ch.from))}`:'')});}
   /* drop a syllabus task when iLearn has the same item (e.g. Quiz 4) within a week of it: iLearn's date and time win */
   if(syl){const drop=new Set();for(const t of out){if(!t.tok||!t.courseId)continue;for(const y of syl)if(!y.manual&&y.courseId===t.courseId&&y.date&&ilTok(y.title)===t.tok&&Math.abs(dDiff(pd(y.date),pd(t.date)))<=7){drop.add(y.key);if((S.tstate[y.key]||{}).done&&!(S.tstate[t.key]||{}).done)S.tstate[t.key]=Object.assign(S.tstate[t.key]||{},{done:true});}}
     for(let i=syl.length-1;i>=0;i--)if(drop.has(syl[i].key))syl.splice(i,1);}
