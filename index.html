@@ -388,7 +388,12 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 .ilg li>span{display:grid;min-width:0}.ilg b{font-size:13.5px}.ilg small{font-size:12px;color:var(--mute)}.ilg select{max-width:52%;min-width:0;font-size:13px;min-height:34px;padding:0 8px}.ilo summary{font-size:13px;font-weight:700;cursor:pointer;padding:6px 0;color:var(--mute)}
 .upil{display:grid;grid-template-columns:30px 1fr auto;gap:12px;align-items:start;height:auto;min-height:0;width:100%;text-align:left;font:inherit;color:var(--ink);background:none;border:1.5px dashed var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;margin:0}
 .upil:hover,.upil:focus-visible{border-color:var(--ink);background:var(--soft);outline:0}.upil>span:nth-child(2){display:grid;gap:2px}.upil b{font-size:15px}.upil small{color:var(--mute);font-size:12.5px;line-height:1.35}.upil em{align-self:center;font-style:normal;font-weight:800;font-size:13px;white-space:nowrap}.upil.on{border-style:solid;border-color:var(--ink)}.upil .upi{grid-row:auto}.upil.on .upi{background:var(--ink);color:var(--bg)}
-.tlink{font-weight:700;color:var(--ink)}.ivcard{max-width:560px;width:100%;max-height:90vh;overflow:auto}.ivhead .ivk{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--mute)}.ivhead .cdot{background:var(--cc)}.ivhead h3{margin:4px 0 10px;font-size:21px;line-height:1.25}
+.tlink{font-weight:700;color:var(--ink)}.ilmain{border:1.5px solid var(--ink);padding:14px 16px;gap:6px}.ilmain>b{font-size:16px}.ilrec{justify-self:start;font-size:10.5px!important;font-weight:800;text-transform:uppercase;letter-spacing:.06em;background:var(--ink);color:var(--bg)!important;border-radius:99px;padding:2px 9px}
+.ilhelp a.btn{color:var(--bg)}.ilhelp a.btn.ghost{color:var(--ink)}.ilmainb{display:flex;gap:8px;flex-wrap:wrap;margin:4px 0 2px}.ilmainb .btn{text-decoration:none;display:inline-grid;place-items:center}.ilmini{margin:8px 0 0!important;gap:6px!important}.ilmini li{font-size:13px!important}.ilmini li::before{width:20px!important;height:20px!important;font-size:11px!important}
+.ilman{margin:12px 0 4px}.ilman[open]{padding-bottom:14px}.ilman h4{margin:14px 0 2px;font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--mute)}
+.illim{border-left:3px solid var(--red);padding:2px 0 2px 12px;margin:10px 0 4px;font-size:13.5px}.illim b{font-size:13.5px}.illim ul{margin:4px 0;padding-left:18px;color:var(--mute)}.illim li{margin:2px 0}.illim p{margin:4px 0 0!important;font-size:13px!important}
+.ilmrow{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.ivcard{max-width:560px;width:100%;max-height:90vh;overflow:auto}.ivhead .ivk{display:flex;align-items:center;gap:7px;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--mute)}.ivhead .cdot{background:var(--cc)}.ivhead h3{margin:4px 0 10px;font-size:21px;line-height:1.25}
 .ivgrade{display:flex;align-items:baseline;gap:10px;border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin-bottom:12px}.ivgrade b{font-size:32px;font-weight:900;font-variant-numeric:tabular-nums}.ivgrade span{font-size:16px;font-weight:700;color:var(--mute)}
 .ivrows{margin-bottom:10px}.ivsec{border-top:1px solid var(--line);padding-top:10px;margin-bottom:12px}.ivsec h4{margin:0 0 6px;font-size:11.5px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--mute)}
 .ivtext{white-space:pre-wrap;font-size:14px;line-height:1.55;margin:0;overflow-wrap:anywhere}.ivaddr{display:flex;gap:8px;flex-wrap:wrap}.ivaddr select{flex:1;min-width:160px;min-height:34px}#ivopen{text-decoration:none;display:inline-grid;place-items:center}
@@ -800,23 +805,31 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 <div id="ivmodal" class="modal"><div class="card cnf ivcard" role="dialog" aria-modal="true" aria-labelledby="ivtitle"><div id="ivbody"></div><div class="mact"><button class="btn ghost" id="ivclose">Close</button><a class="btn" id="ivopen" href="#" target="_blank" rel="noopener">Open in iLearn ↗</a></div></div></div>
 <div id="igmodal" class="modal"><div class="card cnf igcard" role="dialog" aria-modal="true" aria-labelledby="igtitle"><h3 id="igtitle">New grades from iLearn</h3><div id="igbody"></div><div class="mact"><button class="btn ghost" id="iglater">Later</button><button class="btn" id="igadd">Save</button></div></div></div>
 <div id="ilmodal" class="modal"><div class="card cnf ilcard" role="dialog" aria-modal="true" aria-labelledby="iltitle"><h3 id="iltitle">Connect iLearn</h3>
-<p class="hint">Bring due dates from iLearn into Tasks. Only this semester’s courses are used: the iLearn course for everyone taking a class, your section’s course, and the same for labs.</p>
-<details id="ilguide" class="ilguide" open><summary>How to get your iLearn calendar link</summary>
-<p class="hint ilold" style="margin:8px 0 0!important">Have the iLearn helper? Skip this: it adds your link by itself.</p>
+<p class="hint">Bring your iLearn due dates, grades and announcements into the site. Only the courses you’re taking this semester are used: the iLearn course for everyone taking a class and your section’s, and the same for labs.</p>
+<div id="ilhelper"></div>
+<div id="ilstate"></div>
+<details id="ilmanual" class="ilguide ilman"><summary>Without the extension: use your calendar link</summary>
+<div class="illim"><b>What you miss without the helper</b><ul>
+<li>iLearn’s calendar link doesn’t say which course an item is from. The site guesses from your timetable and syllabi, and you sort the rest by hand.</li>
+<li>No grades, feedback or announcements, and no links to your iLearn course pages.</li>
+<li>It can’t see what you’ve submitted: past items are simply counted as done.</li></ul>
+<p>It does work on any device or browser, phones included, with nothing to install.</p></div>
+<h4>Get your calendar link</h4>
 <ol class="ilsteps">
 <li><b>Sign in to iLearn</b><span>Go to <a href="https://ilearn.aus.edu" target="_blank" rel="noopener">ilearn.aus.edu</a>.</span></li>
 <li><b>Open Calendar</b><span>From the main menu on the left, not from inside a course.</span></li>
 <li><b>Open Calendar settings</b><span>The gear button at the top right of the calendar.</span></li>
-<li><b>Choose Share calendar</b><span>In the ⋯ menu next to the “Calendar settings” heading, then copy the link it shows. It usually ends in <code>.ics</code>.</span></li>
+<li><b>Choose Share calendar</b><span>In the ⋯ menu next to the “Calendar settings” heading, then copy the link it shows. It ends in <code>.ics</code>.</span></li>
 <li><b>Paste it below</b><span>The site checks it again whenever you open it, so new and moved due dates show up on their own.</span></li>
 </ol>
-<p class="hint ilold">Older iLearn layout? Open <b>Calendar</b> and click <b>Get External Calendar Link</b> instead.</p></details>
+<p class="hint ilold">Older iLearn layout? Open <b>Calendar</b> and click <b>Get External Calendar Link</b> instead.</p>
 <label class="illbl">Calendar link<input id="ilurl" type="url" autocomplete="off" spellcheck="false" placeholder="https://ilearn.aus.edu/…/learn.ics"></label>
 <p class="ilmsg" id="ilmsg" role="status"></p>
 <p class="hint ilpriv">Keep this link private. Anyone with it can see your iLearn deadlines, but not your grades or password.</p>
-<div id="ilstate"></div>
+<div class="ilmrow"><button class="btn sm" id="ilgo">Connect</button><button class="lnkbtn" id="ilfileb">Upload a calendar file instead</button></div>
 <input type="file" id="ilfilef" hidden accept=".ics,text/calendar">
-<div class="mact"><button class="lnkbtn" id="ilfileb">Upload a calendar file instead</button><span class="sp"></span><button class="btn ghost" id="ilclose">Close</button><button class="btn" id="ilgo">Connect</button></div></div></div>
+</details>
+<div class="mact"><button class="btn" id="ilclose">Done</button></div></div></div>
 <div id="hwmodal" class="modal"><div class="card cnf hwcard" role="dialog" aria-modal="true" aria-labelledby="hwmt"><h3 id="hwmt">Add a widget</h3><p class="hint">Widgets land in the emptiest spot. Move and resize them however you like.</p><div class="hwlist" id="hwlist"></div><div class="mact"><button class="btn ghost" id="hwclose">Cancel</button></div></div></div>
 <div id="ccmodal" class="modal"><div class="card cnf dcard cccard" role="dialog" aria-modal="true" aria-labelledby="cccode"><div id="ccbody"></div>
 <div class="mact"><button class="btn ghost" id="cctt">Open timetable</button><span class="sp"></span><button class="btn" id="ccclose">Close</button></div></div></div>
@@ -2355,12 +2368,9 @@ function ilHelperHTML0(){const E=S.ilearn&&S.ilearn.ext,h=ilHelper();
   if(h&&E&&E.login)return`<div class="ilhelp bad"><b>Log in to iLearn</b><span>The iLearn helper can’t read your courses until you log in again. New items are guessed until then. <a href="https://ilearn.aus.edu" target="_blank" rel="noopener">Open iLearn</a></span></div>`;
   if(h&&E&&E.at)return`<div class="ilhelp ok"><b>Automatic sorting is on</b><span>The iLearn helper checked ${esc(ago(E.at))}: ${Object.keys(E.m).length} items in ${Object.keys(E.c).length} iLearn courses, each with its exact course.</span></div>`;
   if(h)return`<div class="ilhelp"><b>iLearn helper installed</b><span>Waiting for its first check. Make sure you’re logged in to <a href="https://ilearn.aus.edu" target="_blank" rel="noopener">iLearn</a> in this browser.</span></div>`;
-  return`<details class="ilhelp ilget"><summary><b>Sort every item automatically</b><span>Add the iLearn helper to Chrome or Edge on a computer. It uses your iLearn login to tell which course each item is from, and brings in your grades and announcements too. <a href="helper.html" target="_blank" rel="noopener">Download and full guide ↗</a></span></summary>
-    <ol class="ilsteps"><li><b>Download the helper</b><span><a href="ilearn-helper.zip" download>ilearn-helper.zip</a>, then unzip it. <a href="helper.html" target="_blank" rel="noopener">Full guide ↗</a></span></li>
-    <li><b>Open your extensions page</b><span>Type <code>chrome://extensions</code> (or <code>edge://extensions</code>) in the address bar.</span></li>
-    <li><b>Turn on Developer mode</b><span>The switch at the top right (Edge: on the left).</span></li>
-    <li><b>Click Load unpacked</b><span>Choose the unzipped <code>ilearn-helper</code> folder. Keep the folder where it is.</span></li>
-    <li><b>Come back here</b><span>Reload this page. As long as you’re logged in to iLearn in this browser, it checks every couple of minutes. It only reads your courses and calendar.</span></li></ol></details>`;}
+  return`<div class="ilhelp ilmain"><span class="ilrec">Recommended</span><b>Install the iLearn helper</b><span>A small extension for Chrome or Edge on a computer. It uses your iLearn login to bring in every due date already sorted by course, plus your grades, feedback, announcements and links to your iLearn courses. Your calendar link is filled in for you.</span>
+    <div class="ilmainb"><a class="btn sm" href="ilearn-helper.zip" download>Download the helper</a><a class="btn ghost sm" href="helper.html" target="_blank" rel="noopener">Install guide ↗</a></div>
+    <ol class="ilsteps ilmini"><li><b>Unzip it</b><span>and keep the <code>ilearn-helper</code> folder somewhere it can stay.</span></li><li><b>Open <code>chrome://extensions</code></b><span>(or <code>edge://extensions</code>) and turn on Developer mode.</span></li><li><b>Click Load unpacked</b><span>and choose the <code>ilearn-helper</code> folder.</span></li><li><b>Log in to iLearn</b><span>in the same browser, then reload this page.</span></li></ol></div>`;}
 /* ---- iLearn grades, announcements and course links (all from the helper, only for courses you're taking) ---- */
 const ilCUrl=(cid,sub)=>{const E=S.ilearn&&S.ilearn.ext,c=E&&E.c[cid];const base=(c&&c.url?c.url:`https://ilearn.aus.edu/ultra/courses/${cid}/outline`).replace(/\/outline.*$/,'');return base+'/'+(sub||'outline');};
 const ilSite=code=>code?S.courses.find(c=>c.code&&(normCode(c.code)===normCode(code)||normCode(altCode(c.code))===normCode(code)))||null:null;
@@ -2467,13 +2477,13 @@ const ilCount=()=>{try{return allTasks().filter(t=>t.ilearn).length;}catch{retur
 function ilAuto(){ilPing();const L=S.ilearn;if(!L||!L.url||ilBusy)return;const last=Math.max(L.at||0,L.fail||0);if(Date.now()-last>IL_FRESH)ilSync({quiet:true});}
 const ago=t=>{const m=Math.round((Date.now()-t)/60000);return m<1?'just now':m<60?m+' min ago':m<1440?Math.round(m/60)+' h ago':fmtD(new Date(t));};
 function ilPaint(){const m=$('#ilmodal');if(!m||!m.classList.contains('on'))return;const L=IL(),on=ilOn();
-  $('#ilguide').open=!on;$('#ilgo').textContent=on&&L.url?'Save link':'Connect';$('#ilurl').value=$('#ilurl').value||L.url||'';
+  $('#ilhelper').innerHTML=ilHelperHTML();if(ilErr)$('#ilmanual').open=true;$('#ilgo').textContent=L.url?'Save link':'Connect';$('#ilurl').value=$('#ilurl').value||L.url||'';
   $('#ilmsg').className='ilmsg'+(ilErr?' err':'');$('#ilmsg').textContent=ilBusy?'Fetching your iLearn calendar…':ilErr;
-  if(!on){$('#ilstate').innerHTML=ilHelperHTML();return;}
+  if(!on){$('#ilstate').innerHTML='';return;}
   const cs=ilCourses(),keys=Object.keys(L.grp).sort((a,b)=>(L.grp[a].cur?0:1)-(L.grp[b].cur?0:1)||L.grp[a].label.localeCompare(L.grp[b].label)),cur=keys.filter(k=>L.grp[k].cur||(!L.grp[k].code&&ilTarget(k)!=='skip')||(L.map[k]&&L.map[k]!=='skip')),oth=keys.filter(k=>!cur.includes(k));
   const sel=k=>`<select data-ilmap="${esc(k)}" aria-label="Course for ${esc(L.grp[k].label)}">${L.grp[k].code?'':`<option value="auto"${ilTarget(k)==='auto'?' selected':''}>Sort item by item</option>`}<option value="skip"${ilTarget(k)==='skip'?' selected':''}>Don’t import</option>${cs.map(c=>`<option value="${esc(c.code)}"${ilTarget(k)===c.code?' selected':''}>${esc(c.code)}${c.title?' · '+esc(c.title):''}</option>`).join('')}${L.grp[k].code&&!cs.some(c=>normCode(c.code)===normCode(L.grp[k].code))?`<option value="${esc(L.grp[k].code)}"${ilTarget(k)===L.grp[k].code?' selected':''}>${esc(L.grp[k].code)} (on its own)</option>`:''}</select>`;
   const row=k=>`<li><span><b>${esc(L.grp[k].label)}</b><small>${L.grp[k].n} item${L.grp[k].n===1?'':'s'}</small></span>${sel(k)}</li>`;
-  $('#ilstate').innerHTML=ilHelperHTML()+ilExtListHTML()+`<div class="ilstat"><span class="ildot"></span><span><b>Connected</b> · ${L.url?(L.auto?'link added by the iLearn helper · ':'')+'synced '+(L.at?ago(L.at):'never'):L.file?'from a calendar file':'through the iLearn helper only'} · ${ilCount()} due date${ilCount()===1?'':'s'} this semester</span>${L.url?`<button class="btn ghost sm" data-il="sync"${ilBusy?' disabled':''}>Sync now</button>`:''}<button class="btn ghost sm danger-ghost" data-il="off">Disconnect</button></div>
+  $('#ilstate').innerHTML=ilExtListHTML()+`<div class="ilstat"><span class="ildot"></span><span><b>Connected</b> · ${L.url?(L.auto?'link added by the iLearn helper · ':'')+'synced '+(L.at?ago(L.at):'never'):L.file?'from a calendar file':'through the iLearn helper only'} · ${ilCount()} due date${ilCount()===1?'':'s'} this semester</span>${L.url?`<button class="btn ghost sm" data-il="sync"${ilBusy?' disabled':''}>Sync now</button>`:''}<button class="btn ghost sm danger-ghost" data-il="off">Disconnect</button></div>
     ${keys.length?`<h4>iLearn courses</h4><p class="hint">Each class can have an iLearn course for everyone taking it and one for your section, and labs have their own. All the ones that match your courses this semester are used.</p><ul class="ilg">${cur.map(row).join('')||'<li class="hint">Couldn’t tell which iLearn courses are this semester’s. Pick a course for them below, and tap “Copy details for troubleshooting” to send to the site’s maker.</li>'}</ul>${oth.length?`<details class="ilo"><summary>Other iLearn courses (${oth.length})</summary><ul class="ilg">${oth.map(row).join('')}</ul></details>`:''}`:L.ext&&L.ext.at?'':'<p class="hint">Nothing dated in your iLearn calendar yet.</p>'}${ilSortHTML(cs)}${L.url||ilRaw?'<p class="ildiag"><button class="lnkbtn" data-il="diag">Copy details for troubleshooting</button> <span class="hint">If courses aren’t sorted right. It copies how your iLearn calendar names courses and items, without your link.</span></p>':''}`;}
 /* this semester's items whose course was guessed or isn't known: pick it once, and items named the same way follow */
 const IL_WHY={none:'Which course?','class time':'Guessed: due during its class','syllabus':'Guessed: same item in the syllabus',kind:'Guessed: only course with this kind of work',pattern:'Like items you sorted'};
@@ -2481,7 +2491,7 @@ function ilSortHTML(cs){const it=allTasks().filter(t=>t.ilearn&&t.why&&t.why!=='
   const nNone=it.filter(t=>t.why==='none').length,nG=it.length-nNone,code=t=>{const c=t.courseId?byId(t.courseId):null;return c?normC(c.code):t.tag!=='iLearn'?t.tag:'';};
   return`<h4>Items to sort <span class="ilcnt">${nNone?nNone+' need a course':''}${nNone&&nG?' · ':''}${nG?nG+' guessed':''}</span></h4><p class="hint">iLearn often doesn’t say which course an item is from, so the site guesses from your timetable and syllabi. Pick the course once and items named the same way (Lab 1, Lab 2…) follow.${nG?' <button class="lnkbtn" data-il="okall">Keep all guesses</button>':''}</p>
     <ul class="ilg ilsort">${it.slice(0,120).map(t=>`<li><span><b>${esc(t.title)}</b><small>${esc(fmtD(pd(t.date)))}${t.time?' · '+esc(fmtClock(toMin(t.time),TT().h24)+(TT().h24?'':' '+ampm(toMin(t.time)))):''} · <em class="${t.why==='none'?'ilq':''}">${esc(IL_WHY[t.why]||'')}</em></small></span><select data-ilpick="${esc(t.u)}" aria-label="Course for ${esc(t.title)}"><option value="">${t.why==='none'?'Which course?':'Not sure'}</option>${cs.map(c=>`<option value="${esc(c.code)}"${code(t)&&normCode(code(t))===normCode(c.code)?' selected':''}>${esc(c.code)}</option>`).join('')}<option value="-">Not for this semester · hide</option></select></li>`).join('')}</ul>`;}
-function openIL(){ilPing();ilErr='';$('#ilurl').value=(S.ilearn&&S.ilearn.url)||'';$('#ilmodal').classList.add('on');ilPaint();setTimeout(()=>(ilOn()?$('#ilclose'):$('#ilurl')).focus({preventScroll:true}),0);}
+function openIL(){ilPing();ilErr='';$('#ilurl').value=(S.ilearn&&S.ilearn.url)||'';$('#ilmodal').classList.add('on');ilPaint();setTimeout(()=>$('#ilclose').focus({preventScroll:true}),0);}
 $('#ilgo').onclick=async()=>{const u=ilFix($('#ilurl').value);if(!/^https:\/\/[^\s]+$/i.test(u)){ilErr='Paste the calendar link from iLearn. It starts with https:// (or webcal://).';ilPaint();return;}
   const L=IL(),had=L.url;L.url=u;$('#ilurl').value=u;delete L.file;delete L.auto;if(had!==u){L.ev=[];L.chg={};}await ilSync();if(ilErr&&!had){delete L.url;}save();ilPaint();};
 $('#ilurl').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();$('#ilgo').click();}});
