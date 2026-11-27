@@ -411,6 +411,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 .wichips{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}.wichips .fchip{border:1px solid var(--line)}.wichips .fchip.on{border-color:var(--ink);background:var(--soft)}
 .hnote.wibig{min-height:300px;field-sizing:fixed;height:46vh}.mtoday{font-size:12px;font-weight:700;margin-left:-4px}
 .ilmain{border:1.5px solid var(--ink);padding:14px 16px;gap:6px}.ilmain>b{font-size:16px}.ilrec{justify-self:start;font-size:10.5px!important;font-weight:800;text-transform:uppercase;letter-spacing:.06em;background:var(--ink);color:var(--bg)!important;border-radius:99px;padding:2px 9px}
+.igbtn{display:inline-flex;align-items:center;gap:7px}.igbtn i{width:8px;height:8px;border-radius:99px;background:var(--red);box-shadow:0 0 0 2px var(--bg)}
 .ilhelp a.btn{color:var(--bg)}.ilhelp a.btn.ghost{color:var(--ink)}.ilmainb{display:flex;gap:8px;flex-wrap:wrap;margin:4px 0 2px}.ilmainb .btn{text-decoration:none;display:inline-grid;place-items:center}.ilmini{margin:8px 0 0!important;gap:6px!important}.ilmini li{font-size:13px!important}.ilmini li::before{width:20px!important;height:20px!important;font-size:11px!important}
 .ilman{margin:12px 0 4px}.ilman[open]{padding-bottom:14px}.ilman h4{margin:14px 0 2px;font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:var(--mute)}
 .illim{border-left:3px solid var(--red);padding:2px 0 2px 12px;margin:10px 0 4px;font-size:13.5px}.illim b{font-size:13.5px}.illim ul{margin:4px 0;padding-left:18px;color:var(--mute)}.illim li{margin:2px 0}.illim p{margin:4px 0 0!important;font-size:13px!important}
@@ -1036,7 +1037,7 @@ function renderPanel(){
   if(S.sel==='gpa'){renderGPA();return;}
   const co=byId(S.sel);
   if(!co){$('#panel').innerHTML='<div class="ttempty"><h2>Add your courses</h2><p>Upload your syllabi (PDF, Word, photos or text) and a grade calculator is built for each course, with its own weights and grade boundaries. You can also paste the text or set a course up by hand.</p><div class="gempty"><button class="btn" data-act="pickfiles">Upload syllabi</button><button class="btn ghost" data-act="addmanual">Add by hand</button></div></div>';return;}
-  $('#panel').innerHTML=`<div class="chead"><div><h2><button class="sw hsw" data-act="color" data-ck="${esc(co.code||co.id)}" style="background:${courseColor(co)}" aria-label="Course colour" title="Change colour (also used in Timetable)"></button>${esc(co.code||'Untitled course')}</h2><div class="csub">${[co.title?esc(co.title):'',profHTML(co),co.isLab?'Lab':'',`${fmt(creditsOf(co))} credit${creditsOf(co)===1?'':'s'}`,co.noGpa?'not in GPA':''].filter(Boolean).map(x=>`<span class="cs">${x}</span>`).join('')}</div>${ilLinksHTML(co)}${coTasksHTML(co)}</div><div class="cside"><div class="cacts"><button class="btn ghost sm" data-act="cleargrades" data-co="${co.id}" ${courseHasData(co)?'':'hidden'}>Clear grades</button><button class="btn ${edit?'':'ghost'} sm" data-act="edit">${edit?'Done editing':'Edit structure'}</button></div>${classesLeftHTML(co)}</div></div>${(()=>{const n=notes(co);return n?`<div class="notes">${n}</div>`:'';})()}<div id="res"></div>${co.comps.length?`<div class="comps">${co.comps.map(k=>compHTML(co,k,true)).join('')}</div>`:'<p class="hint">No graded parts yet. Use Edit structure to add some.</p>'}${edit?editHTML(co):''}`;
+  $('#panel').innerHTML=`<div class="chead"><div><h2><button class="sw hsw" data-act="color" data-ck="${esc(co.code||co.id)}" style="background:${courseColor(co)}" aria-label="Course colour" title="Change colour (also used in Timetable)"></button>${esc(co.code||'Untitled course')}</h2><div class="csub">${[co.title?esc(co.title):'',profHTML(co),co.isLab?'Lab':'',`${fmt(creditsOf(co))} credit${creditsOf(co)===1?'':'s'}`,co.noGpa?'not in GPA':''].filter(Boolean).map(x=>`<span class="cs">${x}</span>`).join('')}</div>${ilLinksHTML(co)}${coTasksHTML(co)}</div><div class="cside">${igBtnHTML(co)}<div class="cacts"><button class="btn ghost sm" data-act="cleargrades" data-co="${co.id}" ${courseHasData(co)?'':'hidden'}>Clear grades</button><button class="btn ${edit?'':'ghost'} sm" data-act="edit">${edit?'Done editing':'Edit structure'}</button></div>${classesLeftHTML(co)}</div></div>${(()=>{const n=notes(co);return n?`<div class="notes">${n}</div>`:'';})()}<div id="res"></div>${co.comps.length?`<div class="comps">${co.comps.map(k=>compHTML(co,k,true)).join('')}</div>`:'<p class="hint">No graded parts yet. Use Edit structure to add some.</p>'}${edit?editHTML(co):''}`;
   numbers();
   setTimeout(()=>ilGradePrompt(byId(S.sel)),0);
 }
@@ -1126,6 +1127,7 @@ document.addEventListener('click',e=>{if(!e.target.closest('.profw'))document.qu
   if(act==='color'&&b.closest('#panel')){openColor(b);return;}
   if(act==='settings'){openSettings();return;}
   if(act==='cleargrades'){const c=byId(b.dataset.co);if(c)clearGrades(c);return;}
+  if(act==='igopen'){const c=byId(b.dataset.co);if(c)ilGradePrompt(c,true);return;}
   if(act==='ladder'){ladderOpen=!ladderOpen;numbers();return;}
   if(act==='edit'){const c0=byId(S.sel);if(edit&&c0&&c0.basic){c0.basic=false;save();}edit=!edit;renderPanel();}
   else if(act==='open'){S.sel=b.dataset.id;edit=false;render();save();window.scrollTo({top:$('.wrap').offsetTop-8});}
@@ -2427,13 +2429,21 @@ function ilRegrades(){const L=IL();if(!L.gdone)return;const ch=[];for(const x of
   if(ch.length){toast('Updated from iLearn: '+ch.join(' · '));}}
 /* new iLearn grades for the course you open in Grades: add each to a section, or don't */
 let igShown='';
-function ilGradePrompt(co){if(!co||document.body.dataset.view!=='grades'||$('.modal.on'))return;const P=ilPending(co);if(!P.length)return;const key=co.id+':'+P.map(x=>x.n).join();if(igShown===key)return;igShown=key;
+/* opens by itself only for grades you haven't dismissed yet; the "New iLearn grades" button on the course reopens it any time */
+let igCo=null;
+function ilGradePrompt(co,force){if(!co||document.body.dataset.view!=='grades'||$('.modal.on'))return;const L=IL(),all=ilPending(co);if(!all.length)return;
+  if(!force){const fresh=all.filter(x=>!(L.gsnooze||{})[x.n]);if(!fresh.length)return;const key=co.id+':'+fresh.map(x=>x.n).join();if(igShown===key)return;igShown=key;}
+  const P=all;igCo=co.id;
   $('#igtitle').textContent=`New grade${P.length===1?'':'s'} from iLearn · ${co.code||''}`;
   $('#igbody').innerHTML=`<p class="hint">${P.length===1?'This grade was':'These grades were'} posted on iLearn. Choose the section each one counts toward, or leave it out.</p><ul class="igl">${P.map(x=>{const g=ilGuessComp(co,x.t);return`<li><span><b>${esc(x.t||'Grade')}</b><small>${esc(ilScore(x))}${ilPct(x)!=null?` · ${ilPct(x)}%`:''}${x.at?' · '+esc(fmtD(new Date(x.at))):''}</small></span><select data-ign="${esc(x.n)}" aria-label="Section for ${esc(x.t)}"><option value="">Don’t add</option>${co.comps.map(k=>`<option value="${esc(k.id)}"${k.id===g?' selected':''}>${esc(k.name)}</option>`).join('')}</select></li>`;}).join('')}</ul>`;
   $('#igmodal').classList.add('on');}
 $('#igadd').onclick=()=>{const snap=JSON.stringify(S),L=IL();let n=0;for(const s of document.querySelectorAll('#igbody [data-ign]')){if(s.value){if(ilAddGrade(s.dataset.ign,s.value))n++;}else L.gdone=Object.assign({},L.gdone,{[s.dataset.ign]:'skip'});}
   $('#igmodal').classList.remove('on');save();render();toast(n?`Added ${n} grade${n===1?'':'s'} from iLearn.`:'Left out of your grades.',snap);};
-$('#iglater').onclick=()=>$('#igmodal').classList.remove('on');$('#igmodal').addEventListener('click',e=>{if(e.target===$('#igmodal'))$('#igmodal').classList.remove('on');});
+function igDismiss(){if(!$('#igmodal').classList.contains('on'))return;const L=IL(),sn=Object.assign({},L.gsnooze);for(const s of document.querySelectorAll('#igbody [data-ign]'))sn[s.dataset.ign]=1;L.gsnooze=sn;$('#igmodal').classList.remove('on');save();render();}
+$('#iglater').onclick=igDismiss;$('#igmodal').addEventListener('click',e=>{if(e.target===$('#igmodal'))igDismiss();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#igmodal').classList.contains('on')){e.stopPropagation();igDismiss();}},true);
+/* the button on the course page */
+function igBtnHTML(co){const n=ilPending(co).length;return n?`<button class="btn sm igbtn" data-act="igopen" data-co="${co.id}"><i></i>${n} new iLearn grade${n===1?'':'s'}</button>`:'';}
 /* links to each of your iLearn courses: the one for everyone taking it and your section's, plus the lab's when it's part of the course */
 /* the course's upcoming work, most urgent first: the first one shows, the rest drop down */
 const coOpen={};
