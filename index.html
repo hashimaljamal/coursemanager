@@ -594,6 +594,8 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 .pst.fl,.kst.fl{background:var(--red)}.pst.ex,.kst.ex{font-size:8.5px}
 .pcol.xf{background:repeating-linear-gradient(45deg,transparent 0 8px,color-mix(in srgb,var(--ink) 4%,transparent) 8px 16px)}
 .seg5 button{font-size:12px;padding:8px 2px}
+/* timetable Week / List switch (the generic .seg rules above are for other controls) */
+#tthead .seg{display:inline-flex;flex:none;border:0;background:var(--soft);border-radius:10px;padding:3px;gap:2px;overflow:visible;margin:0}#tthead .seg button{flex:none;border:0;border-radius:8px;padding:6px 16px;min-height:32px;font-size:13.5px;font-weight:700;color:var(--mute);line-height:1;cursor:pointer}#tthead .seg button+button{border-left:0}#tthead .seg button:hover:not(.on){color:var(--ink)}#tthead .seg button.on{background:var(--bg);color:var(--ink);box-shadow:0 1px 3px rgb(0 0 0/.18),0 0 0 1px var(--line)}
 .pbrowse{border-top:2px solid var(--ink);margin-top:18px;padding:14px 0 30px}
 .cbtop{display:flex;align-items:center;gap:14px;flex-wrap:wrap}.cbtop h2{margin:0;font-size:20px;font-weight:900;font-stretch:110%}.cbtop input{flex:1;min-width:200px;max-width:420px}
 .cbtabs{display:flex;gap:4px;margin:12px 0 8px;border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none}.cbtabs button{border:0;background:none;font:inherit;font-size:14px;font-weight:700;color:var(--mute);padding:8px 12px;border-bottom:3px solid transparent;cursor:pointer;white-space:nowrap}.cbtabs button.on{color:var(--ink);border-bottom-color:var(--red)}
