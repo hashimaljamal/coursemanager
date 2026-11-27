@@ -265,6 +265,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 .tbtns{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
 .ttmain{padding:12px 0 24px 20px;min-width:0}
 .tthead .seg{margin:0}
+@media(max-width:600px){#v-tt:not([hidden]){display:flex;flex-direction:column}#v-tt>.pbar,#v-tt>.ttwrap{display:contents}#v-tt .tthead{order:1;padding:10px 0 2px}#v-tt .ttmain{order:2;padding:6px 0 10px}#v-tt .ttside{order:3;align-self:stretch;padding-top:0}#v-tt>.pbar>.acts{order:4;margin:6px 0 24px}}
 .ttempty{max-width:560px;margin:48px auto;text-align:center;padding:28px;border:2px dashed var(--line);border-radius:16px}
 .ttempty h2{margin:0 0 8px;font-size:22px}.ttempty p{color:var(--mute);font-size:14px;margin:0 0 16px}
 .tgrid{--g:56px}
