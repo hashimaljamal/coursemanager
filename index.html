@@ -802,6 +802,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 <div id="ilmodal" class="modal"><div class="card cnf ilcard" role="dialog" aria-modal="true" aria-labelledby="iltitle"><h3 id="iltitle">Connect iLearn</h3>
 <p class="hint">Bring due dates from iLearn into Tasks. Only this semester’s courses are used: the iLearn course for everyone taking a class, your section’s course, and the same for labs.</p>
 <details id="ilguide" class="ilguide" open><summary>How to get your iLearn calendar link</summary>
+<p class="hint ilold" style="margin:8px 0 0!important">Have the iLearn helper? Skip this: it adds your link by itself.</p>
 <ol class="ilsteps">
 <li><b>Sign in to iLearn</b><span>Go to <a href="https://ilearn.aus.edu" target="_blank" rel="noopener">ilearn.aus.edu</a>.</span></li>
 <li><b>Open Calendar</b><span>From the main menu on the left, not from inside a course.</span></li>
@@ -2308,7 +2309,10 @@ const ilHelper=()=>document.documentElement.dataset.cmIlearnHelper||'';
 const ilNum=u=>{const m=String(u||'').match(/_(\d+)_1\b/g);return m?m[m.length-1].match(/\d+/)[0]:'';};
 function ilPing(){if(ilHelper())window.postMessage({cmIlearnPing:1},location.origin);}
 window.addEventListener('message',e=>{if(e.source!==window||!e.data||!e.data.cmIlearn)return;ilExt(e.data.cmIlearn);});
-function ilExt(d){if(!d||typeof d!=='object')return;const L0=S.ilearn&&S.ilearn.ext;
+function ilExt(d){if(!d||typeof d!=='object')return;
+  /* the helper found your calendar link: use it if none is set yet, so nothing has to be copied by hand */
+  if(d.feed&&/^https:\/\/ilearn\.aus\.edu\/webapps\/calendar\/calendarFeed\/[\w-]+\/learn\.ics$/.test(d.feed)&&!(S.ilearn&&(S.ilearn.url||S.ilearn.noauto))){const L=IL();L.url=d.feed;L.auto=1;delete L.file;save();if($('#ilurl'))$('#ilurl').value=d.feed;setTimeout(()=>ilSync({quiet:true}),0);}
+  const L0=S.ilearn&&S.ilearn.ext;
   if(L0&&L0.at===d.at&&!!L0.login===!!d.login)return;
   const L=IL(),cs=ilCourses(),known=ilSubjects(cs),c={},m={},i={},st={},T0=today0(),lo=addD(T0,-160),hi=addD(T0,220);
   for(const co of d.courses||[]){const g=ilGroup([co.courseId,co.name,co.term].filter(Boolean),cs,known),rm=String(co.courseId||'').match(/^([A-Z]{2,4})(\d{3}[A-Z]?)(?![0-9])/);c[co.id]={code:g.code||'',rc:rm?normC(rm[1]+' '+rm[2]):'',name:String(co.name||'').slice(0,90),term:g.term||co.term||'',...(co.url?{url:String(co.url).slice(0,200)}:{})};}
@@ -2463,7 +2467,7 @@ function ilPaint(){const m=$('#ilmodal');if(!m||!m.classList.contains('on'))retu
   const cs=ilCourses(),keys=Object.keys(L.grp).sort((a,b)=>(L.grp[a].cur?0:1)-(L.grp[b].cur?0:1)||L.grp[a].label.localeCompare(L.grp[b].label)),cur=keys.filter(k=>L.grp[k].cur||(!L.grp[k].code&&ilTarget(k)!=='skip')||(L.map[k]&&L.map[k]!=='skip')),oth=keys.filter(k=>!cur.includes(k));
   const sel=k=>`<select data-ilmap="${esc(k)}" aria-label="Course for ${esc(L.grp[k].label)}">${L.grp[k].code?'':`<option value="auto"${ilTarget(k)==='auto'?' selected':''}>Sort item by item</option>`}<option value="skip"${ilTarget(k)==='skip'?' selected':''}>Don’t import</option>${cs.map(c=>`<option value="${esc(c.code)}"${ilTarget(k)===c.code?' selected':''}>${esc(c.code)}${c.title?' · '+esc(c.title):''}</option>`).join('')}${L.grp[k].code&&!cs.some(c=>normCode(c.code)===normCode(L.grp[k].code))?`<option value="${esc(L.grp[k].code)}"${ilTarget(k)===L.grp[k].code?' selected':''}>${esc(L.grp[k].code)} (on its own)</option>`:''}</select>`;
   const row=k=>`<li><span><b>${esc(L.grp[k].label)}</b><small>${L.grp[k].n} item${L.grp[k].n===1?'':'s'}</small></span>${sel(k)}</li>`;
-  $('#ilstate').innerHTML=ilHelperHTML()+ilExtListHTML()+`<div class="ilstat"><span class="ildot"></span><span><b>Connected</b> · ${L.url?'synced '+(L.at?ago(L.at):'never'):L.file?'from a calendar file':'through the iLearn helper only'} · ${ilCount()} due date${ilCount()===1?'':'s'} this semester</span>${L.url?`<button class="btn ghost sm" data-il="sync"${ilBusy?' disabled':''}>Sync now</button>`:''}<button class="btn ghost sm danger-ghost" data-il="off">Disconnect</button></div>
+  $('#ilstate').innerHTML=ilHelperHTML()+ilExtListHTML()+`<div class="ilstat"><span class="ildot"></span><span><b>Connected</b> · ${L.url?(L.auto?'link added by the iLearn helper · ':'')+'synced '+(L.at?ago(L.at):'never'):L.file?'from a calendar file':'through the iLearn helper only'} · ${ilCount()} due date${ilCount()===1?'':'s'} this semester</span>${L.url?`<button class="btn ghost sm" data-il="sync"${ilBusy?' disabled':''}>Sync now</button>`:''}<button class="btn ghost sm danger-ghost" data-il="off">Disconnect</button></div>
     ${keys.length?`<h4>iLearn courses</h4><p class="hint">Each class can have an iLearn course for everyone taking it and one for your section, and labs have their own. All the ones that match your courses this semester are used.</p><ul class="ilg">${cur.map(row).join('')||'<li class="hint">Couldn’t tell which iLearn courses are this semester’s. Pick a course for them below, and tap “Copy details for troubleshooting” to send to the site’s maker.</li>'}</ul>${oth.length?`<details class="ilo"><summary>Other iLearn courses (${oth.length})</summary><ul class="ilg">${oth.map(row).join('')}</ul></details>`:''}`:L.ext&&L.ext.at?'':'<p class="hint">Nothing dated in your iLearn calendar yet.</p>'}${ilSortHTML(cs)}${L.url||ilRaw?'<p class="ildiag"><button class="lnkbtn" data-il="diag">Copy details for troubleshooting</button> <span class="hint">If courses aren’t sorted right. It copies how your iLearn calendar names courses and items, without your link.</span></p>':''}`;}
 /* this semester's items whose course was guessed or isn't known: pick it once, and items named the same way follow */
 const IL_WHY={none:'Which course?','class time':'Guessed: due during its class','syllabus':'Guessed: same item in the syllabus',kind:'Guessed: only course with this kind of work',pattern:'Like items you sorted'};
@@ -2473,7 +2477,7 @@ function ilSortHTML(cs){const it=allTasks().filter(t=>t.ilearn&&t.why&&t.why!=='
     <ul class="ilg ilsort">${it.slice(0,120).map(t=>`<li><span><b>${esc(t.title)}</b><small>${esc(fmtD(pd(t.date)))}${t.time?' · '+esc(fmtClock(toMin(t.time),TT().h24)+(TT().h24?'':' '+ampm(toMin(t.time)))):''} · <em class="${t.why==='none'?'ilq':''}">${esc(IL_WHY[t.why]||'')}</em></small></span><select data-ilpick="${esc(t.u)}" aria-label="Course for ${esc(t.title)}"><option value="">${t.why==='none'?'Which course?':'Not sure'}</option>${cs.map(c=>`<option value="${esc(c.code)}"${code(t)&&normCode(code(t))===normCode(c.code)?' selected':''}>${esc(c.code)}</option>`).join('')}<option value="-">Not for this semester · hide</option></select></li>`).join('')}</ul>`;}
 function openIL(){ilPing();ilErr='';$('#ilurl').value=(S.ilearn&&S.ilearn.url)||'';$('#ilmodal').classList.add('on');ilPaint();setTimeout(()=>(ilOn()?$('#ilclose'):$('#ilurl')).focus({preventScroll:true}),0);}
 $('#ilgo').onclick=async()=>{const u=ilFix($('#ilurl').value);if(!/^https:\/\/[^\s]+$/i.test(u)){ilErr='Paste the calendar link from iLearn. It starts with https:// (or webcal://).';ilPaint();return;}
-  const L=IL(),had=L.url;L.url=u;$('#ilurl').value=u;delete L.file;if(had!==u){L.ev=[];L.chg={};}await ilSync();if(ilErr&&!had){delete L.url;}save();ilPaint();};
+  const L=IL(),had=L.url;L.url=u;$('#ilurl').value=u;delete L.file;delete L.auto;if(had!==u){L.ev=[];L.chg={};}await ilSync();if(ilErr&&!had){delete L.url;}save();ilPaint();};
 $('#ilurl').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();$('#ilgo').click();}});
 $('#ilfileb').onclick=()=>$('#ilfilef').click();
 $('#ilfilef').addEventListener('change',async e=>{const f=e.target.files[0];e.target.value='';if(!f)return;try{try{await loadCatalog();}catch{}const L=IL();if(!L.url)L.file=f.name;const r=ilIngest(await f.text());ilErr='';save();toast(`Added ${ilCount()} iLearn due date${ilCount()===1?'':'s'} for this semester.`);}catch(er){ilErr=String(er.message||er);}ilPaint();renderTasks();});
@@ -2482,7 +2486,7 @@ $('#ilmodal').addEventListener('click',e=>{if(e.target===$('#ilmodal')){$('#ilmo
   if(b.dataset.il==='sync')ilSync();
   if(b.dataset.il==='diag')ilDiag();
   if(b.dataset.il==='okall'){const L=IL();for(const t of allTasks())if(t.ilearn&&t.why&&t.why!=='none'&&t.why!=='you'){const c=t.courseId?byId(t.courseId):null;const code=c?normC(c.code):t.tag;if(code&&code!=='iLearn')L.pick[t.u]=code;}save();ilPaint();if(document.body.dataset.view==='tasks')renderTasks();}
-  if(b.dataset.il==='off'){const snap=JSON.stringify(S);delete S.ilearn;save();ilErr='';$('#ilurl').value='';ilPaint();renderTasks();toast('iLearn disconnected.',snap);}});
+  if(b.dataset.il==='off'){const snap=JSON.stringify(S);S.ilearn={noauto:1};save();ilErr='';$('#ilurl').value='';ilPaint();renderTasks();toast('iLearn disconnected.',snap);}});
 $('#ilclose').onclick=()=>{$('#ilmodal').classList.remove('on');const v=document.body.dataset.view;if(v==='tasks')renderTasks();else if(v==='home')renderHome();};
 $('#kil').onclick=openIL;
 function renderTasks(){TS();const s=SEM(),all=allTasks(),wi=weekInfo();
