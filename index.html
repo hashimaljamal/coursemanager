@@ -420,6 +420,14 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 .upbox.done,.upil.done{padding-top:10px;padding-bottom:10px;border-style:solid}.upbox.done>small,.upil.done small{display:none}.upbox.done .upi,.upil.done .upi{font-size:0}.upbox.done .upi::before,.upil.done .upi::before{content:'✓';font-size:13px}.upbox.done .upnone{display:none}
 .hup.ghost{display:inline-flex;align-items:center;gap:6px}.hup svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 @media(max-width:600px){.hup.ghost span{display:none}.hup.ghost{width:42px;padding:0;justify-content:center}}
+.iltog{margin:0 0 10px;align-items:center!important}.iltog input{margin-top:0!important}
+.upfab{display:none}
+@media(max-width:600px){.upfab{position:fixed;right:calc(16px + env(safe-area-inset-right));bottom:calc(16px + env(safe-area-inset-bottom));z-index:25;display:inline-flex;align-items:center;justify-content:center;gap:8px;height:52px;min-width:52px;padding:0;border-radius:99px;border:0;background:var(--ink);color:var(--bg);font:inherit;font-weight:800;font-size:15px;box-shadow:0 6px 18px rgb(0 0 0/.25);cursor:pointer;transition:transform .15s}
+ .upfab:active{transform:scale(.94)}.upfab svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}.upfab span{display:none}
+ .upfab.big{padding:0 20px 0 18px;background:var(--red);color:#fff}.upfab.big span{display:inline}
+ body[data-view=sched] .upfab{display:none}.hhero>.hup{display:none!important}
+ .shell{padding-bottom:76px}#toast{left:16px;right:84px;transform:translateY(140px);justify-content:space-between}#toast.on{transform:none}}
+.confetti{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:80}
 .nfcard{max-width:520px;width:100%;max-height:92vh;overflow:auto}.nfcard>h3{margin:0 0 10px}.nfok b{color:var(--ink)}.nfsh{width:14px;height:14px;vertical-align:-2px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
 .nfdev{display:flex;align-items:center;gap:10px;flex-wrap:wrap;border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;margin:0 0 4px}.nfdev p{margin:0!important;flex:1 1 220px;color:var(--ink)!important;font-weight:600}.nfdev.st-push{border-color:var(--ink)}.nfdev.st-denied p,.nfdev.st-none p,.nfdev.st-ios p{font-weight:500;color:var(--mute)!important}
 .nfh{margin:14px 0 2px;font-size:13px;text-transform:uppercase;letter-spacing:.04em;color:var(--mute)}.nfopts{margin:6px 0!important;gap:6px!important}.nfopt{padding:9px 12px!important;align-items:center!important;flex-wrap:wrap}.nfopt>span{flex:1 1 180px}.nfopt select{flex:none;min-height:34px;max-width:100%}@media(max-width:600px){.nfopt select{margin-left:29px}}
@@ -913,6 +921,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 <div id="zmodal" class="modal"><div class="card cnf dcard"><h3>Reset data</h3><p class="hint">Deletes data from this browser. You can undo right after, but export a backup first if you might want it later.</p>
 <div class="dopts" id="zopts"></div>
 <div class="mact"><button class="btn ghost" id="zcancel">Cancel</button><button class="btn danger" id="zdo">Reset…</button></div></div></div>
+<button class="upfab" id="upfab" type="button" aria-label="Upload syllabi, a schedule or a calendar" title="Upload"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 10.5V2.5M4.5 6 8 2.5 11.5 6M2.5 10.5v3h11v-3"/></svg><span>Upload</span></button>
 <div id="toast"><span id="tmsg"></span><button id="tundo" hidden>Undo</button></div>
 <script>
 /* ======== SETUP: paste your Cloudflare Worker address between the quotes, e.g. 'https://syllabus-reader.yourname.workers.dev' ======== */
@@ -1114,7 +1123,7 @@ function numbers(){
 }
 
 /* ---------- persistence ---------- */
-let saveWarned=false;function save(){S.at=Date.now();if(typeof queuePush==='function')queuePush();if(typeof nfDirty==='function')nfDirty();try{localStorage.setItem(KEY,JSON.stringify(S));saveWarned=false;}catch{if(!saveWarned){saveWarned=true;toast('Couldn’t save: browser storage is off or full. Export a backup.');}}}
+let saveWarned=false;function save(){S.at=Date.now();if(typeof fabPaint==='function')setTimeout(fabPaint,0);if(typeof queuePush==='function')queuePush();if(typeof nfDirty==='function')nfDirty();try{localStorage.setItem(KEY,JSON.stringify(S));saveWarned=false;}catch{if(!saveWarned){saveWarned=true;toast('Couldn’t save: browser storage is off or full. Export a backup.');}}}
 
 /* ---------- toast ---------- */
 let tT,undoSnap=null;
@@ -2287,7 +2296,9 @@ let tFilter='all',tShowDone=false,tShowCal=true,tLaterOpen=false,tOverOpen=false
    taking it, one per section) and labs do the same, so items from every iLearn course that matches one of your courses are merged. */
 const IL_FRESH=30*60000;let ilBusy=false,ilErr='';
 function IL(){if(!S.ilearn||typeof S.ilearn!=='object')S.ilearn={};const L=S.ilearn;L.ev=L.ev||[];L.map=L.map||{};L.grp=L.grp||{};L.chg=L.chg||{};L.pick=L.pick||{};return L;}
-const ilOn=()=>!!(S.ilearn&&(S.ilearn.url||S.ilearn.file||S.ilearn.ext&&S.ilearn.ext.at));
+const ilConn=()=>!!(S.ilearn&&(S.ilearn.url||S.ilearn.file||S.ilearn.ext&&S.ilearn.ext.at));
+/* connected but switched off: everything stays synced in the background, just not shown */
+const ilOn=()=>ilConn()&&!S.ilearn.hide;
 /* this semester's courses: syllabi plus timetable classes, labs included */
 function ilCourses(){const out=[],seen=new Set();const add=(code,title,co)=>{code=normC(code);if(!code||!/^[A-Z]{2,4} \d{3}/.test(code)||seen.has(normCode(code)))return;seen.add(normCode(code));out.push({code,title:title||'',co:co||null});};
   for(const c of S.courses)if(c.code)add(c.code,c.title,c);
@@ -2446,7 +2457,7 @@ function ilHelperHTML0(){const E=S.ilearn&&S.ilearn.ext,h=ilHelper();
 const ilCUrl=(cid,sub)=>{const E=S.ilearn&&S.ilearn.ext,c=E&&E.c[cid];const base=(c&&c.url?c.url:`https://ilearn.aus.edu/ultra/courses/${cid}/outline`).replace(/\/outline.*$/,'');return base+'/'+(sub||'outline');};
 const ilSite=code=>code?S.courses.find(c=>c.code&&(normCode(c.code)===normCode(code)||normCode(altCode(c.code))===normCode(code)))||null:null;
 const ilMine=cid=>{const E=S.ilearn&&S.ilearn.ext,c=E&&E.c[cid];return!!c&&ilExtUse({cid,...c},ilCourses());};
-function ilGrades(){const E=S.ilearn&&S.ilearn.ext;if(!E||!E.g)return[];const out=[];
+function ilGrades(){const E=S.ilearn&&S.ilearn.ext;if(!E||!E.g||!ilOn())return[];const out=[];
   for(const n in E.g){const x=E.g[n],c=E.c[x.c];if(!c||!ilMine(x.c)||IL_NOISE.test(x.t)||/^\s*total\b|\btotal\s*$/i.test(x.t))continue;out.push({n,...x,code:c.code||c.name,co:ilSite(c.rc||c.code)||ilSite(c.code)});}
   return out.sort((a,b)=>(b.at||b.d||'').localeCompare(a.at||a.d||''));}
 const ilPending=co=>{const L=IL();return ilGrades().filter(x=>x.co&&(!co||x.co.id===co.id)&&x.co.comps.length&&!(L.gdone||{})[x.n]);};
@@ -2492,13 +2503,13 @@ function coTasksHTML(co){const T0=today0(),ids=new Set([co.id,...S.courses.filte
   const f=list[0],n=dDiff(T0,pd(f.date)),rel=n<0?`${-n} day${n===-1?'':'s'} overdue`:n===0?'Today':n===1?'Tomorrow':`In ${n} days`;
   return`<details class="cotasks" data-cot="${co.id}"${coOpen[co.id]?' open':''}><summary><span class="cotl">Upcoming</span><span class="cotp" style="--tc:${f.final?'var(--red)':taskColor(f)}"><i class="cdot"></i><span class="cotb"><b>${esc(f.title)}</b><small>${esc(taskWhen(f))}</small></span><em class="${n<0?'late':n<=2?'soon':''}">${rel}</em></span><span class="cotn">${list.length>1?`+${list.length-1} more`:'Details'}<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg></span></summary><ul class="tasks">${list.map(t=>taskRow(t,true)).join('')}</ul></details>`;}
 document.addEventListener('toggle',e=>{const d=e.target;if(d.classList&&d.classList.contains('cotasks'))coOpen[d.dataset.cot]=d.open;},true);
-function ilLinksHTML(co){const E=S.ilearn&&S.ilearn.ext;if(!E||!E.c||!co||!co.code)return'';const cur=ilTermName();
+function ilLinksHTML(co){const E=S.ilearn&&S.ilearn.ext;if(!E||!E.c||!co||!co.code||!ilOn())return'';const cur=ilTermName();
   const mk=code=>Object.entries(E.c).filter(([id,c])=>c.rc&&normCode(c.rc)===normCode(code)&&(!c.term||c.term===cur)).map(([id,c])=>{const sec=(c.name.match(/Sec(?:tion)?\s*0*(\d+)/i)||[])[1];return{id,kind:/all\s*students/i.test(c.name)?'All students':sec?'Section '+sec.padStart(2,'0'):'Course'};}).sort((a,b)=>(a.kind==='All students'?0:1)-(b.kind==='All students'?0:1));
   const own=mk(co.code),lab=!co.isLab&&!/L$/.test(normC(co.code))&&co.comps.some(k=>k.kind==='lab')?mk(normC(co.code)+'L'):[];if(!own.length&&!lab.length)return'';
   const a=(x,pre)=>`<a class="ill" href="${esc(ilCUrl(x.id))}" target="_blank" rel="noopener">${pre}${esc(x.kind)}<span aria-hidden="true">↗</span></a>`;
   return`<div class="illinks"><span class="illh">iLearn</span>${own.map(x=>a(x,'')).join('')}${lab.map(x=>a(x,'Lab · ')).join('')}</div>`;}
 /* the two Home widgets go on the page by themselves the first time the helper brings grades or announcements */
-function ilAutoWidgets(){const E=S.ilearn&&S.ilearn.ext;if(!E)return;
+function ilAutoWidgets(){const E=S.ilearn&&S.ilearn.ext;if(!E||!ilOn())return;
   /* added the first time by an earlier version at a larger size: shrink them, unless you've resized them since */
   const keys=['items',...(S.home&&Array.isArray(S.home.mItems)?['mItems']:[])];
   if(S.home&&S.home.ilAuto===1){for(const k of keys){const items=hwItemsOf(k);for(const o of items)if(IL_W.has(o.t)&&o.w===9&&!o.h){o.w=6;o.h=340;}hwSave(items,k);}S.home.ilAuto=2;save();return;}
@@ -2563,15 +2574,18 @@ async function ilSync(opt={}){const L=IL();if(!L.url||ilBusy)return;ilBusy=true;
 const ilCount=()=>{try{return allTasks().filter(t=>t.ilearn).length;}catch{return 0;}};
 function ilAuto(){ilPing();const L=S.ilearn;if(!L||!L.url||ilBusy)return;const last=Math.max(L.at||0,L.fail||0);if(Date.now()-last>IL_FRESH)ilSync({quiet:true});}
 const ago=t=>{const m=Math.round((Date.now()-t)/60000);return m<1?'just now':m<60?m+' min ago':m<1440?Math.round(m/60)+' h ago':fmtD(new Date(t));};
-function ilPaint(){const m=$('#ilmodal');if(!m||!m.classList.contains('on'))return;const L=IL(),on=ilOn();
+function ilPaint(){const m=$('#ilmodal');if(!m||!m.classList.contains('on'))return;const L=IL(),on=ilConn();
   $('#ilhelper').innerHTML=ilHelperHTML();if(ilErr)$('#ilmanual').open=true;$('#ilgo').textContent=L.url?'Save link':'Connect';$('#ilurl').value=$('#ilurl').value||L.url||'';
   $('#ilmsg').className='ilmsg'+(ilErr?' err':'');$('#ilmsg').textContent=ilBusy?'Fetching your iLearn calendar…':ilErr;
   if(!on){$('#ilstate').innerHTML='';return;}
   const cs=ilCourses(),keys=Object.keys(L.grp).sort((a,b)=>(L.grp[a].cur?0:1)-(L.grp[b].cur?0:1)||L.grp[a].label.localeCompare(L.grp[b].label)),cur=keys.filter(k=>L.grp[k].cur||(!L.grp[k].code&&ilTarget(k)!=='skip')||(L.map[k]&&L.map[k]!=='skip')),oth=keys.filter(k=>!cur.includes(k));
   const sel=k=>`<select data-ilmap="${esc(k)}" aria-label="Course for ${esc(L.grp[k].label)}">${L.grp[k].code?'':`<option value="auto"${ilTarget(k)==='auto'?' selected':''}>Sort item by item</option>`}<option value="skip"${ilTarget(k)==='skip'?' selected':''}>Don’t import</option>${cs.map(c=>`<option value="${esc(c.code)}"${ilTarget(k)===c.code?' selected':''}>${esc(c.code)}${c.title?' · '+esc(c.title):''}</option>`).join('')}${L.grp[k].code&&!cs.some(c=>normCode(c.code)===normCode(L.grp[k].code))?`<option value="${esc(L.grp[k].code)}"${ilTarget(k)===L.grp[k].code?' selected':''}>${esc(L.grp[k].code)} (on its own)</option>`:''}</select>`;
   const row=k=>`<li><span><b>${esc(L.grp[k].label)}</b><small>${L.grp[k].n} item${L.grp[k].n===1?'':'s'}</small></span>${sel(k)}</li>`;
-  $('#ilstate').innerHTML=ilExtListHTML()+`<div class="ilstat"><span class="ildot"></span><span><b>Connected</b> · ${L.url?(L.auto?'link added by the iLearn helper · ':'')+'synced '+(L.at?ago(L.at):'never'):L.file?'from a calendar file':'through the iLearn helper only'} · ${ilCount()} due date${ilCount()===1?'':'s'} this semester</span>${L.url?`<button class="btn ghost sm" data-il="sync"${ilBusy?' disabled':''}>Sync now</button>`:''}<button class="btn ghost sm danger-ghost" data-il="off">Disconnect</button></div>
+  $('#ilstate').innerHTML=`<label class="dopt iltog"><input type="checkbox" data-iltog ${L.hide?'':'checked'}><span><b>Use iLearn in Course Manager</b><small>${L.hide?'Off: iLearn due dates, grades, announcements and links are hidden. You’re still connected and it keeps syncing, so turning it back on is instant.':'On: iLearn due dates, grades, announcements and course links show up across the site. Turn off to hide them without disconnecting.'}</small></span></label>`+(L.hide?'':ilExtListHTML())+`<div class="ilstat"><span class="ildot"></span><span><b>Connected</b> · ${L.url?(L.auto?'link added by the iLearn helper · ':'')+'synced '+(L.at?ago(L.at):'never'):L.file?'from a calendar file':'through the iLearn helper only'} · ${ilCount()} due date${ilCount()===1?'':'s'} this semester</span>${L.url?`<button class="btn ghost sm" data-il="sync"${ilBusy?' disabled':''}>Sync now</button>`:''}<button class="btn ghost sm danger-ghost" data-il="off">Disconnect</button></div>
     ${keys.length?`<h4>iLearn courses</h4><p class="hint">Each class can have an iLearn course for everyone taking it and one for your section, and labs have their own. All the ones that match your courses this semester are used.</p><ul class="ilg">${cur.map(row).join('')||'<li class="hint">Couldn’t tell which iLearn courses are this semester’s. Pick a course for them below, and tap “Copy details for troubleshooting” to send to the site’s maker.</li>'}</ul>${oth.length?`<details class="ilo"><summary>Other iLearn courses (${oth.length})</summary><ul class="ilg">${oth.map(row).join('')}</ul></details>`:''}`:L.ext&&L.ext.at?'':'<p class="hint">Nothing dated in your iLearn calendar yet.</p>'}${ilSortHTML(cs)}${L.url||ilRaw?'<p class="ildiag"><button class="lnkbtn" data-il="diag">Copy details for troubleshooting</button> <span class="hint">If courses aren’t sorted right. It copies how your iLearn calendar names courses and items, without your link.</span></p>':''}`;}
+$('#ilmodal').addEventListener('change',e=>{const c=e.target.closest('[data-iltog]');if(!c)return;const L=IL();if(c.checked)delete L.hide;else L.hide=1;
+  if(c.checked)ilAutoWidgets();save();ilPaint();renderTasks();if(document.body.dataset.view==='home')renderHome();else if(document.body.dataset.view==='grades')render();if(typeof nfHelper==='function')nfHelper();
+  toast(c.checked?'iLearn is back on':'iLearn hidden. Still connected and syncing.');});
 /* this semester's items whose course was guessed or isn't known: pick it once, and items named the same way follow */
 const IL_WHY={none:'Which course?','class time':'Guessed: due during its class','syllabus':'Guessed: same item in the syllabus',kind:'Guessed: only course with this kind of work',pattern:'Like items you sorted'};
 function ilSortHTML(cs){const it=allTasks().filter(t=>t.ilearn&&t.why&&t.why!=='you'&&!t.autoDone).sort((a,b)=>(a.why==='none'?0:1)-(b.why==='none'?0:1)||a.date.localeCompare(b.date));if(!it.length)return'';
@@ -2678,7 +2692,7 @@ VK.addEventListener('click',e=>{const f=e.target.closest('[data-tf]');if(f){tFil
   else if(a==='catcolor'){const k=catOf(b.dataset.id);pickColor(b,k.color,c=>{k.color=c;save();renderTasks();});}
   else if(a==='catdel'){const k=catOf(b.dataset.id);confirmBox(`Delete “${k.name}”?`,'Its tasks stay, without a category.','Delete category').then(ok=>{if(!ok)return;const snap=JSON.stringify(S);S.cats=S.cats.filter(x=>x!==k);S.tasks.forEach(t=>{if(t.catId===k.id)t.catId=null;});if(tFilter==='k:'+k.id)tFilter='all';save();renderTasks();toast('Category deleted',snap);});}});
 document.addEventListener('change',e=>{const c=e.target;if(c.dataset&&c.dataset.cal!=null){toggleCal(c.dataset.cal,c.checked);c.closest('.crow')?.classList.toggle('done',c.checked);setTimeout(()=>{renderPlanner();if($('#semmodal').classList.contains('on'))fillSem();},c.checked?350:0);return;}
-  if(c.dataset&&c.dataset.task!=null){toggleTask(c.dataset.task,c.checked);setTimeout(renderPlanner,c.checked?350:0);return;}
+  if(c.dataset&&c.dataset.task!=null){toggleTask(c.dataset.task,c.checked);if(c.checked)confetti();setTimeout(renderPlanner,c.checked?350:0);return;}
   if(c.id==='kdone'){tShowDone=c.checked;renderTasks();}if(c.id==='kcal'){tShowCal=c.checked;renderTasks();}});
 $('#ktaskadd').onclick=()=>openTask(null);$('#ksem').onclick=()=>{$('#srcmodal').classList.remove('on');openSem();};
 function pickColor(btn,cur,cb){closeColor();const pop=document.createElement('div');pop.className='cpop';
@@ -2770,9 +2784,9 @@ function upShow(){const T=TT(),cs=S.courses.filter(c=>!c.isLab).length,cal=S.sem
   $('#upcal').innerHTML=line(UP.cal?[UP.cal]:null,cal?`Already added: ${cal} dates for ${semName()||'this semester'}`:'');
   for(const b of document.querySelectorAll('.upbox'))b.classList.toggle('has',b.dataset.up==='syl'?UP.syl.length>0:!!UP[b.dataset.up]);
   const hv={syl:cs>0,ics:T.slots.length>0,cal:!!cal};for(const b of document.querySelectorAll('.upbox')){const k=b.dataset.up,picked=k==='syl'?UP.syl.length>0:!!UP[k];b.classList.toggle('done',hv[k]&&!picked);}
-  $('#upil').classList.toggle('done',ilOn());$('#upmodal .upcard>.hint').textContent=Object.values(hv).some(Boolean)?'Add more or replace anything here. Ticked items are already set up; click one to update it.':'Add any of these. They’re all optional, and each one fills in a different part of the site.';
+  $('#upil').classList.toggle('done',ilConn());$('#upmodal .upcard>.hint').textContent=Object.values(hv).some(Boolean)?'Add more or replace anything here. Ticked items are already set up; click one to update it.':'Add any of these. They’re all optional, and each one fills in a different part of the site.';
   $('#updo').disabled=!(UP.syl.length||UP.ics||UP.cal);}
-function openUpload(){UP.syl=[];UP.ics=null;UP.cal=null;upShow();$('#upilst').textContent=ilOn()?'Connected · Manage':'Connect →';$('#upil').classList.toggle('on',ilOn());$('#upmodal').classList.add('on');}
+function openUpload(){UP.syl=[];UP.ics=null;UP.cal=null;upShow();$('#upilst').textContent=ilConn()?(ilOn()?'Connected · Manage':'Connected · Off'):'Connect →';$('#upil').classList.toggle('on',ilConn());$('#upmodal').classList.add('on');}
 const upInput={syl:'#upsylf',ics:'#upicsf',cal:'#upcalf'};
 function upTake(kind,files){files=[...files];if(!files.length)return;if(kind==='syl'){const ics=files.filter(f=>/\.ics$/i.test(f.name));if(ics.length&&!UP.ics)UP.ics=ics[0];UP.syl.push(...files.filter(f=>!/\.ics$/i.test(f.name)));}else UP[kind]=files[0];upShow();}
 for(const b of document.querySelectorAll('.upbox')){const k=b.dataset.up;
@@ -4010,7 +4024,7 @@ function nfLocal(items){for(const t of NFTM.values())clearTimeout(t);NFTM.clear(
   for(const it of NFLOC)NFTM.set(it.id,setTimeout(()=>nfShow(it),Math.max(0,it.at-now)));}
 function nfCatchUp(){const now=Date.now();for(const it of NFLOC)if(it.at<=now&&it.at>now-15*6e4)nfShow(it);}
 /* the iLearn helper sends grade / announcement / due date alerts itself, so it needs the key */
-function nfHelper(){if(!ilHelper())return;const n=NF(),T=n.t;window.postMessage({cmNotif:n.key&&n.push?{key:n.key,relay:RELAY,on:{ilgrade:!!T.ilgrade.on,ilnews:!!T.ilnews.on,ilmoved:!!T.ilmoved.on}}:{off:1}},location.origin);}
+function nfHelper(){if(!ilHelper())return;const n=NF(),T=n.t,u=ilOn();window.postMessage({cmNotif:n.key&&n.push?{key:n.key,relay:RELAY,on:{ilgrade:u&&!!T.ilgrade.on,ilnews:u&&!!T.ilnews.on,ilmoved:u&&!!T.ilmoved.on}}:{off:1}},location.origin);}
 setTimeout(nfHelper,2000);nfDot();window.CMNF={nfBuild,nfSync,nfDev,timers:()=>NFTM.size};
 async function nfEnable(){if(!nfCanNotify()){toast('This browser can’t show notifications');return;}
   let p=Notification.permission;if(p==='default')p=await Notification.requestPermission();
@@ -4056,6 +4070,23 @@ $('#nftest').onclick=async()=>{const dev=nfDev(),b=$('#nftest');b.disabled=true;
 /* a close button on every pop-up: same as pressing Escape (cancels, never saves) */
 document.querySelectorAll('.modal>.card').forEach(c=>c.insertAdjacentHTML('afterbegin','<button type="button" class="mx" aria-label="Close" title="Close"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8"/></svg></button>'));
 document.addEventListener('click',e=>{if(e.target.closest('.modal .mx'))document.dispatchEvent(new KeyboardEvent('keydown',{key:'Escape',bubbles:true}));});
+/* phones: one floating Upload button (bigger and labelled until you've set things up) */
+function fabPaint(){const b=$('#upfab');if(b)b.classList.toggle('big',!upDone());}
+$('#upfab').onclick=openUpload;setTimeout(fabPaint,0);
+/* a little celebration when you tick off a task */
+let CF=null;
+function confetti(){if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  const W=innerWidth,H=innerHeight,ink=getComputedStyle(document.documentElement).getPropertyValue('--ink').trim()||'#111',cols=['#d0021b','#f59e0b','#16a34a','#2563eb','#7c3aed','#ec4899','#06b6d4',ink];
+  if(!CF){const cv=document.createElement('canvas');cv.className='confetti';cv.setAttribute('aria-hidden','true');document.body.appendChild(cv);const dpr=Math.min(2,devicePixelRatio||1);cv.width=W*dpr;cv.height=H*dpr;const x=cv.getContext('2d');x.scale(dpr,dpr);CF={cv,x,p:[],W,H};}
+  const n=Math.round(Math.min(160,Math.max(70,W/7)));
+  for(let i=0;i<n;i++)CF.p.push({x:Math.random()*W,y:-20-Math.random()*H*.45,vx:(Math.random()-.5)*1.2,vy:2+Math.random()*3,r:Math.random()*6.3,vr:(Math.random()-.5)*.25,w:6+Math.random()*6,h:4+Math.random()*5,c:cols[i%cols.length],sw:Math.random()*6.3,round:Math.random()<.25});
+  if(CF.raf)return;let last=performance.now();
+  const step=t=>{const dt=Math.min(3,(t-last)/16.7);last=t;const{x,p}=CF;x.clearRect(0,0,CF.W,CF.H);
+    for(let i=p.length-1;i>=0;i--){const q=p[i];q.sw+=.05*dt;q.vy=Math.min(q.vy+.05*dt,6);q.x+=(q.vx+Math.sin(q.sw)*.8)*dt;q.y+=q.vy*dt;q.r+=q.vr*dt;
+      if(q.y>CF.H+20){p.splice(i,1);continue;}x.save();x.translate(q.x,q.y);x.rotate(q.r);x.fillStyle=q.c;x.globalAlpha=q.y>CF.H*.8?Math.max(0,(CF.H+20-q.y)/(CF.H*.2+20)):1;
+      if(q.round){x.beginPath();x.arc(0,0,q.h/2+1,0,6.3);x.fill();}else{x.scale(1,Math.cos(q.sw*2));x.fillRect(-q.w/2,-q.h/2,q.w,q.h);}x.restore();}
+    if(p.length)CF.raf=requestAnimationFrame(step);else{CF.cv.remove();CF=null;}};
+  CF.raf=requestAnimationFrame(step);}
 /* "add" pop-ups: Add course (Courses) and Sources (Tasks) */
 $('#psetup').onclick=()=>{const p=PL(),pr=curProg(),st=(id,t,k)=>{const e=$(id);e.textContent=t;e.className='chst'+(k?' '+k:'');};
   st('#plprogst',pr?'Set ✓':'Not picked',pr?'ok':'');let n=0;for(const t of p.terms)for(const x of t.items||[])if(x.st==='done'||x.st==='tr')n++;
@@ -4070,7 +4101,7 @@ document.addEventListener('click',e=>{const c=e.target.closest('[data-chclose]')
 for(const id of ['#comodal','#srcmodal'])$(id).addEventListener('click',e=>{if(e.target===$(id))$(id).classList.remove('on');});
 $('#coadd').onclick=()=>{$('#comodal').classList.add('on');setTimeout(()=>$('#pick').focus({preventScroll:true}),0);};
 $('#ksrc').onclick=()=>{const st=(id,t,k)=>{const e=$(id);e.textContent=t;e.className='chst'+(k?' '+k:'');};
-  st('#kilst',ilOn()?(K_SORT?`${K_SORT} to sort`:'Connected ✓'):'Not connected',ilOn()?(K_SORT?'warn':'ok'):'');
+  st('#kilst',ilConn()?(!ilOn()?'Off':K_SORT?`${K_SORT} to sort`:'Connected ✓'):'Not connected',ilOn()?(K_SORT?'warn':'ok'):'');
   const f=myFinals();st('#kfinst',f&&f.list.length?`${f.list.length} final${f.list.length===1?'':'s'} ✓`:'Not added',f&&f.list.length?'ok':'');
   const s=SEM(),n=s?(s.cal||[]).length:0;st('#ksemst',s&&s.start?`${n} date${n===1?'':'s'} ✓`:'Not set',s&&s.start?'ok':'');
   $('#srcmodal').classList.add('on');setTimeout(()=>$('#kil').focus({preventScroll:true}),0);};
