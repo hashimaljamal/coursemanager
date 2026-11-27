@@ -65,7 +65,7 @@ h1{font-size:clamp(22px,2.4vw,30px);line-height:1.1;margin:0;font-stretch:112%;f
 @media(max-width:600px){.sframewrap{height:calc(100dvh - 190px)}}
 .tabs a[aria-current=page]{background:var(--bg);color:var(--ink);box-shadow:0 1px 3px rgb(0 0 0/.14)}
 body:not([data-view=tt]) .tonly,body:not([data-view=grades]) .gonly,body:not([data-view=tasks]) .konly,body:not([data-view=home]) .honly{display:none!important}
-.rline{margin:0;font-size:12px;color:var(--mute)}
+.rline{margin:0;font-size:12px;color:var(--mute)}.corline{margin:12px 0 0!important;font-size:12.5px!important}.copbar>.pleft:empty{display:none}#v-grades .copbar{justify-content:flex-end}
 /* page bar: same place and height on every page */
 .pbar{display:flex;align-items:center;justify-content:space-between;gap:8px 16px;flex-wrap:wrap;min-height:62px;padding:10px 0;border-bottom:1px solid var(--line)}
 .pleft{flex:1 1 260px;min-width:0;display:flex;align-items:center;gap:8px 14px;flex-wrap:wrap}
@@ -751,7 +751,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
   </div>
 </div><div class="kwrap"><div class="kside" id="kside"></div><div class="kmain"><div id="klist"></div></div></div></section>
 <section id="v-grades" hidden>
-<div class="pbar"><div class="pleft"><p class="rline"><span id="reader"></span> <button class="link" id="setbtn">Reading settings</button></p></div>
+<div class="pbar copbar"><div class="pleft"></div>
   <div class="acts">
     <button class="btn" id="coadd" title="Add a course from a syllabus, pasted text or by hand"><svg class="bi" viewBox="0 0 16 16" aria-hidden="true"><path d="M8 3v10M3 8h10"/></svg>Add course</button>
   </div>
@@ -859,7 +859,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 <button class="dopt" id="pick"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 10.5V2.5M4.5 6 8 2.5 11.5 6M2.5 10.5v3h11v-3"/></svg><span><b>Upload syllabus files</b><small>PDF, Word, photos or text. You can pick several at once, or drop them anywhere on the page.</small></span></button>
 <button class="dopt" id="pastebtn"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5.5 2.5h5v2h-5zM4 3.5H3v10.5h10V3.5h-1M5.5 8h5M5.5 10.5h3.5"/></svg><span><b>Paste syllabus text</b><small>Copy the grading section from the syllabus and paste it in.</small></span></button>
 <button class="dopt" id="manual"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10.5 2.5l3 3-8 8h-3v-3zM9 4l3 3"/></svg><span><b>Enter it by hand</b><small>Start with a blank course and type in its parts.</small></span></button>
-</div><div class="mact"><button class="btn ghost" data-chclose>Cancel</button></div></div></div>
+</div><p class="rline corline"><span id="reader"></span> <button class="link" id="setbtn">Reading settings</button></p><div class="mact"><button class="btn ghost" data-chclose>Cancel</button></div></div></div>
 <div id="srcmodal" class="modal"><div class="card cnf" role="dialog" aria-modal="true" aria-labelledby="srctitle"><h3 id="srctitle">Sources</h3><p class="hint">Where your tasks and dates come from, besides your syllabi.</p><div class="dopts chopts">
 <button class="dopt" id="kil"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6.5 9.5a3 3 0 0 0 4.2 0l2-2a3 3 0 0 0-4.2-4.2l-.8.8M9.5 6.5a3 3 0 0 0-4.2 0l-2 2a3 3 0 0 0 4.2 4.2l.8-.8"/></svg><span><b>iLearn</b><small>Due dates, grades and announcements from your courses.</small></span><em class="chst" id="kilst"></em></button>
 <button class="dopt" id="kfin"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 2.5h10v11H3zM5.5 5.5h5M5.5 8h5M5.5 10.5h3"/></svg><span><b>Final exams</b><small>The university’s final exam schedule, matched to your courses.</small></span><em class="chst" id="kfinst"></em></button>
@@ -1445,7 +1445,7 @@ const sm=$('#smodal');
 function sUI(){const p=$('#sprov').value,k=p==='gemini'||p==='anthropic';$('#skeyl').hidden=$('#smodl').hidden=!k;$('#smod').placeholder=DEF_MODEL[p]||'';
   $('#snotep').textContent=p==='site'?'Uses this site’s own AI reader. Nothing to set up. If it’s busy or down, the built-in reader is used instead.':p==='gemini'?'Free tier: create a key at aistudio.google.com → Get API key. On the free tier Google may use what you send to improve its products.':p==='anthropic'?'Paid per use. Create a key at console.anthropic.com. Reading one syllabus usually costs well under a cent with the default model.':p==='basic'?'Looks for percentage lines (e.g. “Quizzes 10%”), point totals, item counts, “lowest … dropped” and a letter-grade scale. Always check what it found.':'';}
 const openSettings=()=>{$('#sprov').value=(CFG.provider==='site'&&!RELAY)?'basic':CFG.provider;$('#skey').value=CFG.key;$('#smod').value=CFG.model;sUI();sm.classList.add('on');};
-$('#setbtn').onclick=openSettings;$('#sprov').onchange=sUI;$('#scancel').onclick=()=>sm.classList.remove('on');
+$('#setbtn').onclick=()=>{$('#comodal').classList.remove('on');openSettings();};$('#sprov').onchange=sUI;$('#scancel').onclick=()=>sm.classList.remove('on');
 $('#ssave').onclick=()=>{CFG={provider:$('#sprov').value,key:$('#skey').value.trim(),model:$('#smod').value.trim()};try{localStorage.setItem(SKEY,JSON.stringify(CFG));}catch{}sm.classList.remove('on');readerLabel();toast((CFG.provider==='gemini'||CFG.provider==='anthropic')&&!CFG.key?'No key entered, so '+NAMES[provider()]+' stays on':'Reading settings saved');};
 /* ---------- backup: export this page or the whole site; import detects what a file holds ---------- */
 const SCOPES={grades:{name:'Courses',sub:'Courses, weights, scores, professors and missed-exam make-ups',get:()=>({courses:S.courses,sel:S.sel}),set:d=>{S.courses=Array.isArray(d.courses)?d.courses:[];S.sel=d.sel;}},
