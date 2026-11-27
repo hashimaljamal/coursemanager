@@ -616,7 +616,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 .cbf{display:inline-block;border:1px solid var(--line);border-radius:6px;padding:1px 7px;margin:0 4px 4px 0;font-size:12px;font-weight:700}
 .pbrowse select{font-size:13.5px;min-height:36px;padding:4px 8px;width:auto}.cbadd select{max-width:340px}
 @media(max-width:600px){.cblist{grid-template-columns:1fr}.cbdl>div{grid-template-columns:1fr;gap:0}}
-.gpacg{display:grid;margin-top:8px;padding-top:8px;border-top:1px solid var(--line)}
+.gpas{display:grid}.gpacg{display:grid;margin-top:8px;padding-top:8px;border-top:1px solid var(--line)}
 
 @media(prefers-color-scheme:dark){:root:not([data-theme=light]) .pbox{border-color:#111}}
 :root[data-theme=dark] .pbox{border-color:#111}
@@ -644,7 +644,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
  aside{padding:12px 0 10px;border-bottom:1px solid var(--line);display:flex;gap:8px;align-items:stretch;overflow-x:auto;scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;scrollbar-width:none}
  aside::-webkit-scrollbar{display:none}
  aside h2{display:none}
- .gpacard{flex:none;width:auto;margin:0;min-width:120px;padding:6px 12px}.gpacard b{font-size:22px}.gpacard small{display:none}
+ .gpacard{flex:none;width:auto;margin:0;min-width:120px;padding:6px 12px;display:flex;align-items:center;gap:12px}.gpacg{margin:0;padding:0 0 0 12px;border-top:0;border-left:1px solid var(--line);align-self:stretch;align-content:center}.gpas,.gpacg{white-space:nowrap}.gpacard b{font-size:22px}.gpacard small{display:none}
  .clist{flex-direction:row;gap:6px}
  .ci{flex:none;scroll-snap-align:start;min-width:130px;max-width:220px;border:1px solid var(--line)}
  .ci.sel{box-shadow:inset 0 -3px 0 var(--cc,var(--red));border-color:var(--soft)}
@@ -981,7 +981,7 @@ function renderSide(){
   const list=S.courses.filter(c=>!(c.isLab&&linkedBy(c.id)));
   const sm=semester();
   const cg=projCGPA(sm);
-  $('#gpacard').innerHTML=`<span>Semester GPA</span>${sm.gpa==null?'<b class="nil">No grades yet</b>':`<b>${fmt2(sm.gpa)}</b>`}<small>${sm.n?`${sm.n} course${sm.n===1?'':'s'} · ${fmt(sm.cr)} credits`:'Enter scores to see it'}</small>${cg?`<div class="gpacg"><span>Projected CGPA</span><b>${g2(cg.cg)}</b><small>Now ${g2(cg.prior)} over ${fmt(cg.h)} credits</small></div>`:''}`;
+  $('#gpacard').innerHTML=`<div class="gpas"><span>Semester GPA</span>${sm.gpa==null?'<b class="nil">No grades yet</b>':`<b>${fmt2(sm.gpa)}</b>`}<small>${sm.n?`${sm.n} course${sm.n===1?'':'s'} · ${fmt(sm.cr)} credits`:'Enter scores to see it'}</small></div>${cg?`<div class="gpacg"><span>Projected CGPA</span><b>${g2(cg.cg)}</b><small>Now ${g2(cg.prior)} over ${fmt(cg.h)} credits</small></div>`:''}`;
   $('#gpacard').classList.toggle('sel',S.sel==='gpa');$('#gpacard').hidden=!list.length;
   document.querySelector('.wrap').classList.toggle('nocourses',!list.length);
   $('#side').innerHTML=list.map(c=>{const p=coursePct(c),inc=c.comps.map(k=>labOf(c,k)).filter(Boolean);return`<button class="ci ${(S.sel===c.id||inc.some(l=>l.id===S.sel))?'sel':''}" data-sel="${c.id}" data-rid="${c.id}" style="--cc:${courseColor(c)}"><b><i class="cdot" aria-hidden="true"></i>${esc(c.code||'Untitled')}</b><em>${p==null?'':esc(letter(c,p))}</em><small>${p==null?'No grades yet':fmt(p)+'%'}${inc.length?' · incl. '+inc.map(l=>esc(l.code)).join(', '):''}${(()=>{const o=classesLeftMap()[c.id];return o?` · ${o.left} class${o.left===1?'':'es'} left`:'';})()}</small></button>`}).join('')||'<p class="hint">No courses yet.</p>';
