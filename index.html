@@ -701,7 +701,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--ink);outline:none;box
 <div class="shell">
 <header class="top">
   <div class="brand"><div class="btitle"><span class="bpre">Hashim’s</span><h1>Course Manager</h1></div><div class="brow"><button class="semsw" id="semsw" aria-haspopup="menu" aria-expanded="false"><span id="semswl">Semester</span><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg></button><button class="acct" id="acct" hidden aria-haspopup="menu"></button><button class="acct nfb" id="nfbtn" title="Reminders and notifications" aria-label="Reminders and notifications"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 11.5V7a4 4 0 0 1 8 0v4.5l1.2 1.2H2.8zM6.5 14a1.6 1.6 0 0 0 3 0"/></svg><i hidden></i></button></div></div>
-  <nav class="tabs" aria-label="Sections"><a href="#home" id="tab-home">Home</a><a href="#courses" id="tab-grades">Courses</a><a href="#timetable" id="tab-tt">Timetable</a><a href="#tasks" id="tab-tasks">Tasks</a><a href="#plan" id="tab-plan">Plan</a><a href="#scheduler" id="tab-sched" hidden>Scheduler</a></nav>
+  <nav class="tabs" aria-label="Sections"><a href="#home" id="tab-home">Home</a><a href="#timetable" id="tab-tt">Timetable</a><a href="#courses" id="tab-grades">Courses</a><a href="#tasks" id="tab-tasks">Tasks</a><a href="#plan" id="tab-plan">Plan</a><a href="#scheduler" id="tab-sched" hidden>Scheduler</a></nav>
   <div class="dacts">
     <button class="btn ghost sm dbtn" id="impbtn" title="Import a backup file"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2v8M4.5 6.5 8 10l3.5-3.5M2.5 11v2.5h11V11"/></svg><span>Import</span></button>
     <button class="btn ghost sm dbtn" id="expbtn" title="Export a backup file"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 10V2M4.5 5.5 8 2l3.5 3.5M2.5 11v2.5h11V11"/></svg><span>Export</span></button>
@@ -3124,7 +3124,7 @@ $('#sframewrap').addEventListener('click',e=>{if(e.target.id==='srecheck'){$('#s
 $('#sreload').onclick=()=>{schedLoaded=false;Promise.resolve(schedCheck(true)).then(()=>renderSched());};
 $('#sinvbtn').onclick=()=>{const on=$('#sinvbtn').getAttribute('aria-pressed')!=='true';try{localStorage.setItem('cm-sinv',on?'1':'0');}catch{}schedTheme();};
 schedCheck();document.addEventListener('visibilitychange',()=>{if(!document.hidden)schedCheck();});
-const VIEWS={home:['#home','Home'],grades:['#courses','Courses'],tt:['#timetable','Timetable'],tasks:['#tasks','Tasks'],plan:['#plan','Plan'],sched:['#scheduler','Scheduler']};
+const VIEWS={home:['#home','Home'],tt:['#timetable','Timetable'],grades:['#courses','Courses'],tasks:['#tasks','Tasks'],plan:['#plan','Plan'],sched:['#scheduler','Scheduler']};
 function route(){const h=location.hash,v=h==='#courses'||h==='#grades'?'grades':h==='#timetable'?'tt':h==='#tasks'?'tasks':h==='#plan'||h==='#planner'?'plan':h==='#scheduler'?'sched':'home';const prevV=document.body.dataset.view;document.body.dataset.view=v;
   for(const k in VIEWS){$('#v-'+k).hidden=k!==v;$('#tab-'+k).setAttribute('aria-current',k===v?'page':'false');}
   $('#dropover').textContent=v==='tt'?'Drop your .ics schedule':'Drop syllabi to add them';document.title=VIEWS[v][1]+' · Course Manager';
