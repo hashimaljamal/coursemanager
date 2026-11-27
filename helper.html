@@ -37,7 +37,7 @@ code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;back
 .note{border-left:3px solid var(--red);padding:2px 0 2px 12px;font-size:14px;color:var(--mute);margin:10px 0}
 .qa{display:grid;gap:8px}.qa details{border:1px solid var(--line);border-radius:12px;padding:10px 14px}.qa summary{font-weight:700;cursor:pointer}.qa p{margin:8px 0 2px;color:var(--mute);font-size:14.5px}
 .status{display:none;align-items:center;gap:8px;border:1.5px solid var(--ok);color:var(--ok);border-radius:12px;padding:10px 14px;font-weight:700;margin:0 0 20px}.status i{width:9px;height:9px;border-radius:99px;background:var(--ok)}
-.status.on{display:flex}
+.status.on{display:flex}.status.upd{border-color:var(--red);color:var(--red)}.status.upd i{background:var(--red)}
 a{color:var(--ink)}
 </style>
 </head>
@@ -48,6 +48,7 @@ a{color:var(--ink)}
   <h1>Bring iLearn into Course Manager</h1>
   <p class="lead">A small browser extension that reads your iLearn due dates, grades and announcements with your own login, and sorts each one into the right course for you.</p>
   <div class="status" id="st"><i></i><span>The iLearn helper is installed in this browser.</span></div>
+  <div class="status upd" id="upd"><i></i><span></span></div>
 
   <div class="dl">
     <a class="btn" href="ilearn-helper.zip" download><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v10M5.5 8.5L10 13l4.5-4.5M4 16.5h12"/></svg>Download the helper</a>
@@ -73,7 +74,7 @@ a{color:var(--ink)}
   </ol>
   <p class="note">Only courses on your timetable or with a syllabus in Course Manager are used. Dropped courses, older terms and advising spaces are left out.</p>
 
-  <h2>Updating</h2>
+  <h2 id="update">Updating</h2>
   <ol class="steps">
     <li><b>Download the new zip</b><p>Unzip it over your old <code>ilearn-helper</code> folder, replacing the files.</p></li>
     <li><b>Reload it</b><p>On <code>chrome://extensions</code>, press the ↻ button on the helper’s card.</p></li>
@@ -91,7 +92,11 @@ a{color:var(--ink)}
 </div>
 <script>
 /* the helper marks this site's pages when it's installed */
-setTimeout(()=>{const v=document.documentElement.dataset.cmIlearnHelper;if(v){const s=document.getElementById('st');s.classList.add('on');s.querySelector('span').textContent='The iLearn helper (version '+v+') is installed in this browser.';}},400);
+const num=v=>String(v||'').split('.').map(n=>+n||0).reduce((a,n)=>a*1000+n,0);
+fetch('ilearn-helper.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).catch(()=>null).then(j=>{const latest=j&&j.version;if(latest)document.getElementById('ver').textContent='Version '+latest+' · for Chrome or Edge on a computer · free · about 10 KB';
+  setTimeout(()=>{const v=document.documentElement.dataset.cmIlearnHelper;if(!v)return;
+    if(latest&&num(v)<num(latest)){const u=document.getElementById('upd');u.classList.add('on');u.querySelector('span').textContent='You have version '+v+'. Version '+latest+' is out: download it and follow “Updating” below.';}
+    else{const s=document.getElementById('st');s.classList.add('on');s.querySelector('span').textContent='The iLearn helper (version '+v+') is installed in this browser and up to date.';}},400);});
 for(const b of document.querySelectorAll('.copy'))b.onclick=async()=>{try{await navigator.clipboard.writeText(b.dataset.c);b.textContent='Copied';setTimeout(()=>b.textContent='Copy',1500);}catch{}};
 </script>
 </body>

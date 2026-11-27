@@ -2345,7 +2345,13 @@ function ilExtListHTML(){const E=S.ilearn&&S.ilearn.ext;if(!E||!E.c)return'';con
   if(!rows.length)return'';
   return`<h4>Courses from the iLearn helper</h4><p class="hint">Only courses on your timetable or with a syllabus here are used. Switch on anything else you want in Tasks.</p><ul class="ilg ilx">${rows.map(([id,c])=>{const on=ilExtUse({cid:id,...c},cs),mine=c.code&&cs.some(z=>normCode(z.code)===normCode(c.code));
     return`<li><span><b>${esc(c.code||c.name.replace(/\s*\([^)]*\)\s*$/,''))}</b><small>${esc(c.name)}${mine?' · your course':''} · ${n[id]} item${n[id]===1?'':'s'}</small></span><label class="chk"><input type="checkbox" data-ilinc="${esc(id)}"${on?' checked':''}> Use</label></li>`;}).join('')}</ul>`;}
-function ilHelperHTML(){const E=S.ilearn&&S.ilearn.ext,h=ilHelper();
+/* the newest helper on the site, to spot an older one installed in this browser */
+let ilLatest='';const ilVer=v=>String(v||'').split('.').map(n=>+n||0).reduce((a,n)=>a*1000+n,0);
+function ilCheckLatest(){if(ilLatest||!ilHelper())return;fetch('ilearn-helper.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(j=>{if(j&&j.version){ilLatest=j.version;ilPaint();}}).catch(()=>{});}
+const ilOld=()=>ilLatest&&ilHelper()&&ilVer(ilHelper())<ilVer(ilLatest);
+const ilUpdHTML=()=>ilOld()?`<div class="ilhelp bad"><b>Helper update available</b><span>You have version ${esc(ilHelper())}; version ${esc(ilLatest)} is out. <a href="helper.html#update" target="_blank" rel="noopener">How to update ↗</a> (download, unzip over the old folder, press reload).</span></div>`:'';
+function ilHelperHTML(){ilCheckLatest();return ilUpdHTML()+ilHelperHTML0();}
+function ilHelperHTML0(){const E=S.ilearn&&S.ilearn.ext,h=ilHelper();
   if(h&&E&&E.login)return`<div class="ilhelp bad"><b>Log in to iLearn</b><span>The iLearn helper can’t read your courses until you log in again. New items are guessed until then. <a href="https://ilearn.aus.edu" target="_blank" rel="noopener">Open iLearn</a></span></div>`;
   if(h&&E&&E.at)return`<div class="ilhelp ok"><b>Automatic sorting is on</b><span>The iLearn helper checked ${esc(ago(E.at))}: ${Object.keys(E.m).length} items in ${Object.keys(E.c).length} iLearn courses, each with its exact course.</span></div>`;
   if(h)return`<div class="ilhelp"><b>iLearn helper installed</b><span>Waiting for its first check. Make sure you’re logged in to <a href="https://ilearn.aus.edu" target="_blank" rel="noopener">iLearn</a> in this browser.</span></div>`;
